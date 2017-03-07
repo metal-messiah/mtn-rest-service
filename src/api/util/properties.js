@@ -39,7 +39,7 @@ function loadProperties() {
         }
     }
 
-    Logger.info('Environment variable: ' + envArg);
+    Logger.info('Environment variable: ' + envArg).build();
 
     if (env) {
         try {

@@ -20,35 +20,34 @@ function loadProperties() {
     var applicationProperties = require('../../resources/config.js');
     _.assign(Properties, applicationProperties);
 
-    //Now check for environment variable
-    var args = process.argv.slice(2);
-    if (args.length) {
-        var envArg = _.find(args, function (arg) {
-            return arg.indexOf('app.env') === 0;
-        });
+    //Check process variable first (Heroku)
+    var env = process.env['app.env'];
 
-        //If we didn't find it as a command line argument, try finding Heroku property
-        if (!envArg) {
-            envArg = process.env['app.env'];
-        }
+    //If no process variable, check process args (Local)
+    if (!env) {
+        //Now check for environment variable
+        var args = process.argv.slice(2);
+        if (args.length) {
+            var envArg = _.find(args, function (arg) {
+                return arg.indexOf('app.env') === 0;
+            });
 
-        Logger.info('Environment variable: ' + envArg);
-
-        //If we found an environment variable, attempt to load the corresponding config file
-        if (envArg) {
-            var env = envArg;
-            if (envArg.indexOf('=') !== -1) {
+            //If we found an environment variable, attempt to load the corresponding config file
+            if (envArg) {
                 env = envArg.split('=')[1];
-            }
-
-            if (env) {
-                try {
-                    var environmentProperties = require('../../resources/config-' + env + '.js');
-                    _.assign(Properties, environmentProperties);
-                } catch (e) {
-                    //Don't add the properties
-                }
             }
         }
     }
+
+    Logger.info('Environment variable: ' + envArg);
+
+    if (env) {
+        try {
+            var environmentProperties = require('../../resources/config-' + env + '.js');
+            _.assign(Properties, environmentProperties);
+        } catch (e) {
+            //Don't add the properties
+        }
+    }
+
 }

@@ -1,5 +1,7 @@
 var _ = require('lodash');
 
+var Logger = require('./logger.js');
+
 /**
  * An injectable object that will have all application properties read in.
  *
@@ -25,9 +27,19 @@ function loadProperties() {
             return arg.indexOf('app.env') === 0;
         });
 
+        //If we didn't find it as a command line argument, try finding Heroku property
+        if (!envArg) {
+            envArg = process.env['app.env'];
+        }
+
+        Logger.info('Environment variable: ' + envArg);
+
         //If we found an environment variable, attempt to load the corresponding config file
         if (envArg) {
-            var env = envArg.split('=')[1];
+            var env = envArg;
+            if (envArg.indexOf('=') !== -1) {
+                env = envArg.split('=')[1];
+            }
 
             if (env) {
                 try {

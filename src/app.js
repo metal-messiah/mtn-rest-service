@@ -50,7 +50,7 @@ function configurePassport() {
 
 function start() {
     server = app.listen(
-        Properties.server.port,
+        process.env.PORT || Properties.server.port,
         function () {
             Logger.info('Server started on port ' + server.address().port).build();
         }

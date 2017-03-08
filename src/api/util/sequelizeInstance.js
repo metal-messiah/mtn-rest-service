@@ -13,13 +13,21 @@ module.exports = buildInstance();
 ////////////////////////////////////////
 
 function buildInstance() {
-    var database = validate(getDatabase());
-    var username = validate(getUsername());
-    var password = validate(getPassword());
-
     var options = buildOptions();
 
-    return new Sequelize(database, username, password, options);
+    //If we have a connection string from Heroku, use it
+    var herokuConnectionString = process.env.DATABASE_URL;
+    if (herokuConnectionString) {
+        return new Sequelize(herokuConnectionString, options);
+    }
+    //Else, load from local configuration
+    else {
+        var database = validate(getDatabase());
+        var username = validate(getUsername());
+        var password = validate(getPassword());
+
+        return new Sequelize(database, username, password, options);
+    }
 }
 
 function buildOptions() {

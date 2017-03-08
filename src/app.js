@@ -10,6 +10,8 @@ var Properties = require('./api/util/properties.js');
 var Routes = require('./api/routes.js');
 var LocalUsers = require('./api/util/localUsers.js');
 
+////////////////////////////////////
+
 var app, server;
 
 //Allow time to attach a debugger
@@ -49,14 +51,28 @@ function configurePassport() {
 }
 
 function start() {
-    server = app.listen(
-        process.env.PORT || Properties.server.port,
-        function () {
-            Logger.info('Server started on port ' + server.address().port).build();
-        }
-    );
+    var SequelizeInstance = require('./api/util/sequelizeInstance.js');
 
-    server.on('error', function (error) {
-        Logger.error('Server Error: ', error);
-    });
+    //Connect to database, then start server
+    SequelizeInstance
+        .authenticate()
+        .then(function() {
+            Logger.info('Successfully connected to database').build();
+
+            server = app.listen(
+                process.env.PORT || Properties.server.port,
+                function () {
+                    Logger.info('Server started on port ' + server.address().port).build();
+                }
+            );
+
+            server.on('error', function (error) {
+                Logger.error('Server Error: ', error);
+            });
+        })
+        .catch(function(error) {
+            Logger.error('Failed to establish connection to database')
+                .exception(error)
+                .build();
+        });
 }

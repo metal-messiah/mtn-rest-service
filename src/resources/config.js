@@ -2,6 +2,12 @@
 Global configuration here.
  */
 var config = {
+    database: {
+        dialect: 'postgres',
+        maxPoolSize: 50,
+        minPoolSize: 1,
+        maxIdleTimeMs: 60000
+    },
     server: {
         port: 3000
     },

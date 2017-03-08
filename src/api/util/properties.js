@@ -39,12 +39,14 @@ function loadProperties() {
         }
     }
 
-    Logger.info('Environment variable: ' + env).build();
+    Logger.info('Loading environment')
+        .keyValue('env', env)
+        .build();
 
     if (env) {
         try {
             var environmentProperties = require('../../resources/config-' + env + '.js');
-            _.assign(Properties, environmentProperties);
+            _.merge(Properties, environmentProperties);
         } catch (e) {
             //Don't add the properties
         }

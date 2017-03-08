@@ -2,11 +2,8 @@ var Sequelize = require('sequelize');
 var _ = require('lodash');
 
 var Properties = require('./properties.js');
-var Logger = require('./logger.js');
 
 ////////////////////////////////////////
-
-Logger.info('Properties').json(Properties).build();
 
 module.exports = buildInstance();
 

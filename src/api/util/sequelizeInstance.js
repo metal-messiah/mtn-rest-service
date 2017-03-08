@@ -13,12 +13,11 @@ module.exports = buildInstance();
 ////////////////////////////////////////
 
 function buildInstance() {
-    var options = buildOptions();
 
     //If we have a connection string from Heroku, use it
     var herokuConnectionString = process.env.DATABASE_URL;
     if (herokuConnectionString) {
-        return new Sequelize(herokuConnectionString, options);
+        return new Sequelize(herokuConnectionString, buildLimitedOptions());
     }
     //Else, load from local configuration
     else {
@@ -26,7 +25,7 @@ function buildInstance() {
         var username = validate(getUsername());
         var password = validate(getPassword());
 
-        return new Sequelize(database, username, password, options);
+        return new Sequelize(database, username, password, buildOptions());
     }
 }
 
@@ -36,6 +35,12 @@ function buildOptions() {
         dialect: validate(getDialect()),
         pool: buildPool()
     }
+}
+
+function buildLimitedOptions() {
+    return {
+        pool: buildPool()
+    };
 }
 
 function buildPool() {

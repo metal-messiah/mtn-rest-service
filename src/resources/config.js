@@ -6,7 +6,8 @@ var config = {
         dialect: 'postgres',
         maxPoolSize: 50,
         minPoolSize: 1,
-        maxIdleTimeMs: 60000
+        maxIdleTimeMs: 60000,
+        showSql: false
     },
     server: {
         port: 3000

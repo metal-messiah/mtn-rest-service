@@ -30,12 +30,14 @@ function buildOptions() {
     return {
         host: validate(getHost()),
         dialect: validate(getDialect()),
+        logging: validate(getShowSql()),
         pool: buildPool()
     }
 }
 
 function buildLimitedOptions() {
     return {
+        logging: validate(getShowSql()),
         pool: buildPool()
     };
 }
@@ -90,4 +92,8 @@ function getMinPoolSize() {
 
 function getMaxIdleTimeMs() {
     return Properties.database.maxIdleTimeMs;
+}
+
+function getShowSql() {
+    return Properties.database.showSql;
 }

@@ -4,6 +4,8 @@ var helmet = require('helmet');
 var path = require('path');
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
+var q = require('q');
+var Umzug = require('umzug');
 
 var Logger = require('./api/util/logger.js');
 var Properties = require('./api/util/properties.js');
@@ -12,14 +14,22 @@ var LocalUsers = require('./api/util/localUsers.js');
 
 ////////////////////////////////////
 
-var app, server;
+var app, server, sequelizeInstance;
 
 //Allow time to attach a debugger
 setTimeout(function () {
     app = express();
-    configureMiddleware();
-    configurePassport();
-    start();
+
+    q.fcall(configureMiddleware)
+        .then(configurePassport)
+        .then(connectDatabase)
+        .then(migrateDatabase)
+        .then(start)
+        .catch(function(error) {
+            Logger.error('Failed to start application')
+                .exception(error)
+                .build();
+        });
 }, 5000);
 
 ////////////////////////////////////
@@ -50,29 +60,81 @@ function configurePassport() {
     ));
 }
 
-function start() {
-    var SequelizeInstance = require('./api/util/sequelizeInstance.js');
+function connectDatabase() {
+    sequelizeInstance = require('./api/util/sequelizeInstance.js');
 
-    //Connect to database, then start server
-    SequelizeInstance
+    return sequelizeInstance
         .authenticate()
         .then(function() {
             Logger.info('Successfully connected to database').build();
-
-            server = app.listen(
-                process.env.PORT || Properties.server.port,
-                function () {
-                    Logger.info('Server started on port ' + server.address().port).build();
-                }
-            );
-
-            server.on('error', function (error) {
-                Logger.error('Server Error: ', error);
-            });
         })
         .catch(function(error) {
             Logger.error('Failed to establish connection to database')
                 .exception(error)
                 .build();
+            throw error;
         });
+}
+
+function migrateDatabase() {
+    var umzugConfig = {
+        storage: 'sequelize',
+        storageOptions: {
+            sequelize: sequelizeInstance
+        },
+        migrations: {
+            path: 'src/resources/migrations'
+        }
+    };
+
+    var umzug = new Umzug(umzugConfig);
+
+    var migrationTimer = require('./api/util/migrationTimer.js');
+
+    umzug.on('migrating', function(migration) {
+        migrationTimer.start(migration);
+    });
+
+    umzug.on('migrated', function(migration) {
+        var duration = migrationTimer.stop(migration);
+        Logger.info('Completed migration')
+            .keyValue('script', migration)
+            .keyValue('duration', duration)
+            .build();
+    });
+
+    umzug.on('reverting', function(migration) {
+        migrationTimer.stop(migration);
+        Logger.warn('Reverting migration')
+            .keyValue('script', migration)
+            .build();
+    });
+
+    umzug.on('reverted', function(migration) {
+        migrationTimer.stop(migration);
+        Logger.warn('Reverted migration')
+            .keyValue('script', migration)
+            .build();
+    });
+
+    return umzug
+        .up()
+        .then(function(migrations) {
+            Logger.info('Completed migrations')
+                .keyValue('count', migrations.length)
+                .build();
+        });
+}
+
+function start() {
+    server = app.listen(
+        process.env.PORT || Properties.server.port,
+        function () {
+            Logger.info('Server started on port ' + server.address().port).build();
+        }
+    );
+
+    server.on('error', function (error) {
+        Logger.error('Server Error: ', error);
+    });
 }

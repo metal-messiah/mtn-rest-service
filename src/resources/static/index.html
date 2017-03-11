@@ -1,11 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="mtn">
 <head>
     <title>MTN Rest Service</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="styles/main.css">
+    <base href="/" />
 </head>
 <body>
-<div>
-    These are not the droids you're looking for.
+<div ng-controller="IndexCtrl" ng-cloak>
+    <md-content>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <div ng-if="isAuthenticated">
+                    Welcome
+                </div>
+                <span flex></span>
+                <md-button class="md-icon-button" aria-label="Login" ng-if="!isAuthenticated" ng-click="AuthService.login()">
+                    <md-icon><i class="material-icons">lock_open</i></md-icon>
+                    <md-tooltip>You are not logged in</md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="Logout" ng-if="isAuthenticated" ng-click="AuthService.logout()">
+                    <md-icon><i class="material-icons">lock</i></md-icon>
+                    <md-tooltip>You are logged in</md-tooltip>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <br/>
+        <br/>
+        <div layout="row" layout-align="start center">
+            <md-button class="md-raised md-primary" ng-click="getPing()">
+                Ping
+            </md-button>
+            <strong ng-class="{'text-green': pingResult === 'OK', 'text-red': pingResult !== 'OK' && pingResult !== 'Checking...'}">{{pingResult}}</strong>
+        </div>
+    </md-content>
 </div>
+
+<script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-messages.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+<script src="https://cdn.auth0.com/js/lock/10.8/lock.min.js"></script>
+<script src="scripts/lib/angular-jwt.min.js"></script>
+<script src="scripts/lib/angular-lock.min.js"></script>
+
+<script src="scripts/app.js"></script>
+<script src="scripts/indexCtrl.js"></script>
+<script src="scripts/auth/authService.js"></script>
+<script src="scripts/ping/pingService.js"></script>
+<script src="scripts/util/authInterceptor.js"></script>
+<script src="scripts/util/cache.js"></script>
+
 </body>
 </html>

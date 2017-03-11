@@ -2,6 +2,10 @@
 Global configuration here.
  */
 var config = {
+    auth: {
+        secret: 'cfI8g1OJ0QX8J-edJjypVCXGA6ef5dJMSG0OAiWGJ7Lzs9st-nsRhO0ccDXcAYEU',
+        clientId: 'FArOoQuRqPT1MZFsNE9qnxeykHp48cIO'
+    },
     database: {
         dialect: 'postgres',
         maxPoolSize: 50,

@@ -6,6 +6,7 @@ var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var q = require('q');
 var Umzug = require('umzug');
+var jwt = require('express-jwt');
 
 var Logger = require('./api/util/logger.js');
 var Properties = require('./api/util/properties.js');
@@ -25,24 +26,39 @@ setTimeout(function () {
         .then(connectDatabase)
         .then(migrateDatabase)
         .then(start)
-        .catch(function(error) {
+        .catch(function (error) {
             Logger.error('Failed to start application')
                 .exception(error)
                 .build();
         });
-}, 5000);
+// }, 5000);
+});
 
 ////////////////////////////////////
 
 function configureMiddleware() {
-    app.use(passport.initialize());
-    app.use('/api', passport.authenticate('basic', {session: false}));
+    // app.use(passport.initialize());
+    // app.use('/api', passport.authenticate('basic', {session: false}));
     app.use(helmet({
         frameguard: {
             action: 'deny'
         }
     }));
+
     app.use(express.static(path.join(__dirname, 'resources/static')));
+
+    //Check JWT
+    app.use(jwt({
+        secret: Properties.auth.secret,
+        audience: Properties.auth.clientId
+    }));
+
+    //Handle any error from JWT
+    app.use(function (err, req, res, next) {
+        if (err.name === 'UnauthorizedError') {
+            res.status(401).send('Unauthorized');
+        }
+    });
     app.use(bodyParser.json());
     app.use('/api', Routes);
 }

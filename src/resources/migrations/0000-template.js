@@ -9,7 +9,7 @@ module.exports = {
 
 /////////////////////////////////
 
-function up() {
+function up(queryInterface, DataTypes) {
     var deferred = q.defer();
 
     //Script logic here, call resolve() or reject() as appropriate
@@ -18,7 +18,7 @@ function up() {
     return deferred.promise;
 }
 
-function down() {
+function down(queryInterface, DataTypes) {
     var deferred = q.defer();
 
     //Script logic here, call resolve() or reject() as appropriate

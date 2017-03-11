@@ -83,7 +83,10 @@ function migrateDatabase() {
             sequelize: sequelizeInstance
         },
         migrations: {
-            path: 'src/resources/migrations'
+            path: 'src/resources/migrations',
+            params: [sequelizeInstance.getQueryInterface(), sequelizeInstance.constructor, function() {
+                throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
+            }]
         }
     };
 

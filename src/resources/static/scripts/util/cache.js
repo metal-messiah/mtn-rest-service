@@ -54,8 +54,8 @@
             }
         }
 
-        function user(value) {
-            return service.store('user', value);
+        function user() {
+            return service.get('user');
         }
     }
 })();

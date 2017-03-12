@@ -21,10 +21,12 @@ function configureAuth($httpProvider, lockProvider, jwtOptionsProvider) {
     });
 }
 
-function registerAuth(AuthService, authManager) {
+function registerAuth($rootScope, AuthService, authManager, Cache) {
     AuthService.registerAuthenticationListener();
     authManager.checkAuthOnRefresh();
     if (authManager.isAuthenticated()) {
         AuthService.loadProfile();
     }
+
+    $rootScope.Cache = Cache;
 }

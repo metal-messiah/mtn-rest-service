@@ -13,7 +13,7 @@
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <div ng-if="isAuthenticated">
-                    Welcome
+                    Welcome, {{Cache.user().user_metadata.displayName}}
                 </div>
                 <span flex></span>
                 <md-button class="md-icon-button" aria-label="Login" ng-if="!isAuthenticated" ng-click="AuthService.login()">

@@ -28,7 +28,7 @@
 
                 $log.info('Successfully retrieved user profile', profile);
 
-                Cache.user(profile);
+                Cache.store('user', profile);
             });
 
             return deferred.promise;

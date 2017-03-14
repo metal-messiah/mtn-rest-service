@@ -1,33 +1,21 @@
-var auth0 = require('auth0-js');
 var q = require('q');
 
-var Properties = require('../util/properties.js');
 var Cache = require('../util/cache.js');
 var Logger = require('../util/logger.js');
 var User = require('./user.js');
-
-var Auth0 = new auth0.Authentication({
-    domain: Properties.auth.domain,
-    clientID: Properties.auth.clientId
-});
+var AuthService = require('./authService.js');
 
 module.exports = UserCacheMiddleware;
-
-/////////////////////////////////
 
 function UserCacheMiddleware(req, res, next) {
     var user;
 
-    q.fcall(validateRequestUserPresent)
-        .then(loadUser)
+    return q.fcall(validateRequestUserPresent)
+        .then(loadUserFromCache)
+        .then(loadUserFromProvider)
         .then(appendUserToRequest)
         .then(next)
-        .catch(function(error) {
-            Logger.warn('Failed to handle caching user')
-                .exception(error)
-                .build();
-            return res.status(401).send('Unauthorized');
-        });
+        .catch(sendUnauthorizedResponse);
 
     ////////////////////
 
@@ -37,53 +25,44 @@ function UserCacheMiddleware(req, res, next) {
         }
     }
 
-    function loadUser() {
-        var deferred = q.defer();
+    function loadUserFromCache() {
+        var userId = getUserId(req);
+        user = Cache.user(userId);
+    }
 
-        user = getUserFromCache(req);
-        if (user) {
-            deferred.resolve();
-        } else {
+    function loadUserFromProvider() {
+        if (!user) {
             var accessToken = req.headers['mtn-access-token'];
-            Auth0.userInfo(accessToken, function(error, profile) {
-                if (error) {
-                    deferred.reject(error);
-                } else {
+            return AuthService.getUserProfile(accessToken)
+                .then(function(profile) {
                     //User email must be verified
                     if (!profile['email_verified']) {
-                        deferred.reject(new Error('Email not verified'));
+                        throw new Error('Email not verified');
                     }
 
-                    //Build and return user
-                    try {
-                        user = User.build(profile);
-                        if (user.isActive()) {
-                            Cache.user(user.id, user);
-                        }
-                        deferred.resolve();
-                    } catch(e) {
-                        deferred.reject(e);
+                    user = User.build(profile);
+
+                    //Only cache if user is active
+                    if (user.isActive()) {
+                        Cache.user(user.id, user);
                     }
-                }
-            });
+                });
         }
-
-        return deferred.promise;
     }
 
     function appendUserToRequest() {
         req.mtnUser = user;
     }
-}
 
-//////////////////////////////
+    function getUserId(req) {
+        var sub = req.user.sub;
+        return sub.substring(sub.indexOf('|') + 1, sub.length);
+    }
 
-function getUserFromCache(req) {
-    var userId = getUserId(req);
-    return Cache.user(userId);
-}
-
-function getUserId(req) {
-    var sub = req.user.sub;
-    return sub.substring(sub.indexOf('|') + 1, sub.length);
+    function sendUnauthorizedResponse(error) {
+        Logger.warn('Failed to handle caching user')
+            .exception(error)
+            .build();
+        return res.status(401).send('Unauthorized');
+    }
 }

@@ -2,8 +2,6 @@ var Logger = require('../util/logger.js');
 
 module.exports = UserActiveMiddleware;
 
-///////////////////////
-
 function UserActiveMiddleware(req, res, next) {
     if (!req.mtnUser) {
         Logger.error('No mtnUser found on request!').build();

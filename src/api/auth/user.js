@@ -6,13 +6,9 @@ function User(id, email, permissions) {
     this.id = id;
     this.email = email;
     this.permissions = {
-        isActive: !!permissions.isActive,
-        isAdmin: !!permissions.isAdmin
+        isActive: permissions ? !!permissions.isActive : false,
+        isAdmin: permissions ? !!permissions.isAdmin : false
     };
-
-    if (permissions && permissions.length) {
-        this.permissions.push.apply(this.permissions, permissions);
-    }
 }
 
 User.prototype.isActive = function() {

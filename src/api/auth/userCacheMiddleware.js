@@ -55,7 +55,9 @@ function UserCacheMiddleware(req, res, next) {
                     //Build and return user
                     try {
                         user = User.build(profile);
-                        Cache.user(user.id, user);
+                        if (user.isActive()) {
+                            Cache.user(user.id, user);
+                        }
                         deferred.resolve();
                     } catch(e) {
                         deferred.reject(e);

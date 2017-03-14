@@ -6,8 +6,10 @@ angular.module('mtn').run(registerAuth);
 
 /////////////////////////////////////
 
-function configureAuth($httpProvider, lockProvider, jwtOptionsProvider) {
+function configureAuth($httpProvider, $locationProvider, lockProvider, jwtOptionsProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
+
+    $locationProvider.html5Mode(true);
 
     lockProvider.init({
         clientID: 'FArOoQuRqPT1MZFsNE9qnxeykHp48cIO',
@@ -21,8 +23,9 @@ function configureAuth($httpProvider, lockProvider, jwtOptionsProvider) {
     });
 }
 
-function registerAuth($rootScope, AuthService, authManager, Cache) {
+function registerAuth($rootScope, AuthService, lock, authManager, Cache) {
     AuthService.registerAuthenticationListener();
+    lock.interceptHash();
     authManager.checkAuthOnRefresh();
     if (authManager.isAuthenticated()) {
         AuthService.loadProfile();

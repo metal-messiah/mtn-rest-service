@@ -15,6 +15,12 @@
             if (token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }
+
+            var accessToken = Cache.get('access_token');
+            if (accessToken) {
+                config.headers['mtn-access-token'] = accessToken;
+            }
+
             return config;
         }
     }

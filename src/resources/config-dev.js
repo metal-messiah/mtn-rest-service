@@ -1,6 +1,10 @@
 /*
 Dev-specific configuration here
  */
-var config = {};
+var config = {
+    auth: {
+        callbackUrl: 'https://mtnra-dev.herokuapp.com'
+    }
+};
 
 module.exports = config;

@@ -2,6 +2,9 @@
 Local-specific configuration here
  */
 var config = {
+    auth: {
+        callbackUrl: 'http://localhost:3000'
+    },
     database: {
         name: 'mtn',
         host: 'localhost',

@@ -47,6 +47,7 @@
         function registerAuthenticationListener() {
             lock.on('authenticated', function(authResult) {
                 setToken(authResult.idToken);
+                Cache.store('access_token', authResult.accessToken);
                 service.loadProfile();
                 authManager.authenticate();
             });

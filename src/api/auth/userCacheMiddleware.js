@@ -13,6 +13,8 @@ var Auth0 = new auth0.Authentication({
 
 module.exports = UserCacheMiddleware;
 
+/////////////////////////////////
+
 function UserCacheMiddleware(req, res, next) {
     var user;
 
@@ -74,11 +76,12 @@ function UserCacheMiddleware(req, res, next) {
     }
 }
 
+//////////////////////////////
+
 function getUserFromCache(req) {
     var userId = getUserId(req);
     return Cache.user(userId);
 }
-
 
 function getUserId(req) {
     var sub = req.user.sub;

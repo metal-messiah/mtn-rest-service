@@ -1,4 +1,4 @@
-angular.module('mtn', ['ngMaterial', 'auth0.lock', 'angular-jwt']);
+angular.module('mtn', ['ngMaterial', 'auth0.lock', 'angular-jwt', 'ngclipboard']);
 
 angular.module('mtn').config(configureAuth);
 

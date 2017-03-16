@@ -33,7 +33,8 @@ function buildOptions() {
         logging: validate(getShowSql()),
         pool: buildPool(),
         define: buildDefine(),
-        omitNull: true
+        omitNull: true,
+        quoteIdentifiers: false
     }
 }
 
@@ -42,7 +43,8 @@ function buildLimitedOptions() {
         logging: validate(getShowSql()),
         pool: buildPool(),
         define: buildDefine(),
-        omitNull: true
+        omitNull: true,
+        quoteIdentifiers: false
     };
 }
 

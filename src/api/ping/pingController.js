@@ -1,15 +1,9 @@
-module.exports = PingController();
+module.exports = {
+    ping: ping
+};
 
-function PingController() {
-    var controller = {
-        ping: ping
-    };
+////////////////////////////
 
-    return controller;
-
-    ////////////////////////////
-
-    function ping(req, res) {
-        res.status(200).json({status: 'OK'});
-    }
+function ping(req, res) {
+    res.status(200).json({status: 'OK'});
 }

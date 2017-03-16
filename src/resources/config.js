@@ -12,7 +12,7 @@ var config = {
         maxPoolSize: 50,
         minPoolSize: 1,
         maxIdleTimeMs: 60000,
-        showSql: false
+        showSql: true
     },
     server: {
         port: 3000

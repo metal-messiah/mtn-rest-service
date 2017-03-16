@@ -1,26 +1,13 @@
-function User(id, email, permissions) {
+function User(id, email) {
     this.id = id;
     this.email = email;
-    this.permissions = {
-        isActive: permissions ? !!permissions.isActive : false,
-        isAdmin: permissions ? !!permissions.isAdmin : false
-    };
 }
-
-User.prototype.isActive = function() {
-    return this.permissions.isActive;
-};
-
-User.prototype.isAdmin = function() {
-    return this.permissions.isAdmin;
-};
 
 User.build = function(profile) {
     var userId = getUserId(profile);
     var email = getEmail(profile);
-    var permissions = getPermissions(profile);
 
-    return new User(userId, email, permissions);
+    return new User(userId, email);
 };
 
 function getUserId(profile) {
@@ -36,12 +23,4 @@ function getEmail(profile) {
         throw new Error('No email found for User!');
     }
     return profile.email;
-}
-
-function getPermissions(profile) {
-    var appMetadata = profile['app_metadata'];
-    if (!appMetadata || !appMetadata.permissions) {
-        throw new Error('No permissions found for User!');
-    }
-    return appMetadata.permissions;
 }

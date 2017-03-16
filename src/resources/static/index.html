@@ -26,7 +26,7 @@
         </div>
     </md-toolbar>
     <md-content>
-        <section layout="column" ng-if="Cache.user().isAdmin()" layout-padding>
+        <section layout="column" ng-if="Cache.user()"layout-padding>
             <h1 class="md-primary">Admin Info</h1>
             <p>Paste these values into your Postman environment variables for testing:</p>
             <md-input-container style="width:220px;">
@@ -75,7 +75,7 @@
 <script src="scripts/indexCtrl.js"></script>
 <script src="scripts/auth/authService.js"></script>
 <script src="scripts/ping/pingService.js"></script>
-<script src="scripts/util/authInterceptor.js"></script>
+<script src="scripts/auth/authInterceptor.js"></script>
 <script src="scripts/util/cache.js"></script>
 <script src="scripts/auth/user.js"></script>
 </body>

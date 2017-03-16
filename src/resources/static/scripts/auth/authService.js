@@ -25,11 +25,8 @@
                 }
 
                 var user = User.build(profile);
-
-                if (user.isAdmin()) {
-                    user.idToken = Cache.get('id_token');
-                    user.accessToken = Cache.get('access_token');
-                }
+                user.idToken = Cache.get('id_token');
+                user.accessToken = Cache.get('access_token');
 
                 $log.info('Successfully retrieved user profile', profile);
 

@@ -10,7 +10,6 @@ var Logger = require('./api/util/logger.js');
 var Properties = require('./api/util/properties.js');
 var Routes = require('./api/routes.js');
 var UserCacheMiddleware = require('./api/auth/userCacheMiddleware.js');
-var UserActiveMiddleware = require('./api/auth/userActiveMiddleware.js');
 
 ////////////////////////////////////
 
@@ -58,8 +57,7 @@ function configureMiddleware() {
     });
 
     //Load and cache profile
-    // app.use('/api', UserCacheMiddleware);
-    // app.use('/api', UserActiveMiddleware);
+    app.use('/api', UserCacheMiddleware);
 
     app.use(bodyParser.json());
     app.use('/api', Routes);

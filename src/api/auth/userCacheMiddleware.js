@@ -35,17 +35,8 @@ function UserCacheMiddleware(req, res, next) {
             var accessToken = req.headers['mtn-access-token'];
             return AuthService.getUserProfile(accessToken)
                 .then(function(profile) {
-                    //User email must be verified
-                    if (!profile['email_verified']) {
-                        throw new Error('Email not verified');
-                    }
-
                     user = User.build(profile);
-
-                    //Only cache if user is active
-                    if (user.isActive()) {
-                        Cache.user(user.id, user);
-                    }
+                    Cache.user(user.id, user);
                 });
         }
     }

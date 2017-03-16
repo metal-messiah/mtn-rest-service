@@ -31,14 +31,16 @@ function buildOptions() {
         host: validate(getHost()),
         dialect: validate(getDialect()),
         logging: validate(getShowSql()),
-        pool: buildPool()
+        pool: buildPool(),
+        define: buildDefine()
     }
 }
 
 function buildLimitedOptions() {
     return {
         logging: validate(getShowSql()),
-        pool: buildPool()
+        pool: buildPool(),
+        define: buildDefine()
     };
 }
 
@@ -96,4 +98,17 @@ function getMaxIdleTimeMs() {
 
 function getShowSql() {
     return Properties.database.showSql;
+}
+
+function buildDefine() {
+    return {
+        charset: 'utf8',
+        createdAt: 'created_date',
+        deletedAt: 'deleted_date',
+        freezeTableName: true,
+        paranoid: true,
+        timezone: '+00:00', //UTC time
+        underscored: true,
+        updatedAt: 'updated_date'
+    }
 }

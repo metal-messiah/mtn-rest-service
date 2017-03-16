@@ -1,5 +1,6 @@
 var winston = require('winston');
 var moment = require('moment');
+var User = require('../auth/user.js');
 
 var Level = {
     DEBUG: 'DEBUG',
@@ -98,6 +99,13 @@ function LogEntry(level, message) {
 
     this.json = function (value) {
         this._json = value;
+        return this;
+    };
+
+    this.user = function(user) {
+        if (user instanceof User) {
+            this.keyValue('user', user.email);
+        }
         return this;
     };
 

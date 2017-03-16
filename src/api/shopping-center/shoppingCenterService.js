@@ -10,16 +10,18 @@ module.exports = {
 
 ////////////////////////////
 
-function findAll() {
+function findAll(req) {
     return q(ShoppingCenter
         .findAll())
         .then(function(results) {
             Logger.info('Retrieved Shopping Centers')
+                .user(req.mtnUser)
                 .build();
             return results;
         })
         .catch(function(error) {
             Logger.error('Failed to retrieve Shopping Centers')
+                .user(req.mtnUser)
                 .exception(error)
                 .build();
             throw error;

@@ -8,7 +8,7 @@ module.exports = {
 
 function findAll(req, res) {
     ShoppingCenterService
-        .findAll()
+        .findAll(req)
         .then(function(data) {
             res.status(200).json(data);
         })

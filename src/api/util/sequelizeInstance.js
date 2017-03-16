@@ -32,7 +32,8 @@ function buildOptions() {
         dialect: validate(getDialect()),
         logging: validate(getShowSql()),
         pool: buildPool(),
-        define: buildDefine()
+        define: buildDefine(),
+        omitNull: true
     }
 }
 
@@ -40,7 +41,8 @@ function buildLimitedOptions() {
     return {
         logging: validate(getShowSql()),
         pool: buildPool(),
-        define: buildDefine()
+        define: buildDefine(),
+        omitNull: true
     };
 }
 

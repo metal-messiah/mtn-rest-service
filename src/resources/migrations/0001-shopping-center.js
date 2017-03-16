@@ -27,22 +27,25 @@ function up(queryInterface, DataTypes) {
                     type: DataTypes.DATE,
                     allowNull: false
                 },
+                deleted_date: {
+                    type: DataTypes.DATE
+                },
                 name: {
-                    type: DataTypes.STRING,
+                    type: DataTypes.STRING(64),
                     allowNull: false
                 },
                 native_id: {
-                    type: DataTypes.STRING
+                    type: DataTypes.STRING(64)
                 },
                 owner: {
-                    type: DataTypes.STRING
+                    type: DataTypes.STRING(64)
                 },
                 updated_date: {
                     type: DataTypes.DATE,
                     allowNull: false
                 },
                 url: {
-                    type: DataTypes.STRING
+                    type: DataTypes.STRING(256)
                 },
                 version: {
                     type: DataTypes.INTEGER,

@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
                 type: DataTypes.STRING,
                 validate: {
                     len: [3, 64],
-                    notEmpty: true,
+                    notEmpty: true
                 }
             },
             nativeId: {

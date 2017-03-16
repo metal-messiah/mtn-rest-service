@@ -58,8 +58,8 @@ function configureMiddleware() {
     });
 
     //Load and cache profile
-    app.use('/api', UserCacheMiddleware);
-    app.use('/api', UserActiveMiddleware);
+    // app.use('/api', UserCacheMiddleware);
+    // app.use('/api', UserActiveMiddleware);
 
     app.use(bodyParser.json());
     app.use('/api', Routes);

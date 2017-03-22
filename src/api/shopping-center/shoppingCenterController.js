@@ -1,5 +1,4 @@
 var ShoppingCenterService = require('./shoppingCenterService.js');
-var Errors = require('../error/errors.js');
 var ResponseUtil = require('../util/responseUtil.js');
 
 module.exports = {

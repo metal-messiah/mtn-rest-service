@@ -9,7 +9,7 @@ module.exports = {
 
 function findAll(req, res) {
     ShoppingCenterService
-        .findAll(req.mtnUser)
+        .findAll(req.mtnUser, req.query)
         .then(function(data) {
             ResponseUtil.ok(res, data);
         })

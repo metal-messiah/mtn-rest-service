@@ -107,12 +107,13 @@ function getShowSql() {
 function buildDefine() {
     return {
         charset: 'utf8',
-        createdAt: 'created_date',
-        deletedAt: 'deleted_date',
+        createdAt: 'createdDate',
+        deletedAt: 'deletedDate',
         freezeTableName: true,
         paranoid: true,
         timezone: '+00:00', //UTC time
         underscored: true,
-        updatedAt: 'updated_date'
+        updatedAt: 'updatedDate',
+        timestamps: true
     }
 }

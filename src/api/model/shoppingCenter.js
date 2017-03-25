@@ -7,8 +7,17 @@ module.exports = function(sequelize, DataTypes) {
                 field: 'shopping_center_id',
                 primaryKey: true
             },
+            createdDate: {
+                type: DataTypes.DATE,
+                field: 'created_date'
+            },
+            deletedDate: {
+                type: DataTypes.DATE,
+                field: 'deleted_date'
+            },
             name: {
                 type: DataTypes.STRING,
+                allowNull: false,
                 validate: {
                     len: [3, 64],
                     notEmpty: true
@@ -28,6 +37,10 @@ module.exports = function(sequelize, DataTypes) {
                 validate: {
                     len: [3, 64]
                 }
+            },
+            updatedDate: {
+                type: DataTypes.DATE,
+                field: 'updated_date'
             },
             url: {
                 type: DataTypes.STRING,

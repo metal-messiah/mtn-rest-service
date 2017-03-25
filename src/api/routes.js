@@ -8,7 +8,8 @@ Router.route('/ping')
     .get(PingController.ping);
 
 Router.route('/shopping-center')
-    .get(ShoppingCenterController.findAll);
+    .get(ShoppingCenterController.findAll)
+    .post(ShoppingCenterController.addOne);
 
 Router.route('/shopping-center/:shoppingCenterId')
     .get(ShoppingCenterController.findOne);

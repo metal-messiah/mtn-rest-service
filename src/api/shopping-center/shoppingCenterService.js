@@ -15,13 +15,39 @@ module.exports = {
 
 ////////////////////////////
 
-//TODO findOne
-//TODO addOne
 //TODO updateOne
 //TODO deleteOne
 
 function addOne(user, request) {
+    return q
+        .fcall(function() {
+            user.authorize(User.Permission.CREATE_SHOPPING_CENTER);
+        })
+        .then(function() {
+            var options = {
+                fields: ['name', 'nativeId', 'owner', 'url'],
+                returning: true
+            };
 
+            return q(ShoppingCenter
+                .create(request, options))
+                .then(function(result) {
+                    Logger.info('Created Shopping Center')
+                        .user(user)
+                        .json(request)
+                        .build();
+                    return result;
+                })
+                .catch(Utils.handleSequelizeException);
+        })
+        .catch(function(error) {
+            Logger.error('Failed to create Shopping Center')
+                .user(user)
+                .json(request)
+                .exception(error)
+                .build();
+            throw error;
+        });
 }
 
 function findAll(user, params) {

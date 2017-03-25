@@ -13,6 +13,11 @@ module.exports = {
 
 ////////////////////////////
 
+//TODO findOne
+//TODO addOne
+//TODO updateOne
+//TODO deleteOne
+
 function addOne(user, request) {
 
 }
@@ -47,6 +52,7 @@ function initFindAllOptions(params) {
     var options = {
         limit: 10,
         offset: 0,
+        order: 'id DESC',
         where: {}
     };
 

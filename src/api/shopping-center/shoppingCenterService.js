@@ -9,14 +9,13 @@ var Errors = require('../error/errors.js');
 
 module.exports = {
     addOne: addOne,
+    deleteOne: deleteOne,
     findAll: findAll,
-    findOne: findOne
+    findOne: findOne,
+    updateOne: updateOne
 };
 
 ////////////////////////////
-
-//TODO updateOne
-//TODO deleteOne
 
 function addOne(user, request) {
     return q
@@ -44,6 +43,38 @@ function addOne(user, request) {
             Logger.error('Failed to create Shopping Center')
                 .user(user)
                 .json(request)
+                .exception(error)
+                .build();
+            throw error;
+        });
+}
+
+function deleteOne(user, id) {
+    return q
+        .fcall(function() {
+            if (!Utils.isPositiveInteger(id)) {
+                throw new Errors.BadRequestError('Invalid ID Provided');
+            }
+            user.authorize(User.Permission.DELETE_SHOPPING_CENTER);
+        })
+        .then(function() {
+            return q(ShoppingCenter
+                .destroy({
+                    where: {
+                        id: id
+                    }
+                }))
+                .then(function(rows) {
+                    Logger.info('Deleted Shopping Center')
+                        .user(user)
+                        .keyValue('id', id)
+                        .keyValue('count', rows)
+                        .build();
+                });
+        })
+        .catch(function(error) {
+            Logger.error('Failed to delete Shopping Center')
+                .user(user)
                 .exception(error)
                 .build();
             throw error;
@@ -104,6 +135,12 @@ function findOne(user, id) {
             throw error;
         });
 }
+
+function updateOne(user, id, request) {
+
+}
+
+///////////////////////////////
 
 function initFindAllOptions(params) {
     var options = {

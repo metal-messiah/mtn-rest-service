@@ -5,10 +5,12 @@ var Logger = require('../util/logger.js');
 var Models = require('../model/models.js');
 var ShoppingCenter = Models.ShoppingCenter;
 var Utils = require('../util/utils.js');
+var Errors = require('../error/errors.js');
 
 module.exports = {
     addOne: addOne,
-    findAll: findAll
+    findAll: findAll,
+    findOne: findOne
 };
 
 ////////////////////////////
@@ -42,6 +44,35 @@ function findAll(user, params) {
         .catch(function(error) {
             Logger.error('Failed to retrieve Shopping Centers')
                 .user(user)
+                .exception(error)
+                .build();
+            throw error;
+        });
+}
+
+function findOne(user, id) {
+    return q
+        .fcall(function() {
+            if (!Utils.isPositiveInteger(id)) {
+                throw new Errors.BadRequestError('Invalid ID Provided');
+            }
+            user.authorize(User.Permission.READ_SHOPPING_CENTER);
+        })
+        .then(function() {
+            return q(ShoppingCenter
+                .findById(id)
+                .then(function(result) {
+                    Logger.info('Retrieved Shopping Center')
+                        .user(user)
+                        .keyValue('id', id)
+                        .build();
+                    return result;
+                }));
+        })
+        .catch(function(error) {
+            Logger.error('Failed to retrieve Shopping Center')
+                .user(user)
+                .keyValue('id', id)
                 .exception(error)
                 .build();
             throw error;

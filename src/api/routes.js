@@ -10,4 +10,7 @@ Router.route('/ping')
 Router.route('/shopping-center')
     .get(ShoppingCenterController.findAll);
 
+Router.route('/shopping-center/:shoppingCenterId')
+    .get(ShoppingCenterController.findOne);
+
 module.exports = Router;

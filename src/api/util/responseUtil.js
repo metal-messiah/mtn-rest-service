@@ -40,5 +40,9 @@ function error(res, error) {
 }
 
 function ok(res, data) {
-    res.status(200).json(data);
+    if (data) {
+        res.status(200).json(data);
+    } else {
+        res.status(204).send();
+    }
 }

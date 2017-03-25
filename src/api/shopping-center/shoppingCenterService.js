@@ -137,7 +137,55 @@ function findOne(user, id) {
 }
 
 function updateOne(user, id, request) {
+    return q
+        .fcall(function() {
+            if (!Utils.isPositiveInteger(id)) {
+                throw new Errors.BadRequestError('Invalid ID Provided');
+            }
+            user.authorize(User.Permission.EDIT_SHOPPING_CENTER);
+        })
+        .then(function() {
+            return q(ShoppingCenter
+                .findById(id)
+                .then(function(result) {
+                    if (!result) {
+                        throw new Errors.BadRequestError('Shopping Center not found');
+                    }
+                    return result;
+                }));
+        })
+        .then(function(existing) {
+            //TODO version enforcement here
+        })
+        .then(function() {
+            var options = {
+                fields: ['name', 'nativeId', 'owner', 'url'],
+                returning: true,
+                where: {
+                    id: id
+                }
+            };
 
+            return q(ShoppingCenter
+                .update(request, options))
+                .then(function(results) {
+                    Logger.info('Updated Shopping Center')
+                        .user(user)
+                        .json(request)
+                        .build();
+                    return results[1][0];
+                })
+                .catch(Utils.handleSequelizeException);
+        })
+        .catch(function(error) {
+            Logger.error('Failed to update Shopping Center')
+                .user(user)
+                .keyValue('id', id)
+                .json(request)
+                .exception(error)
+                .build();
+            throw error;
+        });
 }
 
 ///////////////////////////////

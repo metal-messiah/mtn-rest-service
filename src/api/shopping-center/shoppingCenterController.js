@@ -5,7 +5,8 @@ module.exports = {
     addOne: addOne,
     deleteOne: deleteOne,
     findAll: findAll,
-    findOne: findOne
+    findOne: findOne,
+    updateOne: updateOne
 };
 
 /////////////////////////////
@@ -46,6 +47,17 @@ function findAll(req, res) {
 function findOne(req, res) {
     ShoppingCenterService
         .findOne(req.mtnUser, req.params.shoppingCenterId)
+        .then(function(data) {
+            ResponseUtil.ok(res, data);
+        })
+        .catch(function(error) {
+            ResponseUtil.error(res, error);
+        });
+}
+
+function updateOne(req, res) {
+    ShoppingCenterService
+        .updateOne(req.mtnUser, req.params.shoppingCenterId, req.body)
         .then(function(data) {
             ResponseUtil.ok(res, data);
         })

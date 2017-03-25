@@ -14,9 +14,22 @@ function User(id, email, permissions) {
  * Throws an error if user doesn't have the given permission
  */
 User.prototype.authorize = function(permission) {
-    if (!this.permissions[permission]) {
+    if (!this.hasPermission(permission)) {
         throw new Errors.UnauthorizedError('User does not have permission to perform this action', permission);
     }
+};
+
+/**
+ * Throws an error if user doesn't have any of the given permissions
+ */
+User.prototype.authorizeAny = function(permissions) {
+    for (var i = 0; i < permissions.length; i++) {
+        var permission = permissions[i];
+        if (this.hasPermission(permission)) {
+            return;
+        }
+    }
+    throw new Errors.UnauthorizedError('User does not have permission to perform this action', permission);
 };
 
 /**
@@ -37,6 +50,7 @@ User.build = function(auth0Profile) {
 User.Permission = {
     CREATE_SHOPPING_CENTER: 'CREATE:SHOPPING_CENTER',
     DELETE_SHOPPING_CENTER: 'DELETE:SHOPPING_CENTER',
+    EDIT_SHOPPING_CENTER: 'EDIT:SHOPPING_CENTER',
     READ_SHOPPING_CENTER: 'READ:SHOPPING_CENTER'
 };
 

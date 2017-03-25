@@ -13,6 +13,7 @@ Router.route('/shopping-center')
 
 Router.route('/shopping-center/:shoppingCenterId')
     .get(ShoppingCenterController.findOne)
-    .delete(ShoppingCenterController.deleteOne);
+    .delete(ShoppingCenterController.deleteOne)
+    .put(ShoppingCenterController.updateOne);
 
 module.exports = Router;

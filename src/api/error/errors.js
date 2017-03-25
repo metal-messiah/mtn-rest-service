@@ -6,7 +6,7 @@
  */
 module.exports = {
     BadRequestError: extendError('BadRequestError', 400, 'Bad Request'),
-    ConflictError: extendError('ConflictError', 417, 'The version of your data is out-of-date'),
+    ConflictError: extendError('ConflictError', 409, 'The version of your data is out-of-date'),
     InternalServerError: extendError('InternalServerError', 500, 'An Unexpected Error Occurred'),
     UnauthorizedError: extendError('UnauthorizedError', 401, 'You do not have permission to perform this action')
 };

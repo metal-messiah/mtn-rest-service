@@ -33,7 +33,13 @@ function error(res, error) {
      */
     if (error && error.status) {
         status = error.status;
-        data.message = error.message;
+
+        //Replace error response body with conflicted data if ConflictError
+        if (error instanceof Errors.ConflictError) {
+            data = error.extra;
+        } else {
+            data.message = error.message;
+        }
     }
 
     res.status(status).json(data);

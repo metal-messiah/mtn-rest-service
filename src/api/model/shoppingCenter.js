@@ -49,6 +49,9 @@ module.exports = function(sequelize, DataTypes) {
                     isUrl: true,
                     len: [3, 256]
                 }
+            },
+            version: {
+                type: DataTypes.INTEGER
             }
         }
     );

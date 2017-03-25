@@ -142,6 +142,9 @@ function updateOne(user, id, request) {
             if (!Utils.isPositiveInteger(id)) {
                 throw new Errors.BadRequestError('Invalid ID Provided');
             }
+            if (!request.version) {
+                throw new Errors.BadRequestError('No Version Provided');
+            }
             user.authorize(User.Permission.EDIT_SHOPPING_CENTER);
         })
         .then(function() {
@@ -155,16 +158,22 @@ function updateOne(user, id, request) {
                 }));
         })
         .then(function(existing) {
-            //TODO version enforcement here
+            //Return a 409 Conflict if request data is out-of-date
+            if (existing.version !== request.version) {
+                throw new Errors.ConflictError(existing);
+            }
         })
         .then(function() {
             var options = {
-                fields: ['name', 'nativeId', 'owner', 'url'],
+                fields: ['name', 'nativeId', 'owner', 'url', 'version'],
                 returning: true,
                 where: {
                     id: id
                 }
             };
+
+            //TODO figure out why hooks aren't registering?
+            request.version++;
 
             return q(ShoppingCenter
                 .update(request, options))

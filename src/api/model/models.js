@@ -5,6 +5,11 @@ module.exports = Models();
 function Models() {
     var registry = Registry();
 
+    //Hooks
+    registry.ShoppingCenter.beforeUpdate = function(instance, options) {
+        instance.version++;
+    };
+
     //Relationships
     //registry.This.belongsTo(registry.That);
 

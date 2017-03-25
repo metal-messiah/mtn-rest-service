@@ -7,7 +7,8 @@ module.exports = {
     cleanUndefined: cleanUndefined,
     handleSequelizeException: handleSequelizeException,
     isNumeric: isNumeric,
-    isPositiveInteger: isPositiveInteger
+    isPositiveInteger: isPositiveInteger,
+    Pagination: Pagination
 };
 
 //////////////////////////////////
@@ -61,4 +62,13 @@ function isPositiveInteger(value) {
         return n > 0;
     }
     return false;
+}
+
+function Pagination(results, totalCount, options) {
+    this.content = results;
+    this.pagination = {
+        limit: options.limit,
+        offset: options.offset,
+        totalResults: totalCount
+    };
 }

@@ -82,21 +82,41 @@ function deleteOne(user, id) {
 }
 
 function findAll(user, params) {
-    var where = initFindAllOptions(params);
+    var options = initFindAllOptions(params);
 
     return q
         .fcall(function() {
             user.authorize(User.Permission.READ_SHOPPING_CENTER);
         })
         .then(function() {
-            return q(ShoppingCenter
-                .findAll(where))
-                .then(function(results) {
-                    Logger.info('Retrieved Shopping Centers')
-                        .user(user)
-                        .build();
-                    return results;
-                });
+            var promises = [];
+
+            //Pagination count
+            promises.push(
+                q(ShoppingCenter
+                    .count(options)
+                    .then(function(count) {
+                        return count;
+                    }))
+            );
+
+            //Actual query
+            promises.push(
+                q(ShoppingCenter
+                    .findAll(options))
+                    .then(function(results) {
+                        Logger.info('Retrieved Shopping Centers')
+                            .user(user)
+                            .build();
+                        return results;
+                    })
+            );
+
+            return q
+                .all(promises)
+                .then(function(promiseResults) {
+                    return new Utils.Pagination(promiseResults[1], promiseResults[0], options);
+                })
         })
         .catch(function(error) {
             Logger.error('Failed to retrieve Shopping Centers')

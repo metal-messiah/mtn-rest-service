@@ -40,32 +40,32 @@ function up(queryInterface, DataTypes) {
                 deleted_date: {
                     type: DataTypes.DATE
                 },
-                hasLeftIn: {
+                has_left_in: {
                     type: DataTypes.BOOLEAN,
                     allowNull: false,
                     defaultValue: false
                 },
-                hasLeftOut: {
+                has_left_out: {
                     type: DataTypes.BOOLEAN,
                     allowNull: false,
                     defaultValue: false
                 },
-                hasRightIn: {
+                has_right_in: {
                     type: DataTypes.BOOLEAN,
                     allowNull: false,
                     defaultValue: false
                 },
-                hasRightOut: {
+                has_right_out: {
                     type: DataTypes.BOOLEAN,
                     allowNull: false,
                     defaultValue: false
                 },
-                hasTrafficLight: {
+                has_traffic_light: {
                     type: DataTypes.BOOLEAN,
                     allowNull: false,
                     defaultValue: false
                 },
-                isOneWayRoad: {
+                is_one_way_road: {
                     type: DataTypes.BOOLEAN,
                     allowNull: false,
                     defaultValue: false
@@ -73,6 +73,11 @@ function up(queryInterface, DataTypes) {
                 updated_date: {
                     type: DataTypes.DATE,
                     allowNull: false
+                },
+                version: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false,
+                    defaultValue: 1
                 }
             }
         );

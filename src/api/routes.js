@@ -16,4 +16,8 @@ Router.route('/shopping-center/:shoppingCenterId')
     .delete(ShoppingCenterController.deleteOne)
     .put(ShoppingCenterController.updateOne);
 
+Router.route('/shopping-center/:shoppingCenterId/access')
+    .get(ShoppingCenterController.findAllAccesses)
+    .post(ShoppingCenterController.addOneAccess);
+
 module.exports = Router;

@@ -47,6 +47,8 @@ function handleSequelizeException(error) {
         }
 
         throw new Errors.BadRequestError(validationErrorMessages.join(', '));
+    } else if (error instanceof sequelize.DatabaseError) {
+        throw new Errors.InternalServerError(error.message, error.sql);
     } else {
         throw new Errors.InternalServerError();
     }

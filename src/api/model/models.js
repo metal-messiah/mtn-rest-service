@@ -6,18 +6,23 @@ function Models() {
     var registry = Registry();
 
     //Hooks
-    registry.ShoppingCenter.beforeUpdate = function(instance, options) {
-        instance.version++;
-    };
+    registry.ShoppingCenter.beforeUpdate = incrementVersion;
+    registry.ShoppingCenterAccess.beforeUpdate = incrementVersion;
 
     //Relationships
-    //registry.This.belongsTo(registry.That);
+    registry.ShoppingCenterAccess.hasOne(registry.ShoppingCenter);
+    registry.ShoppingCenter.hasMany(registry.ShoppingCenterAccess, {as: 'Accesses'});
 
     return registry;
 }
 
 function Registry() {
     return {
-        ShoppingCenter: sequelize.import(__dirname + '/shoppingCenter')
+        ShoppingCenter: sequelize.import(__dirname + '/shoppingCenter'),
+        ShoppingCenterAccess: sequelize.import(__dirname + '/shoppingCenterAccess')
     };
+}
+
+function incrementVersion(instance, options) {
+    instance.version++;
 }

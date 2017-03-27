@@ -42,16 +42,14 @@ function addOne(user, shoppingCenterId, request) {
             }));
     }
 
-    function createShoppingCenterAccess() {
+    function createShoppingCenterAccess(shoppingCenter) {
         var options = {
             fields: ['accessType', 'hasLeftIn', 'hasLeftOut', 'hasRightIn', 'hasRightOut', 'hasTrafficLight', 'isOneWayRoad', 'shoppingCenterId'],
             returning: true
         };
 
-        request.shoppingCenterId = shoppingCenterId;
-
-        return q(ShoppingCenterAccess
-            .create(request, options))
+        return q(shoppingCenter
+            .createShoppingCenterAccess(request, options))
             .then(function(result) {
                 Logger.info('Created Access for Shopping Center')
                     .user(user)

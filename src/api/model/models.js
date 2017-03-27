@@ -10,8 +10,8 @@ function Models() {
     registry.ShoppingCenterAccess.beforeUpdate = incrementVersion;
 
     //Relationships
-    // registry.ShoppingCenterAccess.belongsTo(registry.ShoppingCenter);
-    // registry.ShoppingCenter.hasMany(registry.ShoppingCenterAccess, {as: 'Accesses', foreignKey: 'shopping_center_id'});
+    registry.ShoppingCenterAccess.belongsTo(registry.ShoppingCenter);
+    registry.ShoppingCenter.hasMany(registry.ShoppingCenterAccess, {as: 'ShoppingCenterAccesses', foreignKey: 'shoppingCenterId'});
 
     return registry;
 }

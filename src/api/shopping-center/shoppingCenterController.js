@@ -6,10 +6,14 @@ module.exports = {
     addOne: addOne,
     addOneAccess: addOneAccess,
     deleteOne: deleteOne,
+    deleteAllAccesses: deleteAllAccesses,
+    deleteOneAccess: deleteOneAccess,
     findAll: findAll,
     findAllAccesses: findAllAccesses,
     findOne: findOne,
-    updateOne: updateOne
+    findOneAccess: findOneAccess,
+    updateOne: updateOne,
+    updateOneAccess: updateOneAccess
 };
 
 /////////////////////////////
@@ -39,6 +43,28 @@ function addOneAccess(req, res) {
 function deleteOne(req, res) {
     ShoppingCenterService
         .deleteOne(req.mtnUser, req.params.shoppingCenterId)
+        .then(function() {
+            ResponseUtil.ok(res);
+        })
+        .catch(function(error) {
+            ResponseUtil.error(res, error);
+        });
+}
+
+function deleteAllAccesses(req, res) {
+    ShoppingCenterAccessService
+        .deleteAllForShoppingCenter(req.mtnUser, req.params.shoppingCenterId)
+        .then(function() {
+            ResponseUtil.ok(res);
+        })
+        .catch(function(error) {
+            ResponseUtil.error(res, error);
+        });
+}
+
+function deleteOneAccess(req, res) {
+    ShoppingCenterAccessService
+        .deleteOne(req.mtnUser, req.params.shoppingCenterAccessId)
         .then(function() {
             ResponseUtil.ok(res);
         })
@@ -80,9 +106,31 @@ function findOne(req, res) {
         });
 }
 
+function findOneAccess(req, res) {
+    ShoppingCenterAccessService
+        .findOne(req.mtnUser, req.params.shoppingCenterAccessId)
+        .then(function(data) {
+            ResponseUtil.ok(res, data);
+        })
+        .catch(function(error) {
+            ResponseUtil.error(res, data);
+        });
+}
+
 function updateOne(req, res) {
     ShoppingCenterService
         .updateOne(req.mtnUser, req.params.shoppingCenterId, req.body)
+        .then(function(data) {
+            ResponseUtil.ok(res, data);
+        })
+        .catch(function(error) {
+            ResponseUtil.error(res, error);
+        });
+}
+
+function updateOneAccess(req, res) {
+    ShoppingCenterAccessService
+        .updateOne(req.mtnUser, req.params.shoppingCenterAccessId, req.body)
         .then(function(data) {
             ResponseUtil.ok(res, data);
         })

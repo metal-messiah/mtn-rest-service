@@ -82,7 +82,7 @@ function deleteOne(user, id) {
             .then(function(rows) {
                 Logger.info('Deleted Shopping Center')
                     .user(user)
-                    .keyValue('id', id)
+                    .keyValue('shoppingCenterId', id)
                     .keyValue('count', rows)
                     .build();
             });
@@ -172,7 +172,7 @@ function findOne(user, id) {
             .then(function(result) {
                 Logger.info('Retrieved Shopping Center')
                     .user(user)
-                    .keyValue('id', id)
+                    .keyValue('shoppingCenterId', id)
                     .build();
                 return result;
             }));
@@ -181,7 +181,7 @@ function findOne(user, id) {
     function handleError(error) {
         Logger.error('Failed to retrieve Shopping Center')
             .user(user)
-            .keyValue('id', id)
+            .keyValue('shoppingCenterId', id)
             .exception(error)
             .build();
         throw error;
@@ -210,13 +210,13 @@ function updateOne(user, id, request) {
 
     function retrieveShoppingCenter() {
         return q(ShoppingCenter
-            .findById(id)
+            .findById(id))
             .then(function(result) {
                 if (!result) {
                     throw new Errors.BadRequestError('Shopping Center not found');
                 }
                 return result;
-            }));
+            });
     }
 
     function enforceVersion(existing) {
@@ -253,7 +253,7 @@ function updateOne(user, id, request) {
     function handleError(error) {
         Logger.error('Failed to update Shopping Center')
             .user(user)
-            .keyValue('id', id)
+            .keyValue('shoppingCenterId', id)
             .json(request)
             .exception(error)
             .build();

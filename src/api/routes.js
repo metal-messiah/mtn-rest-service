@@ -18,6 +18,12 @@ Router.route('/shopping-center/:shoppingCenterId')
 
 Router.route('/shopping-center/:shoppingCenterId/access')
     .get(ShoppingCenterController.findAllAccesses)
-    .post(ShoppingCenterController.addOneAccess);
+    .post(ShoppingCenterController.addOneAccess)
+    .delete(ShoppingCenterController.deleteAllAccesses);
+
+Router.route('/shopping-center/access/:shoppingCenterAccessId')
+    .get(ShoppingCenterController.findOneAccess)
+    .delete(ShoppingCenterController.deleteOneAccess)
+    .put(ShoppingCenterController.updateOneAccess);
 
 module.exports = Router;

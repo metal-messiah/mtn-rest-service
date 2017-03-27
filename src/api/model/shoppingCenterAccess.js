@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
                 values: ['FRONT_MAIN', 'SIDE_MAIN', 'NON_MAIN'],
                 allowNull: false,
                 validate: {
-                    isIn: ['FRONT_MAIN', 'SIDE_MAIN', 'NON_MAIN']
+                    isIn: [['FRONT_MAIN', 'SIDE_MAIN', 'NON_MAIN']]
                 }
             },
             createdDate: {

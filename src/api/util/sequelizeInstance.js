@@ -29,6 +29,7 @@ function buildInstance() {
 function buildOptions() {
     return {
         host: validate(getHost()),
+        port: validate(getPort()),
         dialect: validate(getDialect()),
         logging: validate(getShowSql()),
         pool: buildPool(),
@@ -82,6 +83,10 @@ function getPassword() {
 
 function getHost() {
     return Properties.database.host;
+}
+
+function getPort() {
+    return Properties.database.port;
 }
 
 function getDialect() {

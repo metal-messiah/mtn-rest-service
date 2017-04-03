@@ -37,7 +37,6 @@ function up(queryInterface, DataTypes) {
                 },
                 deleted_by: {
                     type: DataTypes.INTEGER,
-                    allowNull: false,
                     references: {
                         model: 'user_profile',
                         key: 'user_profile_id'

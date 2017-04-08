@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app="mtn">
+<head>
+    <title>MTN Rest Service</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="styles/main.css">
+    <base href="/" />
+</head>
+<body>
+<div ng-controller="IndexCtrl" ng-cloak>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <div ng-if="isAuthenticated">
+                Welcome, {{Cache.user().email}}
+            </div>
+            <span flex></span>
+            <md-button class="md-icon-button" aria-label="Login" ng-if="!isAuthenticated" ng-click="AuthService.login()">
+                <md-icon><i class="material-icons">lock_open</i></md-icon>
+                <md-tooltip>You are not logged in</md-tooltip>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Logout" ng-if="isAuthenticated" ng-click="AuthService.logout()">
+                <md-icon><i class="material-icons">lock</i></md-icon>
+                <md-tooltip>You are logged in</md-tooltip>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-content>
+        <section layout="column" ng-if="Cache.user()"layout-padding>
+            <h1 class="md-primary">Admin Info</h1>
+            <p>Paste these values into your Postman environment variables for testing:</p>
+            <md-input-container style="width:220px;">
+                <label>Access Token</label>
+                <input id="access-token" ng-model="Cache.user().accessToken" ng-readonly="true"/>
+                <md-icon ngclipboard data-clipboard-target="#access-token" style="cursor:pointer;">
+                    <i class="material-icons">content_paste</i>
+                    <md-tooltip>Copy to Clipboard</md-tooltip>
+                </md-icon>
+            </md-input-container>
+            <md-input-container style="width:220px;">
+                <label>ID Token</label>
+                <input id="id-token" ng-model="Cache.user().idToken" ng-readonly="true"/>
+                <md-icon ngclipboard data-clipboard-target="#id-token" style="cursor:pointer;">
+                    <i class="material-icons">content_paste</i>
+                    <md-tooltip>Copy to Clipboard</md-tooltip>
+                </md-icon>
+            </md-input-container>
+        </section>
+        <section layout="column" layout-padding>
+            <h1 class="md-primary">Test</h1>
+            <p>Use the Ping button below to test your connection with the server.</p>
+            <div layout="row" layout-align="start center">
+                <md-button class="md-raised md-primary" ng-click="getPing()">
+                    Ping
+                </md-button>
+                <strong ng-class="{'text-green': pingResult === 'OK', 'text-red': pingResult !== 'OK' && pingResult !== 'Checking...'}">{{pingResult}}</strong>
+            </div>
+        </section>
+    </md-content>
+</div>
+
+<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-messages.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+<script src="scripts/lib/ngclipboard.min.js"></script>
+<script src="https://cdn.auth0.com/js/lock/10.8/lock.min.js"></script>
+<script src="scripts/lib/angular-jwt.min.js"></script>
+<script src="scripts/lib/angular-lock.min.js"></script>
+
+<script src="scripts/app.js"></script>
+<script src="scripts/indexCtrl.js"></script>
+<script src="scripts/auth/authService.js"></script>
+<script src="scripts/ping/pingService.js"></script>
+<script src="scripts/auth/authInterceptor.js"></script>
+<script src="scripts/util/cache.js"></script>
+<script src="scripts/auth/user.js"></script>
+</body>
+</html>

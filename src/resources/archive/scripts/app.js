@@ -9,7 +9,7 @@ angular.module('mtn').run(registerAuth);
 function configureAuth($httpProvider, $locationProvider, lockProvider, jwtOptionsProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
 
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(false);
 
     lockProvider.init({
         clientID: 'FArOoQuRqPT1MZFsNE9qnxeykHp48cIO',

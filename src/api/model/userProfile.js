@@ -37,7 +37,14 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         {
-            version: false
+            version: false,
+            defaultScope: {
+                where: {
+                    email: {
+                        $not: 'system.administrator@mtnra.com'
+                    }
+                }
+            }
         }
     );
 };

@@ -3,6 +3,7 @@ var Router = express.Router();
 
 var PingController = require('./ping/pingController.js');
 var ShoppingCenterController = require('./shopping-center/shoppingCenterController.js');
+var UserController = require('./user/userController.js');
 
 Router.route('/ping')
     .get(PingController.ping);
@@ -25,5 +26,14 @@ Router.route('/shopping-center/access/:shoppingCenterAccessId')
     .get(ShoppingCenterController.findOneAccess)
     .delete(ShoppingCenterController.deleteOneAccess)
     .put(ShoppingCenterController.updateOneAccess);
+
+Router.route('/user')
+    .get(UserController.findAll)
+    .post(UserController.addOne);
+
+Router.route('/user/{id}')
+    .get(UserController.findOne)
+    .put(UserController.updateOne)
+    .delete(UserController.deleteOne);
 
 module.exports = Router;

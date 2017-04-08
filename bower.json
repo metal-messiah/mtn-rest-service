@@ -1,0 +1,31 @@
+{
+  "name": "mtn_rest_service",
+  "description": "The core MTN web service",
+  "main": "src/app.js",
+  "authors": [
+    "asudweeks"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.4",
+    "auth0-lock": "^10.14.0",
+    "auth0.js": "^8.5.0",
+    "angular-lock": "^2.0.2",
+    "angular-jwt": "^0.1.9",
+    "angular-route": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-sanitize": "^1.6.4",
+    "angular-aria": "^1.6.4",
+    "angular-messages": "^1.6.4",
+    "angular-material": "^1.1.3"
+  }
+}

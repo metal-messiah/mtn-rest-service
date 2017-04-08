@@ -41,7 +41,7 @@ function configureMiddleware() {
         }
     }));
 
-    app.use(express.static(path.join(__dirname, 'resources/static')));
+    app.use(express.static(path.join(__dirname, 'resources', 'static')));
 
     //Check JWT
     app.use(jwt({

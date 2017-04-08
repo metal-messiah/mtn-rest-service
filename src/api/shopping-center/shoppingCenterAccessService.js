@@ -40,7 +40,7 @@ function addOne(user, shoppingCenterId, request) {
         if (!_.includes(ShoppingCenterAccess.attributes.accessType.values, request.accessType)) {
             throw new Errors.BadRequestError('accessType must be one of: ' + ShoppingCenterAccess.attributes.accessType.values.join(', '));
         }
-        user.authorize(User.Permission.EDIT_SHOPPING_CENTER);
+        //TODO check permission
     }
 
     function retrieveShoppingCenter() {
@@ -96,7 +96,7 @@ function deleteAllForShoppingCenter(user, shoppingCenterId) {
         if (!Utils.isPositiveInteger(shoppingCenterId)) {
             throw new Errors.BadRequestError('Invalid Shopping Center Access ID Provided');
         }
-        user.authorize(User.Permission.DELETE_SHOPPING_CENTER);
+        //TODO check permission
     }
 
     function deleteShoppingCenterAccesses() {
@@ -137,7 +137,7 @@ function deleteOne(user, id) {
         if (!Utils.isPositiveInteger(id)) {
             throw new Errors.BadRequestError('Invalid Shopping Center Access ID Provided');
         }
-        user.authorize(User.Permission.DELETE_SHOPPING_CENTER);
+        //TODO check permission
     }
 
     function deleteShoppingCenterAccess() {
@@ -178,7 +178,7 @@ function findAllForShoppingCenter(user, shoppingCenterId) {
         if (!Utils.isPositiveInteger(shoppingCenterId)) {
             throw new Errors.BadRequestError('Invalid Shopping Center ID Provided');
         }
-        user.authorize(User.Permission.READ_SHOPPING_CENTER);
+        //TODO check permission
     }
 
     function retrieveShoppingCenterAccesses() {
@@ -222,7 +222,7 @@ function findOne(user, id) {
         if (!Utils.isPositiveInteger(id)) {
             throw new Errors.BadRequestError('Invalid Shopping Center Access ID Provided');
         }
-        user.authorize(User.Permission.READ_SHOPPING_CENTER);
+        //TODO check permission
     }
 
     function retrieveShoppingCenterAccess() {
@@ -267,7 +267,7 @@ function updateOne(user, id, request) {
         if (!request.version) {
             throw new Errors.BadRequestError('No Version Provided');
         }
-        user.authorize(User.Permission.EDIT_SHOPPING_CENTER);
+        //TODO check permission
     }
 
     function retrieveShoppingCenterAccess() {

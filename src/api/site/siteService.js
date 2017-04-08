@@ -39,7 +39,7 @@ function addOne(user, shoppingCenterId, request) {
         if (!_.includes(Site.attributes.locationType.values, request.locationType)) {
             throw new Errors.BadRequestError('locationType must be one of: ' + Site.attributes.locationType.values.join(', '));
         }
-        user.authorize(User.Permission.CREATE_SITE);
+        //TODO check permission
     }
 
     function retrieveShoppingCenter() {

@@ -1,9 +1,8 @@
 var q = require('q');
 
-var User = require('../auth/user.js');
 var Logger = require('../util/logger.js');
 var Models = require('../model/models.js');
-var ShoppingCenter = Models.ShoppingCenter;
+var UserProfile = Models.UserProfile;
 var Utils = require('../util/utils.js');
 var Errors = require('../error/errors.js');
 
@@ -15,12 +14,12 @@ module.exports = {
     updateOne: updateOne
 };
 
-////////////////////////////
+///////////////////////////////
 
 function addOne(user, request) {
     return q
         .fcall(validate)
-        .then(createShoppingCenter)
+        .then(createUser)
         .catch(handleError);
 
     //////////////////////////////
@@ -29,16 +28,16 @@ function addOne(user, request) {
         //TODO check permission
     }
 
-    function createShoppingCenter() {
+    function createUser() {
         var options = {
-            fields: ['name', 'nativeId', 'owner', 'url'],
+            fields: ['email', 'firstName', 'lastName'],
             returning: true
         };
 
-        return q(ShoppingCenter
+        return q(UserProfile
             .create(request, options))
             .then(function(result) {
-                Logger.info('Created Shopping Center')
+                Logger.info('Created User')
                     .user(user)
                     .json(request)
                     .build();
@@ -48,7 +47,7 @@ function addOne(user, request) {
     }
 
     function handleError(error) {
-        Logger.error('Failed to create Shopping Center')
+        Logger.error('Failed to create User')
             .user(user)
             .json(request)
             .exception(error)
@@ -60,38 +59,38 @@ function addOne(user, request) {
 function deleteOne(user, id) {
     return q
         .fcall(validate)
-        .then(deleteShoppingCenter)
+        .then(deleteUser)
         .catch(handleError);
 
-    ///////////////////////
+    ///////////////////////////////
 
     function validate() {
         if (!Utils.isPositiveInteger(id)) {
-            throw new Errors.BadRequestError('Invalid Shopping Center ID Provided');
+            throw new Errors.BadRequestError('Invalid User ID Provided');
         }
         //TODO check permission
     }
 
-    function deleteShoppingCenter() {
-        return q(ShoppingCenter
+    function deleteUser() {
+        return q(UserProfile
             .destroy({
                 where: {
                     id: id
                 }
             }))
             .then(function(rows) {
-                Logger.info('Deleted Shopping Center')
+                Logger.info('Deleted User')
                     .user(user)
-                    .keyValue('shoppingCenterId', id)
+                    .keyValue('userId', id)
                     .keyValue('count', rows)
                     .build();
             });
     }
 
     function handleError(error) {
-        Logger.error('Failed to delete Shopping Center')
+        Logger.error('Failed to delete User')
             .user(user)
-            .keyValue('shoppingCenterId', id)
+            .keyValue('userId', id)
             .exception(error)
             .build();
         throw error;
@@ -103,33 +102,30 @@ function findAll(user, params) {
 
     return q
         .fcall(validate)
-        .then(retrieveShoppingCenters)
+        .then(retrieveUsers)
         .catch(handleError);
 
-    ///////////////////////
+    ////////////////////////////////
 
     function validate() {
         //TODO check permission
     }
 
-    function retrieveShoppingCenters() {
+    function retrieveUsers() {
         var promises = [];
 
         //Pagination count
         promises.push(
-            q(ShoppingCenter
-                .count(options)
-                .then(function(count) {
-                    return count;
-                }))
+            q(UserProfile
+                .count(options))
         );
 
         //Actual query
         promises.push(
-            q(ShoppingCenter
+            q(UserProfile
                 .findAll(options))
                 .then(function(results) {
-                    Logger.info('Retrieved Shopping Centers')
+                    Logger.info('Retreived Users')
                         .user(user)
                         .build();
                     return results;
@@ -140,11 +136,11 @@ function findAll(user, params) {
             .all(promises)
             .then(function(promiseResults) {
                 return new Utils.Pagination(promiseResults[1], promiseResults[0], options);
-            })
+            });
     }
 
     function handleError(error) {
-        Logger.error('Failed to retrieve Shopping Centers')
+        Logger.error('Failed to retrieve Users')
             .user(user)
             .exception(error)
             .build();
@@ -155,34 +151,50 @@ function findAll(user, params) {
 function findOne(user, id) {
     return q
         .fcall(validate)
-        .then(retrieveShoppingCenter)
+        .then(retrieveUser)
         .catch(handleError);
 
-    /////////////////////////
+    //////////////////////////////
 
     function validate() {
-        if (!Utils.isPositiveInteger(id)) {
-            throw new Errors.BadRequestError('Invalid Shopping Center ID Provided');
-        }
         //TODO check permission
     }
 
-    function retrieveShoppingCenter() {
-        return q(ShoppingCenter
-            .findById(id)
+    function retrieveUser() {
+        var promise;
+
+        //If integer, look by id
+        if (Utils.isPositiveInteger(id)) {
+            promise = q(UserProfile
+                .findById(id));
+        }
+        //Else, look by provider user id
+        else {
+            promise = q(UserProfile
+                .findOne({
+                    include: [{
+                        model: Models.UserIdentity,
+                        where: {
+                            providerUserId: id
+                        }
+                    }]
+                }));
+        }
+
+        return promise
             .then(function(result) {
-                Logger.info('Retrieved Shopping Center')
+                Logger.info('Retrieved User')
                     .user(user)
-                    .keyValue('shoppingCenterId', id)
+                    .keyValue('userId', id)
                     .build();
                 return result;
-            }));
+            });
     }
 
     function handleError(error) {
-        Logger.error('Failed to retrieve Shopping Center')
+        Logger.error('Failed to retrieve User')
             .user(user)
-            .keyValue('shoppingCenterId', id)
+            .keyValue('userId', id)
             .exception(error)
             .build();
         throw error;
@@ -192,9 +204,8 @@ function findOne(user, id) {
 function updateOne(user, id, request) {
     return q
         .fcall(validate)
-        .then(retrieveShoppingCenter)
-        .then(enforceVersion)
-        .then(updateShoppingCenter)
+        .then(retrieveUser)
+        .then(updateUser)
         .catch(handleError);
 
     /////////////////////////////
@@ -203,58 +214,44 @@ function updateOne(user, id, request) {
         if (!Utils.isPositiveInteger(id)) {
             throw new Errors.BadRequestError('Invalid Shopping Center ID Provided');
         }
-        if (!request.version) {
-            throw new Errors.BadRequestError('No Version Provided');
-        }
         //TODO check permission
     }
 
-    function retrieveShoppingCenter() {
-        return q(ShoppingCenter
+    function retrieveUser() {
+        return q(UserProfile
             .findById(id))
             .then(function(result) {
                 if (!result) {
-                    throw new Errors.BadRequestError('Shopping Center not found');
+                    throw new Errors.BadRequestError('User not found');
                 }
                 return result;
             });
     }
 
-    function enforceVersion(existing) {
-        //Return a 409 Conflict if request data is out-of-date
-        if (existing.version !== request.version) {
-            throw new Errors.ConflictError(existing);
+    function updateUser(existing) {
+        if (request.email) {
+            existing.email = request.email;
         }
-    }
+        existing.firstName = request.firstName;
+        existing.lastName = request.lastName;
 
-    function updateShoppingCenter() {
-        var options = {
-            fields: ['name', 'nativeId', 'owner', 'url', 'version'],
-            returning: true,
-            where: {
-                id: id
-            }
-        };
-
-        //TODO figure out why hooks aren't registering?
-        request.version++;
-
-        return q(ShoppingCenter
-            .update(request, options))
-            .then(function(results) {
-                Logger.info('Updated Shopping Center')
+        return q(existing
+            .save())
+            .then(function(result) {
+                Logger.info('Updated User Profile')
                     .user(user)
+                    .keyValue('userId', id)
                     .json(request)
                     .build();
-                return results[1][0];
+                return result;
             })
             .catch(Utils.handleSequelizeException);
     }
 
     function handleError(error) {
-        Logger.error('Failed to update Shopping Center')
+        Logger.error('Failed to update User Profile')
             .user(user)
-            .keyValue('shoppingCenterId', id)
+            .keyValue('userId', id)
             .json(request)
             .exception(error)
             .build();
@@ -262,13 +259,13 @@ function updateOne(user, id, request) {
     }
 }
 
-///////////////////////////////
+////////////////////////////////////
 
 function initFindAllOptions(params) {
     var options = {
         limit: 10,
         offset: 0,
-        order: 'id DESC',
+        order: 'id ASC',
         where: {}
     };
 
@@ -280,18 +277,42 @@ function initFindAllOptions(params) {
         options.offset = Number(params.offset);
     }
 
-    if (typeof params.name !== 'undefined') {
-        options.where.name = {
-            $iLike: params.name + '%'
-        };
-    }
-    if (typeof params.nativeId !== 'undefined') {
-        options.where.nativeId = params.nativeId;
-    }
-    if (typeof params.owner !== 'undefined') {
-        options.where.owner = {
-            $iLike: params.owner + '%'
-        };
+    if (typeof params.q !== 'undefined') {
+        options.where = {
+            $or: [
+                {
+                    email: {
+                        $iLike: params.q + '%'
+                    }
+                },
+                {
+                    firstName: {
+                        $iLike: params.q + '%'
+                    }
+                },
+                {
+                    lastName: {
+                        $iLike: params.q + '%'
+                    }
+                }
+            ]
+        }
+    } else {
+        if (typeof params.email !== 'undefined') {
+            options.where.email = {
+                $iLike: params.email + '%'
+            };
+        }
+        if (typeof params.firstName !== 'undefined') {
+            options.where.firstName = {
+                $iLike: params.firstName + '%'
+            };
+        }
+        if (typeof params.lastName !== 'undefined') {
+            options.where.lastName = {
+                $iLike: params.lastName + '%'
+            };
+        }
     }
 
     return options;

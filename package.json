@@ -1,6 +1,9 @@
 {
   "name": "mtn_rest_service",
   "version": "0.1.0",
+  "engines": {
+    "node": "6.9.4"
+  },
   "description": "The core MTN web service",
   "main": "src/app.js",
   "scripts": {
@@ -18,8 +21,10 @@
   "dependencies": {
     "auth0-js": "^8.4.0",
     "body-parser": "^1.17.0",
+    "bower": "^1.8.0",
     "express": "^4.15.0",
     "express-jwt": "^5.1.0",
+    "gulp": "^3.9.1",
     "helmet": "^3.4.1",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
@@ -32,10 +37,8 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
-    "bower": "^1.8.0",
     "browser-sync": "^2.18.8",
     "del": "^2.2.2",
-    "gulp": "^3.9.1",
     "gulp-angular-filesort": "^1.1.1",
     "gulp-concat": "^2.6.1",
     "gulp-concat-css": "^2.3.0",

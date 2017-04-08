@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postInstall": "bower install && gulp build"
+    "postinstall": "bower install && gulp build"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
+    "bower": "^1.8.0",
     "browser-sync": "^2.18.8",
     "del": "^2.2.2",
     "gulp": "^3.9.1",

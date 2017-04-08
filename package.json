@@ -2,7 +2,7 @@
   "name": "mtn_rest_service",
   "version": "0.1.0",
   "engines": {
-    "node": "6.9.4"
+    "node": "6.9.2"
   },
   "description": "The core MTN web service",
   "main": "src/app.js",

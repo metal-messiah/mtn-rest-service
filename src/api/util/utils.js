@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var sequelize = require('./sequelizeInstance.js');
+var database = require('../model/database.js');
 
 var Errors = require('../error/errors.js');
 
@@ -37,7 +37,7 @@ function cleanUndefined(object) {
  * Error types.
  */
 function handleSequelizeException(error) {
-    if (error instanceof sequelize.ValidationError) {
+    if (error instanceof database.sequelize.ValidationError) {
         var validationErrors = error.errors;
         var validationErrorMessages = [];
 
@@ -47,7 +47,7 @@ function handleSequelizeException(error) {
         }
 
         throw new Errors.BadRequestError(validationErrorMessages.join(', '));
-    } else if (error instanceof sequelize.DatabaseError) {
+    } else if (error instanceof database.sequelize.DatabaseError) {
         throw new Errors.InternalServerError(error.message, error.sql);
     } else {
         throw new Errors.InternalServerError();

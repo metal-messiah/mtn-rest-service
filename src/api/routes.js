@@ -31,7 +31,7 @@ Router.route('/user')
     .get(UserController.findAll)
     .post(UserController.addOne);
 
-Router.route('/user/{id}')
+Router.route('/user/:userId')
     .get(UserController.findOne)
     .put(UserController.updateOne)
     .delete(UserController.deleteOne);

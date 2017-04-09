@@ -1,8 +1,9 @@
 var q = require('q');
 
 var Logger = require('../util/logger.js');
-var Models = require('../model/models.js');
+var Models = require('../model/database.js');
 var UserProfile = Models.UserProfile;
+var UserIdentity = Models.UserIdentity;
 var Utils = require('../util/utils.js');
 var Errors = require('../error/errors.js');
 
@@ -125,7 +126,7 @@ function findAll(user, params) {
             q(UserProfile
                 .findAll(options))
                 .then(function(results) {
-                    Logger.info('Retreived Users')
+                    Logger.info('Retrieved Users')
                         .user(user)
                         .build();
                     return results;
@@ -161,27 +162,35 @@ function findOne(user, id) {
     }
 
     function retrieveUser() {
-        var promise;
+        var options;
 
-        //If integer, look by id
         if (Utils.isPositiveInteger(id)) {
-            promise = q(UserProfile
-                .findById(id));
-        }
-        //Else, look by provider user id
-        else {
-            promise = q(UserProfile
-                .findOne({
-                    include: [{
-                        model: Models.UserIdentity,
+            options = {
+                include: [{
+                    model: UserIdentity,
+                    separate: true
+                }],
+                where: {
+                    id: id
+                }
+            }
+        } else {
+            options = {
+                include: [{
+                    model: UserIdentity,
+                    separate: true,
+                    through: {
                         where: {
                             providerUserId: id
                         }
-                    }]
-                }));
+                    }
+                }]
+            }
         }
 
-        return promise
+        return q(UserProfile
+            .unscoped()
+            .findOne(options))
             .then(function(result) {
                 Logger.info('Retrieved User')
                     .user(user)

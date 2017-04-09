@@ -50,7 +50,11 @@
                 service.data[name] = undefined;
                 localStorage.removeItem(name);
             } else {
-                service.data = {};
+                for (var property in service.data) {
+                    if (service.data.hasOwnProperty(property)) {
+                        service.clear(property);
+                    }
+                }
             }
         }
 

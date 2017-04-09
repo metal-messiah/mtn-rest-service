@@ -1,12 +1,10 @@
 (function() {
     angular.module('mtn').factory('AuthService', AuthService);
 
-    var ID_TOKEN = 'id_token';
-
     function AuthService($log, $q, lock, authManager, Cache) {
         var service = {
             data: {},
-            loadProfile: loadProfile,
+            loadAuthProfile: loadAuthProfile,
             login: login,
             logout: logout,
             registerAuthenticationListener: registerAuthenticationListener
@@ -16,19 +14,19 @@
 
         ////////////////////////////
 
-        function loadProfile() {
+        function loadAuthProfile() {
             var deferred = $q.defer();
 
-            lock.getProfile(getToken(), function(error, profile) {
+            lock.getProfile(Cache.get('id_token'), function(error, profile) {
                 if (error) {
                     return $log.error('Failed to retrieve profile', error);
                 }
 
-                var user = User.build(profile);
+                var user = AuthUser.build(profile);
                 user.idToken = Cache.get('id_token');
                 user.accessToken = Cache.get('access_token');
 
-                $log.info('Successfully retrieved user profile', profile);
+                $log.info('Successfully retrieved user auth profile', user);
 
                 Cache.store('user', user);
             });
@@ -42,27 +40,18 @@
 
         function logout() {
             Cache.clear();
-            localStorage.removeItem(ID_TOKEN);
+            localStorage.removeItem('id_token');
+            localStorage.removeItem('access_token');
             authManager.unauthenticate();
         }
 
         function registerAuthenticationListener() {
             lock.on('authenticated', function(authResult) {
-                setToken(authResult.idToken);
+                Cache.store('id_token', authResult.idToken);
                 Cache.store('access_token', authResult.accessToken);
-                service.loadProfile();
+                service.loadAuthProfile();
                 authManager.authenticate();
             });
-        }
-
-        //////////////////////////////
-
-        function setToken(value) {
-            Cache.store(ID_TOKEN, value);
-        }
-
-        function getToken() {
-            return Cache.get(ID_TOKEN);
         }
     }
 })();

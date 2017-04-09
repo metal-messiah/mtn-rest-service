@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define(
+    var Site = sequelize.define(
         'site',
         {
             id: {
@@ -93,5 +93,7 @@ module.exports = function(sequelize, DataTypes) {
                 type: DataTypes.INTEGER
             }
         }
-    )
+    );
+
+    return Site;
 };

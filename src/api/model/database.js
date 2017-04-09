@@ -1,16 +1,42 @@
 var Sequelize = require('sequelize');
+var fs = require('fs');
+var path = require('path');
 var _ = require('lodash');
+var changeCase = require('change-case');
 
-var Properties = require('./properties.js');
+var Properties = require('./../util/properties.js');
 
-////////////////////////////////////////
+module.exports = buildDatabase();
 
-module.exports = buildInstance();
+/////////////////////////////////////////
 
-////////////////////////////////////////
+function buildDatabase() {
+    var database = {};
 
-function buildInstance() {
+    var sequelize = buildSequelizeInstance();
 
+    fs.readdirSync(__dirname)
+        .filter(function(file) {
+            return file !== 'database.js';
+        })
+        .forEach(function(file) {
+            var model = sequelize.import(path.join(__dirname, file));
+            database[changeCase.pascal(model.name)] = model;
+        });
+
+    Object.keys(database).forEach(function(modelName) {
+        if ("associate" in database[modelName]) {
+            database[modelName].associate(database);
+        }
+    });
+
+    database.sequelize = sequelize;
+    database.Sequelize = Sequelize;
+
+    return database;
+}
+
+function buildSequelizeInstance() {
     //If we have a connection string from Heroku, use it
     var herokuConnectionString = process.env.DATABASE_URL;
     if (herokuConnectionString) {

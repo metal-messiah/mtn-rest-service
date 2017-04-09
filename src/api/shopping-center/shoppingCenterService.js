@@ -2,7 +2,7 @@ var q = require('q');
 
 var User = require('../auth/user.js');
 var Logger = require('../util/logger.js');
-var Models = require('../model/models.js');
+var Models = require('../model/database.js');
 var ShoppingCenter = Models.ShoppingCenter;
 var Utils = require('../util/utils.js');
 var Errors = require('../error/errors.js');

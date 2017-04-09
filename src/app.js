@@ -8,12 +8,11 @@ var jwt = require('express-jwt');
 
 var Logger = require('./api/util/logger.js');
 var Properties = require('./api/util/properties.js');
-var Routes = require('./api/routes.js');
 var UserCacheMiddleware = require('./api/auth/userCacheMiddleware.js');
 
 ////////////////////////////////////
 
-var app, server, sequelizeInstance;
+var app, server, database;
 
 //Allow time to attach a debugger
 setTimeout(function () {
@@ -34,6 +33,7 @@ setTimeout(function () {
 ////////////////////////////////////
 
 function configureMiddleware() {
+    var Routes = require('./api/routes.js');
 
     app.use(helmet({
         frameguard: {
@@ -64,12 +64,15 @@ function configureMiddleware() {
 }
 
 function connectDatabase() {
-    sequelizeInstance = require('./api/util/sequelizeInstance.js');
+    database = require('./api/model/database.js');
 
-    return sequelizeInstance
+    return database.sequelize
         .authenticate()
         .then(function() {
             Logger.info('Successfully connected to database').build();
+        })
+        .then(function() {
+            return database.sequelize.sync();
         })
         .catch(function(error) {
             Logger.error('Failed to establish connection to database')
@@ -83,11 +86,11 @@ function migrateDatabase() {
     var umzugConfig = {
         storage: 'sequelize',
         storageOptions: {
-            sequelize: sequelizeInstance
+            sequelize: database.sequelize
         },
         migrations: {
             path: 'src/resources/migrations',
-            params: [sequelizeInstance.getQueryInterface(), sequelizeInstance.constructor, function() {
+            params: [database.sequelize.getQueryInterface(), database.sequelize.constructor, function() {
                 throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
             }]
         }

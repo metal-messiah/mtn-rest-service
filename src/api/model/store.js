@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define(
+    var Store = sequelize.define(
         'store',
         {
             id: {
@@ -76,4 +76,6 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     );
+
+    return Store;
 };

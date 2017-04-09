@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define(
+    var ShoppingCenter = sequelize.define(
         'shopping_center',
         {
             id: {
@@ -55,4 +55,6 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     );
+
+    return ShoppingCenter;
 };

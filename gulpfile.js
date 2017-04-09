@@ -26,28 +26,18 @@ var targetPath = './src/resources/static';
  *** Simple tasks
  ***/
 
+gulp.task('build-index', buildIndex);
 gulp.task('clean-static', cleanStatic);
 gulp.task('compile-sass', compileSass);
 gulp.task('compile-js', compileJs);
-gulp.task('copy-html', copyHtml);
 gulp.task('copy-dependencies', copyDependencies);
+gulp.task('copy-html', copyHtml);
 gulp.task('copy-images', copyImages);
 gulp.task('init-browser-sync', initBrowserSync);
-gulp.task('inject-js-dependencies', injectJsDependencies);
-gulp.task('inject-css-dependencies', injectCssDependencies);
 
 /***
  *** Composite tasks
  ***/
-
-gulp.task('build-index', function (callback) {
-    runSequence(
-        'copy-html',
-        'inject-js-dependencies',
-        'inject-css-dependencies',
-        callback
-    );
-});
 
 gulp.task('watch', function () {
     gulp.watch(sourceJsPath + '/**/*.js', ['compile-js', browserSync.reload]);
@@ -60,8 +50,7 @@ gulp.task('build', function (callback) {
     runSequence(
         'clean-static',
         ['copy-html', 'copy-images', 'copy-dependencies'],
-        'inject-js-dependencies',
-        'inject-css-dependencies',
+        'build-index',
         ['compile-sass', 'compile-js'],
         callback
     );
@@ -77,6 +66,30 @@ gulp.task('dev', function (callback) {
 });
 
 ////////////////////////////////////////
+
+/**
+ * Copy index.html to target directory after injecting <link> and <script>
+ * tags for bower dependencies.
+ */
+function buildIndex() {
+    var deferred = q.defer();
+
+    var jsFilter = filter(['**', '**/*.js', '!**/mtn.js'], {restore: true});
+    var cssFilter = filter(['**', '**/*.css', '!**/mtn.css'], {restore: true});
+
+    gulp.src(sourceWebPath + '/index.html')
+        .pipe(gulp.dest(targetPath))
+        .pipe(inject(gulp.src(targetPath + '/**/*.js')
+            .pipe(jsFilter)
+            .pipe(angularFileSort()), {relative: true}))
+        .pipe(inject(gulp.src(targetPath + '/**/*.css')
+            .pipe(cssFilter), {relative: true}))
+        .pipe(gulp.dest(targetPath))
+        .on('end', deferred.resolve)
+        .on('error', deferred.reject);
+
+    return deferred.promise;
+}
 
 /**
  * Delete the static folder and all its contents.
@@ -112,11 +125,11 @@ function compileJs() {
     gulp.src(sourceJsPath + '/**/*.js')
         .pipe(f)
         .pipe(angularFileSort())
-        .pipe(uglify({
-            beautify: true,
-            mangle: false,
-            compress: false
-        }))
+        // .pipe(uglify({
+        //     beautify: true,
+        //     mangle: false,
+        //     compress: false
+        // }))
         .pipe(concat('mtn.js'))
         .pipe(gulp.dest(targetPath + '/scripts'))
         .on('end', deferred.resolve)
@@ -145,7 +158,10 @@ function copyDependencies() {
 function copyHtml() {
     var deferred = q.defer();
 
+    var f = filter(['**', '!**/index.html'], {restore: true});
+
     gulp.src(sourceWebPath + '/**/*.html')
+        .pipe(f)
         .pipe(gulp.dest(targetPath))
         .on('end', deferred.resolve)
         .on('error', deferred.reject);
@@ -161,44 +177,6 @@ function copyImages() {
 
     gulp.src(sourceImagesPath + '/**')
         .pipe(gulp.dest(targetPath + '/images'))
-        .on('end', deferred.resolve)
-        .on('error', deferred.reject);
-
-    return deferred.promise;
-}
-
-/**
- * Inject <script> tags into index.html for bower dependencies.
- */
-function injectJsDependencies() {
-    var deferred = q.defer();
-
-    var f = filter(['**', '!**/mtn.js'], {restore: true});
-
-    var target = gulp.src(targetPath + '/index.html');
-    var sources = gulp.src(targetPath + '/**/*.js')
-        .pipe(f)
-        .pipe(angularFileSort());
-
-    target.pipe(inject(sources, {relative: true}))
-        .pipe(gulp.dest(targetPath))
-        .on('end', deferred.resolve)
-        .on('error', deferred.reject);
-
-    return deferred.promise;
-}
-
-/**
- * Inject <link> tags into index.html for bower dependencies.
- */
-function injectCssDependencies() {
-    var deferred = q.defer();
-
-    var target = gulp.src(targetPath + '/index.html');
-    var sources = gulp.src(targetPath + '/**/*.css');
-
-    target.pipe(inject(sources, {relative: true}))
-        .pipe(gulp.dest(targetPath))
         .on('end', deferred.resolve)
         .on('error', deferred.reject);
 

@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define(
+    var UserProfile = sequelize.define(
         'user_profile',
         {
             id: {
@@ -37,6 +37,11 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         {
+            classMethods: {
+                associate: function(models) {
+                    UserProfile.hasMany(models.UserIdentity)
+                }
+            },
             version: false,
             defaultScope: {
                 where: {
@@ -47,4 +52,6 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     );
+
+    return UserProfile;
 };

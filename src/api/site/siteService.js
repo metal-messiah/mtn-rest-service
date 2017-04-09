@@ -3,7 +3,7 @@ var _ = require('lodash');
 
 var User = require('../auth/user.js');
 var Logger = require('../util/logger.js');
-var Models = require('../model/models.js');
+var Models = require('../model/database.js');
 var ShoppingCenter = Models.ShoppingCenter;
 var Site = Models.Site;
 var Utils = require('../util/utils.js');

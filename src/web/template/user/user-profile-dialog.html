@@ -1,0 +1,31 @@
+<md-dialog aria-label="User Profile" flex="40">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>User Profile</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <md-icon><i class="material-icons">clear</i></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content layout-padding>
+        <div layout="row">
+            <strong flex="20">Display Name</strong>
+            <span flex>{{vm.user.displayName()}}</span>
+        </div>
+        <div layout="row">
+            <strong flex="20">Email</strong>
+            <span flex>{{vm.user.email}}</span>
+        </div>
+        <div layout="row">
+            <strong flex="20">Access Token</strong>
+            <span flex>{{vm.user.accessToken}}</span>
+            <md-tooltip>For Debugging Purposes Only</md-tooltip>
+        </div>
+        <div layout="row">
+            <strong flex="20">ID Token</strong>
+            <span flex style="word-break:break-all">{{vm.user.idToken}}</span>
+            <md-tooltip>For Debugging Purposes Only</md-tooltip>
+        </div>
+    </md-dialog-content>
+</md-dialog>

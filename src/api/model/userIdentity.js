@@ -4,21 +4,14 @@ module.exports = function(sequelize, DataTypes) {
         {
             id: {
                 type: DataTypes.INTEGER,
-                field: 'user_identity_id',
                 primaryKey: true
             },
-            // userProfileId: {
-            //     type: DataTypes.INTEGER,
-            //     field: 'user_profile_id',
-            //     allowNull: false
-            // },
             provider: {
                 type: DataTypes.STRING,
                 allowNull: false
             },
-            providerUserId: {
+            provider_user_id: {
                 type: DataTypes.STRING,
-                field: 'provider_user_id',
                 allowNull: false
             }
         },

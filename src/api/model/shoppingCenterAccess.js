@@ -4,70 +4,54 @@ module.exports = function(sequelize, DataTypes) {
         {
             id: {
                 type: DataTypes.INTEGER,
-                field: 'shopping_center_access_id',
                 primaryKey: true
             },
-            shoppingCenterId: {
-                type: DataTypes.INTEGER,
-                field: 'shopping_center_id',
-                allowNull: false
-            },
-            accessType: {
+            access_type: {
                 type: DataTypes.STRING,
-                field: 'access_type',
                 values: ['FRONT_MAIN', 'SIDE_MAIN', 'NON_MAIN'],
                 allowNull: false,
                 validate: {
                     isIn: [['FRONT_MAIN', 'SIDE_MAIN', 'NON_MAIN']]
                 }
             },
-            createdDate: {
-                type: DataTypes.DATE,
-                field: 'created_date'
+            created_date: {
+                type: DataTypes.DATE
             },
-            deletedDate: {
-                type: DataTypes.DATE,
-                field: 'deleted_date'
+            deleted_date: {
+                type: DataTypes.DATE
             },
-            hasLeftIn: {
+            has_left_in: {
                 type: DataTypes.BOOLEAN,
-                field: 'has_left_in',
                 allowNull: false,
                 defaultValue: false
             },
-            hasLeftOut: {
+            has_left_out: {
                 type: DataTypes.BOOLEAN,
-                field: 'has_left_out',
                 allowNull: false,
                 defaultValue: false
             },
-            hasRightIn: {
+            has_right_in: {
                 type: DataTypes.BOOLEAN,
-                field: 'has_right_in',
                 allowNull: false,
                 defaultValue: false
             },
-            hasRightOut: {
+            has_right_out: {
                 type: DataTypes.BOOLEAN,
-                field: 'has_right_out',
                 allowNull: false,
                 defaultValue: false
             },
-            hasTrafficLight: {
+            has_traffic_light: {
                 type: DataTypes.BOOLEAN,
-                field: 'has_traffic_light',
                 allowNull: false,
                 defaultValue: false
             },
-            isOneWayRoad: {
+            is_one_way_road: {
                 type: DataTypes.BOOLEAN,
-                field: 'is_one_way_road',
                 allowNull: false,
                 defaultValue: false
             },
-            updatedDate: {
-                type: DataTypes.DATE,
-                field: 'updated_date'
+            updated_date: {
+                type: DataTypes.DATE
             },
             version: {
                 type: DataTypes.INTEGER

@@ -192,7 +192,10 @@ function initBrowserSync() {
     var config = {
         port: 3030,
         proxy: 'localhost:3000',
-        serveStatic: ['./src/resources/static']
+        serveStatic: ['./src/resources/static'],
+        ui: {
+            port: 3300
+        }
     };
 
     browserSync.init(config, deferred.resolve);

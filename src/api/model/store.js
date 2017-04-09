@@ -4,42 +4,29 @@ module.exports = function(sequelize, DataTypes) {
         {
             id: {
                 type: DataTypes.INTEGER,
-                field: 'store_id',
                 primaryKey: true
             },
-            siteId: {
-                type: DataTypes.INTEGER,
-                field: 'site_id',
-                allowNull: false
-            },
-            areaIsEstimate: {
+            area_is_estimate: {
                 type: DataTypes.BOOLEAN,
-                field: 'area_is_estimate',
                 allowNull: false
             },
-            areaSales: {
-                type: DataTypes.INTEGER,
-                field: 'area_sales'
+            area_sales: {
+                type: DataTypes.INTEGER
             },
-            areaSalesPercentOfTotal: {
-                type: DataTypes.DOUBLE,
-                field: 'area_sales_percent_of_total'
+            area_sales_percent_of_total: {
+                type: DataTypes.DOUBLE
             },
-            areaTotal: {
-                type: DataTypes.INTEGER,
-                field: 'area_total'
+            area_total: {
+                type: DataTypes.INTEGER
             },
-            closedDate: {
-                type: DataTypes.DATE,
-                field: 'closed_date'
+            closed_date: {
+                type: DataTypes.DATE
             },
-            createdDate: {
-                type: DataTypes.DATE,
-                field: 'created_date'
+            created_date: {
+                type: DataTypes.DATE
             },
-            deletedDate: {
-                type: DataTypes.DATE,
-                field: 'deleted_date'
+            deleted_date: {
+                type: DataTypes.DATE
             },
             fit: {
                 type: DataTypes.STRING,
@@ -55,21 +42,18 @@ module.exports = function(sequelize, DataTypes) {
                     isIn: [['ASIAN', 'CLUB', 'COMBO', 'CONVENTIONAL', 'DISCOUNT', 'HISPANIC', 'INDEPENDENT', 'INTERNATIONAL', 'LIMITED_ASSORTMENT', 'NATURAL_FOODS', 'SUPERCENTER', 'SUPERMARKET', 'WAREHOUSE', 'TRADER_JOES']]
                 }
             },
-            isActive: {
+            is_active: {
                 type: DataTypes.BOOLEAN,
-                field: 'is_active',
                 allowNull: false
             },
             name: {
                 type: DataTypes.STRING
             },
-            openedDate: {
-                type: DataTypes.DATE,
-                field: 'opened_date'
+            opened_date: {
+                type: DataTypes.DATE
             },
-            updatedDate: {
-                type: DataTypes.DATE,
-                field: 'updated_date'
+            updated_date: {
+                type: DataTypes.DATE
             },
             version: {
                 type: DataTypes.INTEGER

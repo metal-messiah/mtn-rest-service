@@ -12,6 +12,10 @@ function config($httpProvider, $locationProvider, $mdThemingProvider) {
     $locationProvider.html5Mode(true);
 
     $mdThemingProvider.theme('default')
+        .primaryPalette('indigo')
+        .accentPalette('teal')
+        .backgroundPalette('grey')
+        .warnPalette('red')
         .dark();
 }
 
@@ -33,7 +37,7 @@ function registerAuth($rootScope, AuthService, lock, authManager, Cache) {
     lock.interceptHash();
     authManager.checkAuthOnRefresh();
     if (authManager.isAuthenticated()) {
-        AuthService.loadAuthProfile();
+        AuthService.loadProfile();
     }
 
     $rootScope.Cache = Cache;

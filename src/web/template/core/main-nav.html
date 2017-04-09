@@ -1,7 +1,12 @@
 <md-toolbar style="padding-left:0;">
     <div class="md-toolbar-tools" style="padding-left:0;">
         <h2 flex style="margin-left:15px;">MTN Rest Service</h2>
-        <span ng-if="vm.user()">{{vm.user().email}}</span>
+        <md-button ng-if="vm.user()" ng-click="vm.openProfile($event)">
+            {{vm.user().displayName()}}
+            <md-tooltip>
+                Click for Details
+            </md-tooltip>
+        </md-button>
         <md-button ng-click="vm.login()" ng-if="!vm.user()">
             <md-icon><i class="material-icons">lock_open</i></md-icon>
             Log In

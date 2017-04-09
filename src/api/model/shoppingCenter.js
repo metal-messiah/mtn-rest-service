@@ -4,16 +4,13 @@ module.exports = function(sequelize, DataTypes) {
         {
             id: {
                 type: DataTypes.INTEGER,
-                field: 'shopping_center_id',
                 primaryKey: true
             },
-            createdDate: {
-                type: DataTypes.DATE,
-                field: 'created_date'
+            created_date: {
+                type: DataTypes.DATE
             },
-            deletedDate: {
-                type: DataTypes.DATE,
-                field: 'deleted_date'
+            deleted_date: {
+                type: DataTypes.DATE
             },
             name: {
                 type: DataTypes.STRING,
@@ -23,9 +20,8 @@ module.exports = function(sequelize, DataTypes) {
                     notEmpty: true
                 }
             },
-            nativeId: {
+            native_id: {
                 type: DataTypes.STRING,
-                field: 'native_id',
                 allowNull: true,
                 validate: {
                     len: [1, 64]
@@ -38,9 +34,8 @@ module.exports = function(sequelize, DataTypes) {
                     len: [3, 64]
                 }
             },
-            updatedDate: {
-                type: DataTypes.DATE,
-                field: 'updated_date'
+            updated_date: {
+                type: DataTypes.DATE
             },
             url: {
                 type: DataTypes.STRING,

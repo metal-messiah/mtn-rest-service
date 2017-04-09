@@ -31,7 +31,7 @@ function addOne(user, request) {
 
     function createUser() {
         var options = {
-            fields: ['email', 'firstName', 'lastName'],
+            fields: ['email', 'first_name', 'last_name'],
             returning: true
         };
 
@@ -181,7 +181,7 @@ function findOne(user, id) {
                     separate: true,
                     through: {
                         where: {
-                            providerUserId: id
+                            provider_user_id: id
                         }
                     }
                 }]
@@ -241,8 +241,8 @@ function updateOne(user, id, request) {
         if (request.email) {
             existing.email = request.email;
         }
-        existing.firstName = request.firstName;
-        existing.lastName = request.lastName;
+        existing.first_name = request.first_name;
+        existing.last_name = request.last_name;
 
         return q(existing
             .save())
@@ -295,12 +295,12 @@ function initFindAllOptions(params) {
                     }
                 },
                 {
-                    firstName: {
+                    first_name: {
                         $iLike: params.q + '%'
                     }
                 },
                 {
-                    lastName: {
+                    last_name: {
                         $iLike: params.q + '%'
                     }
                 }

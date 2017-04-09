@@ -4,21 +4,13 @@ module.exports = function(sequelize, DataTypes) {
         {
             id: {
                 type: DataTypes.INTEGER,
-                field: 'site_id',
                 primaryKey: true
             },
-            shoppingCenterId: {
-                type: DataTypes.INTEGER,
-                field: 'shopping_center_id',
-                allowNull: false
+            address_1: {
+                type: DataTypes.STRING
             },
-            address1: {
-                type: DataTypes.STRING,
-                field: 'address_1'
-            },
-            address2: {
-                type: DataTypes.STRING,
-                field: 'address_2'
+            address_2: {
+                type: DataTypes.STRING
             },
             city: {
                 type: DataTypes.STRING
@@ -29,50 +21,41 @@ module.exports = function(sequelize, DataTypes) {
             country: {
                 type: DataTypes.STRING
             },
-            createdDate: {
-                type: DataTypes.DATE,
-                field: 'created_date'
+            created_date: {
+                type: DataTypes.DATE
             },
-            deletedDate: {
-                type: DataTypes.DATE,
-                field: 'deleted_date'
+            deleted_date: {
+                type: DataTypes.DATE
             },
-            footprintSqft: {
-                type: DataTypes.INTEGER,
-                field: 'footprint_sqft'
+            footprint_sqft: {
+                type: DataTypes.INTEGER
             },
-            intersectionStreetPrimary: {
-                type: DataTypes.STRING,
-                field: 'intersection_street_primary'
+            intersection_street_primary: {
+                type: DataTypes.STRING
             },
-            intersectionStreetSecondary: {
-                type: DataTypes.STRING,
-                field: 'intersection_street_secondary'
+            intersection_street_secondary: {
+                type: DataTypes.STRING
             },
-            intersectionQuad: {
-                type: DataTypes.STRING,
-                field: 'intersection_quad'
+            intersection_quad: {
+                type: DataTypes.STRING
             },
             location: {
                 type: DataTypes.GEOMETRY('POINT'),
                 allowNull: false
             },
-            locationType: {
+            location_type: {
                 type: DataTypes.STRING,
-                field: 'location_type',
                 values: ['HARD_CORNER', 'SOFT_CORNER', 'MID_BLOCK'],
                 allowNull: false,
                 validate: {
                     isIn: [['HARD_CORNER', 'SOFT_CORNER', 'MID_BLOCK']]
                 }
             },
-            positionInCenter: {
-                type: DataTypes.STRING,
-                field: 'position_in_center'
+            position_in_center: {
+                type: DataTypes.STRING
             },
-            postalCode: {
-                type: DataTypes.STRING,
-                field: 'postal_code'
+            postal_code: {
+                type: DataTypes.STRING
             },
             state: {
                 type: DataTypes.STRING
@@ -85,9 +68,8 @@ module.exports = function(sequelize, DataTypes) {
                     isIn: [['PLACEHOLDER', 'ANCHOR', 'DEFAULT']]
                 }
             },
-            updatedDate: {
-                type: DataTypes.DATE,
-                field: 'updated_date'
+            updated_date: {
+                type: DataTypes.DATE
             },
             version: {
                 type: DataTypes.INTEGER

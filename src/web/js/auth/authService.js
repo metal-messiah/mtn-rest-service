@@ -1,10 +1,10 @@
 (function() {
     angular.module('mtn').factory('AuthService', AuthService);
 
-    function AuthService($log, $q, lock, authManager, Cache) {
+    function AuthService($log, $q, lock, authManager, Cache, UserService) {
         var service = {
             data: {},
-            loadAuthProfile: loadAuthProfile,
+            loadProfile: loadProfile,
             login: login,
             logout: logout,
             registerAuthenticationListener: registerAuthenticationListener
@@ -14,21 +14,38 @@
 
         ////////////////////////////
 
+        function loadProfile() {
+            return loadAuthProfile()
+                .then(function(profile) {
+                    var userId = profile.user_id;
+
+                    return UserService.findOne(userId.split('|')[1])
+                        .then(function(user) {
+                            user.idToken = Cache.get('id_token');
+                            user.accessToken = Cache.get('access_token');
+
+                            $log.info('Successfully retrieved user profile', user);
+
+                            Cache.store('user', user);
+                        });
+                })
+                .catch(function(error) {
+                    $log.error('Failed to retrieve profile', error);
+                    return $q.reject(error);
+                });
+        }
+
         function loadAuthProfile() {
             var deferred = $q.defer();
 
             lock.getProfile(Cache.get('id_token'), function(error, profile) {
                 if (error) {
-                    return $log.error('Failed to retrieve profile', error);
+                    $log.error('Failed to retrieve user auth profile', error);
+                    deferred.reject(error);
                 }
 
-                var user = AuthUser.build(profile);
-                user.idToken = Cache.get('id_token');
-                user.accessToken = Cache.get('access_token');
-
-                $log.info('Successfully retrieved user auth profile', user);
-
-                Cache.store('user', user);
+                $log.info('Successfully retrieved user auth profile', profile);
+                deferred.resolve(profile);
             });
 
             return deferred.promise;

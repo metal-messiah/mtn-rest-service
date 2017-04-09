@@ -4,16 +4,13 @@ module.exports = function(sequelize, DataTypes) {
         {
             id: {
                 type: DataTypes.INTEGER,
-                field: 'user_profile_id',
                 primaryKey: true
             },
-            createdDate: {
-                type: DataTypes.DATE,
-                field: 'created_date'
+            created_date: {
+                type: DataTypes.DATE
             },
-            deletedDate: {
-                type: DataTypes.DATE,
-                field: 'deleted_date'
+            deleted_date: {
+                type: DataTypes.DATE
             },
             email: {
                 type: DataTypes.STRING,
@@ -23,17 +20,14 @@ module.exports = function(sequelize, DataTypes) {
                     isEmail: true
                 }
             },
-            firstName: {
-                type: DataTypes.STRING,
-                field: 'first_name'
+            first_name: {
+                type: DataTypes.STRING
             },
-            lastName: {
-                type: DataTypes.STRING,
-                field: 'last_name'
+            last_name: {
+                type: DataTypes.STRING
             },
-            updatedDate: {
-                type: DataTypes.DATE,
-                field: 'updated_date'
+            updated_date: {
+                type: DataTypes.DATE
             }
         },
         {

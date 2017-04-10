@@ -24,7 +24,7 @@
             return $mdDialog.show({
                 controller: UserProfileDialogCtrl,
                 controllerAs: 'vm',
-                templateUrl: 'template/user/user-profile-dialog.html',
+                templateUrl: 'user/user-profile-dialog.html',
                 targetEvent: event,
                 clickOutsideToClose:true
             });

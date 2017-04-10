@@ -13,7 +13,7 @@ function config($httpProvider, $locationProvider, $mdThemingProvider) {
 
     $mdThemingProvider.theme('default')
         .primaryPalette('indigo')
-        .accentPalette('teal')
+        .accentPalette('blue')
         .backgroundPalette('grey')
         .warnPalette('red')
         .dark();
@@ -38,6 +38,8 @@ function registerAuth($rootScope, AuthService, lock, authManager, Cache) {
     authManager.checkAuthOnRefresh();
     if (authManager.isAuthenticated()) {
         AuthService.loadProfile();
+    } else {
+        Cache.clear();
     }
 
     $rootScope.Cache = Cache;

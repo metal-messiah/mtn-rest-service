@@ -30,8 +30,11 @@
 </head>
 <body ng-controller="IndexCtrl as vm">
 
-<md-content layout="row" ng-cloak>
-    <main-nav style="width:100%;"></main-nav>
+<main-nav style="width:100%;"></main-nav>
+<side-nav></side-nav>
+
+<md-content class="main-content" layout="row" ng-if="vm.user()" ng-cloak>
+    <div>Test</div>
 </md-content>
 
 <!-- inject:js -->

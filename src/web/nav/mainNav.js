@@ -1,5 +1,5 @@
 angular.module('mtn').component('mainNav', {
-    templateUrl: 'template/core/main-nav.html',
+    templateUrl: 'nav/main-nav.html',
     controller: MainNavController,
     controllerAs: 'vm'
 });

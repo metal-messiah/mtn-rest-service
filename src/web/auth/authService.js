@@ -1,7 +1,7 @@
 (function() {
     angular.module('mtn').factory('AuthService', AuthService);
 
-    function AuthService($log, $q, lock, authManager, Cache, UserService) {
+    function AuthService($log, $q, $window, lock, authManager, Cache, UserService) {
         var service = {
             data: {},
             loadProfile: loadProfile,
@@ -66,7 +66,7 @@
             lock.on('authenticated', function(authResult) {
                 Cache.store('id_token', authResult.idToken);
                 Cache.store('access_token', authResult.accessToken);
-                service.loadAuthProfile();
+                service.loadProfile();
                 authManager.authenticate();
             });
         }

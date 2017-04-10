@@ -16,10 +16,7 @@ var uglify = require('gulp-uglify');
 var _ = require('lodash');
 
 var sourceWebPath = './src/web';
-var sourceHtmlPath = './src/web/template';
 var sourceImagesPath = './src/web/images';
-var sourceJsPath = './src/web/js';
-var sourceScssPath = './src/web/sass';
 var targetPath = './src/resources/static';
 
 /***
@@ -40,9 +37,9 @@ gulp.task('init-browser-sync', initBrowserSync);
  ***/
 
 gulp.task('watch', function () {
-    gulp.watch(sourceJsPath + '/**/*.js', ['compile-js', browserSync.reload]);
-    gulp.watch(sourceScssPath + '/**/*.scss', ['compile-sass', browserSync.reload]);
-    gulp.watch(sourceHtmlPath + '/**/*.html', ['copy-html', browserSync.reload]);
+    gulp.watch(sourceWebPath + '/**/*.js', ['compile-js', browserSync.reload]);
+    gulp.watch(sourceWebPath + '/**/*.scss', ['compile-sass', browserSync.reload]);
+    gulp.watch(sourceWebPath + '/**/*.html', ['copy-html', browserSync.reload]);
     gulp.watch(sourceWebPath + '/index.html', ['build-index', browserSync.reload]);
 });
 
@@ -104,7 +101,7 @@ function cleanStatic() {
 function compileSass() {
     var deferred = q.defer();
 
-    gulp.src(sourceScssPath + '/**/*.scss')
+    gulp.src(sourceWebPath + '/**/*.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(concatCss('mtn.css'))
         .pipe(gulp.dest(targetPath + '/styles'))
@@ -122,7 +119,7 @@ function compileJs() {
 
     var f = filter(['**', '!**/*.spec.js'], {restore: true});
 
-    gulp.src(sourceJsPath + '/**/*.js')
+    gulp.src(sourceWebPath + '/**/*.js')
         .pipe(f)
         .pipe(angularFileSort())
         // .pipe(uglify({

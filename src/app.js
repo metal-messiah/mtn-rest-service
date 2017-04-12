@@ -9,6 +9,7 @@ var jwt = require('express-jwt');
 var Logger = require('./api/util/logger.js');
 var Properties = require('./api/util/properties.js');
 var UserCacheMiddleware = require('./api/auth/userCacheMiddleware.js');
+var ToSnakeCaseFilter = require('./api/util/case-conversion/toSnakeCaseFilter.js');
 
 ////////////////////////////////////
 
@@ -60,6 +61,7 @@ function configureMiddleware() {
     app.use('/api', UserCacheMiddleware);
 
     app.use(bodyParser.json());
+    app.use(ToSnakeCaseFilter);
     app.use('/api', Routes);
 }
 

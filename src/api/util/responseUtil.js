@@ -1,4 +1,7 @@
+var changeCase = require('change-case');
+
 var Errors = require('../error/errors.js');
+var CaseUtil = require('./case-conversion/caseUtil.js');
 
 /**
  * This service provides a clean and consistent way to handle HTTP
@@ -47,6 +50,16 @@ function error(res, error) {
 
 function ok(res, data) {
     if (data) {
+        /*
+        Until I can find a cleaner way to do this, this is it. The response body may
+        or may not be a Sequelize model instance (which is NOT a raw JSON object, and
+        is NOT easily converted to raw JSON without this type of approach).
+
+        So, stringifying, then re-parsing the object guarantees that we'll be passing
+        the true response body object into the conversion.
+         */
+        data = JSON.stringify(data);
+        data = CaseUtil.convert(JSON.parse(data), changeCase.camelCase);
         res.status(200).json(data);
     } else {
         res.status(204).send();

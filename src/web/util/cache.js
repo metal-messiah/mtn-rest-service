@@ -55,6 +55,11 @@
                         service.clear(property);
                     }
                 }
+                for (var property in localStorage) {
+                    if (localStorage.hasOwnProperty(property)) {
+                        service.clear(property);
+                    }
+                }
             }
         }
 

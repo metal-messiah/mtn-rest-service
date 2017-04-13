@@ -1,23 +1,23 @@
-function UserProfile(email, first_name, last_name) {
+function UserProfile(email, firstName, lastName) {
     this.email = email;
-    this.first_name = first_name;
-    this.last_name = last_name;
-    this.user_identities = [];
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.userIdentities = [];
 }
 
 UserProfile.prototype.displayName = function() {
-    return this.first_name + ' ' + this.last_name;
+    return this.firstName + ' ' + this.lastName;
 };
 
 UserProfile.build = function(data) {
-    var user = new UserProfile(data.email, data.first_name, data.last_name);
-    user.created_by = data.created_by;
-    user.created_date = data.created_date;
-    user.updated_by = data.updated_by;
-    user.updated_date = data.updated_date;
+    var user = new UserProfile(data.email, data.firstName, data.lastName);
+    user.createdBy = data.createdBy;
+    user.createdDate = data.createdDate;
+    user.updatedBy = data.updatedBy;
+    user.updatedDate = data.updatedDate;
 
-    for (var i = 0; i < data.user_identities.length; i++) {
-        user.user_identities.push(UserIdentity.build(data.user_identities[i]));
+    for (var i = 0; i < data.userIdentities.length; i++) {
+        user.userIdentities.push(UserIdentity.build(data.userIdentities[i]));
     }
 
     return user;

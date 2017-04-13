@@ -1,8 +1,8 @@
-function UserIdentity(provider, provider_user_id) {
+function UserIdentity(provider, providerUserId) {
     this.provider = provider;
-    this.provider_user_id = provider_user_id;
+    this.providerUserId = providerUserId;
 }
 
 UserIdentity.build = function(data) {
-    return new UserIdentity(data.provider, data.provider_user_id);
+    return new UserIdentity(data.provider, data.providerUserId);
 };

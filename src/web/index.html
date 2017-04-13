@@ -31,7 +31,7 @@
 <body ng-controller="IndexCtrl as vm">
 
 <main-nav style="width:100%;"></main-nav>
-<side-nav></side-nav>
+<side-nav ng-if="vm.user()"></side-nav>
 
 <md-content class="main-content" layout="row" ng-if="vm.user()" ng-cloak>
     <div>Test</div>

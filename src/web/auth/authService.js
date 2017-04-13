@@ -1,7 +1,7 @@
 (function() {
     angular.module('mtn').factory('AuthService', AuthService);
 
-    function AuthService($log, $q, $window, lock, authManager, Cache, UserService) {
+    function AuthService($log, $q, lock, authManager, Cache, UserService) {
         var service = {
             data: {},
             loadProfile: loadProfile,

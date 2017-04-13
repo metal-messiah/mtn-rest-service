@@ -6,7 +6,7 @@ angular.module('mtn').run(registerAuth);
 
 ///////////////////////////////
 
-function config($httpProvider, $locationProvider, $mdThemingProvider) {
+function config($httpProvider, $locationProvider, $mdThemingProvider, $routeProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
 
     $locationProvider.html5Mode(true);
@@ -17,6 +17,13 @@ function config($httpProvider, $locationProvider, $mdThemingProvider) {
         .backgroundPalette('grey')
         .warnPalette('red')
         .dark();
+
+    $routeProvider
+        .when('/groups', {controller: 'GroupsCtrl', controllerAs: 'vm', templateUrl: 'group/groups.html'})
+        .when('/permissions', {controller: 'PermissionsCtrl', controllerAs: 'vm', templateUrl: 'permission/permissions.html'})
+        .when('/roles', {controller: 'RolesCtrl', controllerAs: 'vm', templateUrl: 'role/roles.html'})
+        .when('/users', {controller: 'UsersCtrl', controllerAs: 'vm', templateUrl: 'user/users.html'})
+        .otherwise({redirectTo: '/'});
 }
 
 function configAuth(lockProvider, jwtOptionsProvider) {

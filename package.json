@@ -27,6 +27,7 @@
     "del": "^2.2.2",
     "express": "^4.15.0",
     "express-jwt": "^5.1.0",
+    "express-urlrewrite": "^1.2.0",
     "gulp": "^3.9.1",
     "gulp-angular-filesort": "^1.1.1",
     "gulp-concat": "^2.6.1",

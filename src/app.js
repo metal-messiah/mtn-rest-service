@@ -5,6 +5,7 @@ var path = require('path');
 var q = require('q');
 var Umzug = require('umzug');
 var jwt = require('express-jwt');
+var urlRewrite = require('express-urlrewrite');
 
 var Logger = require('./api/util/logger.js');
 var Properties = require('./api/util/properties.js');
@@ -42,6 +43,10 @@ function configureMiddleware() {
         }
     }));
 
+    app.use(urlRewrite('/groups', '/index.html'));
+    app.use(urlRewrite('/permissions', '/index.html'));
+    app.use(urlRewrite('/roles', '/index.html'));
+    app.use(urlRewrite('/users', '/index.html'));
     app.use(express.static(path.join(__dirname, 'resources', 'static')));
 
     //Check JWT

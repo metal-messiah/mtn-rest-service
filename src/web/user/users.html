@@ -1,1 +1,40 @@
-Users
+<div class="users-container" >
+    <div class="users-header" layout="row" layout-align="start center">
+        <h1 md-colors="{color: 'primary'}">Users</h1>
+    </div>
+    <div class="users-toolbar form-toolbar">
+        <form name="usersSearchForm" layout="row" layout-align="end center" ng-submit="vm.search()">
+            <md-input-container class="no-error-spacer">
+                <label>Search</label>
+                <input ng-model="vm.queryParams.q"/>
+                <md-tooltip>Search by Email, First Name, or Last Name</md-tooltip>
+            </md-input-container>
+            <md-button class="md-fab md-mini md-primary" type="submit">
+                <md-icon class="material-icons">search</md-icon>
+                <md-tooltip>Search</md-tooltip>
+            </md-button>
+            <md-button class="md-fab md-mini">
+                <md-icon class="material-icons">add</md-icon>
+                <md-tooltip>Add New User</md-tooltip>
+            </md-button>
+        </form>
+    </div>
+    <md-content class="md-whiteframe-1dp">
+        <table class="material-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="user in vm.paginator.getCurrentPage().content">
+                <td>{{user.id}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.displayName()}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </md-content>
+</div>

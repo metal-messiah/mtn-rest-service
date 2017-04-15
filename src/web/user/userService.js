@@ -3,11 +3,45 @@
 
     function UserService($http, $log, $q, $mdDialog, Cache) {
         return {
+            findAll: findAll,
             findOne: findOne,
             showProfile: showProfile
         };
 
         //////////////////////////
+
+        function findAll(params) {
+            var config = {
+                params: {}
+            };
+
+            for (var property in params) {
+                if (params.hasOwnProperty(property) && params[property]) {
+                    config.params[property] = params[property];
+                }
+            }
+
+            return $http.get('/api/user', config)
+                .then(function(response) {
+                    var results = new GenericPaginatedResponse();
+
+                    if (response.data.content) {
+                        for (var i = 0; i < response.data.content.length; i++) {
+                            results.content.push(UserProfile.build(response.data.content[i]));
+                        }
+                    }
+
+                    if (response.data.pagination) {
+                        results.pagination = response.data.pagination;
+                    }
+
+                    return results;
+                })
+                .catch(function(response) {
+                    $log.error('Failed to retrieve users', response);
+                    return $q.reject(response);
+                });
+        }
 
         function findOne(id) {
             return $http.get('/api/user/' + id)

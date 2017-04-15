@@ -12,8 +12,8 @@ function config($httpProvider, $locationProvider, $mdThemingProvider, $routeProv
     $locationProvider.html5Mode(true);
 
     $mdThemingProvider.theme('default')
-        .primaryPalette('indigo')
-        .accentPalette('blue')
+        .primaryPalette('blue')
+        .accentPalette('blue-grey')
         .backgroundPalette('grey')
         .warnPalette('red')
         .dark();

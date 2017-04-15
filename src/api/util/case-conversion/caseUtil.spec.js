@@ -16,6 +16,18 @@ describe('caseConversionScaffolding', function() {
         expect(converted.test1).toEqual(source.test_1);
     });
 
+    it('should convert all nested object keys', function() {
+        var source = {
+            test_field: {
+                child_field: 'testField'
+            }
+        };
+
+        var converted = CaseUtil.convert(source, changeCase.camelCase);
+
+        expect(converted.testField.childField).toEqual(source.test_field.child_field);
+    });
+
     it('should convert objects in array', function() {
         var source = [
             {

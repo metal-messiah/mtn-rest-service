@@ -1,7 +1,106 @@
-* {
+body {
   font-size: 12px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+.form-toolbar {
+
+  md-input-container {
+    width: 200px;
+  }
 }
 
 .main-content {
   padding-top:50px;
+}
+
+.material-table {
+  font-family: Roboto, Helvetica Neue, sans-serif;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 15px;
+  position: relative;
+  width: 100%;
+  background-color: white;
+
+  &.material-table-condensed {
+
+    th,
+    td {
+      height: 24px;
+      line-height: 24px;
+    }
+  }
+
+  .right {
+    text-align: right;
+  }
+
+  th {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.54);
+    white-space: nowrap;
+    position: relative;
+    border-bottom: solid 1px #DDDDDD;
+    height: 56px;
+    line-height: 56px;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    padding-left: 15px;
+    padding-right: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #EEEEEE;
+    }
+  }
+
+  tbody {
+    font-size: 13px;
+
+    tr {
+
+      &:hover {
+        background-color: #EEEEEE;
+      }
+
+      td {
+        padding: 0;
+        height: 48px;
+        font-size: 13px;
+        border-bottom: solid 1px #DDDDDD;
+        padding-left: 15px;
+        padding-right: 5px;
+      }
+    }
+  }
+}
+
+.material-table-footer {
+  background-color: white;
+  color: rgba(0, 0, 0, 0.54);
+  height: 56px;
+  line-height: 56px;
+}
+
+.md-subheader {
+
+  .md-subheader-content {
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+.no-error-spacer {
+
+  .md-errors-spacer {
+    display:none;
+  }
 }

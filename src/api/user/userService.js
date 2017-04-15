@@ -313,12 +313,12 @@ function initFindAllOptions(params) {
             };
         }
         if (typeof params.firstName !== 'undefined') {
-            options.where.firstName = {
+            options.where.first_name = {
                 $iLike: params.firstName + '%'
             };
         }
         if (typeof params.lastName !== 'undefined') {
-            options.where.lastName = {
+            options.where.last_name = {
                 $iLike: params.lastName + '%'
             };
         }

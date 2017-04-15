@@ -30,7 +30,11 @@ function convert(value, conversionCallback) {
                     newKey = stripUnderscore(newKey);
                 }
 
-                newValue[newKey] = value[property];
+                if (typeof value[property] === 'object') {
+                    newValue[newKey] = convert(value[property], conversionCallback);
+                } else {
+                    newValue[newKey] = value[property];
+                }
             }
         }
     }

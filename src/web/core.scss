@@ -95,12 +95,24 @@ h1 {
   line-height: 56px;
 }
 
-.md-subheader {
+md-input-container {
+  margin-bottom: 0;
+}
 
-  .md-subheader-content {
-    font-size: 14px;
-    font-weight: bold;
+.md-subheader {
+  background-color: transparent;
+
+  .md-subheader-inner {
+    padding:0;
+
+    .md-subheader-content {
+      font-weight: bold;
+    }
   }
+}
+
+.md-select-placeholder {
+  margin-top:-11px;
 }
 
 .no-error-spacer {

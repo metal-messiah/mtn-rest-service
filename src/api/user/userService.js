@@ -31,7 +31,7 @@ function addOne(user, request) {
 
     function createUser() {
         var options = {
-            fields: ['email', 'first_name', 'last_name'],
+            fields: ['email', 'first_name', 'last_name', 'created_by', 'updated_by'],
             returning: true
         };
 

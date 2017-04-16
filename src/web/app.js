@@ -11,11 +11,29 @@ function config($httpProvider, $locationProvider, $mdThemingProvider, $routeProv
 
     $locationProvider.html5Mode(true);
 
+    $mdThemingProvider
+        .definePalette('custom-warn', {
+            '50': '#ffffff',
+            '100': '#ffffff',
+            '200': '#ffffff',
+            '300': '#ffffff',
+            '400': '#fffbfc',
+            '500': '#FCE4EC',
+            '600': '#f9cddc',
+            '700': '#f7b6cc',
+            '800': '#f49fbc',
+            '900': '#f288ab',
+            'A100': '#ffffff',
+            'A200': '#ffffff',
+            'A400': '#ffffff',
+            'A700': '#ef719b'
+        });
+
     $mdThemingProvider.theme('default')
         .primaryPalette('blue')
         .accentPalette('blue-grey')
         .backgroundPalette('grey')
-        .warnPalette('red')
+        .warnPalette('custom-warn')
         .dark();
 
     $routeProvider

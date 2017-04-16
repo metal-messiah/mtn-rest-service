@@ -2,13 +2,28 @@
     angular.module('mtn').factory('UserService', UserService);
 
     function UserService($http, $log, $q, $mdDialog, Cache) {
-        return {
+        var service = {
+            addOne: addOne,
             findAll: findAll,
             findOne: findOne,
+            showAddUser: showAddUser,
             showProfile: showProfile
         };
 
+        return service;
+
         //////////////////////////
+
+        function addOne(user) {
+            return $http.post('/api/user', user)
+                .then(function(response) {
+                    return UserProfile.build(response.data);
+                })
+                .catch(function(response) {
+                    $log.error('Failed to add User', response);
+                    return $q.reject(response);
+                });
+        }
 
         function findAll(params) {
             var config = {
@@ -54,6 +69,16 @@
                 });
         }
 
+        function showAddUser(event) {
+            return $mdDialog.show({
+                controller: AddUserDialogCtrl,
+                controllerAs: 'vm',
+                templateUrl: 'user/add-user-dialog.html',
+                targetEvent: event,
+                clickOutsideToClose:false
+            });
+        }
+
         function showProfile(event) {
             return $mdDialog.show({
                 controller: UserProfileDialogCtrl,
@@ -68,6 +93,21 @@
             var vm = this;
 
             vm.user = Cache.user();
+
+            vm.cancel = function() {
+                $mdDialog.cancel();
+            };
+        }
+
+        function AddUserDialogCtrl($mdDialog) {
+            var vm = this;
+
+            vm.user = new UserProfile();
+
+            vm.save = function() {
+                return service.addOne(vm.user)
+                    .then($mdDialog.hide);
+            };
 
             vm.cancel = function() {
                 $mdDialog.cancel();

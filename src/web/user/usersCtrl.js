@@ -16,5 +16,9 @@ function UsersCtrl(UserService, PaginatorFactory) {
         );
     };
 
+    vm.openAddUser = function(event) {
+        UserService.showAddUser(event).then(vm.search);
+    };
+
     vm.search();
 }

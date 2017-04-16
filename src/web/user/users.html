@@ -1,9 +1,8 @@
 <div class="users-container" >
-    <div class="users-header" layout="row" layout-align="start center">
-        <h1 md-colors="{color: 'primary'}">Users</h1>
-    </div>
     <div class="users-toolbar form-toolbar">
-        <form name="usersSearchForm" layout="row" layout-align="end center" ng-submit="vm.search()">
+        <form name="usersSearchForm" layout="row" layout-align="start center" ng-submit="vm.search()">
+            <h1 md-colors="{color: 'primary'}">Users</h1>
+            <span flex></span>
             <md-input-container class="no-error-spacer">
                 <label>Search</label>
                 <input ng-model="vm.queryParams.q"/>
@@ -13,7 +12,7 @@
                 <md-icon class="material-icons">search</md-icon>
                 <md-tooltip>Search</md-tooltip>
             </md-button>
-            <md-button class="md-fab md-mini">
+            <md-button class="md-fab md-mini" ng-click="vm.openAddUser($event)">
                 <md-icon class="material-icons">add</md-icon>
                 <md-tooltip>Add New User</md-tooltip>
             </md-button>
@@ -26,6 +25,7 @@
                 <th>ID</th>
                 <th>Email</th>
                 <th>Name</th>
+                <th class="right" style="padding-right:25px;">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -33,6 +33,18 @@
                 <td>{{user.id}}</td>
                 <td>{{user.email}}</td>
                 <td>{{user.displayName()}}</td>
+                <td>
+                   <div layout="row" layout-align="end center">
+                       <md-button class="md-icon-button md-accent">
+                           <md-icon class="material-icons">edit</md-icon>
+                           <md-tooltip>Edit User</md-tooltip>
+                       </md-button>
+                       <md-button class="md-icon-button md-accent">
+                           <md-icon class="material-icons">delete</md-icon>
+                           <md-tooltip>Delete User</md-tooltip>
+                       </md-button>
+                   </div>
+                </td>
             </tr>
             </tbody>
         </table>

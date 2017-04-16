@@ -56,9 +56,14 @@ h1 {
     padding-left: 15px;
     padding-right: 5px;
     cursor: pointer;
+    text-align: left;
 
     &:hover {
       background-color: #EEEEEE;
+    }
+
+    &.right {
+      text-align: right;
     }
   }
 

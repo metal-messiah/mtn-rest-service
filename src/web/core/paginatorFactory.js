@@ -159,6 +159,15 @@
             return deferred.promise;
         };
 
+        Paginator.prototype.currentPageRange = function() {
+            var startValue = this.pageNumber * this.limit + 1;
+            var endValue = this.pageNumber * this.limit + this.limit;
+            if( endValue > this.totalResults ) {
+                endValue = this.totalResults;
+            }
+            return startValue + '-' + endValue;
+        };
+
         function Page(number, content) {
             this.number = number;
             this.content = content;

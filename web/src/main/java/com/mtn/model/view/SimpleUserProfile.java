@@ -1,10 +1,6 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.UserProfile;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 4/21/2017.
@@ -47,19 +43,5 @@ public class SimpleUserProfile {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public static SimpleUserProfile build(UserProfile domainModel) {
-        SimpleUserProfile viewModel = new SimpleUserProfile();
-        viewModel.setId(domainModel.getId());
-        viewModel.setEmail(domainModel.getEmail());
-        viewModel.setFirstName(domainModel.getFirstName());
-        viewModel.setLastName(domainModel.getLastName());
-
-        return viewModel;
-    }
-
-    public static List<SimpleUserProfile> build(List<UserProfile> domainModels) {
-        return domainModels.stream().map(SimpleUserProfile::build).collect(Collectors.toList());
     }
 }

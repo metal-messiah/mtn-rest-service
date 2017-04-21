@@ -21,7 +21,6 @@
         <hikari-cp.version>2.6.1</hikari-cp.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
         <postresql.version>9.4.1212</postresql.version>
-        <springfox-swagger.version>2.6.1</springfox-swagger.version>
     </properties>
 
     <dependencies>
@@ -57,16 +56,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger.version}</version>
         </dependency>
     </dependencies>
 

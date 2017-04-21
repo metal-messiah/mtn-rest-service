@@ -17,6 +17,7 @@
 
     <properties>
         <commons-lang3.version>3.5</commons-lang3.version>
+        <flyway.version>4.1.2</flyway.version>
         <hikari-cp.version>2.6.1</hikari-cp.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
         <mtn-model.version>1.0.0</mtn-model.version>
@@ -52,6 +53,11 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikaricp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

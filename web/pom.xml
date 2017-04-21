@@ -20,17 +20,11 @@
         <flyway.version>4.1.2</flyway.version>
         <hikari-cp.version>2.6.1</hikari-cp.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
-        <mtn-model.version>1.0.0</mtn-model.version>
         <postresql.version>9.4.1212</postresql.version>
         <springfox-swagger.version>2.6.1</springfox-swagger.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.mtn</groupId>
-            <artifactId>model</artifactId>
-            <version>${mtn-model.version}</version>
-        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -76,4 +70,18 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <inherited>true</inherited>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

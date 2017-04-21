@@ -3,6 +3,10 @@ var q = require('q');
 var Cache = require('../util/cache.js');
 var Logger = require('../util/logger.js');
 var User = require('./user.js');
+var AuthToken = require('./authToken.js');
+var Models = require('../model/database.js');
+var UserProfile = Models.UserProfile;
+var UserIdentity = Models.UserIdentity;
 var AuthService = require('./authService.js');
 
 module.exports = UserCacheMiddleware;
@@ -12,6 +16,7 @@ function UserCacheMiddleware(req, res, next) {
 
     return q.fcall(validateRequestUserPresent)
         .then(loadUserFromCache)
+        .then(loadUserFromDatabase)
         .then(loadUserFromProvider)
         .then(appendUserToRequest)
         .then(next)
@@ -20,14 +25,34 @@ function UserCacheMiddleware(req, res, next) {
     ////////////////////
 
     function validateRequestUserPresent() {
-        if (!req.user || !req.user.sub) {
+        if (!req.user || !(req.user instanceof AuthToken)) {
             throw new Error('No user found on request');
         }
     }
 
     function loadUserFromCache() {
-        var userId = getUserId(req);
-        user = Cache.user(userId);
+        user = Cache.user(req.user.getProviderUserId());
+    }
+
+    function loadUserFromDatabase() {
+        var options = {
+            include: [{
+                model: UserIdentity,
+                where: {
+                    provider_user_id: req.user.getProviderUserId()
+                }
+            }]
+        };
+
+        return q(UserProfile
+            .unscoped()
+            .findAll(options))
+            .then(function(result) {
+                if (result) {
+                    user = result;
+                    Cache.user(req.user.getProviderUserId(), user);
+                }
+            });
     }
 
     function loadUserFromProvider() {
@@ -35,19 +60,43 @@ function UserCacheMiddleware(req, res, next) {
             var accessToken = req.headers['mtn-access-token'];
             return AuthService.getUserProfile(accessToken)
                 .then(function(profile) {
-                    user = User.build(profile);
-                    Cache.user(user.id, user);
+                    var options = {
+                        where: {
+                            email: profile.email
+                        }
+                    };
+
+                    //Now, find user in database, if any
+                    return q(UserProfile
+                        .unscoped()
+                        .findOne(options))
+                        .then(function(result) {
+                            if (result) {
+                                return result;
+                            } else {
+                                var newUser = UserProfile.build({
+                                    email: profile.email
+                                });
+                                newUser.setCreatedBy(Cache.systemAdministrator());
+                                newUser.setUpdatedBy(Cache.systemAdministrator());
+
+                                return q(newUser
+                                    .save())
+                                    .then(function(result) {
+                                        Cache.user(req.user.getProviderUserId(), result);
+                                        user = result;
+                                    })
+                            }
+                        })
+                        .then(function(databaseUser) {
+
+                        });
                 });
         }
     }
 
     function appendUserToRequest() {
         req.mtnUser = user;
-    }
-
-    function getUserId(req) {
-        var sub = req.user.sub;
-        return sub.substring(sub.indexOf('|') + 1, sub.length);
     }
 
     function sendUnauthorizedResponse(error) {

@@ -33,7 +33,9 @@ module.exports = function(sequelize, DataTypes) {
         {
             classMethods: {
                 associate: function(models) {
-                    UserProfile.hasMany(models.UserIdentity)
+                    UserProfile.hasMany(models.UserIdentity);
+                    UserProfile.hasOne(models.UserProfile, {as: 'CreatedBy', foreignKey: 'created_by'});
+                    UserProfile.hasOne(models.UserProfile, {as: 'UpdatedBy', foreignKey: 'updated_by'});
                 }
             },
             version: false,

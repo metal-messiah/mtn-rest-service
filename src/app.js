@@ -9,7 +9,6 @@ var urlRewrite = require('express-urlrewrite');
 
 var Logger = require('./api/util/logger.js');
 var Properties = require('./api/util/properties.js');
-var UserCacheMiddleware = require('./api/auth/userCacheMiddleware.js');
 var ToSnakeCaseFilter = require('./api/util/case-conversion/toSnakeCaseFilter.js');
 
 ////////////////////////////////////
@@ -20,9 +19,10 @@ var app, server, database;
 setTimeout(function () {
     app = express();
 
-    q.fcall(configureMiddleware)
-        .then(connectDatabase)
+    q.fcall(connectDatabase)
         .then(migrateDatabase)
+        .then(configureMiddleware)
+        .then(cacheSystemAdministrator)
         .then(start)
         .catch(function (error) {
             Logger.error('Failed to start application')
@@ -34,7 +34,33 @@ setTimeout(function () {
 
 ////////////////////////////////////
 
+function cacheSystemAdministrator() {
+    var Cache = require('./api/util/cache.js');
+    var Models = require('./api/model/database.js');
+    var UserProfile = Models.UserProfile;
+
+    var options = {
+        where: {
+            email: 'system.administrator@mtnra.com'
+        }
+    };
+
+    return q(UserProfile
+        .unscoped()
+        .findOne(options))
+        .then(function(result) {
+            if (!result) {
+                throw new Error('Failed to load system administrator!');
+            }
+            Cache.systemAdministrator(result);
+        });
+
+}
+
 function configureMiddleware() {
+    var AuthTokenMiddleware = require('./api/auth/authTokenMiddleware.js');
+    var UserCacheMiddleware = require('./api/auth/userCacheMiddleware.js');
+
     var Routes = require('./api/routes.js');
 
     app.use(helmet({
@@ -63,6 +89,7 @@ function configureMiddleware() {
     });
 
     //Load and cache profile
+    app.use('/api', AuthTokenMiddleware);
     app.use('/api', UserCacheMiddleware);
 
     app.use(bodyParser.json());

@@ -1,7 +1,6 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,18 +9,12 @@ import java.util.List;
  */
 @Entity
 @Table
-public class UserProfile {
+public class UserProfile extends AuditingEntity {
 
     private Integer id;
     private String email;
     private String firstName;
     private String lastName;
-    private UserProfile createdBy;
-    private LocalDateTime createdDate;
-    private UserProfile deletedBy;
-    private LocalDateTime deletedDate;
-    private UserProfile updatedBy;
-    private LocalDateTime updatedDate;
 
     private List<UserIdentity> identities = new ArrayList<>();
 
@@ -58,60 +51,6 @@ public class UserProfile {
 
     public void setLastName(final String lastName) {
         this.lastName = lastName;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    public UserProfile getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(final UserProfile createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(final LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "deleted_by")
-    public UserProfile getDeletedBy() {
-        return deletedBy;
-    }
-
-    public void setDeletedBy(final UserProfile deletedBy) {
-        this.deletedBy = deletedBy;
-    }
-
-    public LocalDateTime getDeletedDate() {
-        return deletedDate;
-    }
-
-    public void setDeletedDate(final LocalDateTime deletedDate) {
-        this.deletedDate = deletedDate;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "updated_by")
-    public UserProfile getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(final UserProfile updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(final LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
     }
 
     @OneToMany(mappedBy = "userProfile")

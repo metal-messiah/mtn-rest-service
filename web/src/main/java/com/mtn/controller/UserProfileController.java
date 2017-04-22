@@ -21,6 +21,12 @@ public class UserProfileController {
     @Autowired
     private UserProfileService userProfileService;
 
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity addOne(@RequestBody UserProfile request) {
+        UserProfile domainModel = userProfileService.addOne(request);
+        return ResponseEntity.ok(UserProfileToUserProfileViewConverter.build(domainModel));
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(@RequestParam(value = "q", required = false) String q, Pageable page) {
         Page<UserProfile> domainModels;

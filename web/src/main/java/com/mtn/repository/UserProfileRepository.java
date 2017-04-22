@@ -17,4 +17,6 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Intege
 
     @Query("FROM UserProfile up JOIN FETCH up.identities i WHERE i.providerUserId = :providerUserId")
     UserProfile findOneByProviderUserId(@Param("providerUserId") String providerUserId);
+
+    UserProfile findOneByEmail(String email);
 }

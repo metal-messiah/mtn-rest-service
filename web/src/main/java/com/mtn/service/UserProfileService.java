@@ -22,6 +22,7 @@ public class UserProfileService implements ValidatingDataService<UserProfile> {
 
     public UserProfile addOne(UserProfile request) {
         validateForInsert(request);
+        validateDoesNotExist(request);
 
         UserProfile systemAdministrator = findSystemAdministrator();
         request.setCreatedBy(systemAdministrator);
@@ -42,6 +43,10 @@ public class UserProfileService implements ValidatingDataService<UserProfile> {
         return userProfileRepository.findOneByProviderUserId(providerUserId);
     }
 
+    public UserProfile findOneByEmail(String email) {
+        return userProfileRepository.findOneByEmail(email);
+    }
+
     /**
      * TODO Usage of this needs to be replaced with current user ASAP
      */
@@ -51,6 +56,13 @@ public class UserProfileService implements ValidatingDataService<UserProfile> {
 
     public Page<UserProfile> query(String q, Pageable page) {
         return userProfileRepository.findAllByQueryString(q, page);
+    }
+
+    public void validateDoesNotExist(UserProfile userProfile) {
+        UserProfile existing = findOneByEmail(userProfile.getEmail());
+        if (existing != null) {
+            throw new IllegalArgumentException("UserProfile with this email already exists");
+        }
     }
 
     @Override

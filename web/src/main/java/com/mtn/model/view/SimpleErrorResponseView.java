@@ -1,6 +1,7 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.http.HttpStatus;
 
 /**
  * Created by Allen on 4/22/2017.
@@ -17,6 +18,10 @@ public class SimpleErrorResponseView {
     public SimpleErrorResponseView(Integer code, String message) {
         this.code = code;
         this.message = message;
+    }
+
+    public SimpleErrorResponseView(HttpStatus httpStatus, String message) {
+        this(httpStatus.value(), message);
     }
 
     public Integer getCode() {

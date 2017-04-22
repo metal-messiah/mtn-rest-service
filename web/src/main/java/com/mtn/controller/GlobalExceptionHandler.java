@@ -26,13 +26,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity badRequest(IllegalArgumentException e) {
-        return ResponseEntity.status(400).body(new SimpleErrorResponseView(400, e.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PropertyReferenceException.class)
     public ResponseEntity badSortParameter(PropertyReferenceException e) {
-        return ResponseEntity.status(400).body(new SimpleErrorResponseView(400, String.format("'%s' is not a valid sort value", e.getPropertyName())));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, String.format("'%s' is not a valid sort value", e.getPropertyName())));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
 
         logger.error(String.format("UNEXPECTED EXCEPTION - %s", getCorrelationId(req)), e);
 
-        return ResponseEntity.status(500).body(new SimpleErrorResponseView(500, "An Unexpected Error Occurred"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new SimpleErrorResponseView(HttpStatus.INTERNAL_SERVER_ERROR, "An Unexpected Error Occurred"));
     }
 
     ////////////////////////////////

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * Created by Allen on 4/21/2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleUserProfile {
+public class SimpleUserProfileView {
 
     private Integer id;
     private String email;

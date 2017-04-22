@@ -1,6 +1,6 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.UserProfileToSimpleUserProfileConverter;
+import com.mtn.model.converter.UserProfileToSimpleUserProfileViewConverter;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.service.UserProfileService;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +32,6 @@ public class UserProfileController {
             domainModels = userProfileService.findAll(page);
         }
 
-        return ResponseEntity.ok(domainModels.map(new UserProfileToSimpleUserProfileConverter()));
+        return ResponseEntity.ok(domainModels.map(new UserProfileToSimpleUserProfileViewConverter()));
     }
 }

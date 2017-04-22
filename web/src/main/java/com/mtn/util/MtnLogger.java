@@ -72,7 +72,7 @@ public class MtnLogger {
 
         String correlationId = enhancedRequest.getHeader(CorrelationIdFilter.MTN_CORRELATION_ID_HEADER);
         int status = httpServletResponse.getStatus();
-        String message = String.format("%s - %s - %d - %s %s", RESPONSE, correlationId, status, enhancedRequest.getMethod(), enhancedRequest.getRequestURL().toString());
+        String message = String.format("%s - %s - %s %s - %d", RESPONSE, correlationId, enhancedRequest.getMethod(), enhancedRequest.getRequestURL().toString(), status);
 
         if (status >= 200 && status < 400) {
             logger.info(message);

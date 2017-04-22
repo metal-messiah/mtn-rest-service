@@ -61,8 +61,7 @@ public class MtnLogger {
         CustomHeadersEnabledServletRequest enhancedRequest = (CustomHeadersEnabledServletRequest) servletRequest;
 
         String correlationId = enhancedRequest.getHeader(CorrelationIdFilter.MTN_CORRELATION_ID_HEADER);
-        String url = enhancedRequest.getRequestURL().toString();
-        String message = String.format("%s - %s - %s", REQUEST, correlationId, url);
+        String message = String.format("%s - %s - %s %s", REQUEST, correlationId, enhancedRequest.getMethod(), enhancedRequest.getRequestURL().toString());
 
         logger.info(message);
     }
@@ -72,9 +71,8 @@ public class MtnLogger {
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
         String correlationId = enhancedRequest.getHeader(CorrelationIdFilter.MTN_CORRELATION_ID_HEADER);
-        String url = enhancedRequest.getRequestURL().toString();
         int status = httpServletResponse.getStatus();
-        String message = String.format("%s - %s - %d - %s", RESPONSE, correlationId, status, url);
+        String message = String.format("%s - %s - %d - %s %s", RESPONSE, correlationId, status, enhancedRequest.getMethod(), enhancedRequest.getRequestURL().toString());
 
         if (status >= 200 && status < 400) {
             logger.info(message);

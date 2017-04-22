@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleUserProfileView {
 
-    private Integer id;
-    private String email;
-    private String firstName;
-    private String lastName;
+    protected Integer id;
+    protected String email;
+    protected String firstName;
+    protected String lastName;
 
     public Integer getId() {
         return id;

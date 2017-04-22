@@ -14,4 +14,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Intege
 
     @Query("FROM UserProfile up WHERE LOWER(up.email) LIKE LOWER(:q)")
     Page<UserProfile> findAllByQueryString(@Param("q") String q, Pageable page);
+
+    @Query("FROM UserProfile up JOIN FETCH up.identities i WHERE i.providerUserId = :providerUserId")
+    UserProfile findOneByProviderUserId(@Param("providerUserId") String providerUserId);
 }

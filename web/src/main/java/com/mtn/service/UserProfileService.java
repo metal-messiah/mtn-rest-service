@@ -20,7 +20,16 @@ public class UserProfileService {
         return userProfileRepository.findAll(page);
     }
 
+    public UserProfile findOne(Integer id) {
+        return userProfileRepository.findOne(id);
+    }
+
+    public UserProfile findOne(String providerUserId) {
+        return userProfileRepository.findOneByProviderUserId(providerUserId);
+    }
+
     public Page<UserProfile> query(String q, Pageable page) {
         return userProfileRepository.findAllByQueryString(q, page);
     }
+
 }

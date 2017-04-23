@@ -38,6 +38,16 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         return userProfileRepository.save(request);
     }
 
+    @Transactional
+    public void deleteOne(Integer id) {
+        UserProfile existing = findOne(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("No UserProfile found with this id");
+        }
+
+        existing.setDeletedBy(findSystemAdministrator());
+    }
+
     public Page<UserProfile> findAll(Pageable page) {
         return userProfileRepository.findAll(page);
     }
@@ -63,6 +73,27 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     public Page<UserProfile> query(String q, Pageable page) {
         return userProfileRepository.findAllByQueryString(q, page);
+    }
+
+    @Transactional
+    public UserProfile updateOne(Integer id, UserProfile request) {
+        validateNotNull(request);
+        validateForUpdate(request);
+
+        UserProfile existing = findOne(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("No UserProfile found with this id");
+        }
+
+        if (!existing.getEmail().equalsIgnoreCase(request.getEmail())) {
+            validateDoesNotExist(request);
+        }
+
+        existing.setEmail(request.getEmail());
+        existing.setFirstName(request.getFirstName());
+        existing.setLastName(request.getLastName());
+
+        return existing;
     }
 
     public void validateDoesNotExist(UserProfile userProfile) {
@@ -92,8 +123,6 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         if (object.getId() == null) {
             throw new IllegalArgumentException("UserProfile id must be provided");
         }
-
-        object.getIdentities().forEach(userIdentityService::validateForUpdate);
 
         validateBusinessRules(object);
     }

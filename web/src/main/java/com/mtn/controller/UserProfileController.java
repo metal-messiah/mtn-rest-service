@@ -27,6 +27,12 @@ public class UserProfileController {
         return ResponseEntity.ok(UserProfileToUserProfileViewConverter.build(domainModel));
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
+        userProfileService.deleteOne(id);
+        return ResponseEntity.ok().build();
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(@RequestParam(value = "q", required = false) String q, Pageable page) {
         Page<UserProfile> domainModels;
@@ -53,5 +59,11 @@ public class UserProfileController {
         } else {
             return ResponseEntity.noContent().build();
         }
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody UserProfile request) {
+        UserProfile domainModel = userProfileService.updateOne(id, request);
+        return ResponseEntity.ok(UserProfileToUserProfileViewConverter.build(domainModel));
     }
 }

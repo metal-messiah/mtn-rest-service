@@ -31,6 +31,10 @@ public abstract class AuditingEntity {
     @PreUpdate
     public void preUpdate() {
         this.updatedDate = LocalDateTime.now();
+
+        if (this.deletedBy != null && this.deletedDate == null) {
+            this.deletedDate = LocalDateTime.now();
+        }
     }
 
     @ManyToOne

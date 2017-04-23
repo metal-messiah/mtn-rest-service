@@ -95,3 +95,42 @@ Model validation is done in the service layer by the data services, after extend
  
 ## Domain Model to View Model Conversion
 Domain models are not directly exposed to the client, but instead should be passed through a Converter and converted to a View Model. This allows flexibility in what data is returned to the client in different circumstances, and again keeps domain models clean of any changes that would have been done to accommodate the client. This keeps a nice separation of concerns, puts all conversion logic into a single consistent framework, and again, keeps the domain models nice and clean.
+
+## Query Specifications (Dynamic WHERE Clause)
+Dynamic WHERE clauses can be constructed using Spring Data Specifications. A Specification creates a structure of Predicates that are translated into the WHERE clause of a query, and is used with the default JpaRepository findOne, findAll, etc, methods. These Specifications do introduce a fair bit of boilerplate and duplicate code, but provide the functionality necessary for preventing access to "protected" records, deleted records, and for the client-specific query restrictions discussed as future requirements of this service.
+
+For example:
+```
+    private static Specification<UserProfile> isNotDeleted() {
+        return new Specification<UserProfile>() {
+            @Override
+            public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.isNull(root.get(DELETED_DATE));
+            }
+        };
+    }
+```
+
+Which can be join with another Specification to create a composite Specification, as follows:
+```
+    public static Specification<UserProfile> queryWhereNotSystemAdministratorAndNotDeleted() {
+        return new Specification<UserProfile>() {
+            @Override
+            public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new ArrayList<>();
+
+                predicates.add(isNotSystemAdministrator().toPredicate(root, criteriaQuery, criteriaBuilder));
+                predicates.add(isNotDeleted().toPredicate(root, criteriaQuery, criteriaBuilder));
+
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+    }
+```
+
+And used in any service as such:
+```
+    public Page<UserProfile> findAllUsingSpecs(Pageable page) {
+        return userProfileRepository.findAll(UserProfileSpecifications.queryWhereNotSystemAdministratorAndNotDeleted(), page);
+    }
+```

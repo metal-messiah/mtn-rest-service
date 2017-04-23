@@ -3,6 +3,7 @@ package com.mtn.service;
 import com.mtn.model.domain.UserIdentity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.repository.UserProfileRepository;
+import com.mtn.repository.specification.UserProfileSpecifications;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,8 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         request.setCreatedBy(systemAdministrator);
         request.setUpdatedBy(systemAdministrator);
 
+        request.setEmail(request.getEmail().toLowerCase());
+
         for (UserIdentity userIdentity : request.getIdentities()) {
             userIdentity.setUserProfile(request);
         }
@@ -51,7 +54,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     @Transactional
     public void deleteOne(Integer id) {
-        UserProfile existing = findOne(id);
+        UserProfile existing = findOneUsingSpecs(id);
         if (existing == null) {
             throw new IllegalArgumentException("No UserProfile found with this id");
         }
@@ -59,16 +62,24 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         existing.setDeletedBy(findSystemAdministrator());
     }
 
-    public Page<UserProfile> findAll(Pageable page) {
-        return userProfileRepository.findAll(page);
+    public Page<UserProfile> findAllUsingSpecs(Pageable page) {
+        return userProfileRepository.findAll(UserProfileSpecifications.queryWhereNotSystemAdministratorAndNotDeleted(), page);
     }
 
     public UserProfile findOne(Integer id) {
         return userProfileRepository.findOne(id);
     }
 
+    public UserProfile findOneUsingSpecs(Integer id) {
+        return userProfileRepository.findOne(UserProfileSpecifications.queryWhereIdEquals(id));
+    }
+
     public UserProfile findOne(String providerUserId) {
         return userProfileRepository.findOneByProviderUserId(providerUserId);
+    }
+
+    public UserProfile findOneUsingSpecs(String providerUserId) {
+        return userProfileRepository.findOne(UserProfileSpecifications.queryWhereProviderUserIdEquals(providerUserId));
     }
 
     public UserProfile findOneByEmail(String email) {
@@ -83,7 +94,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     }
 
     public Page<UserProfile> query(String q, Pageable page) {
-        return userProfileRepository.findAllByQueryString(q, page);
+        return userProfileRepository.findAll(UserProfileSpecifications.queryWhereEmailOrFirstNameOrLastNameContains(q), page);
     }
 
     @Transactional
@@ -91,7 +102,9 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         validateNotNull(request);
         validateForUpdate(request);
 
-        UserProfile existing = findOne(id);
+        request.setEmail(request.getEmail().toLowerCase());
+
+        UserProfile existing = findOneUsingSpecs(id);
         if (existing == null) {
             throw new IllegalArgumentException("No UserProfile found with this id");
         }
@@ -107,13 +120,14 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         return existing;
     }
 
-    public void validateDoesNotExist(UserProfile userProfile) {
-        UserProfile existing = findOneByEmail(userProfile.getEmail());
+    @Override
+    public void validateDoesNotExist(UserProfile object) {
+        UserProfile existing = findOneByEmail(object.getEmail().toLowerCase());
         if (existing != null) {
             throw new IllegalArgumentException("UserProfile with this email already exists");
         }
 
-        userProfile.getIdentities().forEach(userIdentityService::validateDoesNotExist);
+        object.getIdentities().forEach(userIdentityService::validateDoesNotExist);
     }
 
     @Override

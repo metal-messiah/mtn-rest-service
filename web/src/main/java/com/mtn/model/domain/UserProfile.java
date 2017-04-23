@@ -18,6 +18,12 @@ public class UserProfile extends AuditingEntity {
 
     private List<UserIdentity> identities = new ArrayList<>();
 
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        email = email.toLowerCase();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_profile_id")
     @SequenceGenerator(name = "seq_user_profile_id", sequenceName = "seq_user_profile_id", allocationSize = 1)

@@ -54,7 +54,7 @@ public class UserProfileController {
         if (StringUtils.isNotBlank(q)) {
             domainModels = userProfileService.query(q, page);
         } else {
-            domainModels = userProfileService.findAll(page);
+            domainModels = userProfileService.findAllUsingSpecs(page);
         }
 
         return ResponseEntity.ok(domainModels.map(new UserProfileToSimpleUserProfileViewConverter()));
@@ -70,9 +70,9 @@ public class UserProfileController {
     public ResponseEntity findOne(@PathVariable("id") String id) {
         UserProfile domainModel;
         if (StringUtils.isNumeric(id)) {
-            domainModel = userProfileService.findOne(Integer.parseInt(id));
+            domainModel = userProfileService.findOneUsingSpecs(Integer.parseInt(id));
         } else {
-            domainModel = userProfileService.findOne(id);
+            domainModel = userProfileService.findOneUsingSpecs(id);
         }
 
         if (domainModel != null) {

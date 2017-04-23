@@ -22,6 +22,11 @@ public class UserProfileToUserProfileViewConverter implements Converter<UserProf
         viewModel.setEmail(userProfile.getEmail());
         viewModel.setFirstName(userProfile.getFirstName());
         viewModel.setLastName(userProfile.getLastName());
+        viewModel.setCreatedDate(userProfile.getCreatedDate());
+        viewModel.setUpdatedDate(userProfile.getUpdatedDate());
+
+        viewModel.setCreatedBy(UserProfileToSimpleUserProfileViewConverter.build(userProfile.getCreatedBy()));
+        viewModel.setUpdatedBy(UserProfileToSimpleUserProfileViewConverter.build(userProfile.getUpdatedBy()));
 
         viewModel.setIdentities(userProfile.getIdentities().stream().map(UserIdentityToSimpleUserIdentityViewConverter::build).collect(Collectors.toList()));
 

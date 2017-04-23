@@ -25,7 +25,6 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     @Transactional
     public UserProfile addOne(UserProfile request) {
         validateForInsert(request);
-        validateDoesNotExist(request);
 
         UserProfile systemAdministrator = findSystemAdministrator();
         request.setCreatedBy(systemAdministrator);
@@ -36,6 +35,18 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         }
 
         return userProfileRepository.save(request);
+    }
+
+    @Transactional
+    public UserIdentity addOneIdentityToUser(Integer userProfileId, UserIdentity request) {
+        UserProfile existing = findOne(userProfileId);
+        if (existing == null) {
+            throw new IllegalArgumentException("No UserProfile found with this id");
+        }
+
+        request.setUserProfile(existing);
+
+        return userIdentityService.addOne(request);
     }
 
     @Transactional
@@ -108,6 +119,8 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     @Override
     public void validateForInsert(UserProfile object) {
         validateNotNull(object);
+        validateDoesNotExist(object);
+
         if (object.getId() != null) {
             throw new IllegalArgumentException("UserProfile id must be null");
         }

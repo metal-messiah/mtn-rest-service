@@ -42,7 +42,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     @Transactional
     public UserIdentity addOneIdentityToUser(Integer userProfileId, UserIdentity request) {
-        UserProfile existing = findOne(userProfileId);
+        UserProfile existing = findOneUsingSpecs(userProfileId);
         if (existing == null) {
             throw new IllegalArgumentException("No UserProfile found with this id");
         }
@@ -66,18 +66,42 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         return userProfileRepository.findAll(UserProfileSpecifications.queryWhereNotSystemAdministratorAndNotDeleted(), page);
     }
 
+    /**
+     * Does an unconditional find by id
+     * <p>
+     * FOR INTERNAL USE ONLY - to protect deleted and system administrator records!
+     */
     public UserProfile findOne(Integer id) {
         return userProfileRepository.findOne(id);
     }
 
+    /**
+     * Safe find, using query specs.
+     *
+     * Will not return a deleted or system adminstrator record.
+     *
+     * Should be used for any client-facing logic.
+     */
     public UserProfile findOneUsingSpecs(Integer id) {
         return userProfileRepository.findOne(UserProfileSpecifications.queryWhereIdEquals(id));
     }
 
+    /**
+     * Does an unconditional find by Identity.providerUserId
+     *
+     * FOR INTERNAL USE ONLY - to protect deleted and system administrator records!
+     */
     public UserProfile findOne(String providerUserId) {
         return userProfileRepository.findOneByProviderUserId(providerUserId);
     }
 
+    /**
+     * Safe find, using query specs.
+     *
+     * Will not return a deleted or system adminstrator record.
+     *
+     * Should be used for any client-facing logic.
+     */
     public UserProfile findOneUsingSpecs(String providerUserId) {
         return userProfileRepository.findOne(UserProfileSpecifications.queryWhereProviderUserIdEquals(providerUserId));
     }

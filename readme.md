@@ -10,7 +10,7 @@ Any updates to the collection will be published back to this same link, so all y
 
 This collection uses environment variables. You'll want to set up Environments in Postman for Local, Dev, and Prod, and will need to provide "host", "idToken", and "accessToken" variables. Due to the nature of JWT, you'll have to update these tokens for each testing session. I've added some help for that on the main web service page once you sign in.
 
-## mtn-correlation-id Header
+## Correlation ID Header
 A client may provide a "mtn-correlation-id" header, which will be used internally by the REST service and appended to most log statements related to that particular request. This allows quick location of relevant messages for debugging.
 
 If the header is not provided by the client, it will be appended to the reqest internally by the REST service before processing the request, and will be returned in the response.
@@ -89,3 +89,9 @@ java.lang.RuntimeException: null
 ```
 
 This header, together with the GlobalExceptionHandler and RequestLoggingFilter, aim to reduce the amount of boilerplate code that must be written in the service and controller layer for logging as much as possible.
+
+## Model Validation
+Model validation is done in the service layer by the data services, after extending ValidatingDataService and implementing the required methods. This allows easy interaction between services and models, and keeps the domain models themselves clean, and without having to implement or extend other interfaces or classes to provide a consistent validation framework.
+ 
+## Domain Model to View Model Conversion
+Domain models are not directly exposed to the client, but instead should be passed through a Converter and converted to a View Model. This allows flexibility in what data is returned to the client in different circumstances, and again keeps domain models clean of any changes that would have been done to accommodate the client. This keeps a nice separation of concerns, puts all conversion logic into a single consistent framework, and again, keeps the domain models nice and clean.

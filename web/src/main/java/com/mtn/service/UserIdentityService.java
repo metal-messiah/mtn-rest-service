@@ -59,7 +59,7 @@ public class UserIdentityService extends ValidatingDataService<UserIdentity> {
     }
 
     @Override
-    void validateDoesNotExist(UserIdentity object) {
+    public void validateDoesNotExist(UserIdentity object) {
         UserIdentity existing = findOneByProviderAndProviderUserId(object.getProvider(), object.getProviderUserId());
         if (existing != null) {
             throw new IllegalArgumentException("UserIdentity with this provider and providerUserId already exists");

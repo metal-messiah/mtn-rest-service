@@ -68,7 +68,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     /**
      * Does an unconditional find by id
-     * <p>
+     *
      * FOR INTERNAL USE ONLY - to protect deleted and system administrator records!
      */
     public UserProfile findOne(Integer id) {
@@ -140,6 +140,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         existing.setEmail(request.getEmail());
         existing.setFirstName(request.getFirstName());
         existing.setLastName(request.getLastName());
+        existing.setUpdatedBy(findSystemAdministrator());
 
         return existing;
     }

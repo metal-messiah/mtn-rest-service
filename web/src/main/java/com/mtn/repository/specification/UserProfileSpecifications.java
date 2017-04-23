@@ -56,20 +56,6 @@ public class UserProfileSpecifications {
         };
     }
 
-    public static Specification<UserProfile> queryWhereEmailEquals(String value) {
-        return new Specification<UserProfile>() {
-            @Override
-            public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new ArrayList<>();
-
-                predicates.add(emailEquals(value).toPredicate(root, criteriaQuery, criteriaBuilder));
-                predicates.add(queryWhereNotSystemAdministratorAndNotDeleted().toPredicate(root, criteriaQuery, criteriaBuilder));
-
-                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-    }
-
     public static Specification<UserProfile> queryWhereIdEquals(Integer value) {
         return new Specification<UserProfile>() {
             @Override

@@ -5,13 +5,13 @@ package com.mtn.service;
  */
 public abstract class ValidatingDataService<T> {
 
-    abstract void validateForInsert(T object);
+    public abstract void validateForInsert(T object);
 
-    abstract void validateForUpdate(T object);
+    public abstract void validateForUpdate(T object);
 
-    abstract void validateBusinessRules(T object);
+    public abstract void validateBusinessRules(T object);
 
-    abstract void validateNotNull(T object);
+    public abstract void validateNotNull(T object);
 
-    abstract void validateDoesNotExist(T object);
+    public abstract void validateDoesNotExist(T object);
 }

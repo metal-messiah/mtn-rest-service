@@ -2,6 +2,8 @@ package com.mtn.controller;
 
 import com.mtn.correlation.CorrelationIdFilter;
 import com.mtn.correlation.CustomHeadersEnabledServletRequest;
+import com.mtn.exception.VersionConflictException;
+import com.mtn.model.view.ConflictErrorResponseView;
 import com.mtn.model.view.SimpleErrorResponseView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PropertyReferenceException.class)
     public ResponseEntity badSortParameter(PropertyReferenceException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, String.format("'%s' is not a valid sort value", e.getPropertyName())));
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(VersionConflictException.class)
+    public ResponseEntity conflict(VersionConflictException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ConflictErrorResponseView(e.getObject()));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

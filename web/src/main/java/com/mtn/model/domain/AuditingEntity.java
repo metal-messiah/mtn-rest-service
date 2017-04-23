@@ -18,18 +18,18 @@ public abstract class AuditingEntity {
     private LocalDateTime updatedDate;
 
     @PreDestroy
-    public void preDestroy() {
+    public void genericPreDestroy() {
         this.deletedDate = LocalDateTime.now();
     }
 
     @PrePersist
-    public void prePersist() {
+    public void genericPrePersist() {
         this.createdDate = LocalDateTime.now();
         this.updatedDate = LocalDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
+    public void genericPreUpdate() {
         this.updatedDate = LocalDateTime.now();
 
         if (this.deletedBy != null && this.deletedDate == null) {

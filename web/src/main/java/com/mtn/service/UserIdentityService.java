@@ -2,14 +2,31 @@ package com.mtn.service;
 
 import com.mtn.constant.Provider;
 import com.mtn.model.domain.UserIdentity;
+import com.mtn.repository.UserIdentityRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  * Created by Allen on 4/22/2017.
  */
 @Service
-public class UserIdentityService implements ValidatingDataService<UserIdentity> {
+public class UserIdentityService extends ValidatingDataService<UserIdentity> {
+
+    @Autowired
+    private UserIdentityRepository userIdentityRepository;
+
+    public UserIdentity findOneByProviderAndProviderUserId(Provider provider, String providerUserId) {
+        return userIdentityRepository.findOneByProviderAndProviderUserId(provider, providerUserId);
+    }
+
+    @Override
+    void validateDoesNotExist(UserIdentity object) {
+        UserIdentity existing = findOneByProviderAndProviderUserId(object.getProvider(), object.getProviderUserId());
+        if (existing != null) {
+            throw new IllegalArgumentException("UserIdentity with this provider and providerUserId already exists");
+        }
+    }
 
     @Override
     public void validateForInsert(UserIdentity object) {

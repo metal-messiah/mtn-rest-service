@@ -3,13 +3,15 @@ package com.mtn.service;
 /**
  * Created by Allen on 4/22/2017.
  */
-public interface ValidatingDataService<T> {
+public abstract class ValidatingDataService<T> {
 
-    void validateForInsert(T object);
+    abstract void validateForInsert(T object);
 
-    void validateForUpdate(T object);
+    abstract void validateForUpdate(T object);
 
-    void validateBusinessRules(T object);
+    abstract void validateBusinessRules(T object);
 
-    void validateNotNull(T object);
+    abstract void validateNotNull(T object);
+
+    abstract void validateDoesNotExist(T object);
 }

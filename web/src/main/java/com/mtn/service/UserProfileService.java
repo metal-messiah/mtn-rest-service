@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.model.domain.UserIdentity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.repository.UserProfileRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -7,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Allen on 4/21/2017.
  */
 @Service
-public class UserProfileService implements ValidatingDataService<UserProfile> {
+public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     @Autowired
     private UserIdentityService userIdentityService;
@@ -20,6 +22,7 @@ public class UserProfileService implements ValidatingDataService<UserProfile> {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
+    @Transactional
     public UserProfile addOne(UserProfile request) {
         validateForInsert(request);
         validateDoesNotExist(request);
@@ -27,6 +30,10 @@ public class UserProfileService implements ValidatingDataService<UserProfile> {
         UserProfile systemAdministrator = findSystemAdministrator();
         request.setCreatedBy(systemAdministrator);
         request.setUpdatedBy(systemAdministrator);
+
+        for (UserIdentity userIdentity : request.getIdentities()) {
+            userIdentity.setUserProfile(request);
+        }
 
         return userProfileRepository.save(request);
     }
@@ -63,6 +70,8 @@ public class UserProfileService implements ValidatingDataService<UserProfile> {
         if (existing != null) {
             throw new IllegalArgumentException("UserProfile with this email already exists");
         }
+
+        userProfile.getIdentities().forEach(userIdentityService::validateDoesNotExist);
     }
 
     @Override

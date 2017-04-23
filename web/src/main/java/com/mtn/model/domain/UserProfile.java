@@ -53,7 +53,7 @@ public class UserProfile extends AuditingEntity {
         this.lastName = lastName;
     }
 
-    @OneToMany(mappedBy = "userProfile")
+    @OneToMany(mappedBy = "userProfile", cascade = {CascadeType.ALL})
     public List<UserIdentity> getIdentities() {
         return identities;
     }

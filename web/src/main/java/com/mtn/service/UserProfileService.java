@@ -3,13 +3,15 @@ package com.mtn.service;
 import com.mtn.model.domain.UserIdentity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.repository.UserProfileRepository;
-import com.mtn.repository.specification.UserProfileSpecifications;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.mtn.repository.specification.UserProfileSpecifications.*;
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Allen on 4/21/2017.
@@ -63,12 +65,16 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     }
 
     public Page<UserProfile> findAllUsingSpecs(Pageable page) {
-        return userProfileRepository.findAll(UserProfileSpecifications.queryWhereNotSystemAdministratorAndNotDeleted(), page);
+        return userProfileRepository.findAll(
+                where(isNotSystemAdministrator())
+                        .and(isNotDeleted()),
+                page
+        );
     }
 
     /**
      * Does an unconditional find by id
-     *
+     * <p>
      * FOR INTERNAL USE ONLY - to protect deleted and system administrator records!
      */
     public UserProfile findOne(Integer id) {
@@ -77,18 +83,22 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     /**
      * Safe find, using query specs.
-     *
+     * <p>
      * Will not return a deleted or system adminstrator record.
-     *
+     * <p>
      * Should be used for any client-facing logic.
      */
     public UserProfile findOneUsingSpecs(Integer id) {
-        return userProfileRepository.findOne(UserProfileSpecifications.queryWhereIdEquals(id));
+        return userProfileRepository.findOne(
+                where(idEquals(id))
+                        .and(isNotSystemAdministrator())
+                        .and(isNotDeleted())
+        );
     }
 
     /**
      * Does an unconditional find by Identity.providerUserId
-     *
+     * <p>
      * FOR INTERNAL USE ONLY - to protect deleted and system administrator records!
      */
     public UserProfile findOne(String providerUserId) {
@@ -97,13 +107,17 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     /**
      * Safe find, using query specs.
-     *
+     * <p>
      * Will not return a deleted or system adminstrator record.
-     *
+     * <p>
      * Should be used for any client-facing logic.
      */
     public UserProfile findOneUsingSpecs(String providerUserId) {
-        return userProfileRepository.findOne(UserProfileSpecifications.queryWhereProviderUserIdEquals(providerUserId));
+        return userProfileRepository.findOne(
+                where(identityUserProviderIdEquals(providerUserId))
+                        .and(isNotSystemAdministrator())
+                        .and(isNotDeleted())
+        );
     }
 
     public UserProfile findOneByEmail(String email) {
@@ -118,7 +132,16 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     }
 
     public Page<UserProfile> query(String q, Pageable page) {
-        return userProfileRepository.findAll(UserProfileSpecifications.queryWhereEmailOrFirstNameOrLastNameContains(q), page);
+        return userProfileRepository.findAll(
+                where(
+                        where(
+                                emailContains(q))
+                                .or(firstNameContains(q))
+                                .or(lastNameContains(q)))
+                        .and(isNotSystemAdministrator())
+                        .and(isNotDeleted())
+                , page
+        );
     }
 
     @Transactional

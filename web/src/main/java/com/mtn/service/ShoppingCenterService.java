@@ -5,13 +5,15 @@ import com.mtn.model.converter.ShoppingCenterToShoppingCenterViewConverter;
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.repository.ShoppingCenterRepository;
-import com.mtn.repository.specification.ShoppingCenterSpecifications;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.mtn.repository.specification.ShoppingCenterSpecifications.*;
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Allen on 4/23/2017.
@@ -47,19 +49,36 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
     }
 
     public Page<ShoppingCenter> findAllUsingSpecs(Pageable page) {
-        return shoppingCenterRepository.findAll(ShoppingCenterSpecifications.queryWhereNotDeleted(), page);
+        return shoppingCenterRepository.findAll(
+                where(isNotDeleted())
+                , page
+        );
     }
 
     public Page<ShoppingCenter> findAllByNameUsingSpecs(String name, Pageable page) {
-        return shoppingCenterRepository.findAll(ShoppingCenterSpecifications.queryWhereNameContains(name), page);
+        return shoppingCenterRepository.findAll(
+                where(nameContains(name))
+                        .and(isNotDeleted())
+                , page
+        );
     }
 
     public Page<ShoppingCenter> findAllByOwnerUsingSpecs(String owner, Pageable page) {
-        return shoppingCenterRepository.findAll(ShoppingCenterSpecifications.queryWhereOwnerContains(owner), page);
+        return shoppingCenterRepository.findAll(
+                where(ownerContains(owner))
+                        .and(isNotDeleted())
+                , page
+        );
     }
 
     public Page<ShoppingCenter> findAllByNameOrOwnerUsingSpecs(String q, Pageable page) {
-        return shoppingCenterRepository.findAll(ShoppingCenterSpecifications.queryWhereNameOrOwnerContains(q), page);
+        return shoppingCenterRepository.findAll(
+                where(
+                        where(nameContains(q))
+                                .or(ownerContains(q)))
+                        .and(isNotDeleted())
+                , page
+        );
     }
 
     public ShoppingCenter findOne(Integer id) {
@@ -67,7 +86,10 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
     }
 
     public ShoppingCenter findOneUsingSpecs(Integer id) {
-        return shoppingCenterRepository.findOne(ShoppingCenterSpecifications.queryWhereIdEquals(id));
+        return shoppingCenterRepository.findOne(
+                where(idEquals(id))
+                        .and(isNotDeleted())
+        );
     }
 
     @Transactional

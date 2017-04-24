@@ -3,6 +3,7 @@ package com.mtn.service;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.converter.ShoppingCenterToShoppingCenterViewConverter;
 import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.domain.Site;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.repository.ShoppingCenterRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,9 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
     private ShoppingCenterRepository shoppingCenterRepository;
 
     @Autowired
+    private SiteService siteService;
+
+    @Autowired
     private UserProfileService userProfileService;
 
     @Transactional
@@ -36,6 +40,16 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         request.setUpdatedBy(systemAdministrator);
 
         return shoppingCenterRepository.save(request);
+    }
+
+    @Transactional
+    public Site addOneSiteToShoppingCenter(Integer shoppingCenterId, Site request) {
+        ShoppingCenter existing = findOneUsingSpecs(shoppingCenterId);
+        validateNotNull(existing);
+
+        request.setShoppingCenter(existing);
+
+        return siteService.addOne(request);
     }
 
     @Transactional

@@ -1,6 +1,8 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allen on 4/23/2017.
@@ -15,6 +17,8 @@ public class ShoppingCenter extends AuditingEntity {
     private String nativeId;
     private String url;
     private Integer version;
+
+    private List<Site> sites = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
@@ -75,5 +79,14 @@ public class ShoppingCenter extends AuditingEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @OneToMany(mappedBy = "shoppingCenter")
+    public List<Site> getSites() {
+        return sites;
+    }
+
+    public void setSites(List<Site> sites) {
+        this.sites = sites;
     }
 }

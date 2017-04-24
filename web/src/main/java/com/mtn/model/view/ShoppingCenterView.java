@@ -3,6 +3,8 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allen on 4/23/2017.
@@ -14,6 +16,8 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
     private LocalDateTime createdDate;
     private SimpleUserProfileView updatedBy;
     private LocalDateTime updatedDate;
+
+    private List<SimpleSiteView> sites = new ArrayList<>();
 
     public SimpleUserProfileView getCreatedBy() {
         return createdBy;
@@ -45,5 +49,13 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
 
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public List<SimpleSiteView> getSites() {
+        return sites;
+    }
+
+    public void setSites(List<SimpleSiteView> sites) {
+        this.sites = sites;
     }
 }

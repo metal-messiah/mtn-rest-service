@@ -16,6 +16,7 @@ CREATE TABLE site (
   intersection_street_primary   VARCHAR(64),
   intersection_street_secondary VARCHAR(64),
   intersection_quad             VARCHAR(64),
+  location_type                 VARCHAR(64),
   position_in_center            VARCHAR(64),
   version                       INT             NOT NULL DEFAULT 1,
   created_by                    INT             NOT NULL,

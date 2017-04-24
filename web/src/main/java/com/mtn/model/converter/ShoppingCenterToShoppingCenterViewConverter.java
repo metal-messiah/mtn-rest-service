@@ -4,6 +4,8 @@ import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.view.ShoppingCenterView;
 import org.springframework.core.convert.converter.Converter;
 
+import java.util.stream.Collectors;
+
 /**
  * Created by Allen on 4/23/2017.
  */
@@ -27,6 +29,12 @@ public class ShoppingCenterToShoppingCenterViewConverter implements Converter<Sh
 
         viewModel.setCreatedBy(UserProfileToSimpleUserProfileViewConverter.build(shoppingCenter.getCreatedBy()));
         viewModel.setUpdatedBy(UserProfileToSimpleUserProfileViewConverter.build(shoppingCenter.getUpdatedBy()));
+
+        viewModel.setSites(shoppingCenter.getSites()
+                .stream()
+                .filter(site -> site.getDeletedDate() == null)
+                .map(SiteToSimpleSiteViewConverter::build)
+                .collect(Collectors.toList()));
 
         return viewModel;
     }

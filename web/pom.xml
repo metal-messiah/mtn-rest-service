@@ -18,6 +18,7 @@
     <properties>
         <commons-lang3.version>3.5</commons-lang3.version>
         <flyway.version>4.1.2</flyway.version>
+        <hibernate-spatial.version>5.2.10.Final</hibernate-spatial.version>
         <hikari-cp.version>2.6.1</hikari-cp.version>
         <jackson-datatype.version>2.8.8</jackson-datatype.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
@@ -62,6 +63,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson-datatype.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>${hibernate-spatial.version}</version>
         </dependency>
     </dependencies>
 

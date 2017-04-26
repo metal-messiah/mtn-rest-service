@@ -2,6 +2,7 @@ package com.mtn.model.view.geojson;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.GeoJsonType;
+import com.vividsolutions.jts.geom.Point;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,14 @@ public class GeoJsonView {
     private GeoJsonType type;
     private Map<String, Object> properties = new HashMap<>();
     private GeometryView geometry;
+
+    public GeoJsonView() {
+    }
+
+    public GeoJsonView(Point location) {
+        this.type = GeoJsonType.Feature;
+        this.geometry = new GeometryView(location);
+    }
 
     public GeoJsonType getType() {
         return type;

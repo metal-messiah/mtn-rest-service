@@ -1,6 +1,7 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.model.domain.ShoppingCenter;
 
 /**
  * Created by Allen on 4/23/2017.
@@ -14,6 +15,18 @@ public class SimpleShoppingCenterView {
     protected String nativeId;
     protected String url;
     protected Integer version;
+
+    public SimpleShoppingCenterView() {
+    }
+
+    public SimpleShoppingCenterView(ShoppingCenter shoppingCenter) {
+        this.id = shoppingCenter.getId();
+        this.name = shoppingCenter.getName();
+        this.owner = shoppingCenter.getOwner();
+        this.nativeId = shoppingCenter.getNativeId();
+        this.url = shoppingCenter.getUrl();
+        this.version = shoppingCenter.getVersion();
+    }
 
     public Integer getId() {
         return id;

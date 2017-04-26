@@ -1,6 +1,7 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.model.domain.UserProfile;
 
 /**
  * Created by Allen on 4/21/2017.
@@ -12,6 +13,15 @@ public class SimpleUserProfileView {
     protected String email;
     protected String firstName;
     protected String lastName;
+
+    public SimpleUserProfileView() {
+    }
+
+    public SimpleUserProfileView(UserProfile userProfile) {
+        this.email = userProfile.getEmail();
+        this.firstName = userProfile.getFirstName();
+        this.lastName = userProfile.getLastName();
+    }
 
     public Integer getId() {
         return id;

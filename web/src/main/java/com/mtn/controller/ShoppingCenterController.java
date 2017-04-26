@@ -1,11 +1,9 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.ShoppingCenterToShoppingCenterViewConverter;
 import com.mtn.model.converter.ShoppingCenterToSimpleShoppingCenterViewConverter;
-import com.mtn.model.converter.SimpleSiteViewToSiteConverter;
-import com.mtn.model.converter.SiteToSimpleSiteViewConverter;
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
+import com.mtn.model.view.ShoppingCenterView;
 import com.mtn.model.view.SimpleSiteView;
 import com.mtn.service.ShoppingCenterService;
 import com.mtn.service.SiteService;
@@ -35,14 +33,14 @@ public class ShoppingCenterController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody ShoppingCenter request) {
         ShoppingCenter domainModel = shoppingCenterService.addOne(request);
-        return ResponseEntity.ok(ShoppingCenterToShoppingCenterViewConverter.build(domainModel));
+        return ResponseEntity.ok(new ShoppingCenterView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/site", method = RequestMethod.POST)
     public ResponseEntity addOneSiteToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody SimpleSiteView request) {
-        Site transformedRequest = SimpleSiteViewToSiteConverter.build(request);
+        Site transformedRequest = new Site(request);
         Site domainModel = shoppingCenterService.addOneSiteToShoppingCenter(shoppingCenterId, transformedRequest);
-        return ResponseEntity.ok(SiteToSimpleSiteViewConverter.build(domainModel));
+        return ResponseEntity.ok(new SimpleSiteView(domainModel));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -75,14 +73,14 @@ public class ShoppingCenterController {
     @RequestMapping(value = "/{id}/site", method = RequestMethod.GET)
     public ResponseEntity findAllSitesForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
         List<Site> domainModels = siteService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
-        return ResponseEntity.ok(domainModels.stream().map(SiteToSimpleSiteViewConverter::build).collect(Collectors.toList()));
+        return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
         ShoppingCenter domainModel = shoppingCenterService.findOneUsingSpecs(id);
         if (domainModel != null) {
-            return ResponseEntity.ok(ShoppingCenterToShoppingCenterViewConverter.build(domainModel));
+            return ResponseEntity.ok(new ShoppingCenterView(domainModel));
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -91,6 +89,6 @@ public class ShoppingCenterController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody ShoppingCenter request) {
         ShoppingCenter domainModel = shoppingCenterService.updateOne(id, request);
-        return ResponseEntity.ok(ShoppingCenterToShoppingCenterViewConverter.build(domainModel));
+        return ResponseEntity.ok(new ShoppingCenterView(domainModel));
     }
 }

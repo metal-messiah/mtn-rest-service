@@ -1,10 +1,10 @@
 package com.mtn.service;
 
 import com.mtn.exception.VersionConflictException;
-import com.mtn.model.converter.ShoppingCenterToShoppingCenterViewConverter;
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.view.ShoppingCenterView;
 import com.mtn.repository.ShoppingCenterRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +116,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
             throw new IllegalArgumentException("No ShoppingCenter found with this id");
         }
         if (!request.getVersion().equals(existing.getVersion())) {
-            throw new VersionConflictException(ShoppingCenterToShoppingCenterViewConverter.build(existing));
+            throw new VersionConflictException(new ShoppingCenterView(existing));
         }
 
         existing.setName(request.getName());

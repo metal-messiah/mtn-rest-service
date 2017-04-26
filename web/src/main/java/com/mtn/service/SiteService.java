@@ -9,8 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.mtn.repository.specification.SiteSpecifications.isNotDeleted;
-import static com.mtn.repository.specification.SiteSpecifications.shoppingCenterIdEquals;
+import static com.mtn.repository.specification.SiteSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
@@ -39,6 +38,13 @@ public class SiteService extends ValidatingDataService<Site> {
     public List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
         return siteRepository.findAll(
                 where(shoppingCenterIdEquals(shoppingCenterId))
+                        .and(isNotDeleted())
+        );
+    }
+
+    public Site findOneUsingSpecs(Integer id) {
+        return siteRepository.findOne(
+                where(idEquals(id))
                         .and(isNotDeleted())
         );
     }

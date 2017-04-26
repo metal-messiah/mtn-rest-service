@@ -1,7 +1,7 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.UserIdentityToSimpleUserIdentityViewConverter;
 import com.mtn.model.domain.UserIdentity;
+import com.mtn.model.view.SimpleUserIdentityView;
 import com.mtn.service.UserIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class UserIdentityController {
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
         UserIdentity domainModel = userIdentityService.findOne(id);
         if (domainModel != null) {
-            return ResponseEntity.ok(UserIdentityToSimpleUserIdentityViewConverter.build(domainModel));
+            return ResponseEntity.ok(new SimpleUserIdentityView(domainModel));
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -36,7 +36,7 @@ public class UserIdentityController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody UserIdentity request) {
         UserIdentity domainModel = userIdentityService.updateOne(id, request);
-        return ResponseEntity.ok(UserIdentityToSimpleUserIdentityViewConverter.build(domainModel));
+        return ResponseEntity.ok(new SimpleUserIdentityView(domainModel));
     }
 
 }

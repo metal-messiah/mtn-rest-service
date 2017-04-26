@@ -1,40 +1,42 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.UserProfile;
+import com.mtn.model.domain.Site;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Created by Allen on 4/22/2017.
+ * Created by Allen on 4/25/2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserProfileView extends SimpleUserProfileView {
+public class SiteView extends SimpleSiteView {
 
+    private SimpleShoppingCenterView shoppingCenter;
     private SimpleUserProfileView createdBy;
     private LocalDateTime createdDate;
     private SimpleUserProfileView updatedBy;
     private LocalDateTime updatedDate;
 
-    private List<SimpleUserIdentityView> identities = new ArrayList<>();
-
-    public UserProfileView() {
+    public SiteView() {
     }
 
-    public UserProfileView(UserProfile userProfile) {
-        super(userProfile);
+    public SiteView(Site site) {
+        super(site);
 
-        this.createdBy = new SimpleUserProfileView(userProfile.getCreatedBy());
-        this.createdDate = userProfile.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(userProfile.getUpdatedBy());
-        this.updatedDate = userProfile.getUpdatedDate();
-
-        this.identities = userProfile.getIdentities().stream().map(SimpleUserIdentityView::new).collect(Collectors.toList());
+        this.shoppingCenter = new SimpleShoppingCenterView(site.getShoppingCenter());
+        this.createdBy = new SimpleUserProfileView(site.getCreatedBy());
+        this.createdDate = site.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(site.getUpdatedBy());
+        this.updatedDate = site.getUpdatedDate();
     }
 
+    public SimpleShoppingCenterView getShoppingCenter() {
+        return shoppingCenter;
+    }
+
+    public void setShoppingCenter(SimpleShoppingCenterView shoppingCenter) {
+        this.shoppingCenter = shoppingCenter;
+    }
 
     public SimpleUserProfileView getCreatedBy() {
         return createdBy;
@@ -66,13 +68,5 @@ public class UserProfileView extends SimpleUserProfileView {
 
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
-    }
-
-    public List<SimpleUserIdentityView> getIdentities() {
-        return identities;
-    }
-
-    public void setIdentities(List<SimpleUserIdentityView> identities) {
-        this.identities = identities;
     }
 }

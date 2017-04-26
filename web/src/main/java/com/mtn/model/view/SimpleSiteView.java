@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.SiteLocationType;
 import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
+import com.mtn.model.domain.Site;
 import com.mtn.model.view.geojson.GeoJsonView;
 
 /**
@@ -13,7 +14,6 @@ import com.mtn.model.view.geojson.GeoJsonView;
 public class SimpleSiteView {
 
     protected Integer id;
-    protected SimpleShoppingCenterView shoppingCenter;
     protected GeoJsonView location;
     protected SiteType type;
     protected SiteLocationType locationType;
@@ -31,20 +31,35 @@ public class SimpleSiteView {
     protected SitePositionType positionInCenter;
     protected Integer version;
 
+    public SimpleSiteView() {
+    }
+
+    public SimpleSiteView(Site site) {
+        this.id = site.getId();
+        this.location = new GeoJsonView(site.getLocation());
+        this.type = site.getType();
+        this.locationType = site.getLocationType();
+        this.address1 = site.getAddress1();
+        this.address2 = site.getAddress2();
+        this.city = site.getCity();
+        this.state = site.getState();
+        this.postalCode = site.getPostalCode();
+        this.county = site.getCounty();
+        this.country = site.getCountry();
+        this.footprintSqft = site.getFootprintSqft();
+        this.intersectionStreetPrimary = site.getIntersectionStreetPrimary();
+        this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
+        this.intersectionQuad = site.getIntersectionQuad();
+        this.positionInCenter = site.getPositionInCenter();
+        this.version = site.getVersion();
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public SimpleShoppingCenterView getShoppingCenter() {
-        return shoppingCenter;
-    }
-
-    public void setShoppingCenter(SimpleShoppingCenterView shoppingCenter) {
-        this.shoppingCenter = shoppingCenter;
     }
 
     public GeoJsonView getLocation() {

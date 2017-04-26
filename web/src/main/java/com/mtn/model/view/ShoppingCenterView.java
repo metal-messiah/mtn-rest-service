@@ -1,10 +1,12 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.model.domain.ShoppingCenter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 4/23/2017.
@@ -18,6 +20,20 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
     private LocalDateTime updatedDate;
 
     private List<SimpleSiteView> sites = new ArrayList<>();
+
+    public ShoppingCenterView() {
+    }
+
+    public ShoppingCenterView(ShoppingCenter shoppingCenter) {
+        super(shoppingCenter);
+
+        this.createdBy = new SimpleUserProfileView(shoppingCenter.getCreatedBy());
+        this.createdDate = shoppingCenter.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(shoppingCenter.getUpdatedBy());
+        this.updatedDate = shoppingCenter.getUpdatedDate();
+
+        this.sites = shoppingCenter.getSites().stream().map(SimpleSiteView::new).collect(Collectors.toList());
+    }
 
     public SimpleUserProfileView getCreatedBy() {
         return createdBy;

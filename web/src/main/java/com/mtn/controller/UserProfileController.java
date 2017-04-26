@@ -1,10 +1,10 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.UserIdentityToSimpleUserIdentityViewConverter;
 import com.mtn.model.converter.UserProfileToSimpleUserProfileViewConverter;
-import com.mtn.model.converter.UserProfileToUserProfileViewConverter;
 import com.mtn.model.domain.UserIdentity;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.view.SimpleUserIdentityView;
+import com.mtn.model.view.UserProfileView;
 import com.mtn.service.UserIdentityService;
 import com.mtn.service.UserProfileService;
 import org.apache.commons.lang3.StringUtils;
@@ -33,13 +33,13 @@ public class UserProfileController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody UserProfile request) {
         UserProfile domainModel = userProfileService.addOne(request);
-        return ResponseEntity.ok(UserProfileToUserProfileViewConverter.build(domainModel));
+        return ResponseEntity.ok(new UserProfileView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/identity", method = RequestMethod.POST)
     public ResponseEntity addOneIdentityToUser(@PathVariable("id") Integer userProfileId, @RequestBody UserIdentity request) {
         UserIdentity domainModel = userProfileService.addOneIdentityToUser(userProfileId, request);
-        return ResponseEntity.ok(UserIdentityToSimpleUserIdentityViewConverter.build(domainModel));
+        return ResponseEntity.ok(new SimpleUserIdentityView(domainModel));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -63,7 +63,7 @@ public class UserProfileController {
     @RequestMapping(value = "/{id}/identity", method = RequestMethod.GET)
     public ResponseEntity findAllIdentitiesById(@PathVariable("id") Integer userProfileId) {
         List<UserIdentity> domainModels = userIdentityService.findAllByUserProfileId(userProfileId);
-        return ResponseEntity.ok(domainModels.stream().map(UserIdentityToSimpleUserIdentityViewConverter::build).collect(Collectors.toList()));
+        return ResponseEntity.ok(domainModels.stream().map(SimpleUserIdentityView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -76,7 +76,7 @@ public class UserProfileController {
         }
 
         if (domainModel != null) {
-            return ResponseEntity.ok(UserProfileToUserProfileViewConverter.build(domainModel));
+            return ResponseEntity.ok(new UserProfileView(domainModel));
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -85,6 +85,6 @@ public class UserProfileController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody UserProfile request) {
         UserProfile domainModel = userProfileService.updateOne(id, request);
-        return ResponseEntity.ok(UserProfileToUserProfileViewConverter.build(domainModel));
+        return ResponseEntity.ok(new UserProfileView(domainModel));
     }
 }

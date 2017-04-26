@@ -3,6 +3,10 @@ package com.mtn.model.domain;
 import com.mtn.constant.SiteLocationType;
 import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
+import com.mtn.model.view.SimpleSiteView;
+import com.mtn.model.view.SiteView;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
@@ -32,6 +36,40 @@ public class Site extends AuditingEntity {
     private String intersectionQuad;
     private SitePositionType positionInCenter;
     private Integer version;
+
+    public Site() {
+    }
+
+    public Site(SimpleSiteView simpleSiteView) {
+        this.id = simpleSiteView.getId();
+        this.type = simpleSiteView.getType();
+        this.locationType = simpleSiteView.getLocationType();
+        this.address1 = simpleSiteView.getAddress1();
+        this.address2 = simpleSiteView.getAddress2();
+        this.city = simpleSiteView.getCity();
+        this.state = simpleSiteView.getState();
+        this.postalCode = simpleSiteView.getPostalCode();
+        this.county = simpleSiteView.getCounty();
+        this.country = simpleSiteView.getCountry();
+        this.footprintSqft = simpleSiteView.getFootprintSqft();
+        this.intersectionStreetPrimary = simpleSiteView.getIntersectionStreetPrimary();
+        this.intersectionStreetSecondary = simpleSiteView.getIntersectionStreetSecondary();
+        this.intersectionQuad = simpleSiteView.getIntersectionQuad();
+        this.positionInCenter = simpleSiteView.getPositionInCenter();
+        this.version = simpleSiteView.getVersion();
+
+        if (simpleSiteView.getLocation() != null) {
+            this.location = new GeometryFactory().createPoint(new Coordinate(simpleSiteView.getLocation().getGeometry().getCoordinates()[0], simpleSiteView.getLocation().getGeometry().getCoordinates()[1]));
+        }
+    }
+
+    public Site(SiteView siteView) {
+        this((SimpleSiteView) siteView);
+
+        if (siteView.getShoppingCenter() != null) {
+            this.shoppingCenter = new ShoppingCenter(siteView.getShoppingCenter());
+        }
+    }
 
     @PrePersist
     public void prePersist() {

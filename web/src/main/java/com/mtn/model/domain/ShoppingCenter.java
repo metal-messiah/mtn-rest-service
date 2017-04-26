@@ -1,5 +1,7 @@
 package com.mtn.model.domain;
 
+import com.mtn.model.view.SimpleShoppingCenterView;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,18 @@ public class ShoppingCenter extends AuditingEntity {
     private Integer version;
 
     private List<Site> sites = new ArrayList<>();
+
+    public ShoppingCenter() {
+    }
+
+    public ShoppingCenter(SimpleShoppingCenterView shoppingCenterView) {
+        this.id = shoppingCenterView.getId();
+        this.name = shoppingCenterView.getName();
+        this.owner = shoppingCenterView.getOwner();
+        this.nativeId = shoppingCenterView.getNativeId();
+        this.url = shoppingCenterView.getUrl();
+        this.version = shoppingCenterView.getVersion();
+    }
 
     @PrePersist
     public void prePersist() {

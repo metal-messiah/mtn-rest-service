@@ -11,18 +11,6 @@ public class ShoppingCenterToSimpleShoppingCenterViewConverter implements Conver
 
     @Override
     public SimpleShoppingCenterView convert(ShoppingCenter shoppingCenter) {
-        return ShoppingCenterToSimpleShoppingCenterViewConverter.build(shoppingCenter);
-    }
-
-    public static SimpleShoppingCenterView build(ShoppingCenter shoppingCenter) {
-        SimpleShoppingCenterView viewModel = new SimpleShoppingCenterView();
-        viewModel.setId(shoppingCenter.getId());
-        viewModel.setName(shoppingCenter.getName());
-        viewModel.setOwner(shoppingCenter.getOwner());
-        viewModel.setNativeId(shoppingCenter.getNativeId());
-        viewModel.setUrl(shoppingCenter.getUrl());
-        viewModel.setVersion(shoppingCenter.getVersion());
-
-        return viewModel;
+        return new SimpleShoppingCenterView(shoppingCenter);
     }
 }

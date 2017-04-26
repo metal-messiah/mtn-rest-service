@@ -15,12 +15,6 @@ public class UserProfileToSimpleUserProfileViewConverter implements Converter<Us
     }
 
     public static SimpleUserProfileView build(UserProfile userProfile) {
-        SimpleUserProfileView viewModel = new SimpleUserProfileView();
-        viewModel.setId(userProfile.getId());
-        viewModel.setEmail(userProfile.getEmail());
-        viewModel.setFirstName(userProfile.getFirstName());
-        viewModel.setLastName(userProfile.getLastName());
-
-        return viewModel;
+        return new SimpleUserProfileView(userProfile);
     }
 }

@@ -2,6 +2,7 @@ package com.mtn.service;
 
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.SiteView;
 import com.mtn.repository.SiteRepository;
@@ -24,6 +25,9 @@ public class SiteService extends ValidatingDataService<Site> {
     private SiteRepository siteRepository;
 
     @Autowired
+    private StoreService storeService;
+
+    @Autowired
     private UserProfileService userProfileService;
 
     @Transactional
@@ -35,6 +39,16 @@ public class SiteService extends ValidatingDataService<Site> {
         request.setUpdatedBy(systemAdministrator);
 
         return siteRepository.save(request);
+    }
+
+    @Transactional
+    public Store addOneStoreToSite(Integer siteId, Store request) {
+        Site existing = findOneUsingSpecs(siteId);
+        validateNotNull(existing);
+
+        request.setSite(existing);
+
+        return storeService.addOne(request);
     }
 
     @Transactional
@@ -63,7 +77,6 @@ public class SiteService extends ValidatingDataService<Site> {
 
     @Transactional
     public Site updateOne(Integer id, Site request) {
-        validateNotNull(request);
         validateForUpdate(request);
 
         Site existing = findOneUsingSpecs(id);

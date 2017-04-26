@@ -10,6 +10,9 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 4/24/2017.
@@ -36,6 +39,8 @@ public class Site extends AuditingEntity {
     private String intersectionQuad;
     private SitePositionType positionInCenter;
     private Integer version;
+
+    private List<Store> stores = new ArrayList<>();
 
     public Site() {
     }
@@ -68,6 +73,10 @@ public class Site extends AuditingEntity {
 
         if (siteView.getShoppingCenter() != null) {
             this.shoppingCenter = new ShoppingCenter(siteView.getShoppingCenter());
+        }
+
+        if (siteView.getStores() != null) {
+            this.stores = siteView.getStores().stream().map(Store::new).collect(Collectors.toList());
         }
     }
 
@@ -233,5 +242,14 @@ public class Site extends AuditingEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @OneToMany(mappedBy = "site")
+    public List<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(List<Store> stores) {
+        this.stores = stores;
     }
 }

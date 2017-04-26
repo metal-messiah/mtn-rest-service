@@ -17,6 +17,12 @@ public class SiteController {
     @Autowired
     private SiteService siteService;
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
+        siteService.deleteOne(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
         Site domainModel = siteService.findOneUsingSpecs(id);

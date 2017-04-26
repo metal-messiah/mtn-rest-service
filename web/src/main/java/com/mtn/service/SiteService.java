@@ -37,6 +37,16 @@ public class SiteService extends ValidatingDataService<Site> {
         return siteRepository.save(request);
     }
 
+    @Transactional
+    public void deleteOne(Integer id) {
+        Site existing = findOneUsingSpecs(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("No Site found with this id");
+        }
+
+        existing.setDeletedBy(userProfileService.findSystemAdministrator());
+    }
+
     public List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
         return siteRepository.findAll(
                 where(shoppingCenterIdEquals(shoppingCenterId))

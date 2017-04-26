@@ -1,7 +1,9 @@
 package com.mtn.service;
 
+import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.view.SiteView;
 import com.mtn.repository.SiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,39 @@ public class SiteService extends ValidatingDataService<Site> {
                 where(idEquals(id))
                         .and(isNotDeleted())
         );
+    }
+
+    @Transactional
+    public Site updateOne(Integer id, Site request) {
+        validateNotNull(request);
+        validateForUpdate(request);
+
+        Site existing = findOneUsingSpecs(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("No Site found with this id");
+        }
+        if (!request.getVersion().equals(existing.getVersion())) {
+            throw new VersionConflictException(new SiteView(existing));
+        }
+
+        existing.setLocation(request.getLocation());
+        existing.setType(request.getType());
+        existing.setLocationType(request.getLocationType());
+        existing.setAddress1(request.getAddress1());
+        existing.setAddress2(request.getAddress2());
+        existing.setCity(request.getCity());
+        existing.setState(request.getState());
+        existing.setPostalCode(request.getPostalCode());
+        existing.setCounty(request.getCounty());
+        existing.setCountry(request.getCountry());
+        existing.setFootprintSqft(request.getFootprintSqft());
+        existing.setIntersectionStreetPrimary(request.getIntersectionStreetPrimary());
+        existing.setIntersectionStreetSecondary(request.getIntersectionStreetSecondary());
+        existing.setIntersectionQuad(request.getIntersectionQuad());
+        existing.setPositionInCenter(request.getPositionInCenter());
+        existing.setUpdatedBy(userProfileService.findSystemAdministrator());
+
+        return existing;
     }
 
     @Override

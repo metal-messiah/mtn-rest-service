@@ -5,10 +5,7 @@ import com.mtn.model.view.SiteView;
 import com.mtn.service.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Allen on 4/25/2017.
@@ -28,5 +25,12 @@ public class SiteController {
         } else {
             return ResponseEntity.noContent().build();
         }
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody SiteView request) {
+        Site requestModel = new Site(request);
+        Site domainModel = siteService.updateOne(id, requestModel);
+        return ResponseEntity.ok(new SiteView(domainModel));
     }
 }

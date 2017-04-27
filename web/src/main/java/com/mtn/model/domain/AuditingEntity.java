@@ -47,6 +47,7 @@ public abstract class AuditingEntity {
         this.createdBy = createdBy;
     }
 
+    @Column(name = "created_date")
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
@@ -65,6 +66,7 @@ public abstract class AuditingEntity {
         this.deletedBy = deletedBy;
     }
 
+    @Column(name = "deleted_date")
     public LocalDateTime getDeletedDate() {
         return deletedDate;
     }
@@ -83,6 +85,7 @@ public abstract class AuditingEntity {
         this.updatedBy = updatedBy;
     }
 
+    @Column(name = "updated_date")
     public LocalDateTime getUpdatedDate() {
         return updatedDate;
     }

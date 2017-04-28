@@ -153,6 +153,7 @@ public class Store extends AuditingEntity {
         this.areaIsEstimate = areaIsEstimate;
     }
 
+    @Column(name = "opened_date")
     public LocalDateTime getOpenedDate() {
         return openedDate;
     }
@@ -161,6 +162,7 @@ public class Store extends AuditingEntity {
         this.openedDate = openedDate;
     }
 
+    @Column(name = "closed_date")
     public LocalDateTime getClosedDate() {
         return closedDate;
     }

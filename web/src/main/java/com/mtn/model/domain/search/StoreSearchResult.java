@@ -32,6 +32,8 @@ public class StoreSearchResult {
 
     private Integer storeId;
     private String name;
+    private LocalDateTime storeClosedDate;
+    private LocalDateTime storeOpenedDate;
     private LocalDateTime storeDeletedDate;
 
     @Id
@@ -159,6 +161,24 @@ public class StoreSearchResult {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(table = "store", name = "closed_date", insertable = false, updatable = false)
+    public LocalDateTime getStoreClosedDate() {
+        return storeClosedDate;
+    }
+
+    public void setStoreClosedDate(LocalDateTime storeClosedDate) {
+        this.storeClosedDate = storeClosedDate;
+    }
+
+    @Column(table = "store", name = "opened_date", insertable = false, updatable = false)
+    public LocalDateTime getStoreOpenedDate() {
+        return storeOpenedDate;
+    }
+
+    public void setStoreOpenedDate(LocalDateTime storeOpenedDate) {
+        this.storeOpenedDate = storeOpenedDate;
     }
 
     @Column(table = "store", name = "deleted_date", insertable = false, updatable = false)

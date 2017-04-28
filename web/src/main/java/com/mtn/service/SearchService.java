@@ -14,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
-import static com.mtn.repository.specification.ShoppingCenterSearchSpecifications.isNotDeleted;
+import static com.mtn.repository.specification.ShoppingCenterSearchSpecifications.*;
+import static com.mtn.repository.specification.StoreSearchSpecifications.*;
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Allen on 4/26/2017.
@@ -54,12 +57,49 @@ public class SearchService {
     }
 
     private Specification<ShoppingCenterSearchResult> generateShoppingCenterSpecifications(SearchRequest request) {
-        //TODO build the full specification based on request
-        return isNotDeleted();
+        Specifications<ShoppingCenterSearchResult> specifications = where(shoppingCenterIsNotDeleted());
+
+        if (StringUtils.isNotBlank(request.getName())) {
+            specifications = specifications.and(shoppingCenterNameContains(request.getName()));
+        }
+        if (StringUtils.isNotBlank(request.getOwner())) {
+            specifications = specifications.and(shoppingCenterOwnerContains(request.getOwner()));
+        }
+        if (StringUtils.isNotBlank(request.getPostalCode())) {
+            specifications = specifications.and(shoppingCenterPostalCodeContains(request.getPostalCode()));
+        }
+        if (StringUtils.isNotBlank(request.getCity())) {
+            specifications = specifications.and(shoppingCenterCityContains(request.getCity()));
+        }
+        if (StringUtils.isNotBlank(request.getCounty())) {
+            specifications = specifications.and(shoppingCenterCountyContains(request.getCounty()));
+        }
+        if (StringUtils.isNotBlank(request.getState())) {
+            specifications = specifications.and(shoppingCenterStateContains(request.getState()));
+        }
+
+        return specifications;
     }
 
     private Specification<StoreSearchResult> generateStoreSpecifications(SearchRequest request) {
-        //TODO build the full specification based on request
-        throw new UnsupportedOperationException();
+        Specifications<StoreSearchResult> specifications = where(storeIsNotDeleted());
+
+        if (StringUtils.isNotBlank(request.getName())) {
+            specifications = specifications.and(storeNameContains(request.getName()));
+        }
+        if (StringUtils.isNotBlank(request.getPostalCode())) {
+            specifications = specifications.and(storePostalCodeContains(request.getPostalCode()));
+        }
+        if (StringUtils.isNotBlank(request.getCity())) {
+            specifications = specifications.and(storeCityContains(request.getCity()));
+        }
+        if (StringUtils.isNotBlank(request.getCounty())) {
+            specifications = specifications.and(storeCountyContains(request.getCounty()));
+        }
+        if (StringUtils.isNotBlank(request.getState())) {
+            specifications = specifications.and(storeStateContains(request.getState()));
+        }
+
+        return specifications;
     }
 }

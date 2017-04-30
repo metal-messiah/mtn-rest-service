@@ -13,4 +13,8 @@ public class ShoppingCenterSearchResultToSearchResultViewConverter implements Co
     public SearchResultView convert(ShoppingCenterSearchResult shoppingCenterSearchResult) {
         return new SearchResultView(shoppingCenterSearchResult);
     }
+
+    public static SearchResultView build(ShoppingCenterSearchResult shoppingCenterSearchResult) {
+        return new ShoppingCenterSearchResultToSearchResultViewConverter().convert(shoppingCenterSearchResult);
+    }
 }

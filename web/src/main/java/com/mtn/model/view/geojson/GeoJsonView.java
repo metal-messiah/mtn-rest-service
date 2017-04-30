@@ -22,7 +22,7 @@ public class GeoJsonView {
 
     public GeoJsonView(Point location) {
         this.type = GeoJsonType.Feature;
-        this.geometry = new GeometryView(location);
+        this.geometry = new PointGeometry(location);
     }
 
     public GeoJsonType getType() {

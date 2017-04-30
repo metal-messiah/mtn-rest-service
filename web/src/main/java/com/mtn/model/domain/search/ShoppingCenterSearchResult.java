@@ -2,19 +2,9 @@ package com.mtn.model.domain.search;
 
 import com.vividsolutions.jts.geom.Point;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-
 /**
  * Created by Allen on 4/26/2017.
  */
-@Entity
-@Table(name = "shopping_center")
-@SecondaryTables({
-        @SecondaryTable(name = "site", pkJoinColumns = {
-                @PrimaryKeyJoinColumn(name = "shopping_center_id", referencedColumnName = "id")
-        })
-})
 public class ShoppingCenterSearchResult {
 
     private Integer siteId;
@@ -28,14 +18,11 @@ public class ShoppingCenterSearchResult {
     private Point location;
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
-    private LocalDateTime siteDeletedDate;
 
     private Integer shoppingCenterId;
     private String name;
     private String owner;
-    private LocalDateTime shoppingCenterDeletedDate;
 
-    @Column(table = "site", name = "id", insertable = false, updatable = false)
     public Integer getSiteId() {
         return siteId;
     }
@@ -44,7 +31,6 @@ public class ShoppingCenterSearchResult {
         this.siteId = siteId;
     }
 
-    @Column(table = "site", name = "address_1", insertable = false, updatable = false)
     public String getAddress1() {
         return address1;
     }
@@ -53,7 +39,6 @@ public class ShoppingCenterSearchResult {
         this.address1 = address1;
     }
 
-    @Column(table = "site", name = "address_2", insertable = false, updatable = false)
     public String getAddress2() {
         return address2;
     }
@@ -62,7 +47,6 @@ public class ShoppingCenterSearchResult {
         this.address2 = address2;
     }
 
-    @Column(table = "site", insertable = false, updatable = false)
     public String getCity() {
         return city;
     }
@@ -71,7 +55,6 @@ public class ShoppingCenterSearchResult {
         this.city = city;
     }
 
-    @Column(table = "site", insertable = false, updatable = false)
     public String getState() {
         return state;
     }
@@ -80,7 +63,6 @@ public class ShoppingCenterSearchResult {
         this.state = state;
     }
 
-    @Column(table = "site", insertable = false, updatable = false)
     public String getPostalCode() {
         return postalCode;
     }
@@ -89,7 +71,6 @@ public class ShoppingCenterSearchResult {
         this.postalCode = postalCode;
     }
 
-    @Column(table = "site", insertable = false, updatable = false)
     public String getCounty() {
         return county;
     }
@@ -98,7 +79,6 @@ public class ShoppingCenterSearchResult {
         this.county = county;
     }
 
-    @Column(table = "site", insertable = false, updatable = false)
     public String getCountry() {
         return country;
     }
@@ -107,7 +87,6 @@ public class ShoppingCenterSearchResult {
         this.country = country;
     }
 
-    @Column(table = "site", insertable = false, updatable = false)
     public Point getLocation() {
         return location;
     }
@@ -116,7 +95,6 @@ public class ShoppingCenterSearchResult {
         this.location = location;
     }
 
-    @Column(table = "site", insertable = false, updatable = false)
     public String getIntersectionStreetPrimary() {
         return intersectionStreetPrimary;
     }
@@ -125,7 +103,6 @@ public class ShoppingCenterSearchResult {
         this.intersectionStreetPrimary = intersectionStreetPrimary;
     }
 
-    @Column(table = "site", insertable = false, updatable = false)
     public String getIntersectionStreetSecondary() {
         return intersectionStreetSecondary;
     }
@@ -134,17 +111,6 @@ public class ShoppingCenterSearchResult {
         this.intersectionStreetSecondary = intersectionStreetSecondary;
     }
 
-    @Column(table = "site", name = "deleted_date", insertable = false, updatable = false)
-    public LocalDateTime getSiteDeletedDate() {
-        return siteDeletedDate;
-    }
-
-    public void setSiteDeletedDate(LocalDateTime siteDeletedDate) {
-        this.siteDeletedDate = siteDeletedDate;
-    }
-
-    @Id
-    @Column(table = "shopping_center", name = "id", insertable = false, updatable = false)
     public Integer getShoppingCenterId() {
         return shoppingCenterId;
     }
@@ -153,7 +119,6 @@ public class ShoppingCenterSearchResult {
         this.shoppingCenterId = shoppingCenterId;
     }
 
-    @Column(table = "shopping_center", insertable = false, updatable = false)
     public String getName() {
         return name;
     }
@@ -162,21 +127,11 @@ public class ShoppingCenterSearchResult {
         this.name = name;
     }
 
-    @Column(table = "shopping_center", insertable = false, updatable = false)
     public String getOwner() {
         return owner;
     }
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    @Column(table = "shopping_center", name = "deleted_date", insertable = false, updatable = false)
-    public LocalDateTime getShoppingCenterDeletedDate() {
-        return shoppingCenterDeletedDate;
-    }
-
-    public void setShoppingCenterDeletedDate(LocalDateTime shoppingCenterDeletedDate) {
-        this.shoppingCenterDeletedDate = shoppingCenterDeletedDate;
     }
 }

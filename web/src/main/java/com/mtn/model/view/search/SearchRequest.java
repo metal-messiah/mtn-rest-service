@@ -1,7 +1,13 @@
 package com.mtn.model.view.search;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.constant.DistanceUnit;
+import com.mtn.constant.GeometryType;
 import com.mtn.constant.SearchType;
+import com.mtn.model.view.geojson.GeoJsonView;
+import com.mtn.model.view.geojson.PointGeometry;
+import com.mtn.model.view.geojson.PolygonGeometry;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,6 +25,9 @@ public class SearchRequest {
     private String state;
     private String postalCode;
     private String county;
+    private GeoJsonView geoJson;
+    private Double distance;
+    private DistanceUnit unit = DistanceUnit.KILOMETER;
 
     private LocalDateTime openedBefore;
     private LocalDateTime openedAfter;
@@ -111,5 +120,45 @@ public class SearchRequest {
 
     public void setClosedAfter(LocalDateTime closedAfter) {
         this.closedAfter = closedAfter;
+    }
+
+    public GeoJsonView getGeoJson() {
+        return geoJson;
+    }
+
+    public void setGeoJson(GeoJsonView geoJson) {
+        this.geoJson = geoJson;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public DistanceUnit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(DistanceUnit unit) {
+        this.unit = unit;
+    }
+
+    @JsonIgnore
+    public boolean isGeometryOfType(GeometryType type) {
+        if (this.geoJson != null) {
+            switch (type) {
+                case Point:
+                    return this.geoJson.getGeometry() instanceof PointGeometry;
+                case Polygon:
+                    return this.geoJson.getGeometry() instanceof PolygonGeometry;
+                default:
+                    throw new UnsupportedOperationException(String.format("Unmapped GeometryType used: %s", type));
+            }
+        } else {
+            return false;
+        }
     }
 }

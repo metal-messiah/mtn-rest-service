@@ -5,6 +5,7 @@ import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
 import com.mtn.model.view.SimpleSiteView;
 import com.mtn.model.view.SiteView;
+import com.mtn.model.view.geojson.PointGeometry;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
@@ -64,7 +65,8 @@ public class Site extends AuditingEntity {
         this.version = simpleSiteView.getVersion();
 
         if (simpleSiteView.getLocation() != null) {
-            this.location = new GeometryFactory().createPoint(new Coordinate(simpleSiteView.getLocation().getGeometry().getCoordinates()[0], simpleSiteView.getLocation().getGeometry().getCoordinates()[1]));
+            PointGeometry point = (PointGeometry) simpleSiteView.getLocation().getGeometry();
+            this.location = new GeometryFactory().createPoint(new Coordinate(point.getCoordinates()[0], point.getCoordinates()[1]));
         }
     }
 

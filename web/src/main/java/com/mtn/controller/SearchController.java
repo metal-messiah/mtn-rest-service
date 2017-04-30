@@ -4,13 +4,13 @@ import com.mtn.model.view.search.SearchRequest;
 import com.mtn.model.view.search.SearchResultView;
 import com.mtn.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by Allen on 4/26/2017.
@@ -23,8 +23,8 @@ public class SearchController {
     private SearchService searchService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity search(@RequestBody SearchRequest request, Pageable page) {
-        Page<SearchResultView> searchResults = searchService.search(request, page);
+    public ResponseEntity search(@RequestBody SearchRequest request) {
+        List<SearchResultView> searchResults = searchService.search(request);
         return ResponseEntity.ok(searchResults);
     }
 }

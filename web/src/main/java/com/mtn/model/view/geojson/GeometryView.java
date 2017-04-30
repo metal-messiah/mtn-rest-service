@@ -1,26 +1,25 @@
 package com.mtn.model.view.geojson;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mtn.constant.GeometryType;
-import com.vividsolutions.jts.geom.Point;
 
 /**
  * Created by Allen on 4/24/2017.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class GeometryView {
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type",
+        visible = true
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = PointGeometry.class, name = "Point"),
+        @JsonSubTypes.Type(value = PolygonGeometry.class, name = "Polygon")
+})
+public abstract class GeometryView {
 
-    private GeometryType type;
-    private Double[] coordinates = new Double[2];
-
-    public GeometryView() {
-    }
-
-    public GeometryView(Point location) {
-        this.type = GeometryType.Point;
-        this.coordinates[0] = location.getCoordinate().getOrdinate(0);
-        this.coordinates[1] = location.getCoordinate().getOrdinate(1);
-    }
+    protected GeometryType type;
 
     public GeometryType getType() {
         return type;
@@ -28,13 +27,5 @@ public class GeometryView {
 
     public void setType(GeometryType type) {
         this.type = type;
-    }
-
-    public Double[] getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(Double[] coordinates) {
-        this.coordinates = coordinates;
     }
 }

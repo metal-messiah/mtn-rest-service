@@ -2,7 +2,9 @@ package com.mtn.service;
 
 import com.mtn.constant.SearchType;
 import com.mtn.model.converter.ShoppingCenterSearchResultToSearchResultViewConverter;
+import com.mtn.model.converter.StoreSearchResultToSearchResultViewConverter;
 import com.mtn.model.domain.search.ShoppingCenterSearchResult;
+import com.mtn.model.domain.search.StoreSearchResult;
 import com.mtn.model.view.search.SearchRequest;
 import com.mtn.model.view.search.SearchResultView;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +23,9 @@ public class SearchService {
     @Autowired
     private ShoppingCenterSearchService shoppingCenterSearchService;
 
+    @Autowired
+    private StoreSearchService storeSearchService;
+
     public List<SearchResultView> search(SearchRequest request) {
         switch (request.getSearchType()) {
             case SHOPPING_CENTER:
@@ -38,6 +43,7 @@ public class SearchService {
     }
 
     private List<SearchResultView> searchStores(SearchRequest request) {
-        throw new UnsupportedOperationException();
+        List<StoreSearchResult> results = storeSearchService.search(request);
+        return results.stream().map(StoreSearchResultToSearchResultViewConverter::build).collect(Collectors.toList());
     }
 }

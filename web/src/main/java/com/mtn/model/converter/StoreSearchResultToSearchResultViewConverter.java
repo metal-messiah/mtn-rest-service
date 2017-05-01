@@ -11,6 +11,10 @@ public class StoreSearchResultToSearchResultViewConverter implements Converter<S
 
     @Override
     public SearchResultView convert(StoreSearchResult storeSearchResult) {
+        return StoreSearchResultToSearchResultViewConverter.build(storeSearchResult);
+    }
+
+    public static SearchResultView build(StoreSearchResult storeSearchResult) {
         return new SearchResultView(storeSearchResult);
     }
 }

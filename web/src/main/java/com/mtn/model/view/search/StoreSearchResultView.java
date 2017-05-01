@@ -22,8 +22,8 @@ public class StoreSearchResultView {
     public StoreSearchResultView(StoreSearchResult searchResult) {
         this.id = searchResult.getStoreId();
         this.name = searchResult.getName();
-        this.closedDate = searchResult.getStoreClosedDate();
-        this.openedDate = searchResult.getStoreOpenedDate();
+        this.closedDate = searchResult.getClosedDate();
+        this.openedDate = searchResult.getOpenedDate();
     }
 
     public Integer getId() {

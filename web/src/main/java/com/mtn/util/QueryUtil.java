@@ -3,7 +3,7 @@ package com.mtn.util;
 /**
  * Created by Allen on 4/21/2017.
  */
-public class QueryUtils {
+public class QueryUtil {
 
     /**
      * Produces "%BOB%" if value equals "BOB"
@@ -46,7 +46,15 @@ public class QueryUtils {
         return String.format(" ST_DWITHIN(%s, ST_MAKEPOINT(:%s, :%s), :%s) ", column, xCoordinateNamedParameter, yCoordinateNamedParameter, distanceNamedParameter);
     }
 
-    public static String isNull(String column) {
+    public static String isNullClause(String column) {
         return String.format(" %s IS NULL ", column);
+    }
+
+    public static String isGreaterThanClause(String column, String namedParameter) {
+        return String.format(" %s > %s ", column, namedParameter);
+    }
+
+    public static String isLessThanClause(String column, String namedParameter) {
+        return String.format(" %s < %s ", column, namedParameter);
     }
 }

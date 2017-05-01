@@ -91,7 +91,7 @@ public class SearchRequest {
     }
 
     public LocalDateTime getOpenedBefore() {
-        return openedBefore.toLocalDate().atTime(LocalTime.MAX);
+        return openedBefore != null ? openedBefore.toLocalDate().atTime(LocalTime.MAX) : null;
     }
 
     public void setOpenedBefore(LocalDateTime openedBefore) {
@@ -99,7 +99,7 @@ public class SearchRequest {
     }
 
     public LocalDateTime getOpenedAfter() {
-        return openedAfter.toLocalDate().atStartOfDay();
+        return openedAfter != null ? openedAfter.toLocalDate().atStartOfDay() : null;
     }
 
     public void setOpenedAfter(LocalDateTime openedAfter) {
@@ -107,7 +107,7 @@ public class SearchRequest {
     }
 
     public LocalDateTime getClosedBefore() {
-        return closedBefore.toLocalDate().atTime(LocalTime.MAX);
+        return closedBefore != null ? closedBefore.toLocalDate().atTime(LocalTime.MAX) : null;
     }
 
     public void setClosedBefore(LocalDateTime closedBefore) {
@@ -115,7 +115,7 @@ public class SearchRequest {
     }
 
     public LocalDateTime getClosedAfter() {
-        return closedAfter.toLocalDate().atStartOfDay();
+        return closedAfter != null ? closedAfter.toLocalDate().atStartOfDay() : null;
     }
 
     public void setClosedAfter(LocalDateTime closedAfter) {

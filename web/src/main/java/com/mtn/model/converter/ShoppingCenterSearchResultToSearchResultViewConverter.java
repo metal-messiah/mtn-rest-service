@@ -11,10 +11,10 @@ public class ShoppingCenterSearchResultToSearchResultViewConverter implements Co
 
     @Override
     public SearchResultView convert(ShoppingCenterSearchResult shoppingCenterSearchResult) {
-        return new SearchResultView(shoppingCenterSearchResult);
+        return ShoppingCenterSearchResultToSearchResultViewConverter.build(shoppingCenterSearchResult);
     }
 
     public static SearchResultView build(ShoppingCenterSearchResult shoppingCenterSearchResult) {
-        return new ShoppingCenterSearchResultToSearchResultViewConverter().convert(shoppingCenterSearchResult);
+        return new SearchResultView(shoppingCenterSearchResult);
     }
 }

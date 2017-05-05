@@ -21,6 +21,7 @@ public class ShoppingCenter extends AuditingEntity {
     private Integer version;
 
     private List<Site> sites = new ArrayList<>();
+    private List<ShoppingCenterSurvey> surveys = new ArrayList<>();
 
     public ShoppingCenter() {
     }
@@ -102,5 +103,14 @@ public class ShoppingCenter extends AuditingEntity {
 
     public void setSites(List<Site> sites) {
         this.sites = sites;
+    }
+
+    @OneToMany(mappedBy = "shoppingCenter")
+    public List<ShoppingCenterSurvey> getSurveys() {
+        return surveys;
+    }
+
+    public void setSurveys(List<ShoppingCenterSurvey> surveys) {
+        this.surveys = surveys;
     }
 }

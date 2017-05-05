@@ -20,6 +20,7 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
     private LocalDateTime updatedDate;
 
     private List<SimpleSiteView> sites = new ArrayList<>();
+    private List<SimpleShoppingCenterSurveyView> surveys = new ArrayList<>();
 
     public ShoppingCenterView() {
     }
@@ -33,6 +34,7 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
         this.updatedDate = shoppingCenter.getUpdatedDate();
 
         this.sites = shoppingCenter.getSites().stream().map(SimpleSiteView::new).collect(Collectors.toList());
+        this.surveys = shoppingCenter.getSurveys().stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList());
     }
 
     public SimpleUserProfileView getCreatedBy() {
@@ -73,5 +75,13 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
 
     public void setSites(List<SimpleSiteView> sites) {
         this.sites = sites;
+    }
+
+    public List<SimpleShoppingCenterSurveyView> getSurveys() {
+        return surveys;
+    }
+
+    public void setSurveys(List<SimpleShoppingCenterSurveyView> surveys) {
+        this.surveys = surveys;
     }
 }

@@ -53,11 +53,11 @@ public class ShoppingCenterTenant {
         this.type = type;
     }
 
-    public Boolean getOutparcel() {
+    public Boolean getIsOutparcel() {
         return isOutparcel;
     }
 
-    public void setOutparcel(Boolean outparcel) {
+    public void setIsOutparcel(Boolean outparcel) {
         isOutparcel = outparcel;
     }
 

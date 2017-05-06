@@ -36,10 +36,14 @@
             .dark();
 
         $routeProvider
-        // .when('/groups', {controller: 'GroupsCtrl', controllerAs: 'vm', templateUrl: 'group/groups.html'})
-        // .when('/permissions', {controller: 'PermissionsCtrl', controllerAs: 'vm', templateUrl: 'permission/permissions.html'})
-        // .when('/roles', {controller: 'RolesCtrl', controllerAs: 'vm', templateUrl: 'role/roles.html'})
-        // .when('/users', {controller: 'UsersCtrl', controllerAs: 'vm', templateUrl: 'user/users.html'})
+            .when('/groups', {controller: 'GroupsController', controllerAs: 'vm', templateUrl: 'groups/groups.html'})
+            .when('/permissions', {
+                controller: 'PermissionsController',
+                controllerAs: 'vm',
+                templateUrl: 'permissions/permissions.html'
+            })
+            .when('/roles', {controller: 'RolesController', controllerAs: 'vm', templateUrl: 'roles/roles.html'})
+            .when('/users', {controller: 'UsersController', controllerAs: 'vm', templateUrl: 'users/users.html'})
             .otherwise({redirectTo: '/'});
     }
 })();

@@ -218,9 +218,9 @@ function copyDependencies() {
 function copyHtml() {
     var deferred = q.defer();
 
-    var f = filter(['**', '!**/index.html', '!**/canary-page.html'], {restore: true});
+    var f = filter(['**', '!**/index.html'], {restore: true});
 
-    gulp.src('./ng-app/src/**/*.html')
+    gulp.src('./ng-app/**/*.html')
         .pipe(f)
         .pipe(gulp.dest(staticPath))
         .on('end', deferred.resolve)

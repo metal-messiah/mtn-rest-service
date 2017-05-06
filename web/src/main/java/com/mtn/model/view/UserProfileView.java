@@ -2,6 +2,8 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.view.auth.SimpleGroupView;
+import com.mtn.model.view.auth.SimpleRoleView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class UserProfileView extends SimpleUserProfileView {
     private LocalDateTime createdDate;
     private SimpleUserProfileView updatedBy;
     private LocalDateTime updatedDate;
+    private SimpleGroupView group;
+    private SimpleRoleView role;
 
     private List<SimpleUserIdentityView> identities = new ArrayList<>();
 
@@ -31,6 +35,14 @@ public class UserProfileView extends SimpleUserProfileView {
         this.createdDate = userProfile.getCreatedDate();
         this.updatedBy = new SimpleUserProfileView(userProfile.getUpdatedBy());
         this.updatedDate = userProfile.getUpdatedDate();
+
+        if (userProfile.getGroup() != null) {
+            this.group = new SimpleGroupView(userProfile.getGroup());
+        }
+
+        if (userProfile.getRole() != null) {
+            this.role = new SimpleRoleView(userProfile.getRole());
+        }
 
         this.identities = userProfile.getIdentities().stream().map(SimpleUserIdentityView::new).collect(Collectors.toList());
     }
@@ -66,6 +78,22 @@ public class UserProfileView extends SimpleUserProfileView {
 
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public SimpleGroupView getGroup() {
+        return group;
+    }
+
+    public void setGroup(SimpleGroupView group) {
+        this.group = group;
+    }
+
+    public SimpleRoleView getRole() {
+        return role;
+    }
+
+    public void setRole(SimpleRoleView role) {
+        this.role = role;
     }
 
     public List<SimpleUserIdentityView> getIdentities() {

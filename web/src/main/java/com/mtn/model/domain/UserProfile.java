@@ -1,5 +1,8 @@
 package com.mtn.model.domain;
 
+import com.mtn.model.domain.auth.Group;
+import com.mtn.model.domain.auth.Role;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +17,9 @@ public class UserProfile extends AuditingEntity implements Identifiable {
     private Integer id;
     private String email;
     private String firstName;
+    private Group group;
     private String lastName;
+    private Role role;
 
     private List<UserIdentity> identities = new ArrayList<>();
 
@@ -66,5 +71,25 @@ public class UserProfile extends AuditingEntity implements Identifiable {
 
     public void setIdentities(List<UserIdentity> identities) {
         this.identities = identities;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "auth_role_id")
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "auth_group_id")
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }

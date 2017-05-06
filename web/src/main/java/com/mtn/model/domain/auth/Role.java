@@ -5,8 +5,8 @@ import com.mtn.model.domain.Identifiable;
 import com.mtn.model.domain.UserProfile;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Allen on 5/6/2017.
@@ -19,8 +19,8 @@ public class Role extends AuditingEntity implements Identifiable {
     private String displayName;
     private String description;
 
-    private List<Permission> permissions = new ArrayList<>();
-    private List<UserProfile> members = new ArrayList<>();
+    private Set<Permission> permissions = new HashSet<>();
+    private Set<UserProfile> members = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_role_id")
@@ -55,20 +55,20 @@ public class Role extends AuditingEntity implements Identifiable {
             joinColumns = @JoinColumn(name = "auth_role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "auth_permission_id", referencedColumnName = "id")
     )
-    public List<Permission> getPermissions() {
+    public Set<Permission> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<Permission> permissions) {
+    public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
 
     @OneToMany(mappedBy = "role")
-    public List<UserProfile> getMembers() {
+    public Set<UserProfile> getMembers() {
         return members;
     }
 
-    public void setMembers(List<UserProfile> members) {
+    public void setMembers(Set<UserProfile> members) {
         this.members = members;
     }
 }

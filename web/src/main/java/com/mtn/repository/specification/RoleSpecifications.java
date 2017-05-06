@@ -14,7 +14,17 @@ import javax.persistence.criteria.Root;
 public class RoleSpecifications {
 
     private static final String DELETED_DATE = "deletedDate";
+    private static final String DISPLAY_NAME = "displayName";
     private static final String ID = "id";
+
+    public static Specification<Role> displayNameContains(String value) {
+        return new Specification<Role>() {
+            @Override
+            public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.like(criteriaBuilder.lower(root.get(DISPLAY_NAME)), String.format("%%%s%%", value.toLowerCase()));
+            }
+        };
+    }
 
     public static Specification<Role> idEquals(Integer id) {
         return new Specification<Role>() {
@@ -33,4 +43,5 @@ public class RoleSpecifications {
             }
         };
     }
+
 }

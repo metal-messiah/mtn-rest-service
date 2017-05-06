@@ -14,7 +14,17 @@ import javax.persistence.criteria.Root;
 public class GroupSpecifications {
 
     private static final String DELETED_DATE = "deletedDate";
+    private static final String DISPLAY_NAME = "displayName";
     private static final String ID = "id";
+
+    public static Specification<Group> displayNameContains(String value) {
+        return new Specification<Group>() {
+            @Override
+            public Predicate toPredicate(Root<Group> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.like(criteriaBuilder.lower(root.get(DISPLAY_NAME)), String.format("%%%s%%", value.toLowerCase()));
+            }
+        };
+    }
 
     public static Specification<Group> idEquals(Integer id) {
         return new Specification<Group>() {

@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.mtn.repository.specification.UserProfileSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -62,6 +64,22 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         }
 
         existing.setDeletedBy(findSystemAdministrator());
+    }
+
+    public List<UserProfile> findAllByGroupIdUsingSpecs(Integer groupId) {
+        return userProfileRepository.findAll(
+                where(groupIdEquals(groupId))
+                        .and(isNotSystemAdministrator())
+                        .and(isNotDeleted())
+        );
+    }
+
+    public List<UserProfile> findAllByRoleIdUsingSpecs(Integer roleId) {
+        return userProfileRepository.findAll(
+                where(roleIdEquals(roleId))
+                        .and(isNotSystemAdministrator())
+                        .and(isNotDeleted())
+        );
     }
 
     public Page<UserProfile> findAllUsingSpecs(Pageable page) {

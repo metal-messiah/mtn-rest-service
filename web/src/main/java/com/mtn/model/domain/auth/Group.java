@@ -5,8 +5,8 @@ import com.mtn.model.domain.Identifiable;
 import com.mtn.model.domain.UserProfile;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Allen on 5/6/2017.
@@ -19,7 +19,7 @@ public class Group extends AuditingEntity implements Identifiable {
     private String displayName;
     private String description;
 
-    private List<UserProfile> members = new ArrayList<>();
+    private Set<UserProfile> members = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_group_id")
@@ -49,11 +49,11 @@ public class Group extends AuditingEntity implements Identifiable {
     }
 
     @OneToMany(mappedBy = "group")
-    public List<UserProfile> getMembers() {
+    public Set<UserProfile> getMembers() {
         return members;
     }
 
-    public void setMembers(List<UserProfile> members) {
+    public void setMembers(Set<UserProfile> members) {
         this.members = members;
     }
 }

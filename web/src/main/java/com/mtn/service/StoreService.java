@@ -89,25 +89,8 @@ public class StoreService extends ValidatingDataService<Store> {
     }
 
     @Override
-    public void validateForInsert(Store object) {
-        validateNotNull(object);
-        validateDoesNotExist(object);
-
-        if (object.getId() != null) {
-            throw new IllegalArgumentException("Store id must be null");
-        }
-
-        validateBusinessRules(object);
-    }
-
-    @Override
-    public void validateForUpdate(Store object) {
-        validateNotNull(object);
-        if (object.getId() == null) {
-            throw new IllegalArgumentException("Store id must be provided");
-        }
-
-        validateBusinessRules(object);
+    public String getEntityName() {
+        return "Store";
     }
 
     @Override
@@ -118,13 +101,6 @@ public class StoreService extends ValidatingDataService<Store> {
             throw new IllegalArgumentException("Store active must be true or false");
         } else if (object.getAreaIsEstimate() == null) {
             throw new IllegalArgumentException("Store areaIsEstimate must be true or false");
-        }
-    }
-
-    @Override
-    public void validateNotNull(Store object) {
-        if (object == null) {
-            throw new IllegalArgumentException("Store must not be null");
         }
     }
 

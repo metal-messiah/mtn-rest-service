@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Entity
 @Table
-public class ShoppingCenter extends AuditingEntity {
+public class ShoppingCenter extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private String name;

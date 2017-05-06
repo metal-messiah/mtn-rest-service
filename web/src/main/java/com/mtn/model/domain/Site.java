@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 @Entity
 @Table
-public class Site extends AuditingEntity {
+public class Site extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private ShoppingCenter shoppingCenter;

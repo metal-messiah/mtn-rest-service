@@ -9,7 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table
-public class UserProfile extends AuditingEntity {
+public class UserProfile extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private String email;

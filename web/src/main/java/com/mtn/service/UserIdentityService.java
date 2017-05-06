@@ -59,6 +59,11 @@ public class UserIdentityService extends ValidatingDataService<UserIdentity> {
     }
 
     @Override
+    public String getEntityName() {
+        return "UserIdentity";
+    }
+
+    @Override
     public void validateDoesNotExist(UserIdentity object) {
         UserIdentity existing = findOneByProviderAndProviderUserId(object.getProvider(), object.getProviderUserId());
         if (existing != null) {
@@ -68,27 +73,11 @@ public class UserIdentityService extends ValidatingDataService<UserIdentity> {
 
     @Override
     public void validateForInsert(UserIdentity object) {
-        validateNotNull(object);
+        super.validateForInsert(object);
 
-        if (object.getId() != null) {
-            throw new IllegalArgumentException("UserIdentity id must be null");
-        }
         if (object.getUserProfile() == null) {
             throw new IllegalStateException("UserIdentity was not mapped to UserProfile before saving!");
         }
-
-        validateBusinessRules(object);
-    }
-
-    @Override
-    public void validateForUpdate(UserIdentity object) {
-        validateNotNull(object);
-
-        if (object.getId() == null) {
-            throw new IllegalArgumentException("UserIdentity id must be provided");
-        }
-
-        validateBusinessRules(object);
     }
 
     @Override
@@ -97,13 +86,6 @@ public class UserIdentityService extends ValidatingDataService<UserIdentity> {
             throw new IllegalArgumentException(String.format("UserIdentity provider must be one of: %s", StringUtils.join(Provider.values())));
         } else if (StringUtils.isBlank(object.getProviderUserId())) {
             throw new IllegalArgumentException("UserIdentity providerUserId must be provided");
-        }
-    }
-
-    @Override
-    public void validateNotNull(UserIdentity object) {
-        if (object == null) {
-            throw new IllegalArgumentException("UserIdentity must not be null");
         }
     }
 }

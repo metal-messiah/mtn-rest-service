@@ -2,10 +2,14 @@ package com.mtn.controller;
 
 import com.mtn.model.converter.ShoppingCenterToSimpleShoppingCenterViewConverter;
 import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.Site;
+import com.mtn.model.view.ShoppingCenterSurveyView;
 import com.mtn.model.view.ShoppingCenterView;
+import com.mtn.model.view.SimpleShoppingCenterSurveyView;
 import com.mtn.model.view.SimpleSiteView;
 import com.mtn.service.ShoppingCenterService;
+import com.mtn.service.ShoppingCenterSurveyService;
 import com.mtn.service.SiteService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +30,21 @@ public class ShoppingCenterController {
 
     @Autowired
     private ShoppingCenterService shoppingCenterService;
-
     @Autowired
     private SiteService siteService;
+    @Autowired
+    private ShoppingCenterSurveyService surveyService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody ShoppingCenter request) {
         ShoppingCenter domainModel = shoppingCenterService.addOne(request);
         return ResponseEntity.ok(new ShoppingCenterView(domainModel));
+    }
+
+    @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.POST)
+    public ResponseEntity oneAddShoppingCenterSurveysToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterSurvey request) {
+        ShoppingCenterSurvey domainModel = shoppingCenterService.addOneSurveyToShoppingCenter(shoppingCenterId, request);
+        return ResponseEntity.ok(new ShoppingCenterSurveyView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/site", method = RequestMethod.POST)
@@ -68,6 +79,12 @@ public class ShoppingCenterController {
         }
 
         return ResponseEntity.ok(domainModels.map(new ShoppingCenterToSimpleShoppingCenterViewConverter()));
+    }
+
+    @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.GET)
+    public ResponseEntity findAllShoppingCenterSurveysForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
+        List<ShoppingCenterSurvey> domainModels = surveyService.findAllByShoppingCenterId(shoppingCenterId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}/site", method = RequestMethod.GET)

@@ -9,7 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table
-public class ShoppingCenterSurvey extends AuditingEntity {
+public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private ShoppingCenter shoppingCenter;

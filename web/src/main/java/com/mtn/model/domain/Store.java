@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table
-public class Store extends AuditingEntity {
+public class Store extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private Site site;

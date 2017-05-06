@@ -108,25 +108,8 @@ public class SiteService extends ValidatingDataService<Site> {
     }
 
     @Override
-    public void validateForInsert(Site object) {
-        validateNotNull(object);
-        validateDoesNotExist(object);
-
-        if (object.getId() != null) {
-            throw new IllegalArgumentException("Site id must be null");
-        }
-
-        validateBusinessRules(object);
-    }
-
-    @Override
-    public void validateForUpdate(Site object) {
-        validateNotNull(object);
-        if (object.getId() == null) {
-            throw new IllegalArgumentException("Site id must be provided");
-        }
-
-        validateBusinessRules(object);
+    public String getEntityName() {
+        return "Site";
     }
 
     @Override
@@ -137,13 +120,6 @@ public class SiteService extends ValidatingDataService<Site> {
             throw new IllegalStateException("Site ShoppingCenter should have been set by now");
         } else if (object.getType() == null) {
             throw new IllegalArgumentException("Site type must be provided");
-        }
-    }
-
-    @Override
-    public void validateNotNull(Site object) {
-        if (object == null) {
-            throw new IllegalArgumentException("Site must not be null");
         }
     }
 

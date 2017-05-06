@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table
-public class ShoppingCenterTenant {
+public class ShoppingCenterTenant implements Identifiable {
 
     private Integer id;
     private ShoppingCenterSurvey survey;

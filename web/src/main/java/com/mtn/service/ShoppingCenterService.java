@@ -2,6 +2,7 @@ package com.mtn.service;
 
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.ShoppingCenterView;
@@ -24,10 +25,10 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
 
     @Autowired
     private ShoppingCenterRepository shoppingCenterRepository;
-
     @Autowired
     private SiteService siteService;
-
+    @Autowired
+    private ShoppingCenterSurveyService surveyService;
     @Autowired
     private UserProfileService userProfileService;
 
@@ -50,6 +51,16 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         request.setShoppingCenter(existing);
 
         return siteService.addOne(request);
+    }
+
+    @Transactional
+    public ShoppingCenterSurvey addOneSurveyToShoppingCenter(Integer shoppingCenterId, ShoppingCenterSurvey request) {
+        ShoppingCenter existing = findOneUsingSpecs(shoppingCenterId);
+        validateNotNull(existing);
+
+        request.setShoppingCenter(existing);
+
+        return surveyService.addOne(request);
     }
 
     @Transactional
@@ -129,41 +140,23 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
     }
 
     @Override
-    public void validateForInsert(ShoppingCenter object) {
-        validateNotNull(object);
-        validateDoesNotExist(object);
-
-        if (object.getId() != null) {
-            throw new IllegalArgumentException("UserProfile id must be null");
-        }
-
-        validateBusinessRules(object);
+    public String getEntityName() {
+        return "ShoppingCenter";
     }
 
     @Override
     public void validateForUpdate(ShoppingCenter object) {
-        validateNotNull(object);
-        if (object.getId() == null) {
-            throw new IllegalArgumentException("ShoppingCenter id must be provided");
-        }
+        super.validateForUpdate(object);
+
         if (object.getVersion() == null) {
             throw new IllegalArgumentException("ShoppingCenter version must be provided");
         }
-
-        validateBusinessRules(object);
     }
 
     @Override
     public void validateBusinessRules(ShoppingCenter object) {
         if (StringUtils.isBlank(object.getName())) {
             throw new IllegalArgumentException("ShoppingCenter name must be provided");
-        }
-    }
-
-    @Override
-    public void validateNotNull(ShoppingCenter object) {
-        if (object == null) {
-            throw new IllegalArgumentException("ShoppingCenter must not be null");
         }
     }
 

@@ -169,6 +169,11 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     }
 
     @Override
+    public String getEntityName() {
+        return "UserProfile";
+    }
+
+    @Override
     public void validateDoesNotExist(UserProfile object) {
         UserProfile existing = findOneByEmail(object.getEmail().toLowerCase());
         if (existing != null) {
@@ -180,39 +185,14 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     @Override
     public void validateForInsert(UserProfile object) {
-        validateNotNull(object);
-        validateDoesNotExist(object);
-
-        if (object.getId() != null) {
-            throw new IllegalArgumentException("UserProfile id must be null");
-        }
-
+        super.validateForInsert(object);
         object.getIdentities().forEach(userIdentityService::validateForInsert);
-
-        validateBusinessRules(object);
-    }
-
-    @Override
-    public void validateForUpdate(UserProfile object) {
-        validateNotNull(object);
-        if (object.getId() == null) {
-            throw new IllegalArgumentException("UserProfile id must be provided");
-        }
-
-        validateBusinessRules(object);
     }
 
     @Override
     public void validateBusinessRules(UserProfile object) {
         if (StringUtils.isBlank(object.getEmail())) {
             throw new IllegalArgumentException("UserProfile email must be provided");
-        }
-    }
-
-    @Override
-    public void validateNotNull(UserProfile object) {
-        if (object == null) {
-            throw new IllegalArgumentException("UserProfile must not be null");
         }
     }
 }

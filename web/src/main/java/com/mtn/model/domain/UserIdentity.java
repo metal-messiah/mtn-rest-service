@@ -9,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table
-public class UserIdentity {
+public class UserIdentity implements Identifiable {
 
     private Integer id;
     private UserProfile userProfile;

@@ -3,3 +3,4 @@
 bower_components
 node_modules
 */target
+web/src/main/resources/static

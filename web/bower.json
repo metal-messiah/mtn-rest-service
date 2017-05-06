@@ -1,0 +1,29 @@
+{
+  "name": "mtn_rest_service",
+  "description": "Administration app for MTN Rest Service",
+  "main": "index.js",
+  "authors": [
+    "asudweeks"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-sanitize": "^1.6.4",
+    "angular-messages": "^1.6.4",
+    "angular-aria": "^1.6.4",
+    "angular-route": "^1.6.4",
+    "angular-material": "^1.1.4",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4"
+  }
+}

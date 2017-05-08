@@ -1,0 +1,40 @@
+<md-dialog aria-label="Edit Permission" style="width:600px;">
+    <form name="form" ng-submit="vm.save()">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Edit Permission - {{vm.originalPermissionName}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancel()">
+                    <md-icon><i class="material-icons">clear</i></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content" layout="column">
+                <md-input-container style="width:220px;">
+                    <label>Display Name</label>
+                    <input name="displayName" ng-model="vm.permission.displayName" required/>
+                    <ng-messages for="form.displayName.$error">
+                        <ng-message when="required">This field is required</ng-message>
+                    </ng-messages>
+                </md-input-container>
+                <md-input-container>
+                    <label>Description</label>
+                    <textarea name="description" ng-model="vm.permission.description" ng-maxlength="512"></textarea>
+                    <ng-messages for="form.description.$error">
+                        <ng-message when="maxlength">Must be less than 512 characters</ng-message>
+                    </ng-messages>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="md-primary md-raised container" type="submit" ng-disabled="form.$invalid">
+                Save
+                <named-spinner name="save"></named-spinner>
+            </md-button>
+            <md-button class="md-raised" ng-click="vm.cancel()">
+                Close
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

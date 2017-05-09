@@ -2,6 +2,10 @@ body {
   font-size: 12px;
 }
 
+.clearfix {
+  clear: both;
+}
+
 .clickable {
   cursor: pointer;
 }
@@ -126,9 +130,20 @@ md-input-container {
   margin-top: -11px;
 }
 
+md-tooltip {
+
+  &.higher {
+    margin-top: -15px !important;
+  }
+}
+
 .no-error-spacer {
 
   .md-errors-spacer {
     display: none;
   }
+}
+
+.pull-left {
+  float: left;
 }

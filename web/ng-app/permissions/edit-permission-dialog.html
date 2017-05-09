@@ -20,7 +20,8 @@
                 </md-input-container>
                 <md-input-container>
                     <label>Description</label>
-                    <textarea name="description" ng-model="vm.permission.description" ng-maxlength="512"></textarea>
+                    <textarea name="description" ng-model="vm.permission.description" ng-maxlength="512"
+                              rows="2"></textarea>
                     <ng-messages for="form.description.$error">
                         <ng-message when="maxlength">Must be less than 512 characters</ng-message>
                     </ng-messages>

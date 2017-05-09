@@ -25,6 +25,8 @@
                 .findAll()
                 .then(function (permissions) {
                     vm.permissions = permissions;
+                })
+                .finally(function () {
                     Spinner.stop('permissions');
                 });
         }

@@ -1,0 +1,73 @@
+<md-dialog aria-label="Edit User" style="width:450px;">
+    <form name="form" ng-submit="vm.save()">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Edit User - {{vm.originalUserEmail}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancel()">
+                    <md-icon><i class="material-icons">clear</i></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content" layout="column">
+                <md-input-container style="width:220px;">
+                    <label>Email</label>
+                    <input name="email" type="email" ng-model="vm.user.email" ng-maxlength="64" required/>
+                    <ng-messages for="form.email.$error">
+                        <ng-message when="required">This field is required</ng-message>
+                        <ng-message when="email">Must be a valid email address</ng-message>
+                        <ng-message when="maxlength">Must be less than 64 characters</ng-message>
+                    </ng-messages>
+                </md-input-container>
+                <md-input-container style="width:220px;">
+                    <label>First name</label>
+                    <input name="firstName" ng-model="vm.user.firstName" ng-maxlength="64" required/>
+                    <ng-messages for="form.firstName.$error">
+                        <ng-message when="required">This field is required</ng-message>
+                        <ng-message when="maxlength">Must be less than 64 characters</ng-message>
+                    </ng-messages>
+                </md-input-container>
+                <md-input-container style="width:220px;">
+                    <label>Last name</label>
+                    <input name="lastName" ng-model="vm.user.lastName" ng-maxlength="64" required/>
+                    <ng-messages for="form.lastName.$error">
+                        <ng-message when="required">This field is required</ng-message>
+                        <ng-message when="maxlength">Must be less than 64 characters</ng-message>
+                    </ng-messages>
+                </md-input-container>
+                <md-input-container style="width:220px;">
+                    <label>Group</label>
+                    <md-select name="group" ng-model="vm.user.group" ng-disabled="!vm.groups.length">
+                        <md-option ng-repeat="group in vm.groups | orderBy : 'displayName'" ng-value="group">
+                            {{group.displayName}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container style="width:220px;">
+                    <label>Role</label>
+                    <md-select name="role" ng-model="vm.user.role" ng-disabled="!vm.roles.length">
+                        <md-option ng-repeat="role in vm.roles | orderBy : 'displayName'" ng-value="role">
+                            {{role.displayName}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="md-warn md-raised container" ng-click="vm.remove()">
+                <span ng-if="vm.deleteTriggered">Confirm</span>
+                <span ng-if="!vm.deleteTriggered">Delete</span>
+                <named-spinner name="delete"></named-spinner>
+            </md-button>
+            <span flex></span>
+            <md-button class="md-primary md-raised container" type="submit" ng-disabled="form.$invalid">
+                Save
+                <named-spinner name="save"></named-spinner>
+            </md-button>
+            <md-button class="md-raised" ng-click="vm.cancel()">
+                Close
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

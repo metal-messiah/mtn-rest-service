@@ -2,6 +2,8 @@ package com.mtn.service;
 
 import com.mtn.model.domain.UserIdentity;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.domain.auth.Group;
+import com.mtn.model.domain.auth.Role;
 import com.mtn.repository.UserProfileRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,12 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     @Autowired
     private UserIdentityService userIdentityService;
+
+    @Autowired
+    private GroupService groupService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private UserProfileRepository userProfileRepository;
@@ -182,6 +190,18 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         existing.setFirstName(request.getFirstName());
         existing.setLastName(request.getLastName());
         existing.setUpdatedBy(findSystemAdministrator());
+
+        Group group = null;
+        if (request.getGroup() != null) {
+            group = groupService.findOneUsingSpecs(request.getGroup().getId());
+        }
+        existing.setGroup(group);
+
+        Role role = null;
+        if (request.getRole() != null) {
+            role = roleService.findOneUsingSpecs(request.getRole().getId());
+        }
+        existing.setRole(role);
 
         return existing;
     }

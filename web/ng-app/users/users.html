@@ -1,1 +1,50 @@
-Users
+<div class="container">
+    <div layout="row" layout-align="start center">
+        <md-subheader class="md-primary">
+            {{vm.users.length ? '(' + vm.users.length + ') ' : ''}}
+            Users
+        </md-subheader>
+        <span flex></span>
+        <md-input-container style="width:220px;">
+            <label>Filter</label>
+            <input ng-model="vm.filter"/>
+        </md-input-container>
+        <md-button class="md-fab md-mini md-primary" ng-click="vm.openAddDialog($event)">
+            <md-icon class="material-icons">add</md-icon>
+            <md-tooltip>Add a User</md-tooltip>
+            <named-spinner name="add-user"></named-spinner>
+        </md-button>
+    </div>
+    <md-content class="md-whiteframe-1dp table-container" ng-if="vm.users.length">
+        <table class="material-table">
+            <thead>
+            <tr>
+                <th>
+                    <material-th label="ID" value-ref="id" sort-on="vm.tableOptions.sortColumn"
+                                 sort-reverse="vm.tableOptions.sortReverse"></material-th>
+                </th>
+                <th>
+                    <material-th label="Email" value-ref="email" sort-on="vm.tableOptions.sortColumn"
+                                 sort-reverse="vm.tableOptions.sortReverse" default="true"></material-th>
+                </th>
+                <th>
+                    <material-th label="Display Name" value-ref="displayName" sort-on="vm.tableOptions.sortColumn"
+                                 sort-reverse="vm.tableOptions.sortReverse"></material-th>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="clickable" ng-click="vm.openEditDialog(user)"
+                ng-repeat="user in vm.users | filter: vm.filter | orderBy : vm.tableOptions.sortColumn : vm.tableOptions.sortReverse">
+                <td>{{::user.id}}</td>
+                <td>{{::user.email}}</td>
+                <td>{{::user.displayName}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </md-content>
+    <div layout="row" layout-align="center center" ng-if="!vm.users.length">
+        No Results Found
+    </div>
+    <named-spinner name="users"></named-spinner>
+</div>

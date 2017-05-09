@@ -18,6 +18,7 @@ public class SimpleUserProfileView {
     }
 
     public SimpleUserProfileView(UserProfile userProfile) {
+        this.id = userProfile.getId();
         this.email = userProfile.getEmail();
         this.firstName = userProfile.getFirstName();
         this.lastName = userProfile.getLastName();

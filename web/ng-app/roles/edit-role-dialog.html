@@ -75,6 +75,12 @@
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="md-warn md-raised container" ng-click="vm.remove()">
+                <span ng-if="vm.deleteTriggered">Confirm</span>
+                <span ng-if="!vm.deleteTriggered">Delete</span>
+                <named-spinner name="delete"></named-spinner>
+            </md-button>
+            <span flex></span>
             <md-button class="md-primary md-raised container" type="submit" ng-disabled="form.$invalid">
                 Save
                 <named-spinner name="save"></named-spinner>

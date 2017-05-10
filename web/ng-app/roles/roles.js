@@ -3,7 +3,7 @@
 
     angular.module('mtn').factory('Roles', Roles);
 
-    function Roles($http) {
+    function Roles($http, $log, $q) {
         var service = {
             addOne: addOne,
             addOneMemberToRole: addOneMemberToRole,
@@ -26,7 +26,12 @@
             return $http
                 .post('/api/role', role)
                 .then(function (response) {
+                    $log.info('Successfully added role', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to add role', response);
+                    return $q.reject(response);
                 });
         }
 
@@ -34,7 +39,12 @@
             return $http
                 .post('/api/role/' + roleId + '/member/' + userId)
                 .then(function (response) {
+                    $log.info('Successfully added member to role', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to add member to role', response);
+                    return $q.reject(response);
                 });
         }
 
@@ -42,19 +52,37 @@
             return $http
                 .post('/api/role/' + roleId + '/permission/' + permissionId)
                 .then(function (response) {
+                    $log.info('Successfully added permission to role', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to add permission to role', response);
+                    return $q.reject(response);
                 });
         }
 
         function deleteOne(id) {
-            return $http['delete']('/api/role/' + id);
+            return $http
+                ['delete']('/api/role/' + id)
+                .then(function () {
+                    $log.info('Successfully deleted role');
+                })
+                .catch(function (response) {
+                    $log.error('Failed to delete role', response);
+                    return $q.reject(response);
+                });
         }
 
         function findAll() {
             return $http
                 .get('/api/role', new DefaultParams())
                 .then(function (response) {
+                    $log.info('Successfully retrieved roles', response.data.content);
                     return response.data.content;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to retrieve roles', response);
+                    return $q.reject(response);
                 });
         }
 
@@ -62,7 +90,12 @@
             return $http
                 .get('/api/role/' + id + '/member')
                 .then(function (response) {
+                    $log.info('Successfully retrieved role members', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to retrieve role members', response);
+                    return $q.reject(response);
                 });
         }
 
@@ -70,7 +103,12 @@
             return $http
                 .get('/api/role/' + id + '/permission')
                 .then(function (response) {
+                    $log.info('Succesfully retrieved role permissions', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to retrieve role permissions', response);
+                    return $q.reject(response);
                 });
         }
 
@@ -78,7 +116,12 @@
             return $http
                 .get('/api/role/' + id)
                 .then(function (response) {
+                    $log.info('Successfully retrieved role', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to retrieve role', response);
+                    return $q.reject(response);
                 });
         }
 
@@ -86,7 +129,12 @@
             return $http
                 ['delete']('/api/role/' + roleId + '/member/' + userId)
                 .then(function (response) {
+                    $log.info('Successfully removed member from role', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to remove member from role', response);
+                    return $q.reject(response);
                 });
         }
 
@@ -94,7 +142,12 @@
             return $http
                 ['delete']('/api/role/' + roleId + '/permission/' + permissionId)
                 .then(function (response) {
+                    $log.info('Successfully removed permission from role', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to remove permission from role', response);
+                    return $q.reject(response);
                 });
         }
 
@@ -102,7 +155,12 @@
             return $http
                 .put('/api/role/' + role.id, role)
                 .then(function (response) {
+                    $log.info('Successfully updated role', response.data);
                     return response.data;
+                })
+                .catch(function (response) {
+                    $log.error('Failed to update role', response);
+                    return $q.reject(response);
                 });
         }
     }

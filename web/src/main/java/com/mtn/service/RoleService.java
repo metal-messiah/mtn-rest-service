@@ -10,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static com.mtn.repository.specification.RoleSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -72,7 +74,10 @@ public class RoleService extends ValidatingDataService<Role> {
             throw new IllegalArgumentException("No Role found with this id");
         }
 
+        existing.getMembers().forEach(member -> member.setRole(null));
         existing.setMembers(new HashSet<>());
+
+        existing.getPermissions().forEach(permission -> permission.getRoles().remove(existing));
         existing.setPermissions(new HashSet<>());
 
         existing.setDeletedBy(userProfileService.findSystemAdministrator());
@@ -140,7 +145,57 @@ public class RoleService extends ValidatingDataService<Role> {
         existing.setDescription(request.getDescription());
         existing.setUpdatedBy(userProfileService.findSystemAdministrator());
 
+        updateMembers(existing, request);
+        updatePermissions(existing, request);
+
         return existing;
+    }
+
+    private void updateMembers(Role existingRole, Role request) {
+        //Remove members
+        List<UserProfile> removedRoles = new ArrayList<>();
+        for (UserProfile member : existingRole.getMembers()) {
+            if (!request.getMembers().contains(member)) {
+                member.setRole(null);
+                removedRoles.add(member);
+            }
+        }
+        existingRole.getMembers().removeAll(removedRoles);
+
+
+        //Add members
+        for (UserProfile member : request.getMembers()) {
+            if (!existingRole.getMembers().contains(member)) {
+                UserProfile existingMember = userProfileService.findOneUsingSpecs(member.getId());
+                if (existingMember != null) {
+                    existingRole.getMembers().add(existingMember);
+                    existingMember.setRole(existingRole);
+                }
+            }
+        }
+    }
+
+    private void updatePermissions(Role existingRole, Role request) {
+        //Remove permissions
+        List<Permission> removedPermissions = new ArrayList<>();
+        for (Permission permission : existingRole.getPermissions()) {
+            if (!request.getPermissions().contains(permission)) {
+                existingRole.getPermissions().remove(permission);
+                removedPermissions.add(permission);
+            }
+        }
+        existingRole.getPermissions().removeAll(removedPermissions);
+
+        //Add permissions
+        for (Permission permission : request.getPermissions()) {
+            if (!existingRole.getPermissions().contains(permission)) {
+                Permission existingPermission = permissionService.findOne(permission.getId());
+                if (existingPermission != null) {
+                    existingRole.getPermissions().add(existingPermission);
+                    existingPermission.getRoles().remove(existingRole);
+                }
+            }
+        }
     }
 
     @Override

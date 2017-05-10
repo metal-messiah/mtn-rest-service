@@ -1,8 +1,8 @@
-<md-dialog aria-label="Add Role" style="width:800px;">
+<md-dialog aria-label="Add Group" style="width:600px;">
     <form name="form" ng-submit="vm.save()">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Add Role</h2>
+                <h2>Add Group</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.cancel()">
                     <md-icon><i class="material-icons">clear</i></md-icon>
@@ -12,24 +12,24 @@
         <md-dialog-content>
             <div class="md-dialog-content" layout="column">
                 <div layout="column">
-                    <md-subheader class="md-primary">Role Information</md-subheader>
+                    <md-subheader class="md-primary">Group Information</md-subheader>
                     <md-input-container style="width:220px;">
                         <label>Display Name</label>
-                        <input name="displayName" ng-model="vm.role.displayName" required/>
+                        <input name="displayName" ng-model="vm.group.displayName" required/>
                         <ng-messages for="form.displayName.$error">
                             <ng-message when="required">This field is required</ng-message>
                         </ng-messages>
                     </md-input-container>
                     <md-input-container>
                         <label>Description</label>
-                        <textarea name="description" ng-model="vm.role.description" ng-maxlength="512"
+                        <textarea name="description" ng-model="vm.group.description" ng-maxlength="512"
                                   rows="2"></textarea>
                         <ng-messages for="form.description.$error">
                             <ng-message when="maxlength">Must be less than 512 characters</ng-message>
                         </ng-messages>
                     </md-input-container>
                 </div>
-                <div layout="column" style="margin-bottom:15px;">
+                <div layout="column">
                     <md-subheader class="md-primary">Members</md-subheader>
                     <md-autocomplete
                             md-items="user in vm.searchUsers(vm.searchText)"
@@ -54,22 +54,9 @@
                                 user="user"
                                 on-delete="vm.removeMember"
                                 delete-tooltip="Remove Member"
-                                ng-repeat="user in vm.role.members | orderBy : 'email'"
+                                ng-repeat="user in vm.group.members | orderBy : 'email'"
                                 style="width:250px;">
                         </user-chip>
-                    </div>
-                </div>
-                <div layout="column">
-                    <md-subheader class="md-primary">Permissions</md-subheader>
-                    <div class="permissions-container clearfix">
-                        <div class="permission pull-left"
-                             ng-repeat="permission in vm.permissions | orderBy : 'displayName'">
-                            <md-checkbox class="md-primary" ng-model="permission.isAssigned"
-                                         ng-change="vm.togglePermission(permission)">
-                                {{::permission.displayName}}
-                            </md-checkbox>
-                            <md-tooltip class="higher">{{::permission.description}}</md-tooltip>
-                        </div>
                     </div>
                 </div>
             </div>

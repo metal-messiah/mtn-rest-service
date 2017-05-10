@@ -48,7 +48,7 @@ public class Group extends AuditingEntity implements Identifiable {
         this.description = description;
     }
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = {CascadeType.MERGE})
     public Set<UserProfile> getMembers() {
         return members;
     }

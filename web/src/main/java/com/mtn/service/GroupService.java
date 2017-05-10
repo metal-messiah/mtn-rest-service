@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import static com.mtn.repository.specification.GroupSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -32,6 +33,9 @@ public class GroupService extends ValidatingDataService<Group> {
         UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
         request.setCreatedBy(systemAdministrator);
         request.setUpdatedBy(systemAdministrator);
+
+        Set<UserProfile> requestedMembers = request.getMembers();
+        requestedMembers.forEach(member -> member.setGroup(request));
 
         return groupRepository.save(request);
     }
@@ -111,7 +115,30 @@ public class GroupService extends ValidatingDataService<Group> {
         existing.setDescription(request.getDescription());
         existing.setUpdatedBy(userProfileService.findSystemAdministrator());
 
+        updateMembers(existing, request);
+
         return existing;
+    }
+
+    private void updateMembers(Group existing, Group request) {
+        //Remove members
+        for (UserProfile member : existing.getMembers()) {
+            if (!request.getMembers().contains(member)) {
+                member.setGroup(null);
+                existing.getMembers().remove(member);
+            }
+        }
+
+        //Add members
+        for (UserProfile member : request.getMembers()) {
+            if (!existing.getMembers().contains(member)) {
+                UserProfile existingMember = userProfileService.findOneUsingSpecs(member.getId());
+                if (existingMember != null) {
+                    existing.getMembers().add(existingMember);
+                    existingMember.setGroup(existing);
+                }
+            }
+        }
     }
 
     @Override

@@ -57,7 +57,7 @@ public class Permission implements Identifiable {
         this.description = description;
     }
 
-    @ManyToMany(mappedBy = "permissions")
+    @ManyToMany(mappedBy = "permissions", cascade = {CascadeType.MERGE})
     public List<Role> getRoles() {
         return roles;
     }

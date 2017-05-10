@@ -49,7 +49,7 @@ public class Role extends AuditingEntity implements Identifiable {
         this.description = description;
     }
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "auth_role_auth_permission",
             joinColumns = @JoinColumn(name = "auth_role_id", referencedColumnName = "id"),
@@ -63,7 +63,7 @@ public class Role extends AuditingEntity implements Identifiable {
         this.permissions = permissions;
     }
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", cascade = {CascadeType.MERGE})
     public Set<UserProfile> getMembers() {
         return members;
     }

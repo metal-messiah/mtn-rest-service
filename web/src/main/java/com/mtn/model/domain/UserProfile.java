@@ -73,7 +73,7 @@ public class UserProfile extends AuditingEntity implements Identifiable {
         this.identities = identities;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "auth_role_id")
     public Role getRole() {
         return role;
@@ -83,7 +83,7 @@ public class UserProfile extends AuditingEntity implements Identifiable {
         this.role = role;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "auth_group_id")
     public Group getGroup() {
         return group;

@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.exception.DeletedEntityReactivationException;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.auth.Group;
 import com.mtn.repository.GroupRepository;
@@ -9,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.mtn.repository.specification.GroupSpecifications.*;
@@ -28,7 +31,11 @@ public class GroupService extends ValidatingDataService<Group> {
 
     @Transactional
     public Group addOne(Group request) {
-        validateForInsert(request);
+        try {
+            validateForInsert(request);
+        } catch (DeletedEntityReactivationException e) {
+            return reactivateOne((Group) e.getEntity(), request);
+        }
 
         UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
         request.setCreatedBy(systemAdministrator);
@@ -94,6 +101,14 @@ public class GroupService extends ValidatingDataService<Group> {
     }
 
     @Transactional
+    public Group reactivateOne(Group existingGroup, Group request) {
+        existingGroup.setDeletedBy(null);
+        existingGroup.setDeletedDate(null);
+
+        return updateOne(existingGroup, request);
+    }
+
+    @Transactional
     public Group removeOneMemberFromGroup(Integer groupId, Integer userId) {
         Group group = findOneUsingSpecs(groupId);
         validateNotNull(group);
@@ -111,6 +126,11 @@ public class GroupService extends ValidatingDataService<Group> {
         Group existing = findOneUsingSpecs(id);
         validateNotNull(existing);
 
+        return updateOne(existing, request);
+    }
+
+    @Transactional
+    public Group updateOne(Group existing, Group request) {
         existing.setDisplayName(request.getDisplayName());
         existing.setDescription(request.getDescription());
         existing.setUpdatedBy(userProfileService.findSystemAdministrator());
@@ -122,12 +142,14 @@ public class GroupService extends ValidatingDataService<Group> {
 
     private void updateMembers(Group existing, Group request) {
         //Remove members
+        List<UserProfile> removedMembers = new ArrayList<>();
         for (UserProfile member : existing.getMembers()) {
             if (!request.getMembers().contains(member)) {
                 member.setGroup(null);
-                existing.getMembers().remove(member);
+                removedMembers.add(member);
             }
         }
+        existing.getMembers().removeAll(removedMembers);
 
         //Add members
         for (UserProfile member : request.getMembers()) {
@@ -155,7 +177,11 @@ public class GroupService extends ValidatingDataService<Group> {
     public void validateDoesNotExist(Group object) {
         Group existing = findOneByDisplayName(object.getDisplayName());
         if (existing != null) {
-            throw new IllegalArgumentException("Group with this displayName already exists");
+            if (existing.getDeletedDate() != null) {
+                throw new DeletedEntityReactivationException(existing);
+            } else {
+                throw new IllegalArgumentException("Group with this displayName already exists");
+            }
         }
     }
 }

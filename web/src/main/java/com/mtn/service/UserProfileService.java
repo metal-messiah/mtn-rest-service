@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.exception.DeletedEntityReactivationException;
 import com.mtn.model.domain.UserIdentity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.auth.Group;
@@ -37,7 +38,11 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     @Transactional
     public UserProfile addOne(UserProfile request) {
-        validateForInsert(request);
+        try {
+            validateForInsert(request);
+        } catch (DeletedEntityReactivationException e) {
+            return reactivateOne((UserProfile) e.getEntity(), request);
+        }
 
         UserProfile systemAdministrator = findSystemAdministrator();
         request.setCreatedBy(systemAdministrator);
@@ -171,6 +176,14 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     }
 
     @Transactional
+    public UserProfile reactivateOne(UserProfile existing, UserProfile request) {
+        existing.setDeletedBy(null);
+        existing.setDeletedDate(null);
+
+        return updateOne(existing, request);
+    }
+
+    @Transactional
     public UserProfile updateOne(Integer id, UserProfile request) {
         validateNotNull(request);
         validateForUpdate(request);
@@ -186,6 +199,11 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
             validateDoesNotExist(request);
         }
 
+        return updateOne(existing, request);
+    }
+
+    @Transactional
+    public UserProfile updateOne(UserProfile existing, UserProfile request) {
         existing.setEmail(request.getEmail());
         existing.setFirstName(request.getFirstName());
         existing.setLastName(request.getLastName());
@@ -215,7 +233,11 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     public void validateDoesNotExist(UserProfile object) {
         UserProfile existing = findOneByEmail(object.getEmail().toLowerCase());
         if (existing != null) {
-            throw new IllegalArgumentException("UserProfile with this email already exists");
+            if (existing.getDeletedDate() != null) {
+                throw new DeletedEntityReactivationException(existing);
+            } else {
+                throw new IllegalArgumentException("UserProfile with this email already exists");
+            }
         }
 
         object.getIdentities().forEach(userIdentityService::validateDoesNotExist);

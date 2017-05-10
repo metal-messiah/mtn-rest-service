@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.exception.DeletedEntityReactivationException;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.auth.Permission;
 import com.mtn.model.domain.auth.Role;
@@ -32,7 +33,11 @@ public class RoleService extends ValidatingDataService<Role> {
 
     @Transactional
     public Role addOne(Role request) {
-        validateForInsert(request);
+        try {
+            validateForInsert(request);
+        } catch (DeletedEntityReactivationException e) {
+            return reactivateOne((Role) e.getEntity(), request);
+        }
 
         UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
         request.setCreatedBy(systemAdministrator);
@@ -114,6 +119,14 @@ public class RoleService extends ValidatingDataService<Role> {
     }
 
     @Transactional
+    public Role reactivateOne(Role existingRole, Role request) {
+        existingRole.setDeletedBy(null);
+        existingRole.setDeletedDate(null);
+
+        return updateOne(existingRole, request);
+    }
+
+    @Transactional
     public Role removeOneMemberFromRole(Integer roleId, Integer userId) {
         Role role = findOneUsingSpecs(roleId);
         validateNotNull(role);
@@ -141,6 +154,11 @@ public class RoleService extends ValidatingDataService<Role> {
         Role existing = findOneUsingSpecs(id);
         validateNotNull(existing);
 
+        return updateOne(existing, request);
+    }
+
+    @Transactional
+    public Role updateOne(Role existing, Role request) {
         existing.setDisplayName(request.getDisplayName());
         existing.setDescription(request.getDescription());
         existing.setUpdatedBy(userProfileService.findSystemAdministrator());
@@ -212,7 +230,11 @@ public class RoleService extends ValidatingDataService<Role> {
     public void validateDoesNotExist(Role object) {
         Role existing = findOneByDisplayName(object.getDisplayName());
         if (existing != null) {
-            throw new IllegalArgumentException("Role with this displayName already exists");
+            if (existing.getDeletedDate() != null) {
+                throw new DeletedEntityReactivationException(existing);
+            } else {
+                throw new IllegalArgumentException("Role with this displayName already exists");
+            }
         }
     }
 }

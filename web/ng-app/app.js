@@ -7,7 +7,7 @@
 
     ///////////////////////////////
 
-    function config($locationProvider, $mdThemingProvider, $routeProvider) {
+    function config($locationProvider, $mdThemingProvider, $routeProvider, $qProvider) {
         $locationProvider.html5Mode(true);
 
         $mdThemingProvider.theme('default')
@@ -26,5 +26,7 @@
             .when('/roles', {controller: 'RolesController', controllerAs: 'vm', templateUrl: 'roles/roles.html'})
             .when('/users', {controller: 'UsersController', controllerAs: 'vm', templateUrl: 'users/users.html'})
             .otherwise({redirectTo: '/'});
+
+        $qProvider.errorOnUnhandledRejections(false);
     }
 })();

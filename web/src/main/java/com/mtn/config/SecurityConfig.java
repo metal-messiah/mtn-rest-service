@@ -33,6 +33,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .forRS256(apiAudience, issuer, hybridAuthenticationProvider)
                 .configure(http)
                 .authorizeRequests()
-                .anyRequest().authenticated();
+                .antMatchers("/api/**")
+                .authenticated()
+                .antMatchers(
+                        "/",
+                        "/groups/**",
+                        "/images/**",
+                        "/lib/**",
+                        "/nav/**",
+                        "/permissions/**",
+                        "/roles/**",
+                        "/scripts/**",
+                        "/styles/**",
+                        "/users/**")
+                .permitAll()
+                .anyRequest().denyAll();
     }
 }

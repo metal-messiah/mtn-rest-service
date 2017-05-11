@@ -1,5 +1,9 @@
 <md-toolbar class="main-nav" style="padding-left:0;">
     <div class="md-toolbar-tools" style="padding-left:0;">
         <h2 flex style="margin-left:15px;">MTN Rest Service</h2>
+        <md-button class="md-raised" ng-click="vm.logout()" ng-if="vm.isAuthenticated()">
+            <md-icon class="material-icons">lock</md-icon>
+            Log Out
+        </md-button>
     </div>
 </md-toolbar>

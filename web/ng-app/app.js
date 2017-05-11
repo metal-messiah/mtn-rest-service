@@ -1,13 +1,18 @@
 (function () {
     'use strict';
 
-    angular.module('mtn', ['ngRoute', 'ngAnimate', 'ngAria', 'ngSanitize', 'ngMessages', 'ngMaterial']);
+    angular.module('mtn', ['ngRoute', 'ngAnimate', 'ngAria', 'ngSanitize', 'ngMessages', 'ngMaterial', 'auth0.lock', 'angular-jwt']);
 
     angular.module('mtn').config(config);
+    angular.module('mtn').config(configAuth);
+    angular.module('mtn').run(mtnInit);
+    angular.module('mtn').run(registerAuth);
 
     ///////////////////////////////
 
-    function config($locationProvider, $mdThemingProvider, $routeProvider, $qProvider) {
+    function config($httpProvider, $locationProvider, $mdThemingProvider, $routeProvider, $qProvider) {
+        $httpProvider.interceptors.push('AuthRequestInterceptor');
+
         $locationProvider.html5Mode(true);
 
         $mdThemingProvider.theme('default')
@@ -17,6 +22,7 @@
             .warnPalette('red');
 
         $routeProvider
+            .when('/', {controller: 'DashboardController', controllerAs: 'vm', templateUrl: 'dashboard/dashboard.html'})
             .when('/groups', {controller: 'GroupsController', controllerAs: 'vm', templateUrl: 'groups/groups.html'})
             .when('/permissions', {
                 controller: 'PermissionsController',
@@ -25,8 +31,38 @@
             })
             .when('/roles', {controller: 'RolesController', controllerAs: 'vm', templateUrl: 'roles/roles.html'})
             .when('/users', {controller: 'UsersController', controllerAs: 'vm', templateUrl: 'users/users.html'})
-            .otherwise({redirectTo: '/'});
+            .when('/login', {controller: 'LoginController', controllerAs: 'vm', templateUrl: 'auth/login.html'})
+            .otherwise({redirectTo: '/login'});
 
         $qProvider.errorOnUnhandledRejections(false);
+    }
+
+    function configAuth(lockProvider, jwtOptionsProvider) {
+        lockProvider.init({
+            clientID: 'FArOoQuRqPT1MZFsNE9qnxeykHp48cIO',
+            domain: 'asudweeks.auth0.com'
+        });
+
+        jwtOptionsProvider.config({
+            tokenGetter: function () {
+                return JSON.parse(localStorage.getItem('id_token'));
+            }
+        });
+    }
+
+    function mtnInit($rootScope, Cache) {
+        $rootScope.Cache = Cache;
+    }
+
+    function registerAuth($location, lock, authManager, Auth, Cache) {
+        Auth.registerAuthenticationListener();
+        lock.interceptHash();
+        authManager.checkAuthOnRefresh();
+        if (authManager.isAuthenticated()) {
+            Auth.getUserProfile();
+        } else {
+            Cache.clear();
+            $location.path('/login');
+        }
     }
 })();

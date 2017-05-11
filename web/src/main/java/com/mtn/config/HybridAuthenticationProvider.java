@@ -3,7 +3,6 @@ package com.mtn.config;
 import com.auth0.json.auth.UserInfo;
 import com.auth0.jwk.JwkProvider;
 import com.auth0.jwk.JwkProviderBuilder;
-import com.auth0.spring.security.api.JwtAuthenticationProvider;
 import com.auth0.spring.security.api.authentication.JwtAuthentication;
 import com.mtn.cache.AuthenticationCache;
 import com.mtn.model.MtnUserDetails;
@@ -51,7 +50,7 @@ public class HybridAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private AuthenticationCache authenticationCache;
 
-    private static final String TOKEN_HEADER = "mtn-access-header";
+    private static final String TOKEN_HEADER = "mtn-access-token";
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -97,9 +96,9 @@ public class HybridAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    public JwtAuthenticationProvider getJwtAuthenticationProvider() {
+    private CustomJwtAuthenticationProvider getJwtAuthenticationProvider() {
         JwkProvider jwkProvider = (new JwkProviderBuilder(issuer)).build();
-        return new JwtAuthenticationProvider(jwkProvider, issuer, apiAudience);
+        return new CustomJwtAuthenticationProvider(jwkProvider, issuer, apiAudience);
     }
 
     @Override

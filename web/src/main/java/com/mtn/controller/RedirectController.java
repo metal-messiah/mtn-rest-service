@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class RedirectController {
 
-    @RequestMapping({"/groups/**", "/roles/**", "/permissions/**", "/users/**"})
+    @RequestMapping({"/login/**", "/groups/**", "/roles/**", "/permissions/**", "/users/**"})
     public String angularRedirect() {
         return "/";
     }

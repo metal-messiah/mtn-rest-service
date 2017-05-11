@@ -43,6 +43,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ConflictErrorResponseView(e.getObject()));
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(SecurityException.class)
+    public void notAuthorized() {
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ResponseEntity internalServerError(HttpServletRequest req, Exception e) throws Exception {

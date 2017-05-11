@@ -2,9 +2,15 @@ package com.mtn.service;
 
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.exception.Auth0Exception;
+import com.auth0.json.auth.TokenHolder;
 import com.auth0.json.auth.UserInfo;
+import com.auth0.net.AuthRequest;
 import com.auth0.net.Request;
+import com.mtn.model.domain.auth.ApiClient;
+import com.mtn.repository.ApiClientRepository;
 import com.mtn.util.MtnLogger;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +21,9 @@ import javax.annotation.PostConstruct;
  */
 @Service
 public class Auth0Client {
+
+    @Value("${auth0.api-audience}")
+    private String apiAudience;
 
     @Value("${auth0.client-id}")
     private String clientId;
@@ -27,9 +36,25 @@ public class Auth0Client {
 
     private AuthAPI authAPI;
 
+    @Autowired
+    private ApiClientRepository apiClientRepository;
+
     @PostConstruct
     public void init() {
         authAPI = new AuthAPI(domain, clientId, secret);
+    }
+
+    public String getApiAccessToken(String clientId) {
+        ApiClient apiClient = validateClientIdAndFindApiClient(clientId);
+
+        AuthRequest request = new AuthAPI(domain, apiClient.getClientId(), apiClient.getClientSecret()).requestToken(apiAudience);
+        try {
+            TokenHolder tokenHolder = request.execute();
+            return tokenHolder.getAccessToken();
+        } catch (Auth0Exception e) {
+            MtnLogger.error("Failed to retrieve Auth0 API Access Token", e);
+            return null;
+        }
     }
 
     public UserInfo getUserProfile(String accessToken) {
@@ -41,4 +66,23 @@ public class Auth0Client {
             return null;
         }
     }
+
+    private ApiClient validateClientIdAndFindApiClient(String clientId) {
+        try {
+            if (StringUtils.isBlank(clientId)) {
+                throw new SecurityException();
+            }
+
+            ApiClient apiClient = apiClientRepository.findOneByClientId(clientId);
+            if (apiClient == null) {
+                throw new SecurityException();
+            }
+
+            return apiClient;
+        } catch (SecurityException e) {
+            MtnLogger.error(String.format("Unauthorized attempt to retrieve API Access Token clientId=\"%s\"", clientId));
+            throw e;
+        }
+    }
+
 }

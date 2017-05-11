@@ -18,7 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${auth0.issuer}")
     private String issuer;
 
-    @Value("${auth0.apiAudience}")
+    @Value("${auth0.api-audience}")
     private String apiAudience;
 
     @Autowired
@@ -26,6 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.sessionManagement().disable();
+        http.csrf().disable();
+
         JwtWebSecurityConfigurer
                 .forRS256(apiAudience, issuer, hybridAuthenticationProvider)
                 .configure(http)

@@ -1,3 +1,4 @@
 <div class="dashboard-container" layout="column" layout-align="center center">
-    Select an option on the left to begin
+    <div ng-if="vm.hasPermissionForAtLeastOneOption()">Select an option on the left to begin</div>
+    <div ng-if="!vm.hasPermissionForAtLeastOneOption()">You do not have permission to access these services</div>
 </div>

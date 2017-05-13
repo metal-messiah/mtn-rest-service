@@ -145,12 +145,6 @@
                         return Roles.updateOne(vm.role);
                     })
                     .then($mdDialog.hide)
-                    .then(function () {
-                        Toaster.toast('Successfully added Role');
-                    })
-                    .catch(function () {
-                        Toaster.toast('An error occurred adding the Role');
-                    })
                     .finally(function () {
                         Spinner.stop('save');
                     });

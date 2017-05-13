@@ -3,18 +3,12 @@
 
     angular.module('mtn').factory('Roles', Roles);
 
-    function Roles($http, $log, $q) {
+    function Roles($http, $log, $q, Toaster) {
         var service = {
             addOne: addOne,
-            addOneMemberToRole: addOneMemberToRole,
-            addOnePermissionToRole: addOnePermissionToRole,
             deleteOne: deleteOne,
             findAll: findAll,
-            findAllMembersForRole: findAllMembersForRole,
-            findAllPermissionsForRole: findAllPermissionsForRole,
             findOne: findOne,
-            removeOneMemberFromRole: removeOneMemberFromRole,
-            removeOnePermissionFromRole: removeOnePermissionFromRole,
             updateOne: updateOne
         };
 
@@ -27,36 +21,12 @@
                 .post('/api/role', role)
                 .then(function (response) {
                     $log.info('Successfully added role', response.data);
+                    Toaster.toast('Successfully added the Role');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to add role', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function addOneMemberToRole(roleId, userId) {
-            return $http
-                .post('/api/role/' + roleId + '/member/' + userId)
-                .then(function (response) {
-                    $log.info('Successfully added member to role', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to add member to role', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function addOnePermissionToRole(roleId, permissionId) {
-            return $http
-                .post('/api/role/' + roleId + '/permission/' + permissionId)
-                .then(function (response) {
-                    $log.info('Successfully added permission to role', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to add permission to role', response);
+                    Toaster.toast('Something went wrong adding the Role');
                     return $q.reject(response);
                 });
         }
@@ -66,9 +36,11 @@
                 ['delete']('/api/role/' + id)
                 .then(function () {
                     $log.info('Successfully deleted role');
+                    Toaster.toast('Successfully deleted the Role');
                 })
                 .catch(function (response) {
                     $log.error('Failed to delete role', response);
+                    Toaster.toast('Something went wrong deleting the Role');
                     return $q.reject(response);
                 });
         }
@@ -82,32 +54,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve roles', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function findAllMembersForRole(id) {
-            return $http
-                .get('/api/role/' + id + '/member')
-                .then(function (response) {
-                    $log.info('Successfully retrieved role members', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to retrieve role members', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function findAllPermissionsForRole(id) {
-            return $http
-                .get('/api/role/' + id + '/permission')
-                .then(function (response) {
-                    $log.info('Succesfully retrieved role permissions', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to retrieve role permissions', response);
+                    Toaster.toast('Something went wrong loading the Roles');
                     return $q.reject(response);
                 });
         }
@@ -121,32 +68,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve role', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function removeOneMemberFromRole(roleId, userId) {
-            return $http
-                ['delete']('/api/role/' + roleId + '/member/' + userId)
-                .then(function (response) {
-                    $log.info('Successfully removed member from role', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to remove member from role', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function removeOnePermissionFromRole(roleId, permissionId) {
-            return $http
-                ['delete']('/api/role/' + roleId + '/permission/' + permissionId)
-                .then(function (response) {
-                    $log.info('Successfully removed permission from role', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to remove permission from role', response);
+                    Toaster.toast('Something went wrong loading the Role');
                     return $q.reject(response);
                 });
         }
@@ -156,10 +78,12 @@
                 .put('/api/role/' + role.id, role)
                 .then(function (response) {
                     $log.info('Successfully updated role', response.data);
+                    Toaster.toast('Successfully updated the Role');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to update role', response);
+                    Toaster.toast('Something went wrong updating the Role');
                     return $q.reject(response);
                 });
         }

@@ -179,10 +179,6 @@
                         .deleteOne(vm.user.id)
                         .then(function () {
                             $mdDialog.hide();
-                            Toaster.toast('Successfully deleted User');
-                        })
-                        .catch(function () {
-                            Toaster.toast('An error occurred deleting the User');
                         })
                         .finally(function () {
                             Spinner.stop('delete');

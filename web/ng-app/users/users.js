@@ -3,7 +3,7 @@
 
     angular.module('mtn').factory('Users', Users);
 
-    function Users($http, $log, $q) {
+    function Users($http, $log, $q, Toaster) {
         var service = {
             addOne: addOne,
             deleteOne: deleteOne,
@@ -21,10 +21,12 @@
                 .post('/api/user', user)
                 .then(function (response) {
                     $log.info('Successfully added user', response.data);
+                    Toaster.toast('Successfully added the User');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to add user', response);
+                    Toaster.toast('Something went wrong adding the User');
                     return $q.reject(response);
                 });
         }
@@ -34,9 +36,11 @@
                 ['delete']('/api/user/' + id)
                 .then(function () {
                     $log.info('Successfully deleted user');
+                    Toaster.toast('Successfully deleted the User');
                 })
                 .catch(function (response) {
                     $log.error('Failed to delete user', response);
+                    Toaster.toast('Something went wrong deleting the User');
                     return $q.reject(response);
                 });
         }
@@ -60,6 +64,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve users', response);
+                    Toaster.toast('Something went wrong loading the Roles');
                     return $q.reject(response);
                 });
         }
@@ -73,6 +78,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve user', response);
+                    Toaster.toast('Something went wrong loading the Role');
                     return $q.reject(response);
                 });
         }
@@ -88,10 +94,12 @@
                 .put('/api/user/' + user.id, user)
                 .then(function (response) {
                     $log.info('Successfully updated user', response.data);
+                    Toaster.toast('Successfully updated the User');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to update user', response);
+                    Toaster.toast('Something went wrong updating the User');
                     return $q.reject(response);
                 });
         }

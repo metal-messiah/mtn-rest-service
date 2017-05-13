@@ -180,10 +180,6 @@
                         .deleteOne(vm.group.id)
                         .then(function () {
                             $mdDialog.hide();
-                            Toaster.toast('Successfully deleted Group');
-                        })
-                        .catch(function () {
-                            Toaster.toast('An error occurred deleting the Group');
                         })
                         .finally(function () {
                             Spinner.stop('delete');

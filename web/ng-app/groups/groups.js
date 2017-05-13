@@ -3,15 +3,12 @@
 
     angular.module('mtn').factory('Groups', Groups);
 
-    function Groups($http, $log, $q) {
+    function Groups($http, $log, $q, Toaster) {
         var service = {
             addOne: addOne,
-            addOneMemberToGroup: addOneMemberToGroup,
             deleteOne: deleteOne,
             findAll: findAll,
-            findAllMembersForGroup: findAllMembersForGroup,
             findOne: findOne,
-            removeOneMemberFromGroup: removeOneMemberFromGroup,
             updateOne: updateOne
         };
 
@@ -24,23 +21,12 @@
                 .post('/api/group', group)
                 .then(function (response) {
                     $log.info('Successfully added group', response.data);
+                    Toaster.toast('Successfully added the Group');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to add group', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function addOneMemberToGroup(groupId, userId) {
-            return $http
-                .post('/api/group/' + groupId + '/member/' + userId)
-                .then(function (response) {
-                    $log.info('Successfully added member to group', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to add member to group', response);
+                    Toaster.toast('Something went wrong trying to add the Group');
                     return $q.reject(response);
                 });
         }
@@ -49,10 +35,12 @@
             return $http
                 ['delete']('/api/group/' + id)
                 .then(function () {
-                    $log.info('Successfully deleted group');
+                    $log.info('Successfully deleted the group');
+                    Toaster.toast('Successfully deleted Group');
                 })
                 .catch(function (response) {
                     $log.error('Failed to delete group', response);
+                    Toaster.toast('Something went wrong trying to delete the Group');
                     return $q.reject(response);
                 });
         }
@@ -66,19 +54,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve groups', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function findAllMembersForGroup(id) {
-            return $http
-                .get('/api/group/' + id + '/member')
-                .then(function (response) {
-                    $log.info('Successfully retrieved group members', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to retrieve group members', response);
+                    Toaster.toast('Something went wrong trying to load the Groups');
                     return $q.reject(response);
                 });
         }
@@ -92,19 +68,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve group', response);
-                    return $q.reject(response);
-                });
-        }
-
-        function removeOneMemberFromGroup(groupId, userId) {
-            return $http
-                ['delete']('/api/group/' + groupId + '/member/' + userId)
-                .then(function (response) {
-                    $log.info('Successfully removed member from group', response.data);
-                    return response.data;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to remove member from group', response);
+                    Toaster.toast('Something went wrong trying to load the Group');
                     return $q.reject(response);
                 });
         }
@@ -113,11 +77,13 @@
             return $http
                 .put('/api/group/' + group.id, group)
                 .then(function (response) {
-                    $log.info('Successfully updated group', response.data);
+                    $log.info('Successfully updated the Group', response.data);
+                    Toaster.toast('Successfully updated Group');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to update group', response);
+                    Toaster.toast('Something went wrong trying to update the Group');
                     return $q.reject(response);
                 });
         }

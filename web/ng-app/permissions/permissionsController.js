@@ -50,7 +50,7 @@
             }
         }
 
-        function EditPermissionController($mdDialog, Permissions, Spinner, Toaster, Security) {
+        function EditPermissionController($mdDialog, Permissions, Spinner, Security) {
             var vm = this;
 
             vm.cancel = $mdDialog.cancel;
@@ -72,10 +72,6 @@
                     .updateOne(vm.permission)
                     .then(function () {
                         $mdDialog.hide(vm.permission);
-                        Toaster.toast('Successfully updated Permission');
-                    })
-                    .catch(function () {
-                        Toaster.toast('Failed to update Permission');
                     })
                     .finally(function () {
                         Spinner.stop('save');

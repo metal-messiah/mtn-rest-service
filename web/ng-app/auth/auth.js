@@ -29,46 +29,54 @@
          * Get the API Access Token and cache it.
          */
         function getApiAccessToken() {
-            var config = {
-                headers: {
-                    'mtn-client-id': API_CLIENT_ID
-                }
-            };
+            if (Cache.get('api-access-token')) {
+                return $q.resolve(Cache.get('api-access-token'));
+            } else {
+                var config = {
+                    headers: {
+                        'mtn-client-id': API_CLIENT_ID
+                    }
+                };
 
-            return $http
-                .get('/api/auth/token', config)
-                .then(function (response) {
-                    Cache.store('api_access_token', response.data.token);
-                    return response.data.token;
-                })
-                .catch(function (response) {
-                    $log.error('Failed to retrieve API Access Token', response);
-                    return $q.reject(response);
-                });
+                return $http
+                    .get('/api/auth/token', config)
+                    .then(function (response) {
+                        Cache.store('api_access_token', response.data.token);
+                        return response.data.token;
+                    })
+                    .catch(function (response) {
+                        $log.error('Failed to retrieve API Access Token', response);
+                        return $q.reject(response);
+                    });
+            }
         }
 
         function getUserProfile() {
             if (!service.loadingProfile) {
                 service.loadingProfile = true;
-                return service
-                    .getApiAccessToken()
-                    .then(function () {
-                        return $http
-                            .get('/api/auth/user')
-                            .then(function (response) {
-                                $log.info('Successfully retrieved User Profile', response.data);
-                                Cache.store('user', response.data);
-                                $location.path('/');
-                            })
-                            .catch(function (response) {
-                                $log.error('Failed to retrieve User Profile', response);
-                                return $q.reject(response);
-                            });
-                    })
-                    .finally(function () {
-                        $location.search('sign-in-success', null);
-                        service.loadingProfile = false;
-                    });
+                if (Cache.get('user')) {
+                    return $q.resolve(Cache.get('user'));
+                } else {
+                    return service
+                        .getApiAccessToken()
+                        .then(function () {
+                            return $http
+                                .get('/api/auth/user')
+                                .then(function (response) {
+                                    $log.info('Successfully retrieved User Profile', response.data);
+                                    Cache.store('user', response.data);
+                                    $location.path('/');
+                                })
+                                .catch(function (response) {
+                                    $log.error('Failed to retrieve User Profile', response);
+                                    return $q.reject(response);
+                                });
+                        })
+                        .finally(function () {
+                            $location.search('sign-in-success', null);
+                            service.loadingProfile = false;
+                        });
+                }
             }
         }
 

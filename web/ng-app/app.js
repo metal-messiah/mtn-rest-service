@@ -54,8 +54,9 @@
         });
     }
 
-    function mtnInit($rootScope, Cache) {
+    function mtnInit($rootScope, Auth, Cache) {
         $rootScope.Cache = Cache;
+        $rootScope.isAuthenticated = Auth.isAuthenticated;
     }
 
     function registerAuth($location, lock, authManager, Auth, Cache) {
@@ -63,7 +64,7 @@
         lock.interceptHash();
         authManager.checkAuthOnRefresh();
         if (authManager.isAuthenticated()) {
-            // Auth.getUserProfile();
+            Auth.getUserProfile();
         } else {
             Cache.clear();
             $location.path('/login');

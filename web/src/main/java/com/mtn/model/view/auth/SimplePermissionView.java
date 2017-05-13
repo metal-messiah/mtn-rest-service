@@ -1,7 +1,6 @@
 package com.mtn.model.view.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.auth.Permission;
 
 /**
@@ -11,7 +10,7 @@ import com.mtn.model.domain.auth.Permission;
 public class SimplePermissionView {
 
     protected Integer id;
-    protected PermissionType systemName;
+    protected String systemName;
     protected String displayName;
     protected String description;
 
@@ -33,11 +32,11 @@ public class SimplePermissionView {
         this.id = id;
     }
 
-    public PermissionType getSystemName() {
+    public String getSystemName() {
         return systemName;
     }
 
-    public void setSystemName(PermissionType systemName) {
+    public void setSystemName(String systemName) {
         this.systemName = systemName;
     }
 

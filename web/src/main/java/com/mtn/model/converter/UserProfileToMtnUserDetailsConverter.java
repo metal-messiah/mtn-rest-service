@@ -13,9 +13,10 @@ public class UserProfileToMtnUserDetailsConverter implements Converter<UserProfi
 
     @Override
     public MtnUserDetails convert(UserProfile userProfile) {
-        MtnUserDetails mtnUserDetails = new MtnUserDetails();
+        MtnUserDetails mtnUserDetails = null;
 
         if (userProfile != null) {
+            mtnUserDetails = new MtnUserDetails();
             mtnUserDetails.setEmail(userProfile.getEmail());
             mtnUserDetails.setFirstName(userProfile.getFirstName());
             mtnUserDetails.setLastName(userProfile.getLastName());

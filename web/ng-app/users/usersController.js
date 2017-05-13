@@ -3,9 +3,10 @@
 
     angular.module('mtn').controller('UsersController', UsersController);
 
-    function UsersController($mdDialog, Users, Roles, Groups, Spinner) {
+    function UsersController($mdDialog, Users, Roles, Groups, Spinner, Security) {
         var vm = this;
 
+        vm.check = Security.check;
         vm.openAddDialog = openAddDialog;
         vm.openEditDialog = openEditDialog;
 
@@ -78,26 +79,28 @@
         }
 
         function openEditDialog(user, event) {
-            return Users
-                .findOne(user.id)
-                .then(function (user) {
-                    $mdDialog
-                        .show({
-                            templateUrl: 'users/edit-user-dialog.html',
-                            controller: EditUserController,
-                            controllerAs: 'vm',
-                            bindToController: true,
-                            targetEvent: event,
-                            clickOutsideToClose: false,
-                            locals: {
-                                groups: vm.groups,
-                                roles: vm.roles,
-                                users: vm.users,
-                                user: user
-                            }
-                        })
-                        .finally(loadUsers);
-                });
+            if (Security.check('USERS_UPDATE')) {
+                return Users
+                    .findOne(user.id)
+                    .then(function (user) {
+                        $mdDialog
+                            .show({
+                                templateUrl: 'users/edit-user-dialog.html',
+                                controller: EditUserController,
+                                controllerAs: 'vm',
+                                bindToController: true,
+                                targetEvent: event,
+                                clickOutsideToClose: false,
+                                locals: {
+                                    groups: vm.groups,
+                                    roles: vm.roles,
+                                    users: vm.users,
+                                    user: user
+                                }
+                            })
+                            .finally(loadUsers);
+                    });
+            }
         }
 
         function AddUserController($mdDialog, Users, Spinner, Toaster) {
@@ -131,10 +134,11 @@
             }
         }
 
-        function EditUserController($mdDialog, $timeout, Users, Spinner, Toaster) {
+        function EditUserController($mdDialog, $timeout, Users, Spinner, Toaster, Security) {
             var vm = this;
 
             vm.cancel = $mdDialog.cancel;
+            vm.check = Security.check;
             vm.remove = remove;
             vm.save = save;
 

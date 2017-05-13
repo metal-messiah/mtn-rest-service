@@ -3,9 +3,10 @@
 
     angular.module('mtn').controller('PermissionsController', PermissionsController);
 
-    function PermissionsController($mdDialog, Permissions, Spinner) {
+    function PermissionsController($mdDialog, Permissions, Spinner, Security) {
         var vm = this;
 
+        vm.check = Security.check;
         vm.openEditDialog = openEditDialog;
 
         init();
@@ -32,25 +33,28 @@
         }
 
         function openEditDialog(permission) {
-            return $mdDialog
-                .show({
-                    templateUrl: 'permissions/edit-permission-dialog.html',
-                    controller: EditPermissionController,
-                    controllerAs: 'vm',
-                    bindToController: true,
-                    targetEvent: event,
-                    clickOutsideToClose: false,
-                    locals: {
-                        permission: permission
-                    }
-                })
-                .finally(loadPermissions);
+            if (Security.check('PERMISSIONS_UPDATE')) {
+                return $mdDialog
+                    .show({
+                        templateUrl: 'permissions/edit-permission-dialog.html',
+                        controller: EditPermissionController,
+                        controllerAs: 'vm',
+                        bindToController: true,
+                        targetEvent: event,
+                        clickOutsideToClose: false,
+                        locals: {
+                            permission: permission
+                        }
+                    })
+                    .finally(loadPermissions);
+            }
         }
 
-        function EditPermissionController($mdDialog, Permissions, Spinner, Toaster) {
+        function EditPermissionController($mdDialog, Permissions, Spinner, Toaster, Security) {
             var vm = this;
 
             vm.cancel = $mdDialog.cancel;
+            vm.check = Security.check;
             vm.save = save;
 
             init();

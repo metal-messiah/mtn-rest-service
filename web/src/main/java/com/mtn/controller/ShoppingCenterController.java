@@ -8,6 +8,7 @@ import com.mtn.model.view.ShoppingCenterSurveyView;
 import com.mtn.model.view.ShoppingCenterView;
 import com.mtn.model.view.SimpleShoppingCenterSurveyView;
 import com.mtn.model.view.SimpleSiteView;
+import com.mtn.service.SecurityService;
 import com.mtn.service.ShoppingCenterService;
 import com.mtn.service.ShoppingCenterSurveyService;
 import com.mtn.service.SiteService;
@@ -34,21 +35,29 @@ public class ShoppingCenterController {
     private SiteService siteService;
     @Autowired
     private ShoppingCenterSurveyService surveyService;
+    @Autowired
+    private SecurityService securityService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody ShoppingCenter request) {
+        securityService.checkPermission("SHOPPING_CENTERS_CREATE");
+
         ShoppingCenter domainModel = shoppingCenterService.addOne(request);
         return ResponseEntity.ok(new ShoppingCenterView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.POST)
     public ResponseEntity oneAddShoppingCenterSurveysToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterSurvey request) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_CREATE");
+
         ShoppingCenterSurvey domainModel = shoppingCenterService.addOneSurveyToShoppingCenter(shoppingCenterId, request);
         return ResponseEntity.ok(new ShoppingCenterSurveyView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/site", method = RequestMethod.POST)
     public ResponseEntity addOneSiteToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody SimpleSiteView request) {
+        securityService.checkPermission("SITES_CREATE");
+
         Site transformedRequest = new Site(request);
         Site domainModel = shoppingCenterService.addOneSiteToShoppingCenter(shoppingCenterId, transformedRequest);
         return ResponseEntity.ok(new SimpleSiteView(domainModel));
@@ -56,6 +65,8 @@ public class ShoppingCenterController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
+        securityService.checkPermission("SHOPPING_CENTERS_DELETE");
+
         shoppingCenterService.deleteOne(id);
         return ResponseEntity.noContent().build();
     }
@@ -67,6 +78,8 @@ public class ShoppingCenterController {
             @RequestParam(value = "owner", required = false) String owner,
             Pageable page
     ) {
+        securityService.checkPermission("SHOPPING_CENTERS_READ");
+
         Page<ShoppingCenter> domainModels;
         if (StringUtils.isNotBlank(q)) {
             domainModels = shoppingCenterService.findAllByNameOrOwnerUsingSpecs(q, page);
@@ -83,18 +96,24 @@ public class ShoppingCenterController {
 
     @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.GET)
     public ResponseEntity findAllShoppingCenterSurveysForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
+
         List<ShoppingCenterSurvey> domainModels = surveyService.findAllByShoppingCenterId(shoppingCenterId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}/site", method = RequestMethod.GET)
     public ResponseEntity findAllSitesForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
+        securityService.checkPermission("SITES_READ");
+
         List<Site> domainModels = siteService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
+        securityService.checkPermission("SHOPPING_CENTERS_READ");
+
         ShoppingCenter domainModel = shoppingCenterService.findOneUsingSpecs(id);
         if (domainModel != null) {
             return ResponseEntity.ok(new ShoppingCenterView(domainModel));
@@ -105,6 +124,8 @@ public class ShoppingCenterController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody ShoppingCenter request) {
+        securityService.checkPermission("SHOPPING_CENTERS_UPDATE");
+
         ShoppingCenter domainModel = shoppingCenterService.updateOne(id, request);
         return ResponseEntity.ok(new ShoppingCenterView(domainModel));
     }

@@ -6,7 +6,9 @@ import com.auth0.jwk.JwkProviderBuilder;
 import com.auth0.spring.security.api.authentication.JwtAuthentication;
 import com.mtn.cache.AuthenticationCache;
 import com.mtn.model.MtnUserDetails;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.service.Auth0Client;
+import com.mtn.service.UserProfileService;
 import com.mtn.util.MtnLogger;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ public class HybridAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private AuthenticationCache authenticationCache;
+
+    @Autowired
+    private UserProfileService userProfileService;
 
     private static final String TOKEN_HEADER = "mtn-access-token";
 
@@ -108,8 +113,8 @@ public class HybridAuthenticationProvider implements AuthenticationProvider {
 
     private MtnUserDetails getUserDetails() {
         String accessToken = getAccessTokenHeader();
-        String email = getAuth0ProfileEmail(accessToken);
-        return getMtnUserProfile(email);
+        UserInfo auth0Profile = getAuth0Profile(accessToken);
+        return getOrCreateMtnUserDetails(auth0Profile);
     }
 
     private String getAccessTokenHeader() {
@@ -121,18 +126,22 @@ public class HybridAuthenticationProvider implements AuthenticationProvider {
         return header;
     }
 
-    private String getAuth0ProfileEmail(String accessToken) {
+    private UserInfo getAuth0Profile(String accessToken) {
         UserInfo auth0Profile = auth0Client.getUserProfile(accessToken);
         if (auth0Profile == null || StringUtils.isBlank((String) auth0Profile.getValues().get("email"))) {
             throw new MtnAuthenticationException("Not Authorized");
         }
-        return (String) auth0Profile.getValues().get("email");
+        return auth0Profile;
     }
 
-    private MtnUserDetails getMtnUserProfile(String email) {
+    private MtnUserDetails getOrCreateMtnUserDetails(UserInfo auth0Profile) {
+        String email = (String) auth0Profile.getValues().get("email");
         MtnUserDetails userDetails = (MtnUserDetails) userDetailsService.loadUserByUsername(email);
         if (userDetails == null) {
-            throw new MtnAuthenticationException("Not Authorized");
+            UserProfile userProfile = new UserProfile();
+            userProfile.setEmail(email);
+            userProfileService.addOne(userProfile);
+            userDetails = (MtnUserDetails) userDetailsService.loadUserByUsername(email);
         }
         return userDetails;
     }

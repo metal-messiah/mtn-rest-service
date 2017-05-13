@@ -9,7 +9,8 @@
             <label>Filter</label>
             <input ng-model="vm.filter"/>
         </md-input-container>
-        <md-button class="md-fab md-mini md-primary" ng-click="vm.openAddDialog($event)">
+        <md-button class="md-fab md-mini md-primary" ng-click="vm.openAddDialog($event)"
+                   ng-if="vm.check('USERS_CREATE')">
             <md-icon class="material-icons">add</md-icon>
             <md-tooltip>Add a User</md-tooltip>
             <named-spinner name="add-user"></named-spinner>
@@ -34,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="clickable" ng-click="vm.openEditDialog(user)"
+            <tr ng-class="{clickable: vm.check('USERS_UPDATE')}" ng-click="vm.openEditDialog(user)"
                 ng-repeat="user in vm.users | filter: vm.filter | orderBy : vm.tableOptions.sortColumn : vm.tableOptions.sortReverse">
                 <td>{{::user.id}}</td>
                 <td>{{::user.email}}</td>

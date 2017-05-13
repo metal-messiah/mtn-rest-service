@@ -9,7 +9,8 @@
             <label>Filter</label>
             <input ng-model="vm.filter"/>
         </md-input-container>
-        <md-button class="md-fab md-mini md-primary" ng-click="vm.openAddDialog($event)">
+        <md-button class="md-fab md-mini md-primary" ng-click="vm.openAddDialog($event)"
+                   ng-if="vm.check('GROUPS_CREATE')">
             <md-icon class="material-icons">add</md-icon>
             <md-tooltip>Add a Group</md-tooltip>
             <named-spinner name="add-group"></named-spinner>
@@ -34,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="clickable" ng-click="vm.openEditDialog(group)"
+            <tr ng-class="{clickable: vm.check('GROUPS_UPDATE')}" ng-click="vm.openEditDialog(group)"
                 ng-repeat="group in vm.groups | filter: vm.filter | orderBy : vm.tableOptions.sortColumn : vm.tableOptions.sortReverse">
                 <td>{{::group.id}}</td>
                 <td>{{::group.displayName}}</td>

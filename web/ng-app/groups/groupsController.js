@@ -3,9 +3,10 @@
 
     angular.module('mtn').controller('GroupsController', GroupsController);
 
-    function GroupsController($mdDialog, Groups, Spinner) {
+    function GroupsController($mdDialog, Groups, Spinner, Security) {
         var vm = this;
 
+        vm.check = Security.check;
         vm.openAddDialog = openAddDialog;
         vm.openEditDialog = openEditDialog;
 
@@ -49,24 +50,26 @@
         }
 
         function openEditDialog(group, event) {
-            return Groups
-                .findOne(group.id)
-                .then(function (group) {
-                    $mdDialog
-                        .show({
-                            templateUrl: 'groups/edit-group-dialog.html',
-                            controller: EditGroupController,
-                            controllerAs: 'vm',
-                            bindToController: true,
-                            targetEvent: event,
-                            clickOutsideToClose: false,
-                            locals: {
-                                groups: vm.groups,
-                                group: group
-                            }
-                        })
-                        .finally(loadGroups);
-                });
+            if (Security.check('GROUPS_UPDATE')) {
+                return Groups
+                    .findOne(group.id)
+                    .then(function (group) {
+                        $mdDialog
+                            .show({
+                                templateUrl: 'groups/edit-group-dialog.html',
+                                controller: EditGroupController,
+                                controllerAs: 'vm',
+                                bindToController: true,
+                                targetEvent: event,
+                                clickOutsideToClose: false,
+                                locals: {
+                                    groups: vm.groups,
+                                    group: group
+                                }
+                            })
+                            .finally(loadGroups);
+                    });
+            }
         }
 
         function AddGroupController($mdDialog, Groups, Users, Spinner, Toaster) {
@@ -132,11 +135,12 @@
             }
         }
 
-        function EditGroupController($mdDialog, $timeout, Groups, Users, Spinner, Toaster) {
+        function EditGroupController($mdDialog, $timeout, Groups, Users, Spinner, Toaster, Security) {
             var vm = this;
 
             vm.addMember = addMember;
             vm.cancel = $mdDialog.cancel;
+            vm.check = Security.check;
             vm.remove = remove;
             vm.removeMember = removeMember;
             vm.save = save;

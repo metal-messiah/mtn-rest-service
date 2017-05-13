@@ -29,7 +29,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="clickable" ng-click="vm.openEditDialog(permission)"
+            <tr ng-class="{clickable: vm.check('PERMISSIONS_UPDATE')}" ng-click="vm.openEditDialog(permission)"
                 ng-repeat="permission in vm.permissions | filter: vm.filter | orderBy : vm.tableOptions.sortColumn : vm.tableOptions.sortReverse">
                 <td>{{::permission.id}}</td>
                 <td>{{::permission.displayName}}</td>

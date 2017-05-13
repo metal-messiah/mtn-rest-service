@@ -55,7 +55,7 @@
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row" layout-align="end center">
-            <md-button class="md-warn md-raised container" ng-click="vm.remove()">
+            <md-button class="md-warn md-raised container" ng-click="vm.remove()" ng-if="vm.check('USERS_DELETE')">
                 <span ng-if="vm.deleteTriggered">Confirm</span>
                 <span ng-if="!vm.deleteTriggered">Delete</span>
                 <named-spinner name="delete"></named-spinner>

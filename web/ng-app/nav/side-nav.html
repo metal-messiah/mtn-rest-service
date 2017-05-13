@@ -3,9 +3,9 @@
         <h1 class="md-toolbar-tools">Administration</h1>
     </md-toolbar>
     <md-content layout="column">
-        <nav-button label="Groups" route="/groups"></nav-button>
-        <nav-button label="Permissions" route="/permissions"></nav-button>
-        <nav-button label="Roles" route="/roles"></nav-button>
-        <nav-button label="Users" route="/users"></nav-button>
+        <nav-button label="Groups" route="/groups" ng-if="vm.check('GROUPS_READ')"></nav-button>
+        <nav-button label="Permissions" route="/permissions" ng-if="vm.check('PERMISSIONS_READ')"></nav-button>
+        <nav-button label="Roles" route="/roles" ng-if="vm.check('ROLES_READ')"></nav-button>
+        <nav-button label="Users" route="/users" ng-if="vm.check('USERS_READ')"></nav-button>
     </md-content>
 </md-sidenav>

@@ -1,6 +1,5 @@
 package com.mtn.model.domain.auth;
 
-import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Identifiable;
 
 import javax.persistence.*;
@@ -15,7 +14,7 @@ import java.util.List;
 public class Permission implements Identifiable {
 
     private Integer id;
-    private PermissionType systemName;
+    private String systemName;
     private String displayName;
     private String description;
 
@@ -32,12 +31,11 @@ public class Permission implements Identifiable {
         this.id = id;
     }
 
-    @Enumerated(EnumType.STRING)
-    public PermissionType getSystemName() {
+    public String getSystemName() {
         return systemName;
     }
 
-    public void setSystemName(PermissionType systemName) {
+    public void setSystemName(String systemName) {
         this.systemName = systemName;
     }
 

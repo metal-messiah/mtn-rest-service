@@ -11,6 +11,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,7 +45,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(SecurityException.class)
+    @ExceptionHandler({SecurityException.class, AccessDeniedException.class})
     public void notAuthorized() {
     }
 

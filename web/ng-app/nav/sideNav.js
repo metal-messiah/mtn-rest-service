@@ -4,7 +4,8 @@ angular.module('mtn').component('sideNav', {
     controllerAs: 'vm'
 });
 
-function SideNavController() {
+function SideNavController(Security) {
     var vm = this;
 
+    vm.check = Security.check;
 }

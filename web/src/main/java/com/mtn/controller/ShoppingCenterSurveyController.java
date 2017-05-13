@@ -6,6 +6,7 @@ import com.mtn.model.domain.ShoppingCenterTenant;
 import com.mtn.model.view.ShoppingCenterSurveyView;
 import com.mtn.model.view.SimpleShoppingCenterAccessView;
 import com.mtn.model.view.SimpleShoppingCenterTenantView;
+import com.mtn.service.SecurityService;
 import com.mtn.service.ShoppingCenterAccessService;
 import com.mtn.service.ShoppingCenterSurveyService;
 import com.mtn.service.ShoppingCenterTenantService;
@@ -29,39 +30,53 @@ public class ShoppingCenterSurveyController {
     private ShoppingCenterSurveyService surveyService;
     @Autowired
     private ShoppingCenterTenantService tenantService;
+    @Autowired
+    private SecurityService securityService;
 
     @RequestMapping(path = "/{id}/shopping-center-access", method = RequestMethod.POST)
     public ResponseEntity addOneAccessToSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterAccess request) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_UPDATE");
+
         ShoppingCenterAccess domainModel = surveyService.addOneAccessToSurvey(surveyId, request);
         return ResponseEntity.ok(new SimpleShoppingCenterAccessView(domainModel));
     }
 
     @RequestMapping(path = "/{id}/shopping-center-tenant", method = RequestMethod.POST)
     public ResponseEntity addOneTenantToSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterTenant request) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_UPDATE");
+
         ShoppingCenterTenant domainModel = surveyService.addOneTenantToSurvey(surveyId, request);
         return ResponseEntity.ok(new SimpleShoppingCenterTenantView(domainModel));
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_DELETE");
+
         surveyService.deleteOne(id);
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(path = "/{id}/shopping-center-access", method = RequestMethod.GET)
     public ResponseEntity findAllAccessesForSurvey(@PathVariable("id") Integer surveyId) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
+
         List<ShoppingCenterAccess> domainModels = accessService.findAllBySurveyId(surveyId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(path = "/{id}/shopping-center-tenant", method = RequestMethod.GET)
     public ResponseEntity findAllTenantsForSurvey(@PathVariable("id") Integer surveyId) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
+
         List<ShoppingCenterTenant> domainModels = tenantService.findAllBySurveyId(surveyId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterTenantView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
+
         ShoppingCenterSurvey domainModel = surveyService.findOneUsingSpecs(id);
         if (domainModel != null) {
             return ResponseEntity.ok(new ShoppingCenterSurveyView(domainModel));
@@ -72,6 +87,8 @@ public class ShoppingCenterSurveyController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody ShoppingCenterSurvey request) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_UPDATE");
+
         ShoppingCenterSurvey domainModel = surveyService.updateOne(id, request);
         return ResponseEntity.ok(new ShoppingCenterSurveyView(domainModel));
     }

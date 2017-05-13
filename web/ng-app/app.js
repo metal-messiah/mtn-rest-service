@@ -54,7 +54,7 @@
         });
     }
 
-    function mtnInit($rootScope, Auth, Cache) {
+    function mtnInit($rootScope, Auth, Cache, Security) {
         $rootScope.Cache = Cache;
         $rootScope.isAuthenticated = Auth.isAuthenticated;
     }

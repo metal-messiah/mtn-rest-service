@@ -9,7 +9,8 @@
             <label>Filter</label>
             <input ng-model="vm.filter"/>
         </md-input-container>
-        <md-button class="md-fab md-mini md-primary" ng-click="vm.openAddDialog($event)">
+        <md-button class="md-fab md-mini md-primary" ng-click="vm.openAddDialog($event)"
+                   ng-if="vm.check('ROLES_CREATE')">
             <md-icon class="material-icons">add</md-icon>
             <md-tooltip>Add a Role</md-tooltip>
             <named-spinner name="add-role"></named-spinner>
@@ -34,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="clickable" ng-click="vm.openEditDialog(role)"
+            <tr ng-class="{clickable: vm.check('ROLES_UPDATE')}" ng-click="vm.openEditDialog(role)"
                 ng-repeat="role in vm.roles | filter: vm.filter | orderBy : vm.tableOptions.sortColumn : vm.tableOptions.sortReverse">
                 <td>{{::role.id}}</td>
                 <td>{{::role.displayName}}</td>

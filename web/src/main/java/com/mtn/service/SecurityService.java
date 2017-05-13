@@ -2,6 +2,7 @@ package com.mtn.service;
 
 import com.mtn.model.MtnUserDetails;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,23 @@ public class SecurityService {
             }
         }
         return null;
+    }
+
+    public void checkPermission(String permission) {
+        MtnUserDetails currentUser = getCurrentUser();
+        if (currentUser != null) {
+            //Check for system admin
+            if (currentUser.getEmail().equals("system.administrator@mtnra.com")) {
+                return;
+            }
+
+            //Check permissions
+            for (SimpleGrantedAuthority authority : currentUser.getAuthorities()) {
+                if (authority.getAuthority().equalsIgnoreCase(permission)) {
+                    return;
+                }
+            }
+        }
+        throw new SecurityException();
     }
 }

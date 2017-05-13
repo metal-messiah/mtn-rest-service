@@ -4,6 +4,7 @@ import com.mtn.constant.SearchType;
 import com.mtn.model.view.search.SearchRequest;
 import com.mtn.model.view.search.SearchResultView;
 import com.mtn.service.SearchService;
+import com.mtn.service.SecurityService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,13 @@ public class SearchController {
 
     @Autowired
     private SearchService searchService;
+    @Autowired
+    private SecurityService securityService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity search(@RequestBody SearchRequest request) {
+        securityService.checkPermission("SEARCH_READ");
+
         validateSearchRequest(request);
 
         List<SearchResultView> searchResults = searchService.search(request);

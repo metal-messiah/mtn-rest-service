@@ -3,9 +3,10 @@
 
     angular.module('mtn').controller('RolesController', RolesController);
 
-    function RolesController($mdDialog, Roles, Permissions, Spinner) {
+    function RolesController($mdDialog, Roles, Permissions, Spinner, Security) {
         var vm = this;
 
+        vm.check = Security.check;
         vm.openAddDialog = openAddDialog;
         vm.openEditDialog = openEditDialog;
 
@@ -66,25 +67,27 @@
         }
 
         function openEditDialog(role, event) {
-            return Roles
-                .findOne(role.id)
-                .then(function (role) {
-                    $mdDialog
-                        .show({
-                            templateUrl: 'roles/edit-role-dialog.html',
-                            controller: EditRoleController,
-                            controllerAs: 'vm',
-                            bindToController: true,
-                            targetEvent: event,
-                            clickOutsideToClose: false,
-                            locals: {
-                                permissions: vm.permissions,
-                                roles: vm.roles,
-                                role: role
-                            }
-                        })
-                        .finally(loadRoles);
-                });
+            if (Security.check('ROLES_UPDATE')) {
+                return Roles
+                    .findOne(role.id)
+                    .then(function (role) {
+                        $mdDialog
+                            .show({
+                                templateUrl: 'roles/edit-role-dialog.html',
+                                controller: EditRoleController,
+                                controllerAs: 'vm',
+                                bindToController: true,
+                                targetEvent: event,
+                                clickOutsideToClose: false,
+                                locals: {
+                                    permissions: vm.permissions,
+                                    roles: vm.roles,
+                                    role: role
+                                }
+                            })
+                            .finally(loadRoles);
+                    });
+            }
         }
 
         function AddRoleController($mdDialog, Roles, Users, Spinner, Toaster) {
@@ -169,11 +172,12 @@
             }
         }
 
-        function EditRoleController($mdDialog, $timeout, Roles, Users, Spinner, Toaster) {
+        function EditRoleController($mdDialog, $timeout, Roles, Users, Spinner, Toaster, Security) {
             var vm = this;
 
             vm.addMember = addMember;
             vm.cancel = $mdDialog.cancel;
+            vm.check = Security.check;
             vm.remove = remove;
             vm.removeMember = removeMember;
             vm.save = save;

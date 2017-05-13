@@ -1,7 +1,6 @@
 package com.mtn.service;
 
 import com.mtn.exception.DeletedEntityReactivationException;
-import com.mtn.model.domain.UserIdentity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.auth.Group;
 import com.mtn.model.domain.auth.Role;
@@ -25,14 +24,9 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 public class UserProfileService extends ValidatingDataService<UserProfile> {
 
     @Autowired
-    private UserIdentityService userIdentityService;
-
-    @Autowired
     private GroupService groupService;
-
     @Autowired
     private RoleService roleService;
-
     @Autowired
     private UserProfileRepository userProfileRepository;
 
@@ -50,23 +44,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
         request.setEmail(request.getEmail().toLowerCase());
 
-        for (UserIdentity userIdentity : request.getIdentities()) {
-            userIdentity.setUserProfile(request);
-        }
-
         return userProfileRepository.save(request);
-    }
-
-    @Transactional
-    public UserIdentity addOneIdentityToUser(Integer userProfileId, UserIdentity request) {
-        UserProfile existing = findOneUsingSpecs(userProfileId);
-        if (existing == null) {
-            throw new IllegalArgumentException("No UserProfile found with this id");
-        }
-
-        request.setUserProfile(existing);
-
-        return userIdentityService.addOne(request);
     }
 
     @Transactional
@@ -122,30 +100,6 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     public UserProfile findOneUsingSpecs(Integer id) {
         return userProfileRepository.findOne(
                 where(idEquals(id))
-                        .and(isNotSystemAdministrator())
-                        .and(isNotDeleted())
-        );
-    }
-
-    /**
-     * Does an unconditional find by Identity.providerUserId
-     * <p>
-     * FOR INTERNAL USE ONLY - to protect deleted and system administrator records!
-     */
-    public UserProfile findOne(String providerUserId) {
-        return userProfileRepository.findOneByProviderUserId(providerUserId);
-    }
-
-    /**
-     * Safe find, using query specs.
-     * <p>
-     * Will not return a deleted or system adminstrator record.
-     * <p>
-     * Should be used for any client-facing logic.
-     */
-    public UserProfile findOneUsingSpecs(String providerUserId) {
-        return userProfileRepository.findOne(
-                where(identityUserProviderIdEquals(providerUserId))
                         .and(isNotSystemAdministrator())
                         .and(isNotDeleted())
         );
@@ -239,14 +193,11 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
                 throw new IllegalArgumentException("UserProfile with this email already exists");
             }
         }
-
-        object.getIdentities().forEach(userIdentityService::validateDoesNotExist);
     }
 
     @Override
     public void validateForInsert(UserProfile object) {
         super.validateForInsert(object);
-        object.getIdentities().forEach(userIdentityService::validateForInsert);
     }
 
     @Override

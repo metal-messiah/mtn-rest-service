@@ -4,8 +4,6 @@ import com.mtn.model.domain.auth.Group;
 import com.mtn.model.domain.auth.Role;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Allen on 4/21/2017.
@@ -20,8 +18,6 @@ public class UserProfile extends AuditingEntity implements Identifiable {
     private Group group;
     private String lastName;
     private Role role;
-
-    private List<UserIdentity> identities = new ArrayList<>();
 
     @PrePersist
     @PreUpdate
@@ -62,15 +58,6 @@ public class UserProfile extends AuditingEntity implements Identifiable {
 
     public void setLastName(final String lastName) {
         this.lastName = lastName;
-    }
-
-    @OneToMany(mappedBy = "userProfile", cascade = {CascadeType.ALL})
-    public List<UserIdentity> getIdentities() {
-        return identities;
-    }
-
-    public void setIdentities(List<UserIdentity> identities) {
-        this.identities = identities;
     }
 
     @ManyToOne(cascade = {CascadeType.MERGE})

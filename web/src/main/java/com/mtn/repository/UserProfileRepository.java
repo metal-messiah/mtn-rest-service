@@ -11,9 +11,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface UserProfileRepository extends JpaRepository<UserProfile, Integer>, JpaSpecificationExecutor<UserProfile> {
 
-    @Query("FROM UserProfile up JOIN FETCH up.identities i WHERE i.providerUserId = :providerUserId")
-    UserProfile findOneByProviderUserId(@Param("providerUserId") String providerUserId);
-
     @Query("FROM UserProfile up LEFT JOIN FETCH up.role.permissions WHERE up.email = :email")
     UserProfile findOneByEmail(@Param("email") String email);
 }

@@ -1,6 +1,5 @@
 package com.mtn.repository.specification;
 
-import com.mtn.model.domain.UserIdentity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.auth.Group;
 import com.mtn.model.domain.auth.Role;
@@ -21,7 +20,6 @@ public class UserProfileSpecifications {
     private static final String GROUP = "group";
     private static final String LAST_NAME = "lastName";
     private static final String SYSTEM_ADMINISTRATOR_EMAIL = "system.administrator@mtnra.com";
-    private static final String PROVIDER_USER_ID = "providerUserId";
     private static final String ROLE = "role";
 
     public static Specification<UserProfile> emailContains(String value) {
@@ -56,16 +54,6 @@ public class UserProfileSpecifications {
             @Override
             public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
-
-    public static Specification<UserProfile> identityUserProviderIdEquals(String providerUserId) {
-        return new Specification<UserProfile>() {
-            @Override
-            public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                Join<UserProfile, UserIdentity> userIdentityJoin = root.join(IDENTITIES);
-                return criteriaBuilder.equal(userIdentityJoin.get(PROVIDER_USER_ID), providerUserId);
             }
         };
     }

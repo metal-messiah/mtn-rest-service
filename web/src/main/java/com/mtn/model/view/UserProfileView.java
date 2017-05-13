@@ -6,9 +6,6 @@ import com.mtn.model.view.auth.SimpleGroupView;
 import com.mtn.model.view.auth.SimpleRoleView;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 4/22/2017.
@@ -22,8 +19,6 @@ public class UserProfileView extends SimpleUserProfileView {
     private LocalDateTime updatedDate;
     private SimpleGroupView group;
     private SimpleRoleView role;
-
-    private List<SimpleUserIdentityView> identities = new ArrayList<>();
 
     public UserProfileView() {
     }
@@ -43,8 +38,6 @@ public class UserProfileView extends SimpleUserProfileView {
         if (userProfile.getRole() != null) {
             this.role = new SimpleRoleView(userProfile.getRole());
         }
-
-        this.identities = userProfile.getIdentities().stream().map(SimpleUserIdentityView::new).collect(Collectors.toList());
     }
 
 
@@ -94,13 +87,5 @@ public class UserProfileView extends SimpleUserProfileView {
 
     public void setRole(SimpleRoleView role) {
         this.role = role;
-    }
-
-    public List<SimpleUserIdentityView> getIdentities() {
-        return identities;
-    }
-
-    public void setIdentities(List<SimpleUserIdentityView> identities) {
-        this.identities = identities;
     }
 }

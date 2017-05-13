@@ -1,4 +1,4 @@
-package com.mtn.config;
+package com.mtn.security;
 
 import com.auth0.jwk.*;
 import com.auth0.jwt.JWT;

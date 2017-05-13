@@ -1,6 +1,6 @@
 package com.mtn.cache;
 
-import com.mtn.config.HybridAuthenticationProvider;
+import com.mtn.security.HybridAuthenticationProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

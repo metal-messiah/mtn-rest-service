@@ -1,6 +1,7 @@
 package com.mtn.config;
 
 import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
+import com.mtn.security.HybridAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

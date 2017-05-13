@@ -40,7 +40,11 @@
     function configAuth(lockProvider, jwtOptionsProvider) {
         lockProvider.init({
             clientID: 'FArOoQuRqPT1MZFsNE9qnxeykHp48cIO',
-            domain: 'asudweeks.auth0.com'
+            domain: 'asudweeks.auth0.com',
+            options: {
+                redirectUrl: location.href.replace('/login', ''),
+                closable: false
+            }
         });
 
         jwtOptionsProvider.config({
@@ -59,7 +63,7 @@
         lock.interceptHash();
         authManager.checkAuthOnRefresh();
         if (authManager.isAuthenticated()) {
-            Auth.getUserProfile();
+            // Auth.getUserProfile();
         } else {
             Cache.clear();
             $location.path('/login');

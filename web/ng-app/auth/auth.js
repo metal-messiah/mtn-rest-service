@@ -3,7 +3,7 @@
 
     angular.module('mtn').factory('Auth', Auth);
 
-    function Auth($log, $http, $q, lock, authManager, Cache) {
+    function Auth($log, $http, $q, $location, $timeout, lock, authManager, Cache) {
         var API_CLIENT_ID = 'UtMThNghwlK13gzUuRXeF3kUHMQMGMiX';
 
         var service = {
@@ -12,7 +12,7 @@
             isAuthenticated: isAuthenticated,
             login: login,
             logout: logout,
-            registerAuthenticationListener: registerAuthenticationListener,
+            registerAuthenticationListener: registerAuthenticationListener
         };
 
         return service;
@@ -48,20 +48,28 @@
         }
 
         function getUserProfile() {
-            return service
-                .getApiAccessToken()
-                .then(function () {
-                    return $http
-                        .get('/api/auth/user')
-                        .then(function (response) {
-                            $log.info('Successfully retrieved User Profile', response.data);
-                            Cache.store('user', response.data);
-                        })
-                        .catch(function (response) {
-                            $log.error('Failed to retrieve User Profile', response);
-                            return $q.reject(response);
-                        });
-                });
+            if (!service.loadingProfile) {
+                service.loadingProfile = true;
+                return service
+                    .getApiAccessToken()
+                    .then(function () {
+                        return $http
+                            .get('/api/auth/user')
+                            .then(function (response) {
+                                $log.info('Successfully retrieved User Profile', response.data);
+                                Cache.store('user', response.data);
+                                $location.path('/');
+                            })
+                            .catch(function (response) {
+                                $log.error('Failed to retrieve User Profile', response);
+                                return $q.reject(response);
+                            });
+                    })
+                    .finally(function () {
+                        $location.search('sign-in-success', null);
+                        service.loadingProfile = false;
+                    });
+            }
         }
 
         function isAuthenticated() {
@@ -75,14 +83,16 @@
         function logout() {
             Cache.clear();
             authManager.unauthenticate();
+            $location.path('/login');
         }
 
         function registerAuthenticationListener() {
             lock.on('authenticated', function (authResult) {
+                $timeout(function () {
+                    $location.search('sign-in-success', true);
+                });
                 Cache.store('id_token', authResult.idToken);
                 Cache.store('access_token', authResult.accessToken);
-                $log.info('Token issued at: ' + new Date(authResult.idTokenPayload.iat));
-                $log.info('Current time: ' + new Date());
                 service.getUserProfile();
                 authManager.authenticate();
             });

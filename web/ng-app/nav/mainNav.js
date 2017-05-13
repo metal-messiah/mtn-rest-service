@@ -4,6 +4,9 @@ angular.module('mtn').component('mainNav', {
     controllerAs: 'vm'
 });
 
-function MainNavController() {
+function MainNavController(Auth) {
     var vm = this;
+
+    vm.isAuthenticated = Auth.isAuthenticated;
+    vm.logout = Auth.logout;
 }

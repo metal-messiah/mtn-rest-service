@@ -3,22 +3,31 @@
 
     angular.module('mtn').controller('LoginController', LoginController);
 
-    function LoginController($location, Auth) {
+    function LoginController($scope, $location, $timeout, $routeParams, Auth, Cache) {
         var vm = this;
 
         init();
 
         ////////////////////////
 
-        //TODO during init(), check if currently authenticated. If so, redirect to dashboard. If not, clear all cached authentication.
-
         function init() {
-            if (Auth.isAuthenticated()) {
+            //Allow a small timeout before popping the login
+            if (Auth.isAuthenticated() || $routeParams['sign-in-success']) {
                 $location.path('/');
+                $location.search('sign-in-success', null);
                 return;
             } else {
-                Auth.login();
+                $scope.timeout = $timeout(function () {
+                    Cache.clear();
+                    Auth.login();
+                }, 500);
             }
         }
+
+        $scope.$on('$destroy', function () {
+            if ($scope.timeout) {
+                $timeout.cancel($scope.timeout);
+            }
+        });
     }
 })();

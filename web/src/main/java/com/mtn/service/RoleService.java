@@ -204,7 +204,6 @@ public class RoleService extends ValidatingDataService<Role> {
         List<Permission> removedPermissions = new ArrayList<>();
         for (Permission permission : existingRole.getPermissions()) {
             if (!request.getPermissions().contains(permission)) {
-                existingRole.getPermissions().remove(permission);
                 removedPermissions.add(permission);
             }
         }

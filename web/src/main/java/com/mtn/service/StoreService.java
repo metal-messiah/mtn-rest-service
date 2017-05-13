@@ -22,17 +22,16 @@ public class StoreService extends ValidatingDataService<Store> {
 
     @Autowired
     private StoreRepository storeRepository;
-
     @Autowired
-    private UserProfileService userProfileService;
+    private SecurityService securityService;
 
     @Transactional
     public Store addOne(Store request) {
         validateForInsert(request);
 
-        UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
-        request.setCreatedBy(systemAdministrator);
-        request.setUpdatedBy(systemAdministrator);
+        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        request.setCreatedBy(currentUser);
+        request.setUpdatedBy(currentUser);
 
         return storeRepository.save(request);
     }
@@ -44,7 +43,7 @@ public class StoreService extends ValidatingDataService<Store> {
             throw new IllegalArgumentException("No Site found with this id");
         }
 
-        existing.setDeletedBy(userProfileService.findSystemAdministrator());
+        existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
     public List<Store> findAllBySiteIdUsingSpecs(Integer siteId) {
@@ -83,7 +82,7 @@ public class StoreService extends ValidatingDataService<Store> {
         existing.setAreaIsEstimate(request.getAreaIsEstimate());
         existing.setOpenedDate(request.getOpenedDate());
         existing.setClosedDate(request.getClosedDate());
-        existing.setUpdatedBy(userProfileService.findSystemAdministrator());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;
     }

@@ -1,6 +1,8 @@
 package com.mtn.service;
 
 import com.mtn.model.MtnUserDetails;
+import com.mtn.model.domain.UserProfile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -13,6 +15,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecurityService {
 
+    @Autowired
+    private UserProfileService userProfileService;
+
     public MtnUserDetails getCurrentUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         if (securityContext != null) {
@@ -20,6 +25,14 @@ public class SecurityService {
             if (authentication != null) {
                 return (MtnUserDetails) securityContext.getAuthentication().getPrincipal();
             }
+        }
+        return null;
+    }
+
+    public UserProfile getCurrentPersistentUser() {
+        MtnUserDetails currentUser = getCurrentUser();
+        if (currentUser != null) {
+            return userProfileService.findOneByEmail(currentUser.getEmail());
         }
         return null;
     }

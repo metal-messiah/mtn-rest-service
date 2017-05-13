@@ -28,6 +28,8 @@ public class GroupService extends ValidatingDataService<Group> {
     private GroupRepository groupRepository;
     @Autowired
     private UserProfileService userProfileService;
+    @Autowired
+    private SecurityService securityService;
 
     @Transactional
     public Group addOne(Group request) {
@@ -37,9 +39,9 @@ public class GroupService extends ValidatingDataService<Group> {
             return reactivateOne((Group) e.getEntity(), request);
         }
 
-        UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
-        request.setCreatedBy(systemAdministrator);
-        request.setUpdatedBy(systemAdministrator);
+        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        request.setCreatedBy(currentUser);
+        request.setUpdatedBy(currentUser);
 
         Set<UserProfile> requestedMembers = request.getMembers();
         requestedMembers.forEach(member -> member.setGroup(request));
@@ -56,6 +58,7 @@ public class GroupService extends ValidatingDataService<Group> {
         userProfileService.validateNotNull(member);
 
         group.getMembers().add(member);
+        group.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return group;
     }
@@ -67,7 +70,7 @@ public class GroupService extends ValidatingDataService<Group> {
 
         existing.setMembers(new HashSet<>());
 
-        existing.setDeletedBy(userProfileService.findSystemAdministrator());
+        existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
     public Page<Group> findAllUsingSpecs(Pageable page) {
@@ -114,6 +117,7 @@ public class GroupService extends ValidatingDataService<Group> {
         validateNotNull(group);
 
         group.getMembers().removeIf(member -> member.getId().equals(userId));
+        group.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return group;
     }
@@ -133,7 +137,7 @@ public class GroupService extends ValidatingDataService<Group> {
     public Group updateOne(Group existing, Group request) {
         existing.setDisplayName(request.getDisplayName());
         existing.setDescription(request.getDescription());
-        existing.setUpdatedBy(userProfileService.findSystemAdministrator());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         updateMembers(existing, request);
 

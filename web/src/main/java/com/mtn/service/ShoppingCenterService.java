@@ -30,15 +30,15 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
     @Autowired
     private ShoppingCenterSurveyService surveyService;
     @Autowired
-    private UserProfileService userProfileService;
+    private SecurityService securityService;
 
     @Transactional
     public ShoppingCenter addOne(ShoppingCenter request) {
         validateForInsert(request);
 
-        UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
-        request.setCreatedBy(systemAdministrator);
-        request.setUpdatedBy(systemAdministrator);
+        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        request.setCreatedBy(currentUser);
+        request.setUpdatedBy(currentUser);
 
         return shoppingCenterRepository.save(request);
     }
@@ -49,6 +49,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         validateNotNull(existing);
 
         request.setShoppingCenter(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return siteService.addOne(request);
     }
@@ -59,6 +60,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         validateNotNull(existing);
 
         request.setShoppingCenter(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return surveyService.addOne(request);
     }
@@ -70,7 +72,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
             throw new IllegalArgumentException("No ShoppingCenter found with this id");
         }
 
-        existing.setDeletedBy(userProfileService.findSystemAdministrator());
+        existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
     public Page<ShoppingCenter> findAllUsingSpecs(Pageable page) {
@@ -134,7 +136,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         existing.setOwner(request.getOwner());
         existing.setUrl(request.getUrl());
         existing.setNativeId(request.getNativeId());
-        existing.setUpdatedBy(userProfileService.findSystemAdministrator());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;
     }

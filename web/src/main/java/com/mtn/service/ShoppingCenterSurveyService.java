@@ -26,17 +26,17 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
     @Autowired
     private ShoppingCenterTenantService tenantService;
     @Autowired
-    private UserProfileService userProfileService;
-    @Autowired
     private ShoppingCenterSurveyRepository surveyRepository;
+    @Autowired
+    private SecurityService securityService;
 
     @Transactional
     public ShoppingCenterSurvey addOne(ShoppingCenterSurvey request) {
         validateForInsert(request);
 
-        UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
-        request.setCreatedBy(systemAdministrator);
-        request.setUpdatedBy(systemAdministrator);
+        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        request.setCreatedBy(currentUser);
+        request.setUpdatedBy(currentUser);
 
         return surveyRepository.save(request);
     }
@@ -47,6 +47,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
         validateNotNull(existing);
 
         request.setSurvey(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return accessService.addOne(request);
     }
@@ -57,6 +58,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
         validateNotNull(existing);
 
         request.setSurvey(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return tenantService.addOne(request);
     }
@@ -68,7 +70,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
             throw new IllegalArgumentException("No ShoppingCenterSurvey found with this id");
         }
 
-        existing.setDeletedBy(userProfileService.findSystemAdministrator());
+        existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
     public List<ShoppingCenterSurvey> findAllByShoppingCenterId(Integer shoppingCenterId) {
@@ -99,7 +101,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
         existing.setHasAngledSpaces(request.getHasAngledSpaces());
         existing.setHasParkingHog(request.getHasParkingHog());
         existing.setHasSpeedBumps(request.getHasSpeedBumps());
-        existing.setUpdatedBy(userProfileService.findSystemAdministrator());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;
     }

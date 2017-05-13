@@ -140,7 +140,7 @@ public class HybridAuthenticationProvider implements AuthenticationProvider {
         if (userDetails == null) {
             UserProfile userProfile = new UserProfile();
             userProfile.setEmail(email);
-            userProfileService.addOne(userProfile);
+            userProfileService.addOneBySystemAdministrator(userProfile);
             userDetails = (MtnUserDetails) userDetailsService.loadUserByUsername(email);
         }
         return userDetails;

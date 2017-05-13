@@ -23,20 +23,18 @@ public class SiteService extends ValidatingDataService<Site> {
 
     @Autowired
     private SiteRepository siteRepository;
-
     @Autowired
     private StoreService storeService;
-
     @Autowired
-    private UserProfileService userProfileService;
+    private SecurityService securityService;
 
     @Transactional
     public Site addOne(Site request) {
         validateForInsert(request);
 
-        UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
-        request.setCreatedBy(systemAdministrator);
-        request.setUpdatedBy(systemAdministrator);
+        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        request.setCreatedBy(currentUser);
+        request.setUpdatedBy(currentUser);
 
         return siteRepository.save(request);
     }
@@ -47,6 +45,7 @@ public class SiteService extends ValidatingDataService<Site> {
         validateNotNull(existing);
 
         request.setSite(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return storeService.addOne(request);
     }
@@ -58,7 +57,7 @@ public class SiteService extends ValidatingDataService<Site> {
             throw new IllegalArgumentException("No Site found with this id");
         }
 
-        existing.setDeletedBy(userProfileService.findSystemAdministrator());
+        existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
     public List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
@@ -102,7 +101,7 @@ public class SiteService extends ValidatingDataService<Site> {
         existing.setIntersectionStreetSecondary(request.getIntersectionStreetSecondary());
         existing.setIntersectionQuad(request.getIntersectionQuad());
         existing.setPositionInCenter(request.getPositionInCenter());
-        existing.setUpdatedBy(userProfileService.findSystemAdministrator());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;
     }

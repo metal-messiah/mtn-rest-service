@@ -30,6 +30,8 @@ public class RoleService extends ValidatingDataService<Role> {
     private PermissionService permissionService;
     @Autowired
     private UserProfileService userProfileService;
+    @Autowired
+    private SecurityService securityService;
 
     @Transactional
     public Role addOne(Role request) {
@@ -39,9 +41,9 @@ public class RoleService extends ValidatingDataService<Role> {
             return reactivateOne((Role) e.getEntity(), request);
         }
 
-        UserProfile systemAdministrator = userProfileService.findSystemAdministrator();
-        request.setCreatedBy(systemAdministrator);
-        request.setUpdatedBy(systemAdministrator);
+        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        request.setCreatedBy(currentUser);
+        request.setUpdatedBy(currentUser);
 
         return roleRepository.save(request);
     }
@@ -55,6 +57,7 @@ public class RoleService extends ValidatingDataService<Role> {
         userProfileService.validateNotNull(member);
 
         role.getMembers().add(member);
+        role.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return role;
     }
@@ -68,6 +71,7 @@ public class RoleService extends ValidatingDataService<Role> {
         permissionService.validateNotNull(permission);
 
         role.getPermissions().add(permission);
+        role.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return role;
     }
@@ -85,7 +89,7 @@ public class RoleService extends ValidatingDataService<Role> {
         existing.getPermissions().forEach(permission -> permission.getRoles().remove(existing));
         existing.setPermissions(new HashSet<>());
 
-        existing.setDeletedBy(userProfileService.findSystemAdministrator());
+        existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
     public Page<Role> findAllUsingSpecs(Pageable page) {
@@ -132,6 +136,7 @@ public class RoleService extends ValidatingDataService<Role> {
         validateNotNull(role);
 
         role.getMembers().removeIf(member -> member.getId().equals(userId));
+        role.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return role;
     }
@@ -142,6 +147,7 @@ public class RoleService extends ValidatingDataService<Role> {
         validateNotNull(role);
 
         role.getPermissions().removeIf(permission -> permission.getId().equals(permissionId));
+        role.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return role;
     }
@@ -161,7 +167,7 @@ public class RoleService extends ValidatingDataService<Role> {
     public Role updateOne(Role existing, Role request) {
         existing.setDisplayName(request.getDisplayName());
         existing.setDescription(request.getDescription());
-        existing.setUpdatedBy(userProfileService.findSystemAdministrator());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         updateMembers(existing, request);
         updatePermissions(existing, request);

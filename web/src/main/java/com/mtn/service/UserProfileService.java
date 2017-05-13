@@ -29,9 +29,28 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     private RoleService roleService;
     @Autowired
     private UserProfileRepository userProfileRepository;
+    @Autowired
+    private SecurityService securityService;
 
     @Transactional
     public UserProfile addOne(UserProfile request) {
+        try {
+            validateForInsert(request);
+        } catch (DeletedEntityReactivationException e) {
+            return reactivateOne((UserProfile) e.getEntity(), request);
+        }
+
+        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        request.setCreatedBy(currentUser);
+        request.setUpdatedBy(currentUser);
+
+        request.setEmail(request.getEmail().toLowerCase());
+
+        return userProfileRepository.save(request);
+    }
+
+    @Transactional
+    public UserProfile addOneBySystemAdministrator(UserProfile request) {
         try {
             validateForInsert(request);
         } catch (DeletedEntityReactivationException e) {
@@ -54,7 +73,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
             throw new IllegalArgumentException("No UserProfile found with this id");
         }
 
-        existing.setDeletedBy(findSystemAdministrator());
+        existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
     public List<UserProfile> findAllByGroupIdUsingSpecs(Integer groupId) {
@@ -109,9 +128,6 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         return userProfileRepository.findOneByEmail(email);
     }
 
-    /**
-     * TODO Usage of this needs to be replaced with current user ASAP
-     */
     public UserProfile findSystemAdministrator() {
         return findOne(1);
     }
@@ -161,7 +177,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         existing.setEmail(request.getEmail());
         existing.setFirstName(request.getFirstName());
         existing.setLastName(request.getLastName());
-        existing.setUpdatedBy(findSystemAdministrator());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         Group group = null;
         if (request.getGroup() != null) {

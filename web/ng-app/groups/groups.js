@@ -21,12 +21,12 @@
                 .post('/api/group', group)
                 .then(function (response) {
                     $log.info('Successfully added group', response.data);
-                    Toaster.toast('Successfully added the Group');
+                    Toaster.success('Successfully added the Group');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to add group', response);
-                    Toaster.toast('Something went wrong trying to add the Group');
+                    Toaster.error('Something went wrong trying to add the Group');
                     return $q.reject(response);
                 });
         }
@@ -36,11 +36,11 @@
                 ['delete']('/api/group/' + id)
                 .then(function () {
                     $log.info('Successfully deleted the group');
-                    Toaster.toast('Successfully deleted Group');
+                    Toaster.success('Successfully deleted Group');
                 })
                 .catch(function (response) {
                     $log.error('Failed to delete group', response);
-                    Toaster.toast('Something went wrong trying to delete the Group');
+                    Toaster.error('Something went wrong trying to delete the Group');
                     return $q.reject(response);
                 });
         }
@@ -54,7 +54,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve groups', response);
-                    Toaster.toast('Something went wrong trying to load the Groups');
+                    Toaster.error('Something went wrong trying to load the Groups');
                     return $q.reject(response);
                 });
         }
@@ -68,7 +68,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve group', response);
-                    Toaster.toast('Something went wrong trying to load the Group');
+                    Toaster.error('Something went wrong trying to load the Group');
                     return $q.reject(response);
                 });
         }
@@ -78,12 +78,12 @@
                 .put('/api/group/' + group.id, group)
                 .then(function (response) {
                     $log.info('Successfully updated the Group', response.data);
-                    Toaster.toast('Successfully updated Group');
+                    Toaster.success('Successfully updated Group');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to update group', response);
-                    Toaster.toast('Something went wrong trying to update the Group');
+                    Toaster.error('Something went wrong trying to update the Group');
                     return $q.reject(response);
                 });
         }

@@ -1,0 +1,33 @@
+md-toast.mtn-toast {
+  cursor: pointer;
+  z-index: 50;
+
+  .toast-icon-container {
+    margin-right: 15px;
+  }
+
+  .toast-content-container {
+    width: 350px;
+
+    .toast-correlation-id-container {
+      margin-top: 20px;
+    }
+  }
+
+  .SUCCESS {
+    color: lightgreen;
+  }
+
+  .INFO,
+  .CALL {
+    color: deepskyblue;
+  }
+
+  .WARN {
+    color: gold;
+  }
+
+  .ERROR {
+    color: red;
+  }
+}

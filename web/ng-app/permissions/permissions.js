@@ -23,7 +23,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve permissions', response);
-                    Toaster.toast('Something went wrong trying to load the Permissions');
+                    Toaster.error('Something went wrong trying to load the Permissions');
                     return $q.reject(response);
                 });
         }
@@ -37,7 +37,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve permission', response);
-                    Toaster.toast('Something went wrong trying to load the Permission');
+                    Toaster.error('Something went wrong trying to load the Permission');
                     return $q.reject(response);
                 });
         }
@@ -47,12 +47,12 @@
                 .put('/api/permission/' + permission.id, permission)
                 .then(function (response) {
                     $log.info('Successfully updated the Permission', response.data);
-                    Toaster.toast('Successfully updated the Permission');
+                    Toaster.success('Successfully updated the Permission');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to update permissions', response);
-                    Toaster.toast('Something went wrong trying to update the Permission');
+                    Toaster.error('Something went wrong trying to update the Permission');
                     return $q.reject(response);
                 });
         }

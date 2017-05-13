@@ -131,7 +131,7 @@
 
             function save() {
                 if (checkForExistingRole()) {
-                    Toaster.toast('A Role already exists with this name');
+                    Toaster.warn('A Role already exists with this name');
                     return;
                 }
 
@@ -223,10 +223,6 @@
                         .deleteOne(vm.role.id)
                         .then(function () {
                             $mdDialog.hide();
-                            Toaster.toast('Successfully deleted Role');
-                        })
-                        .catch(function () {
-                            Toaster.toast('An error occurred deleting the Role');
                         })
                         .finally(function () {
                             Spinner.stop('delete');
@@ -246,7 +242,7 @@
 
             function save() {
                 if (checkForExistingRole()) {
-                    Toaster.toast('A Role already exists with this name');
+                    Toaster.warn('A Role already exists with this name');
                     return;
                 }
 
@@ -255,12 +251,6 @@
                 Roles
                     .updateOne(vm.role)
                     .then($mdDialog.hide)
-                    .then(function () {
-                        Toaster.toast('Successfully updated Role');
-                    })
-                    .catch(function () {
-                        Toaster.toast('An error occurred updating the Role');
-                    })
                     .finally(function () {
                         Spinner.stop('save');
                     });

@@ -21,12 +21,12 @@
                 .post('/api/role', role)
                 .then(function (response) {
                     $log.info('Successfully added role', response.data);
-                    Toaster.toast('Successfully added the Role');
+                    Toaster.success('Successfully added the Role');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to add role', response);
-                    Toaster.toast('Something went wrong adding the Role');
+                    Toaster.error('Something went wrong adding the Role');
                     return $q.reject(response);
                 });
         }
@@ -36,11 +36,11 @@
                 ['delete']('/api/role/' + id)
                 .then(function () {
                     $log.info('Successfully deleted role');
-                    Toaster.toast('Successfully deleted the Role');
+                    Toaster.success('Successfully deleted the Role');
                 })
                 .catch(function (response) {
                     $log.error('Failed to delete role', response);
-                    Toaster.toast('Something went wrong deleting the Role');
+                    Toaster.error('Something went wrong deleting the Role');
                     return $q.reject(response);
                 });
         }
@@ -54,7 +54,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve roles', response);
-                    Toaster.toast('Something went wrong loading the Roles');
+                    Toaster.error('Something went wrong loading the Roles');
                     return $q.reject(response);
                 });
         }
@@ -68,7 +68,7 @@
                 })
                 .catch(function (response) {
                     $log.error('Failed to retrieve role', response);
-                    Toaster.toast('Something went wrong loading the Role');
+                    Toaster.error('Something went wrong loading the Role');
                     return $q.reject(response);
                 });
         }
@@ -78,12 +78,12 @@
                 .put('/api/role/' + role.id, role)
                 .then(function (response) {
                     $log.info('Successfully updated role', response.data);
-                    Toaster.toast('Successfully updated the Role');
+                    Toaster.success('Successfully updated the Role');
                     return response.data;
                 })
                 .catch(function (response) {
                     $log.error('Failed to update role', response);
-                    Toaster.toast('Something went wrong updating the Role');
+                    Toaster.error('Something went wrong updating the Role');
                     return $q.reject(response);
                 });
         }

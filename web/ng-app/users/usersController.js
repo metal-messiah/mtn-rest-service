@@ -119,7 +119,7 @@
 
             function save() {
                 if (checkForExistingUser()) {
-                    Toaster.toast('A User already exists with this email');
+                    Toaster.warn('A User already exists with this email');
                     return;
                 }
 
@@ -194,7 +194,7 @@
 
             function save() {
                 if (checkForExistingUser()) {
-                    Toaster.toast('A User already exists with this email');
+                    Toaster.warn('A User already exists with this email');
                     return;
                 }
 

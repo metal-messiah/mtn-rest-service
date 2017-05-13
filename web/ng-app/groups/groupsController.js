@@ -111,7 +111,7 @@
 
             function save() {
                 if (checkForExistingGroup()) {
-                    Toaster.toast('A Group already exists with this name');
+                    Toaster.warn('A Group already exists with this name');
                     return;
                 }
 
@@ -199,7 +199,7 @@
 
             function save() {
                 if (checkForExistingGroup()) {
-                    Toaster.toast('A Group already exists with this name');
+                    Toaster.warn('A Group already exists with this name');
                     return;
                 }
 

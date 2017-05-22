@@ -1,7 +1,7 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.SiteLocationType;
+import com.mtn.constant.IntersectionType;
 import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
 import com.mtn.model.domain.Site;
@@ -16,7 +16,7 @@ public class SimpleSiteView {
     protected Integer id;
     protected GeoJsonView location;
     protected SiteType type;
-    protected SiteLocationType locationType;
+    protected IntersectionType intersectionType;
     protected String address1;
     protected String address2;
     protected String city;
@@ -38,7 +38,7 @@ public class SimpleSiteView {
         this.id = site.getId();
         this.location = new GeoJsonView(site.getLocation());
         this.type = site.getType();
-        this.locationType = site.getLocationType();
+        this.intersectionType = site.getIntersectionType();
         this.address1 = site.getAddress1();
         this.address2 = site.getAddress2();
         this.city = site.getCity();
@@ -78,12 +78,12 @@ public class SimpleSiteView {
         this.type = type;
     }
 
-    public SiteLocationType getLocationType() {
-        return locationType;
+    public IntersectionType getIntersectionType() {
+        return intersectionType;
     }
 
-    public void setLocationType(SiteLocationType locationType) {
-        this.locationType = locationType;
+    public void setIntersectionType(IntersectionType intersectionType) {
+        this.intersectionType = intersectionType;
     }
 
     public String getAddress1() {

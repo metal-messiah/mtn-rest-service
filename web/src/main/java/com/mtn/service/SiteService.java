@@ -88,7 +88,7 @@ public class SiteService extends ValidatingDataService<Site> {
 
         existing.setLocation(request.getLocation());
         existing.setType(request.getType());
-        existing.setLocationType(request.getLocationType());
+        existing.setIntersectionType(request.getIntersectionType());
         existing.setAddress1(request.getAddress1());
         existing.setAddress2(request.getAddress2());
         existing.setCity(request.getCity());

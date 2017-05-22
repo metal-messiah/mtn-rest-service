@@ -1,6 +1,6 @@
 package com.mtn.model.domain;
 
-import com.mtn.constant.SiteLocationType;
+import com.mtn.constant.IntersectionType;
 import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
 import com.mtn.model.view.SimpleSiteView;
@@ -26,7 +26,7 @@ public class Site extends AuditingEntity implements Identifiable {
     private ShoppingCenter shoppingCenter;
     private Point location;
     private SiteType type;
-    private SiteLocationType locationType;
+    private IntersectionType intersectionType;
     private String address1;
     private String address2;
     private String city;
@@ -49,7 +49,7 @@ public class Site extends AuditingEntity implements Identifiable {
     public Site(SimpleSiteView simpleSiteView) {
         this.id = simpleSiteView.getId();
         this.type = simpleSiteView.getType();
-        this.locationType = simpleSiteView.getLocationType();
+        this.intersectionType = simpleSiteView.getIntersectionType();
         this.address1 = simpleSiteView.getAddress1();
         this.address2 = simpleSiteView.getAddress2();
         this.city = simpleSiteView.getCity();
@@ -131,12 +131,12 @@ public class Site extends AuditingEntity implements Identifiable {
     }
 
     @Enumerated(EnumType.STRING)
-    public SiteLocationType getLocationType() {
-        return locationType;
+    public IntersectionType getIntersectionType() {
+        return intersectionType;
     }
 
-    public void setLocationType(SiteLocationType locationType) {
-        this.locationType = locationType;
+    public void setIntersectionType(IntersectionType intersectionType) {
+        this.intersectionType = intersectionType;
     }
 
     @Column(name = "address_1")

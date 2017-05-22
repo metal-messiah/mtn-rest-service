@@ -134,8 +134,6 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
 
         existing.setName(request.getName());
         existing.setOwner(request.getOwner());
-        existing.setUrl(request.getUrl());
-        existing.setNativeId(request.getNativeId());
         existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;

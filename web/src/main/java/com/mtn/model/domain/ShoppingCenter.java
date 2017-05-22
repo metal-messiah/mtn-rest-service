@@ -16,8 +16,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private Integer id;
     private String name;
     private String owner;
-    private String nativeId;
-    private String url;
     private Integer version;
 
     private List<Site> sites = new ArrayList<>();
@@ -30,8 +28,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         this.id = shoppingCenterView.getId();
         this.name = shoppingCenterView.getName();
         this.owner = shoppingCenterView.getOwner();
-        this.nativeId = shoppingCenterView.getNativeId();
-        this.url = shoppingCenterView.getUrl();
         this.version = shoppingCenterView.getVersion();
     }
 
@@ -70,22 +66,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public String getNativeId() {
-        return nativeId;
-    }
-
-    public void setNativeId(String nativeId) {
-        this.nativeId = nativeId;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public Integer getVersion() {

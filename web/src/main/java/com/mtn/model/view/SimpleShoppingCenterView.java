@@ -12,8 +12,6 @@ public class SimpleShoppingCenterView {
     protected Integer id;
     protected String name;
     protected String owner;
-    protected String nativeId;
-    protected String url;
     protected Integer version;
 
     public SimpleShoppingCenterView() {
@@ -23,8 +21,6 @@ public class SimpleShoppingCenterView {
         this.id = shoppingCenter.getId();
         this.name = shoppingCenter.getName();
         this.owner = shoppingCenter.getOwner();
-        this.nativeId = shoppingCenter.getNativeId();
-        this.url = shoppingCenter.getUrl();
         this.version = shoppingCenter.getVersion();
     }
 
@@ -50,22 +46,6 @@ public class SimpleShoppingCenterView {
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public String getNativeId() {
-        return nativeId;
-    }
-
-    public void setNativeId(String nativeId) {
-        this.nativeId = nativeId;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public Integer getVersion() {

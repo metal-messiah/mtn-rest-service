@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Store;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 4/26/2017.
@@ -17,6 +20,8 @@ public class StoreView extends SimpleStoreView {
     private SimpleUserProfileView updatedBy;
     private LocalDateTime updatedDate;
 
+    private List<SimpleStoreSurveyView> surveys = new ArrayList<>();
+
     public StoreView() {
     }
 
@@ -28,6 +33,8 @@ public class StoreView extends SimpleStoreView {
         this.createdDate = store.getCreatedDate();
         this.updatedBy = new SimpleUserProfileView(store.getUpdatedBy());
         this.updatedDate = store.getUpdatedDate();
+
+        this.surveys = store.getSurveys().stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList());
     }
 
     public SimpleSiteView getSite() {
@@ -68,5 +75,13 @@ public class StoreView extends SimpleStoreView {
 
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public List<SimpleStoreSurveyView> getSurveys() {
+        return surveys;
+    }
+
+    public void setSurveys(List<SimpleStoreSurveyView> surveys) {
+        this.surveys = surveys;
     }
 }

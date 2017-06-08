@@ -93,13 +93,7 @@ public class StoreService extends ValidatingDataService<Store> {
         }
 
         existing.setName(request.getName());
-        existing.setFit(request.getFit());
-        existing.setFormat(request.getFormat());
         existing.setType(request.getType());
-        existing.setAreaSales(request.getAreaSales());
-        existing.setAreaSalesPercentOfTotal(request.getAreaSalesPercentOfTotal());
-        existing.setAreaTotal(request.getAreaTotal());
-        existing.setAreaIsEstimate(request.getAreaIsEstimate());
         existing.setOpenedDate(request.getOpenedDate());
         existing.setClosedDate(request.getClosedDate());
         existing.setUpdatedBy(securityService.getCurrentPersistentUser());
@@ -118,8 +112,6 @@ public class StoreService extends ValidatingDataService<Store> {
             throw new IllegalStateException("Store Site should have been set by now");
         } else if (object.getType() == null) {
             throw new IllegalArgumentException(String.format("Store type must be one of: %s", StringUtils.join(StoreType.values(), ", ")));
-        } else if (object.getAreaIsEstimate() == null) {
-            throw new IllegalArgumentException("Store areaIsEstimate must be true or false");
         }
     }
 

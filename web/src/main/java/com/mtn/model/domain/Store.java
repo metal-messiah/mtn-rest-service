@@ -1,13 +1,13 @@
 package com.mtn.model.domain;
 
-import com.mtn.constant.StoreFitType;
-import com.mtn.constant.StoreFormatType;
 import com.mtn.constant.StoreType;
 import com.mtn.model.view.SimpleStoreView;
 import com.mtn.model.view.StoreView;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allen on 4/26/2017.
@@ -19,16 +19,12 @@ public class Store extends AuditingEntity implements Identifiable {
     private Integer id;
     private Site site;
     private String name;
-    private StoreFitType fit;
-    private StoreFormatType format;
     private StoreType type;
-    private Integer areaSales;
-    private Double areaSalesPercentOfTotal;
-    private Integer areaTotal;
-    private Boolean areaIsEstimate = true;
     private LocalDateTime openedDate;
     private LocalDateTime closedDate;
     private Integer version;
+
+    private List<StoreSurvey> surveys = new ArrayList<>();
 
     public Store() {
     }
@@ -36,13 +32,7 @@ public class Store extends AuditingEntity implements Identifiable {
     public Store(SimpleStoreView simpleStoreView) {
         this.id = simpleStoreView.getId();
         this.name = simpleStoreView.getName();
-        this.fit = simpleStoreView.getFit();
-        this.format = simpleStoreView.getFormat();
         this.type = simpleStoreView.getType();
-        this.areaSales = simpleStoreView.getAreaSales();
-        this.areaSalesPercentOfTotal = simpleStoreView.getAreaSalesPercentOfTotal();
-        this.areaTotal = simpleStoreView.getAreaTotal();
-        this.areaIsEstimate = simpleStoreView.getAreaIsEstimate();
         this.openedDate = simpleStoreView.getOpenedDate();
         this.closedDate = simpleStoreView.getClosedDate();
         this.version = simpleStoreView.getVersion();
@@ -96,62 +86,12 @@ public class Store extends AuditingEntity implements Identifiable {
     }
 
     @Enumerated(EnumType.STRING)
-    public StoreFitType getFit() {
-        return fit;
-    }
-
-    public void setFit(StoreFitType fit) {
-        this.fit = fit;
-    }
-
-    @Enumerated(EnumType.STRING)
-    public StoreFormatType getFormat() {
-        return format;
-    }
-
-    public void setFormat(StoreFormatType format) {
-        this.format = format;
-    }
-
-    @Enumerated(EnumType.STRING)
     public StoreType getType() {
         return type;
     }
 
     public void setType(StoreType type) {
         this.type = type;
-    }
-
-    public Integer getAreaSales() {
-        return areaSales;
-    }
-
-    public void setAreaSales(Integer areaSales) {
-        this.areaSales = areaSales;
-    }
-
-    public Double getAreaSalesPercentOfTotal() {
-        return areaSalesPercentOfTotal;
-    }
-
-    public void setAreaSalesPercentOfTotal(Double areaSalesPercentOfTotal) {
-        this.areaSalesPercentOfTotal = areaSalesPercentOfTotal;
-    }
-
-    public Integer getAreaTotal() {
-        return areaTotal;
-    }
-
-    public void setAreaTotal(Integer areaTotal) {
-        this.areaTotal = areaTotal;
-    }
-
-    public Boolean getAreaIsEstimate() {
-        return areaIsEstimate;
-    }
-
-    public void setAreaIsEstimate(Boolean areaIsEstimate) {
-        this.areaIsEstimate = areaIsEstimate;
     }
 
     @Column(name = "opened_date")
@@ -178,5 +118,14 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @OneToMany(mappedBy = "store")
+    public List<StoreSurvey> getSurveys() {
+        return surveys;
+    }
+
+    public void setSurveys(List<StoreSurvey> surveys) {
+        this.surveys = surveys;
     }
 }

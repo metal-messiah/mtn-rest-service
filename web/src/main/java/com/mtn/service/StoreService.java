@@ -1,10 +1,12 @@
 package com.mtn.service;
 
+import com.mtn.constant.StoreType;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +77,7 @@ public class StoreService extends ValidatingDataService<Store> {
         existing.setName(request.getName());
         existing.setFit(request.getFit());
         existing.setFormat(request.getFormat());
-        existing.setActive(request.getActive());
+        existing.setType(request.getType());
         existing.setAreaSales(request.getAreaSales());
         existing.setAreaSalesPercentOfTotal(request.getAreaSalesPercentOfTotal());
         existing.setAreaTotal(request.getAreaTotal());
@@ -96,8 +98,8 @@ public class StoreService extends ValidatingDataService<Store> {
     public void validateBusinessRules(Store object) {
         if (object.getSite() == null) {
             throw new IllegalStateException("Store Site should have been set by now");
-        } else if (object.getActive() == null) {
-            throw new IllegalArgumentException("Store active must be true or false");
+        } else if (object.getType() == null) {
+            throw new IllegalArgumentException(String.format("Store type must be one of: %s", StringUtils.join(StoreType.values(), ", ")));
         } else if (object.getAreaIsEstimate() == null) {
             throw new IllegalArgumentException("Store areaIsEstimate must be true or false");
         }

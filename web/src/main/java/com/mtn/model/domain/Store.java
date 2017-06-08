@@ -2,6 +2,7 @@ package com.mtn.model.domain;
 
 import com.mtn.constant.StoreFitType;
 import com.mtn.constant.StoreFormatType;
+import com.mtn.constant.StoreType;
 import com.mtn.model.view.SimpleStoreView;
 import com.mtn.model.view.StoreView;
 
@@ -20,7 +21,7 @@ public class Store extends AuditingEntity implements Identifiable {
     private String name;
     private StoreFitType fit;
     private StoreFormatType format;
-    private Boolean isActive = false;
+    private StoreType type;
     private Integer areaSales;
     private Double areaSalesPercentOfTotal;
     private Integer areaTotal;
@@ -37,7 +38,7 @@ public class Store extends AuditingEntity implements Identifiable {
         this.name = simpleStoreView.getName();
         this.fit = simpleStoreView.getFit();
         this.format = simpleStoreView.getFormat();
-        this.isActive = simpleStoreView.getActive();
+        this.type = simpleStoreView.getType();
         this.areaSales = simpleStoreView.getAreaSales();
         this.areaSalesPercentOfTotal = simpleStoreView.getAreaSalesPercentOfTotal();
         this.areaTotal = simpleStoreView.getAreaTotal();
@@ -112,13 +113,13 @@ public class Store extends AuditingEntity implements Identifiable {
         this.format = format;
     }
 
-    @Column(name = "is_active")
-    public Boolean getActive() {
-        return isActive;
+    @Enumerated(EnumType.STRING)
+    public StoreType getType() {
+        return type;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
+    public void setType(StoreType type) {
+        this.type = type;
     }
 
     public Integer getAreaSales() {

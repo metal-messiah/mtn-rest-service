@@ -3,6 +3,7 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreFitType;
 import com.mtn.constant.StoreFormatType;
+import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Store;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ public class SimpleStoreView {
     protected String name;
     protected StoreFitType fit;
     protected StoreFormatType format;
-    protected Boolean isActive = false;
+    protected StoreType type;
     protected Integer areaSales;
     protected Double areaSalesPercentOfTotal;
     protected Integer areaTotal;
@@ -34,7 +35,7 @@ public class SimpleStoreView {
         this.name = store.getName();
         this.fit = store.getFit();
         this.format = store.getFormat();
-        this.isActive = store.getActive();
+        this.type = store.getType();
         this.areaSales = store.getAreaSales();
         this.areaSalesPercentOfTotal = store.getAreaSalesPercentOfTotal();
         this.areaTotal = store.getAreaTotal();
@@ -76,12 +77,12 @@ public class SimpleStoreView {
         this.format = format;
     }
 
-    public Boolean getActive() {
-        return isActive;
+    public StoreType getType() {
+        return type;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
+    public void setType(StoreType type) {
+        this.type = type;
     }
 
     public Integer getAreaSales() {

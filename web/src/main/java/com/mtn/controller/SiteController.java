@@ -30,10 +30,13 @@ public class SiteController {
     private SecurityService securityService;
 
     @RequestMapping(value = "/{id}/store", method = RequestMethod.POST)
-    public ResponseEntity addOneStoreToSite(@PathVariable("id") Integer siteId, @RequestBody Store request) {
+    public ResponseEntity addOneStoreToSite(
+            @PathVariable("id") Integer siteId,
+            @RequestParam(value = "overrideActiveStore", defaultValue = "false") Boolean overrideActiveStore,
+            @RequestBody Store request) {
         securityService.checkPermission("STORES_CREATE");
 
-        Store domainModel = siteService.addOneStoreToSite(siteId, request);
+        Store domainModel = siteService.addOneStoreToSite(siteId, request, overrideActiveStore);
         return ResponseEntity.ok(new StoreView(domainModel));
     }
 

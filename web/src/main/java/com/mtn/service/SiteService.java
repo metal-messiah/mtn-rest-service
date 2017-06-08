@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.constant.StoreType;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
@@ -40,11 +41,30 @@ public class SiteService extends ValidatingDataService<Site> {
     }
 
     @Transactional
-    public Store addOneStoreToSite(Integer siteId, Store request) {
+    public Store addOneStoreToSite(Integer siteId, Store request, boolean overrideActiveStore) {
         Site existing = findOneUsingSpecs(siteId);
         validateNotNull(existing);
-
         request.setSite(existing);
+
+        //If the new store is ACTIVE, we have some special handling to do
+        if (request.getType() == StoreType.ACTIVE) {
+            //First, ensure the request is valid for insert
+            storeService.validateForInsert(request);
+
+            //Then, check for another existing ACTIVE store
+            Store existingActiveStore = existing.findActiveStore();
+
+            //If one exists, and no override is provided, throw an error
+            if (existingActiveStore != null && !overrideActiveStore) {
+                throw new IllegalArgumentException(String.format("A Site may only have one Active Store at a time. Store ID %d is currently set as this Site's Active Store.", existingActiveStore.getId()));
+            }
+            //Else if one exists, set it to historical before proceeding
+            else if (existingActiveStore != null) {
+                existingActiveStore.setType(StoreType.HISTORICAL);
+                existingActiveStore.setUpdatedBy(securityService.getCurrentPersistentUser());
+            }
+        }
+
         existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return storeService.addOne(request);

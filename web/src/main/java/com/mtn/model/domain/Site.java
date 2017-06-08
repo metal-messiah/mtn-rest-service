@@ -3,6 +3,7 @@ package com.mtn.model.domain;
 import com.mtn.constant.IntersectionType;
 import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
+import com.mtn.constant.StoreType;
 import com.mtn.model.view.SimpleSiteView;
 import com.mtn.model.view.SiteView;
 import com.mtn.model.view.geojson.PointGeometry;
@@ -253,5 +254,10 @@ public class Site extends AuditingEntity implements Identifiable {
 
     public void setStores(List<Store> stores) {
         this.stores = stores;
+    }
+
+    @Transient
+    public Store findActiveStore() {
+        return this.stores.stream().filter(store -> store.getType() == StoreType.ACTIVE).findFirst().orElse(null);
     }
 }

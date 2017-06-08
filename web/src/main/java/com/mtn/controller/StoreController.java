@@ -41,10 +41,13 @@ public class StoreController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody StoreView request) {
+    public ResponseEntity updateOne(
+            @PathVariable("id") Integer id,
+            @RequestParam(value = "overrideActiveStore", defaultValue = "false") Boolean overrideActiveStore,
+            @RequestBody StoreView request) {
         securityService.checkPermission("STORES_UPDATE");
 
-        Store domainModel = storeService.updateOne(id, new Store((StoreView) request)); //Cast ensures correct constructor is called
+        Store domainModel = storeService.updateOne(id, new Store((StoreView) request), overrideActiveStore); //Cast ensures correct constructor is called
         return ResponseEntity.ok(new StoreView(domainModel));
     }
 }

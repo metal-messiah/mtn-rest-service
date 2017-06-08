@@ -2,6 +2,7 @@ package com.mtn.service;
 
 import com.mtn.constant.StoreType;
 import com.mtn.exception.VersionConflictException;
+import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.StoreView;
@@ -63,7 +64,7 @@ public class StoreService extends ValidatingDataService<Store> {
     }
 
     @Transactional
-    public Store updateOne(Integer id, Store request) {
+    public Store updateOne(Integer id, Store request, boolean overrideActiveStore) {
         validateForUpdate(request);
 
         Store existing = findOneUsingSpecs(id);
@@ -72,6 +73,23 @@ public class StoreService extends ValidatingDataService<Store> {
         }
         if (!request.getVersion().equals(existing.getVersion())) {
             throw new VersionConflictException(new StoreView(existing));
+        }
+
+        //If the store is changing status to active, we have some special handling to do
+        if (request.getType() == StoreType.ACTIVE && request.getType() != existing.getType()) {
+            //Find any existing ACTIVE store for the site
+            Site site = existing.getSite();
+            Store existingActiveStore = site.findActiveStore();
+
+            //If one exists, and no override is provided, throw an error
+            if (existingActiveStore != null && !overrideActiveStore) {
+                throw new IllegalArgumentException(String.format("A Site may only have one Active Store at a time. Store ID %d is currently set as this Site's Active Store.", existingActiveStore.getId()));
+            }
+            //Else if one exists, set it to historical before proceeding
+            else if (existingActiveStore != null) {
+                existingActiveStore.setType(StoreType.HISTORICAL);
+                existingActiveStore.setUpdatedBy(securityService.getCurrentPersistentUser());
+            }
         }
 
         existing.setName(request.getName());

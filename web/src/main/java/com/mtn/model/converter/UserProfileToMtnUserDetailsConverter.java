@@ -24,7 +24,7 @@ public class UserProfileToMtnUserDetailsConverter implements Converter<UserProfi
 
             if (userProfile.getRole() != null) {
                 for (Permission permission : userProfile.getRole().getPermissions()) {
-                    mtnUserDetails.getAuthorities().add(new SimpleGrantedAuthority(permission.getSystemName().toString()));
+                    mtnUserDetails.getAuthorities().add(new SimpleGrantedAuthority(permission.getSystemName()));
                 }
             }
         }

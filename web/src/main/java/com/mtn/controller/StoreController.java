@@ -1,12 +1,18 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreSurvey;
+import com.mtn.model.view.SimpleStoreSurveyView;
 import com.mtn.model.view.StoreView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.StoreService;
+import com.mtn.service.StoreSurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 4/25/2017.
@@ -18,7 +24,17 @@ public class StoreController {
     @Autowired
     private StoreService storeService;
     @Autowired
+    private StoreSurveyService surveyService;
+    @Autowired
     private SecurityService securityService;
+
+    @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.POST)
+    public ResponseEntity addOneStoreSurveyToStore(@PathVariable("id") Integer storeId, @RequestBody StoreSurvey request) {
+        securityService.checkPermission("STORE_SURVEYS_CREATE");
+
+        StoreSurvey domainModel = storeService.addOneSurveyToStore(storeId, request);
+        return ResponseEntity.ok(new SimpleStoreSurveyView(domainModel));
+    }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
@@ -26,6 +42,14 @@ public class StoreController {
 
         storeService.deleteOne(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.GET)
+    public ResponseEntity findAllSurveysForStore(@PathVariable("id") Integer storeId) {
+        securityService.checkPermission("STORE_SURVEYS_READ");
+
+        List<StoreSurvey> domainModels = surveyService.findAllByStoreId(storeId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

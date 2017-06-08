@@ -4,6 +4,7 @@ import com.mtn.constant.StoreType;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreSurvey;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
@@ -26,6 +27,8 @@ public class StoreService extends ValidatingDataService<Store> {
     @Autowired
     private StoreRepository storeRepository;
     @Autowired
+    private StoreSurveyService surveyService;
+    @Autowired
     private SecurityService securityService;
 
     @Transactional
@@ -37,6 +40,17 @@ public class StoreService extends ValidatingDataService<Store> {
         request.setUpdatedBy(currentUser);
 
         return storeRepository.save(request);
+    }
+
+    @Transactional
+    public StoreSurvey addOneSurveyToStore(Integer storeId, StoreSurvey request) {
+        Store existing = findOneUsingSpecs(storeId);
+        validateNotNull(existing);
+
+        request.setStore(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+
+        return surveyService.addOne(request);
     }
 
     @Transactional

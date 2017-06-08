@@ -47,7 +47,7 @@ public class ShoppingCenterController {
     }
 
     @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.POST)
-    public ResponseEntity oneAddShoppingCenterSurveysToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterSurvey request) {
+    public ResponseEntity addOneShoppingCenterSurveyToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterSurvey request) {
         securityService.checkPermission("SHOPPING_CENTER_SURVEYS_CREATE");
 
         ShoppingCenterSurvey domainModel = shoppingCenterService.addOneSurveyToShoppingCenter(shoppingCenterId, request);

@@ -20,6 +20,8 @@ public class StoreView extends SimpleStoreView {
     private SimpleUserProfileView updatedBy;
     private LocalDateTime updatedDate;
 
+    private CompanyView parentCompany;
+
     private List<SimpleStoreSurveyView> surveys = new ArrayList<>();
 
     public StoreView() {
@@ -33,6 +35,10 @@ public class StoreView extends SimpleStoreView {
         this.createdDate = store.getCreatedDate();
         this.updatedBy = new SimpleUserProfileView(store.getUpdatedBy());
         this.updatedDate = store.getUpdatedDate();
+
+        if (store.getParentCompany() != null) {
+            this.parentCompany = new CompanyView(store.getParentCompany());
+        }
 
         this.surveys = store.getSurveys().stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList());
     }
@@ -83,5 +89,14 @@ public class StoreView extends SimpleStoreView {
 
     public void setSurveys(List<SimpleStoreSurveyView> surveys) {
         this.surveys = surveys;
+    }
+
+    @Override
+    public CompanyView getParentCompany() {
+        return parentCompany;
+    }
+
+    public void setParentCompany(CompanyView parentCompany) {
+        this.parentCompany = parentCompany;
     }
 }

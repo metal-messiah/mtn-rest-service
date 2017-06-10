@@ -2,18 +2,20 @@ package com.mtn.service;
 
 import com.mtn.constant.StoreType;
 import com.mtn.exception.VersionConflictException;
-import com.mtn.model.domain.Site;
-import com.mtn.model.domain.Store;
-import com.mtn.model.domain.StoreSurvey;
-import com.mtn.model.domain.UserProfile;
+import com.mtn.model.domain.*;
 import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.mtn.repository.specification.StoreSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -30,6 +32,17 @@ public class StoreService extends ValidatingDataService<Store> {
     private StoreSurveyService surveyService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private CompanyService companyService;
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
+
+    private static final String QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST = "" +
+            "SELECT s.* " +
+            "FROM store s " +
+            "RIGHT JOIN company c ON c.id = s.parent_company_id " +
+            "WHERE c.id IN :companyIds " +
+            "AND s.deleted_date IS NULL";
 
     @Transactional
     public Store addOne(Store request) {
@@ -61,6 +74,32 @@ public class StoreService extends ValidatingDataService<Store> {
         }
 
         existing.setDeletedBy(securityService.getCurrentPersistentUser());
+    }
+
+    public List<Store> findAllByParentCompanyId(Integer companyId) {
+        Company company = companyService.findOne(companyId);
+        if (company == null) {
+            throw new IllegalArgumentException("No Company found with this id");
+        }
+
+        return company.getStores()
+                .stream()
+                .filter(store -> store.getDeletedDate() == null)
+                .collect(Collectors.toList());
+    }
+
+    public List<Store> findAllByParentCompanyIdRecursive(Integer companyId) {
+        Company company = companyService.findOne(companyId);
+        if (company == null) {
+            throw new IllegalArgumentException("No Company found with this id");
+        }
+
+        Set<Integer> companyIds = companyService.findAllChildCompanyIdsRecursive(company);
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("companyIds", companyIds);
+
+        return jdbcTemplate.queryForList(QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST, params, Store.class);
     }
 
     public List<Store> findAllBySiteIdUsingSpecs(Integer siteId) {
@@ -113,6 +152,24 @@ public class StoreService extends ValidatingDataService<Store> {
         existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;
+    }
+
+    @Transactional
+    public Store updateOneParentCompany(Integer storeId, Integer companyId) {
+        Store store = findOneUsingSpecs(storeId);
+        if (store == null) {
+            throw new IllegalArgumentException("No Store found with this id");
+        }
+
+        Company company = companyService.findOne(companyId);
+        if (company == null) {
+            throw new IllegalArgumentException("No Company found with this id");
+        }
+
+        store.setParentCompany(company);
+        company.getStores().add(store);
+
+        return store;
     }
 
     @Override

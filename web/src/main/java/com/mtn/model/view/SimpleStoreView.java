@@ -18,6 +18,7 @@ public class SimpleStoreView {
     protected LocalDateTime openedDate;
     protected LocalDateTime closedDate;
     protected Integer version;
+    protected SimpleCompanyView parentCompany;
 
     public SimpleStoreView() {
     }
@@ -29,6 +30,10 @@ public class SimpleStoreView {
         this.openedDate = store.getOpenedDate();
         this.closedDate = store.getClosedDate();
         this.version = store.getVersion();
+
+        if (store.getParentCompany() != null) {
+            this.parentCompany = new SimpleCompanyView(store.getParentCompany());
+        }
     }
 
     public Integer getId() {
@@ -77,5 +82,13 @@ public class SimpleStoreView {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public SimpleCompanyView getParentCompany() {
+        return parentCompany;
+    }
+
+    public void setParentCompany(SimpleCompanyView parentCompany) {
+        this.parentCompany = parentCompany;
     }
 }

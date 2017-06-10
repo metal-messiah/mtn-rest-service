@@ -23,6 +23,7 @@ public class Store extends AuditingEntity implements Identifiable {
     private LocalDateTime openedDate;
     private LocalDateTime closedDate;
     private Integer version;
+    private Company parentCompany;
 
     private List<StoreSurvey> surveys = new ArrayList<>();
 
@@ -127,5 +128,15 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setSurveys(List<StoreSurvey> surveys) {
         this.surveys = surveys;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "parent_company_id")
+    public Company getParentCompany() {
+        return parentCompany;
+    }
+
+    public void setParentCompany(Company parentCompany) {
+        this.parentCompany = parentCompany;
     }
 }

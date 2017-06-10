@@ -74,4 +74,13 @@ public class StoreController {
         Store domainModel = storeService.updateOne(id, new Store((StoreView) request), overrideActiveStore); //Cast ensures correct constructor is called
         return ResponseEntity.ok(new StoreView(domainModel));
     }
+
+    @RequestMapping(value = "/{storeId}/company/{companyId}", method = RequestMethod.PUT)
+    public ResponseEntity updateOneParentCompany(@PathVariable("storeId") Integer storeId, @PathVariable("companyId") Integer companyId) {
+        securityService.checkPermission("STORES_UPDATE");
+        securityService.checkPermission("COMPANIES_UPDATE");
+
+        Store domainModel = storeService.updateOneParentCompany(storeId, companyId);
+        return ResponseEntity.ok(new StoreView(domainModel));
+    }
 }

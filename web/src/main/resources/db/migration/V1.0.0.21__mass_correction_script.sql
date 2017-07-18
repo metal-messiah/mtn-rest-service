@@ -23,7 +23,7 @@ ALTER TABLE shopping_center_survey
 ALTER TABLE shopping_center_survey
   ADD COLUMN flow_has_landscaping BOOLEAN DEFAULT FALSE;
 ALTER TABLE shopping_center_survey
-  ADD COLUMN flow_has_speed_bumps BOOLEAN DEFAULT FALSE;
+  RENAME has_speed_bumps TO flow_has_speed_bumps;
 ALTER TABLE shopping_center_survey
   ADD COLUMN flow_has_stop_signs BOOLEAN DEFAULT FALSE;
 ALTER TABLE shopping_center_survey

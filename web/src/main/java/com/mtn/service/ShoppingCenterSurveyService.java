@@ -98,9 +98,9 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
             throw new IllegalArgumentException("No ShoppingCenterSurvey found with this id");
         }
 
-        existing.setHasAngledSpaces(request.getHasAngledSpaces());
-        existing.setHasParkingHog(request.getHasParkingHog());
-        existing.setHasSpeedBumps(request.getHasSpeedBumps());
+        existing.setParkingHasAngledSpaces(request.getParkingHasAngledSpaces());
+        existing.setParkingHasParkingHog(request.getParkingHasParkingHog());
+        existing.setFlowHasSpeedBumps(request.getFlowHasSpeedBumps());
         existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;

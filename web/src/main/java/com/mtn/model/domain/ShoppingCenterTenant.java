@@ -7,14 +7,26 @@ import javax.persistence.*;
  */
 @Entity
 @Table
-public class ShoppingCenterTenant implements Identifiable {
+public class ShoppingCenterTenant extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private ShoppingCenterSurvey survey;
     private String name;
-    private String type;
+    private Boolean isAnchor = false;
     private Boolean isOutparcel = false;
     private Integer sqft;
+    private Integer legacyCasingId;
+    private Integer version;
+
+    @PrePersist
+    public void prePersist() {
+        version = 1;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        version++;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_tenant_id")
@@ -38,20 +50,13 @@ public class ShoppingCenterTenant implements Identifiable {
         this.survey = survey;
     }
 
+    @Column(name = "tenant_name")
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Boolean getIsOutparcel() {
@@ -68,5 +73,29 @@ public class ShoppingCenterTenant implements Identifiable {
 
     public void setSqft(Integer sqft) {
         this.sqft = sqft;
+    }
+
+    public Boolean getIsAnchor() {
+        return isAnchor;
+    }
+
+    public void setIsAnchor(Boolean anchor) {
+        isAnchor = anchor;
+    }
+
+    public Integer getLegacyCasingId() {
+        return legacyCasingId;
+    }
+
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

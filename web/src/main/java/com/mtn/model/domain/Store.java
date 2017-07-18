@@ -24,6 +24,8 @@ public class Store extends AuditingEntity implements Identifiable {
     private LocalDateTime closedDate;
     private Integer version;
     private Company parentCompany;
+    private String storeNumber;
+    private Integer legacyLocationId;
 
     private List<StoreSurvey> surveys = new ArrayList<>();
 
@@ -37,6 +39,8 @@ public class Store extends AuditingEntity implements Identifiable {
         this.openedDate = simpleStoreView.getOpenedDate();
         this.closedDate = simpleStoreView.getClosedDate();
         this.version = simpleStoreView.getVersion();
+        this.storeNumber = simpleStoreView.getStoreNumber();
+        this.legacyLocationId = simpleStoreView.getLegacyLocationId();
     }
 
     public Store(StoreView storeView) {
@@ -88,6 +92,7 @@ public class Store extends AuditingEntity implements Identifiable {
     }
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "store_type")
     public StoreType getType() {
         return type;
     }
@@ -139,5 +144,21 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setParentCompany(Company parentCompany) {
         this.parentCompany = parentCompany;
+    }
+
+    public String getStoreNumber() {
+        return storeNumber;
+    }
+
+    public void setStoreNumber(String storeNumber) {
+        this.storeNumber = storeNumber;
+    }
+
+    public Integer getLegacyLocationId() {
+        return legacyLocationId;
+    }
+
+    public void setLegacyLocationId(Integer legacyLocationId) {
+        this.legacyLocationId = legacyLocationId;
     }
 }

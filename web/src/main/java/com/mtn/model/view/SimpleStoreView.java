@@ -18,6 +18,8 @@ public class SimpleStoreView {
     protected LocalDateTime openedDate;
     protected LocalDateTime closedDate;
     protected Integer version;
+    private String storeNumber;
+    private Integer legacyLocationId;
     protected SimpleCompanyView parentCompany;
 
     public SimpleStoreView() {
@@ -30,6 +32,8 @@ public class SimpleStoreView {
         this.openedDate = store.getOpenedDate();
         this.closedDate = store.getClosedDate();
         this.version = store.getVersion();
+        this.legacyLocationId = store.getLegacyLocationId();
+        this.storeNumber = store.getStoreNumber();
 
         if (store.getParentCompany() != null) {
             this.parentCompany = new SimpleCompanyView(store.getParentCompany());
@@ -90,5 +94,21 @@ public class SimpleStoreView {
 
     public void setParentCompany(SimpleCompanyView parentCompany) {
         this.parentCompany = parentCompany;
+    }
+
+    public String getStoreNumber() {
+        return storeNumber;
+    }
+
+    public void setStoreNumber(String storeNumber) {
+        this.storeNumber = storeNumber;
+    }
+
+    public Integer getLegacyLocationId() {
+        return legacyLocationId;
+    }
+
+    public void setLegacyLocationId(Integer legacyLocationId) {
+        this.legacyLocationId = legacyLocationId;
     }
 }

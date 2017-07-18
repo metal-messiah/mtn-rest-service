@@ -17,6 +17,8 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private String name;
     private String owner;
     private Integer version;
+    private Integer legacyLocationId;
+    private Integer legacyCasingId;
 
     private List<Site> sites = new ArrayList<>();
     private List<ShoppingCenterSurvey> surveys = new ArrayList<>();
@@ -29,6 +31,8 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         this.name = shoppingCenterView.getName();
         this.owner = shoppingCenterView.getOwner();
         this.version = shoppingCenterView.getVersion();
+        this.legacyCasingId = shoppingCenterView.getLegacyCasingId();
+        this.legacyLocationId = shoppingCenterView.getLegacyLocationId();
     }
 
     @PrePersist
@@ -44,6 +48,7 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_id")
     @SequenceGenerator(name = "seq_shopping_center_id", sequenceName = "seq_shopping_center_id", allocationSize = 1)
+    @Column(name = "shopping_center_id")
     public Integer getId() {
         return id;
     }
@@ -52,6 +57,7 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         this.id = id;
     }
 
+    @Column(name = "shopping_center_name")
     public String getName() {
         return name;
     }
@@ -92,5 +98,21 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
 
     public void setSurveys(List<ShoppingCenterSurvey> surveys) {
         this.surveys = surveys;
+    }
+
+    public Integer getLegacyLocationId() {
+        return legacyLocationId;
+    }
+
+    public void setLegacyLocationId(Integer legacyLocationId) {
+        this.legacyLocationId = legacyLocationId;
+    }
+
+    public Integer getLegacyCasingId() {
+        return legacyCasingId;
+    }
+
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
     }
 }

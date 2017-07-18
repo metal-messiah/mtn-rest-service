@@ -13,6 +13,8 @@ public class SimpleShoppingCenterView {
     protected String name;
     protected String owner;
     protected Integer version;
+    protected Integer legacyCasingId;
+    protected Integer legacyLocationId;
 
     public SimpleShoppingCenterView() {
     }
@@ -22,6 +24,8 @@ public class SimpleShoppingCenterView {
         this.name = shoppingCenter.getName();
         this.owner = shoppingCenter.getOwner();
         this.version = shoppingCenter.getVersion();
+        this.legacyCasingId = shoppingCenter.getLegacyCasingId();
+        this.legacyLocationId = shoppingCenter.getLegacyLocationId();
     }
 
     public Integer getId() {
@@ -54,5 +58,21 @@ public class SimpleShoppingCenterView {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public Integer getLegacyCasingId() {
+        return legacyCasingId;
+    }
+
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
+    }
+
+    public Integer getLegacyLocationId() {
+        return legacyLocationId;
+    }
+
+    public void setLegacyLocationId(Integer legacyLocationId) {
+        this.legacyLocationId = legacyLocationId;
     }
 }

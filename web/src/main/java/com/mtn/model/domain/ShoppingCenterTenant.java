@@ -19,6 +19,7 @@ public class ShoppingCenterTenant implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_tenant_id")
     @SequenceGenerator(name = "seq_shopping_center_tenant_id", sequenceName = "seq_shopping_center_tenant_id", allocationSize = 1)
+    @Column(name = "shopping_center_tenant_id")
     public Integer getId() {
         return id;
     }

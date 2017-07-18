@@ -23,6 +23,7 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_survey_id")
     @SequenceGenerator(name = "seq_shopping_center_survey_id", sequenceName = "seq_shopping_center_survey_id", allocationSize = 1)
+    @Column(name = "shopping_center_survey_id")
     public Integer getId() {
         return id;
     }

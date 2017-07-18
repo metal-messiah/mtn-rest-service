@@ -23,6 +23,7 @@ public class Permission implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_permission_id")
     @SequenceGenerator(name = "seq_auth_permission_id", sequenceName = "seq_auth_permission_id", allocationSize = 1)
+    @Column(name = "auth_permission_id")
     public Integer getId() {
         return id;
     }

@@ -24,6 +24,7 @@ public class Group extends AuditingEntity implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_group_id")
     @SequenceGenerator(name = "seq_auth_group_id", sequenceName = "seq_auth_group_id", allocationSize = 1)
+    @Column(name = "auth_group_id")
     public Integer getId() {
         return id;
     }

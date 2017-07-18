@@ -96,6 +96,7 @@ public class Site extends AuditingEntity implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_site_id")
     @SequenceGenerator(name = "seq_site_id", sequenceName = "seq_site_id", allocationSize = 1)
+    @Column(name = "site_id")
     public Integer getId() {
         return id;
     }

@@ -25,6 +25,7 @@ public class Role extends AuditingEntity implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_role_id")
     @SequenceGenerator(name = "seq_auth_role_id", sequenceName = "seq_auth_role_id", allocationSize = 1)
+    @Column(name = "auth_role_id")
     public Integer getId() {
         return id;
     }
@@ -52,8 +53,8 @@ public class Role extends AuditingEntity implements Identifiable {
     @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "auth_role_auth_permission",
-            joinColumns = @JoinColumn(name = "auth_role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "auth_permission_id", referencedColumnName = "id")
+            joinColumns = @JoinColumn(name = "auth_role_id", referencedColumnName = "auth_role_id"),
+            inverseJoinColumns = @JoinColumn(name = "auth_permission_id", referencedColumnName = "auth_permission_id")
     )
     public Set<Permission> getPermissions() {
         return permissions;

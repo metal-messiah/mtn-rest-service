@@ -27,6 +27,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_store_survey_id")
     @SequenceGenerator(name = "seq_store_survey_id", sequenceName = "seq_store_survey_id", allocationSize = 1)
+    @Column(name = "store_survey_id")
     public Integer getId() {
         return id;
     }

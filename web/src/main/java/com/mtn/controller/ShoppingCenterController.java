@@ -2,16 +2,11 @@ package com.mtn.controller;
 
 import com.mtn.model.converter.ShoppingCenterToSimpleShoppingCenterViewConverter;
 import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.domain.ShoppingCenterCasing;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.Site;
-import com.mtn.model.view.ShoppingCenterSurveyView;
-import com.mtn.model.view.ShoppingCenterView;
-import com.mtn.model.view.SimpleShoppingCenterSurveyView;
-import com.mtn.model.view.SimpleSiteView;
-import com.mtn.service.SecurityService;
-import com.mtn.service.ShoppingCenterService;
-import com.mtn.service.ShoppingCenterSurveyService;
-import com.mtn.service.SiteService;
+import com.mtn.model.view.*;
+import com.mtn.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +32,8 @@ public class ShoppingCenterController {
     private ShoppingCenterSurveyService surveyService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private ShoppingCenterCasingService casingService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody ShoppingCenter request) {
@@ -44,6 +41,14 @@ public class ShoppingCenterController {
 
         ShoppingCenter domainModel = shoppingCenterService.addOne(request);
         return ResponseEntity.ok(new ShoppingCenterView(domainModel));
+    }
+
+    @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.POST)
+    public ResponseEntity addOneShoppingCenterCasingToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterCasing request) {
+        securityService.checkPermission("SHOPPING_CENTER_CASINGS_CREATE");
+
+        ShoppingCenterCasing domainModel = shoppingCenterService.addOneCasingToShoppingCenter(shoppingCenterId, request);
+        return ResponseEntity.ok(new SimpleShoppingCenterCasingView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.POST)
@@ -92,6 +97,14 @@ public class ShoppingCenterController {
         }
 
         return ResponseEntity.ok(domainModels.map(new ShoppingCenterToSimpleShoppingCenterViewConverter()));
+    }
+
+    @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.GET)
+    public ResponseEntity findAllShoppingCenterCasingsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
+        securityService.checkPermission("SHOPPING_CENTER_CASINGS_READ");
+
+        List<ShoppingCenterCasing> domainModels = casingService.findAllByShoppingCenterId(shoppingCenterId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.GET)

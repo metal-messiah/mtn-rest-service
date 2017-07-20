@@ -19,6 +19,7 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
     private SimpleUserProfileView updatedBy;
     private LocalDateTime updatedDate;
 
+    private List<SimpleShoppingCenterCasingView> casings = new ArrayList<>();
     private List<SimpleSiteView> sites = new ArrayList<>();
     private List<SimpleShoppingCenterSurveyView> surveys = new ArrayList<>();
 
@@ -33,6 +34,7 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
         this.updatedBy = new SimpleUserProfileView(shoppingCenter.getUpdatedBy());
         this.updatedDate = shoppingCenter.getUpdatedDate();
 
+        this.casings = shoppingCenter.getCasings().stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList());
         this.sites = shoppingCenter.getSites().stream().map(SimpleSiteView::new).collect(Collectors.toList());
         this.surveys = shoppingCenter.getSurveys().stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList());
     }
@@ -83,5 +85,13 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
 
     public void setSurveys(List<SimpleShoppingCenterSurveyView> surveys) {
         this.surveys = surveys;
+    }
+
+    public List<SimpleShoppingCenterCasingView> getCasings() {
+        return casings;
+    }
+
+    public void setCasings(List<SimpleShoppingCenterCasingView> casings) {
+        this.casings = casings;
     }
 }

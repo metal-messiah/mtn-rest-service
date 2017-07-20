@@ -1,10 +1,7 @@
 package com.mtn.service;
 
 import com.mtn.exception.VersionConflictException;
-import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.model.domain.ShoppingCenterSurvey;
-import com.mtn.model.domain.Site;
-import com.mtn.model.domain.UserProfile;
+import com.mtn.model.domain.*;
 import com.mtn.model.view.ShoppingCenterView;
 import com.mtn.repository.ShoppingCenterRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +27,8 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
     @Autowired
     private ShoppingCenterSurveyService surveyService;
     @Autowired
+    private ShoppingCenterCasingService casingService;
+    @Autowired
     private SecurityService securityService;
 
     @Transactional
@@ -41,6 +40,17 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         request.setUpdatedBy(currentUser);
 
         return shoppingCenterRepository.save(request);
+    }
+
+    @Transactional
+    public ShoppingCenterCasing addOneCasingToShoppingCenter(Integer shoppingCenterId, ShoppingCenterCasing request) {
+        ShoppingCenter existing = findOneUsingSpecs(shoppingCenterId);
+        validateNotNull(existing);
+
+        request.setShoppingCenter(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+
+        return casingService.addOne(request);
     }
 
     @Transactional

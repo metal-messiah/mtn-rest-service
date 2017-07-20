@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.mtn.repository.specification.ShoppingCenterAccessSpecifications.idEquals;
+import static com.mtn.repository.specification.ShoppingCenterAccessSpecifications.isNotDeleted;
+import static org.springframework.data.jpa.domain.Specifications.where;
+
 /**
  * Created by Allen on 5/6/2017.
  */
@@ -38,6 +42,13 @@ public class ShoppingCenterAccessService extends ValidatingDataService<ShoppingC
 
     public ShoppingCenterAccess findOne(Integer id) {
         return accessRepository.findOne(id);
+    }
+
+    public ShoppingCenterAccess findOneUsingSpecs(Integer id) {
+        return accessRepository.findOne(
+                where(idEquals(id))
+                        .and(isNotDeleted())
+        );
     }
 
     @Transactional

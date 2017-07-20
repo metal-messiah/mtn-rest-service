@@ -20,6 +20,7 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private Integer legacyLocationId;
     private Integer legacyCasingId;
 
+    private List<ShoppingCenterCasing> casings = new ArrayList<>();
     private List<Site> sites = new ArrayList<>();
     private List<ShoppingCenterSurvey> surveys = new ArrayList<>();
 
@@ -114,5 +115,14 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
 
     public void setLegacyCasingId(Integer legacyCasingId) {
         this.legacyCasingId = legacyCasingId;
+    }
+
+    @OneToMany(mappedBy = "shoppingCenter")
+    public List<ShoppingCenterCasing> getCasings() {
+        return casings;
+    }
+
+    public void setCasings(List<ShoppingCenterCasing> casings) {
+        this.casings = casings;
     }
 }

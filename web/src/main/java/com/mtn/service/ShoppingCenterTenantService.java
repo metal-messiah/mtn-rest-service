@@ -1,6 +1,8 @@
 package com.mtn.service;
 
+import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.ShoppingCenterTenant;
+import com.mtn.model.view.SimpleShoppingCenterTenantView;
 import com.mtn.repository.ShoppingCenterTenantRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class ShoppingCenterTenantService extends ValidatingDataService<ShoppingC
 
     @Autowired
     private ShoppingCenterTenantRepository tenantRepository;
+    @Autowired
+    private SecurityService securityService;
 
     @Transactional
     public ShoppingCenterTenant addOne(ShoppingCenterTenant request) {
@@ -46,11 +50,15 @@ public class ShoppingCenterTenantService extends ValidatingDataService<ShoppingC
         if (existing == null) {
             throw new IllegalArgumentException("No ShoppingCenterTenant found with this id");
         }
+        if (!request.getVersion().equals(existing.getVersion())) {
+            throw new VersionConflictException(new SimpleShoppingCenterTenantView(existing));
+        }
 
         existing.setName(request.getName());
-        existing.setType(request.getType());
+        existing.setIsAnchor(request.getIsAnchor());
         existing.setIsOutparcel(request.getIsOutparcel());
         existing.setSqft(request.getSqft());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;
     }
@@ -73,8 +81,6 @@ public class ShoppingCenterTenantService extends ValidatingDataService<ShoppingC
     public void validateBusinessRules(ShoppingCenterTenant object) {
         if (StringUtils.isBlank(object.getName())) {
             throw new IllegalArgumentException("ShoppingCenterTenant name must not be null");
-        } else if (object.getType() == null) {
-            throw new IllegalArgumentException("ShoppingCenterTenant type must not be null");
         }
     }
 

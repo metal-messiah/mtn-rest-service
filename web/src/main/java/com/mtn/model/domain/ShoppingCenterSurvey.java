@@ -32,6 +32,16 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
     private List<ShoppingCenterAccess> accesses = new ArrayList<>();
     private List<ShoppingCenterTenant> tenants = new ArrayList<>();
 
+    @PrePersist
+    public void prePersist() {
+        version = 1;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        version++;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_survey_id")
     @SequenceGenerator(name = "seq_shopping_center_survey_id", sequenceName = "seq_shopping_center_survey_id", allocationSize = 1)

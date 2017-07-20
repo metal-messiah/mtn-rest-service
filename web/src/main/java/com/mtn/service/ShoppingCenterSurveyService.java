@@ -1,9 +1,11 @@
 package com.mtn.service;
 
+import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.ShoppingCenterTenant;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.view.ShoppingCenterSurveyView;
 import com.mtn.repository.ShoppingCenterSurveyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,10 +99,23 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
         if (existing == null) {
             throw new IllegalArgumentException("No ShoppingCenterSurvey found with this id");
         }
+        if (!request.getVersion().equals(existing.getVersion())) {
+            throw new VersionConflictException(new ShoppingCenterSurveyView(existing));
+        }
 
+        existing.setType(request.getType());
+        existing.setNote(request.getNote());
+        existing.setFlowHasLandscaping(request.getFlowHasLandscaping());
+        existing.setFlowHasSpeedBumps(request.getFlowHasSpeedBumps());
+        existing.setFlowHasStopSigns(request.getFlowHasStopSigns());
+        existing.setFlowHasOneWayAisles(request.getFlowHasOneWayAisles());
         existing.setParkingHasAngledSpaces(request.getParkingHasAngledSpaces());
         existing.setParkingHasParkingHog(request.getParkingHasParkingHog());
-        existing.setFlowHasSpeedBumps(request.getFlowHasSpeedBumps());
+        existing.setParkingIsPoorlyLit(request.getParkingIsPoorlyLit());
+        existing.setParkingSpaceCount(request.getParkingSpaceCount());
+        existing.setTenantOccupiedCount(request.getTenantOccupiedCount());
+        existing.setTenantVacantCount(request.getTenantVacantCount());
+        existing.setSqFtPercentOccupied(request.getSqFtPercentOccupied());
         existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;

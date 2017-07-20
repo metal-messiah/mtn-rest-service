@@ -1,6 +1,8 @@
 package com.mtn.service;
 
+import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.ShoppingCenterAccess;
+import com.mtn.model.view.SimpleShoppingCenterAccessView;
 import com.mtn.repository.ShoppingCenterAccessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ public class ShoppingCenterAccessService extends ValidatingDataService<ShoppingC
 
     @Autowired
     private ShoppingCenterAccessRepository accessRepository;
+    @Autowired
+    private SecurityService securityService;
 
     @Transactional
     public ShoppingCenterAccess addOne(ShoppingCenterAccess request) {
@@ -43,7 +47,10 @@ public class ShoppingCenterAccessService extends ValidatingDataService<ShoppingC
 
         ShoppingCenterAccess existing = findOne(id);
         if (existing == null) {
-            throw new IllegalArgumentException("No ShoppingCenterTenant found with this id");
+            throw new IllegalArgumentException("No ShoppingCenterAccess found with this id");
+        }
+        if (!request.getVersion().equals(existing.getVersion())) {
+            throw new VersionConflictException(new SimpleShoppingCenterAccessView(existing));
         }
 
         existing.setHasLeftIn(request.getHasLeftIn());
@@ -52,6 +59,7 @@ public class ShoppingCenterAccessService extends ValidatingDataService<ShoppingC
         existing.setHasOneWayRoad(request.getHasOneWayRoad());
         existing.setHasRightIn(request.getHasRightIn());
         existing.setHasRightOut(request.getHasRightOut());
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return existing;
     }

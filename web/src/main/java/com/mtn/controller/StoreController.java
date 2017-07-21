@@ -61,7 +61,7 @@ public class StoreController {
     public ResponseEntity findAllSurveysForStore(@PathVariable("id") Integer storeId) {
         securityService.checkPermission("STORE_SURVEYS_READ");
 
-        List<StoreSurvey> domainModels = surveyService.findAllByStoreId(storeId);
+        List<StoreSurvey> domainModels = surveyService.findAllByStoreIdUsingSpecs(storeId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
     }
 

@@ -9,8 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.mtn.repository.specification.StoreSurveySpecifications.idEquals;
-import static com.mtn.repository.specification.StoreSurveySpecifications.isNotDeleted;
+import static com.mtn.repository.specification.StoreSurveySpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
@@ -47,6 +46,13 @@ public class StoreSurveyService extends ValidatingDataService<StoreSurvey> {
 
     public List<StoreSurvey> findAllByStoreId(Integer storeId) {
         return surveyRepository.findAllByStoreId(storeId);
+    }
+
+    public List<StoreSurvey> findAllByStoreIdUsingSpecs(Integer storeId) {
+        return surveyRepository.findAll(
+                where(storeIdEquals(storeId))
+                        .and(isNotDeleted())
+        );
     }
 
     public StoreSurvey findOne(Integer id) {

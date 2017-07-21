@@ -17,7 +17,6 @@ public class StoreCasingController {
     @Autowired
     private SecurityService securityService;
 
-
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
         securityService.checkPermission("STORE_CASINGS_DELETE");

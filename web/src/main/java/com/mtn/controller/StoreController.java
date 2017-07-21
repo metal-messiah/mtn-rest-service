@@ -1,13 +1,7 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.Store;
-import com.mtn.model.domain.StoreCasing;
-import com.mtn.model.domain.StoreSurvey;
-import com.mtn.model.domain.StoreVolume;
-import com.mtn.model.view.SimpleStoreCasingView;
-import com.mtn.model.view.SimpleStoreSurveyView;
-import com.mtn.model.view.SimpleStoreVolumeView;
-import com.mtn.model.view.StoreView;
+import com.mtn.model.domain.*;
+import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +26,8 @@ public class StoreController {
     @Autowired
     private StoreCasingService casingService;
     @Autowired
+    private StoreModelService modelService;
+    @Autowired
     private SecurityService securityService;
 
     @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.POST)
@@ -40,6 +36,14 @@ public class StoreController {
 
         StoreCasing domainModel = storeService.addOneCasingToStore(storeId, request);
         return ResponseEntity.ok(new SimpleStoreCasingView(domainModel));
+    }
+
+    @RequestMapping(value = "/{id}/store-model", method = RequestMethod.POST)
+    public ResponseEntity addOneStoreModelToStore(@PathVariable("id") Integer storeId, @RequestBody StoreModel request) {
+        securityService.checkPermission("STORE_MODELS_CREATE");
+
+        StoreModel domainModel = storeService.addOneModelToStore(storeId, request);
+        return ResponseEntity.ok(new SimpleStoreModelView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.POST)
@@ -72,6 +76,14 @@ public class StoreController {
 
         List<StoreCasing> domainModels = casingService.findAllByStoreIdUsingSpecs(storeId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/{id}/store-model", method = RequestMethod.GET)
+    public ResponseEntity findAllModelsForStore(@PathVariable("id") Integer storeId) {
+        securityService.checkPermission("STORE_MODELS_READ");
+
+        List<StoreModel> domainModels = modelService.findAllByStoreIdUsingSpecs(storeId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreModelView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.GET)

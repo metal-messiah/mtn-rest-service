@@ -28,6 +28,7 @@ public class Store extends AuditingEntity implements Identifiable {
     private Integer legacyLocationId;
 
     private List<StoreCasing> casings = new ArrayList<>();
+    private List<StoreModel> models = new ArrayList<>();
     private List<StoreSurvey> surveys = new ArrayList<>();
     private List<StoreVolume> volumes = new ArrayList<>();
 
@@ -180,5 +181,14 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setCasings(List<StoreCasing> casings) {
         this.casings = casings;
+    }
+
+    @OneToMany(mappedBy = "store")
+    public List<StoreModel> getModels() {
+        return models;
+    }
+
+    public void setModels(List<StoreModel> models) {
+        this.models = models;
     }
 }

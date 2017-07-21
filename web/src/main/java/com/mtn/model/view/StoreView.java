@@ -3,7 +3,6 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Store;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,14 +14,10 @@ import java.util.stream.Collectors;
 public class StoreView extends SimpleStoreView {
 
     private SimpleSiteView site;
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
-
     private CompanyView parentCompany;
 
     private List<SimpleStoreSurveyView> surveys = new ArrayList<>();
+    private List<SimpleStoreVolumeView> volumes = new ArrayList<>();
 
     public StoreView() {
     }
@@ -31,10 +26,6 @@ public class StoreView extends SimpleStoreView {
         super(store);
 
         this.site = new SimpleSiteView(store.getSite());
-        this.createdBy = new SimpleUserProfileView(store.getCreatedBy());
-        this.createdDate = store.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(store.getUpdatedBy());
-        this.updatedDate = store.getUpdatedDate();
 
         if (store.getParentCompany() != null) {
             this.parentCompany = new CompanyView(store.getParentCompany());
@@ -49,38 +40,6 @@ public class StoreView extends SimpleStoreView {
 
     public void setSite(SimpleSiteView site) {
         this.site = site;
-    }
-
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
     }
 
     public List<SimpleStoreSurveyView> getSurveys() {

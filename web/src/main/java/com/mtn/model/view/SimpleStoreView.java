@@ -18,9 +18,13 @@ public class SimpleStoreView {
     protected LocalDateTime openedDate;
     protected LocalDateTime closedDate;
     protected Integer version;
-    private String storeNumber;
-    private Integer legacyLocationId;
+    protected String storeNumber;
+    protected Integer legacyLocationId;
     protected SimpleCompanyView parentCompany;
+    protected SimpleUserProfileView createdBy;
+    protected LocalDateTime createdDate;
+    protected SimpleUserProfileView updatedBy;
+    protected LocalDateTime updatedDate;
 
     public SimpleStoreView() {
     }
@@ -34,6 +38,10 @@ public class SimpleStoreView {
         this.version = store.getVersion();
         this.legacyLocationId = store.getLegacyLocationId();
         this.storeNumber = store.getStoreNumber();
+        this.createdBy = new SimpleUserProfileView(store.getCreatedBy());
+        this.createdDate = store.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(store.getUpdatedBy());
+        this.updatedDate = store.getUpdatedDate();
 
         if (store.getParentCompany() != null) {
             this.parentCompany = new SimpleCompanyView(store.getParentCompany());
@@ -110,5 +118,37 @@ public class SimpleStoreView {
 
     public void setLegacyLocationId(Integer legacyLocationId) {
         this.legacyLocationId = legacyLocationId;
+    }
+
+    public SimpleUserProfileView getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SimpleUserProfileView createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public SimpleUserProfileView getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

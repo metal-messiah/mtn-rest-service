@@ -2,11 +2,14 @@ package com.mtn.controller;
 
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreSurvey;
+import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.view.SimpleStoreSurveyView;
+import com.mtn.model.view.SimpleStoreVolumeView;
 import com.mtn.model.view.StoreView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.StoreService;
 import com.mtn.service.StoreSurveyService;
+import com.mtn.service.StoreVolumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,8 @@ public class StoreController {
     @Autowired
     private StoreSurveyService surveyService;
     @Autowired
+    private StoreVolumeService volumeService;
+    @Autowired
     private SecurityService securityService;
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.POST)
@@ -34,6 +39,14 @@ public class StoreController {
 
         StoreSurvey domainModel = storeService.addOneSurveyToStore(storeId, request);
         return ResponseEntity.ok(new SimpleStoreSurveyView(domainModel));
+    }
+
+    @RequestMapping(value = "/{id}/store-volume", method = RequestMethod.POST)
+    public ResponseEntity addOneStoreVolumeToStore(@PathVariable("id") Integer storeId, @RequestBody StoreVolume request) {
+        securityService.checkPermission("STORE_VOLUMES_CREATE");
+
+        StoreVolume domainModel = storeService.addOneVolumeToStore(storeId, request);
+        return ResponseEntity.ok(new SimpleStoreVolumeView(domainModel));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -50,6 +63,14 @@ public class StoreController {
 
         List<StoreSurvey> domainModels = surveyService.findAllByStoreId(storeId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/{id}/store-volume", method = RequestMethod.GET)
+    public ResponseEntity findAllVolumesForStore(@PathVariable("id") Integer storeId) {
+        securityService.checkPermission("STORE_VOLUMES_READ");
+
+        List<StoreVolume> domainModels = volumeService.findAllByStoreIdUsingSpecs(storeId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreVolumeView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

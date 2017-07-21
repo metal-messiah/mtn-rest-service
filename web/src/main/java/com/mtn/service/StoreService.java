@@ -36,6 +36,8 @@ public class StoreService extends ValidatingDataService<Store> {
     private CompanyService companyService;
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
+    @Autowired
+    private StoreVolumeService volumeService;
 
     private static final String QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST = "" +
             "SELECT s.* " +
@@ -64,6 +66,17 @@ public class StoreService extends ValidatingDataService<Store> {
         existing.setUpdatedBy(securityService.getCurrentPersistentUser());
 
         return surveyService.addOne(request);
+    }
+
+    @Transactional
+    public StoreVolume addOneVolumeToStore(Integer storeId, StoreVolume request) {
+        Store existing = findOneUsingSpecs(storeId);
+        validateNotNull(existing);
+
+        request.setStore(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+
+        return volumeService.addOne(request);
     }
 
     @Transactional

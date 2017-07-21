@@ -16,6 +16,7 @@ public class StoreView extends SimpleStoreView {
     private SimpleSiteView site;
     private CompanyView parentCompany;
 
+    private List<SimpleStoreCasingView> casings = new ArrayList<>();
     private List<SimpleStoreSurveyView> surveys = new ArrayList<>();
     private List<SimpleStoreVolumeView> volumes = new ArrayList<>();
 
@@ -31,7 +32,9 @@ public class StoreView extends SimpleStoreView {
             this.parentCompany = new CompanyView(store.getParentCompany());
         }
 
+        this.casings = store.getCasings().stream().map(SimpleStoreCasingView::new).collect(Collectors.toList());
         this.surveys = store.getSurveys().stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList());
+        this.volumes = store.getVolumes().stream().map(SimpleStoreVolumeView::new).collect(Collectors.toList());
     }
 
     public SimpleSiteView getSite() {
@@ -57,5 +60,21 @@ public class StoreView extends SimpleStoreView {
 
     public void setParentCompany(CompanyView parentCompany) {
         this.parentCompany = parentCompany;
+    }
+
+    public List<SimpleStoreCasingView> getCasings() {
+        return casings;
+    }
+
+    public void setCasings(List<SimpleStoreCasingView> casings) {
+        this.casings = casings;
+    }
+
+    public List<SimpleStoreVolumeView> getVolumes() {
+        return volumes;
+    }
+
+    public void setVolumes(List<SimpleStoreVolumeView> volumes) {
+        this.volumes = volumes;
     }
 }

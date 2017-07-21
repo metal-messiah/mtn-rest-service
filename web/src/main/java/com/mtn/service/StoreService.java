@@ -35,6 +35,8 @@ public class StoreService extends ValidatingDataService<Store> {
     @Autowired
     private CompanyService companyService;
     @Autowired
+    private StoreCasingService casingService;
+    @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
     @Autowired
     private StoreVolumeService volumeService;
@@ -55,6 +57,17 @@ public class StoreService extends ValidatingDataService<Store> {
         request.setUpdatedBy(currentUser);
 
         return storeRepository.save(request);
+    }
+
+    @Transactional
+    public StoreCasing addOneCasingToStore(Integer storeId, StoreCasing request) {
+        Store existing = findOneUsingSpecs(storeId);
+        validateNotNull(existing);
+
+        request.setStore(existing);
+        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+
+        return casingService.addOne(request);
     }
 
     @Transactional

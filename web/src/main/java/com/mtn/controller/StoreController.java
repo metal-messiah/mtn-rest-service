@@ -1,15 +1,14 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreSurvey;
 import com.mtn.model.domain.StoreVolume;
+import com.mtn.model.view.SimpleStoreCasingView;
 import com.mtn.model.view.SimpleStoreSurveyView;
 import com.mtn.model.view.SimpleStoreVolumeView;
 import com.mtn.model.view.StoreView;
-import com.mtn.service.SecurityService;
-import com.mtn.service.StoreService;
-import com.mtn.service.StoreSurveyService;
-import com.mtn.service.StoreVolumeService;
+import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,17 @@ public class StoreController {
     @Autowired
     private StoreVolumeService volumeService;
     @Autowired
+    private StoreCasingService casingService;
+    @Autowired
     private SecurityService securityService;
+
+    @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.POST)
+    public ResponseEntity addOneStoreCasingToStore(@PathVariable("id") Integer storeId, @RequestBody StoreCasing request) {
+        securityService.checkPermission("STORE_CASINGS_CREATE");
+
+        StoreCasing domainModel = storeService.addOneCasingToStore(storeId, request);
+        return ResponseEntity.ok(new SimpleStoreCasingView(domainModel));
+    }
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.POST)
     public ResponseEntity addOneStoreSurveyToStore(@PathVariable("id") Integer storeId, @RequestBody StoreSurvey request) {
@@ -55,6 +64,14 @@ public class StoreController {
 
         storeService.deleteOne(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.GET)
+    public ResponseEntity findAllCasingsForStore(@PathVariable("id") Integer storeId) {
+        securityService.checkPermission("STORE_CASINGS_READ");
+
+        List<StoreCasing> domainModels = casingService.findAllByStoreIdUsingSpecs(storeId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.GET)

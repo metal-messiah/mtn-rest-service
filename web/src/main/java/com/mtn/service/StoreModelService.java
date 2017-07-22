@@ -21,7 +21,7 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 public class StoreModelService extends ValidatingDataService<StoreModel> {
 
     @Autowired
-    private StoreModelRepository casingRepository;
+    private StoreModelRepository modelRepository;
     @Autowired
     private SecurityService securityService;
 
@@ -33,7 +33,7 @@ public class StoreModelService extends ValidatingDataService<StoreModel> {
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
-        return casingRepository.save(request);
+        return modelRepository.save(request);
     }
 
     @Transactional
@@ -46,23 +46,34 @@ public class StoreModelService extends ValidatingDataService<StoreModel> {
         existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
+    public List<StoreModel> findAllByProjectId(Integer projectId) {
+        return modelRepository.findAllByProjectId(projectId);
+    }
+
+    public List<StoreModel> findAllByProjectIdUsingSpecs(Integer projectId) {
+        return modelRepository.findAll(
+                where(projectIdEquals(projectId))
+                        .and(isNotDeleted())
+        );
+    }
+
     public List<StoreModel> findAllByStoreId(Integer storeId) {
-        return casingRepository.findAllByStoreId(storeId);
+        return modelRepository.findAllByStoreId(storeId);
     }
 
     public List<StoreModel> findAllByStoreIdUsingSpecs(Integer storeId) {
-        return casingRepository.findAll(
+        return modelRepository.findAll(
                 where(storeIdEquals(storeId))
                         .and(isNotDeleted())
         );
     }
 
     public StoreModel findOne(Integer id) {
-        return casingRepository.findOne(id);
+        return modelRepository.findOne(id);
     }
 
     public StoreModel findOneUsingSpecs(Integer id) {
-        return casingRepository.findOne(
+        return modelRepository.findOne(
                 where(idEquals(id))
                         .and(isNotDeleted())
         );

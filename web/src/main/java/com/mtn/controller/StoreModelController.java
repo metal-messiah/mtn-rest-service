@@ -2,6 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.model.domain.StoreModel;
 import com.mtn.model.view.SimpleStoreModelView;
+import com.mtn.model.view.StoreModelView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.StoreModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class StoreModelController {
 
         StoreModel domainModel = modelService.findOneUsingSpecs(id);
         if (domainModel != null) {
-            return ResponseEntity.ok(new SimpleStoreModelView(domainModel));
+            return ResponseEntity.ok(new StoreModelView(domainModel));
         } else {
             return ResponseEntity.noContent().build();
         }

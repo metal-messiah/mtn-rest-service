@@ -3,6 +3,7 @@ package com.mtn.model.view.geojson;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.GeoJsonType;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,11 @@ public class GeoJsonView {
     public GeoJsonView(Point location) {
         this.type = GeoJsonType.Feature;
         this.geometry = new PointGeometry(location);
+    }
+
+    public GeoJsonView(Polygon polygon) {
+        this.type = GeoJsonType.Feature;
+        this.geometry = new PolygonGeometry(polygon);
     }
 
     public GeoJsonType getType() {

@@ -11,6 +11,7 @@ public class StoreModel extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private Store store;
+    private Project project;
     private String mapkey;
     private Double curve;
     private Double pwta;
@@ -51,6 +52,16 @@ public class StoreModel extends AuditingEntity implements Identifiable {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public String getMapkey() {

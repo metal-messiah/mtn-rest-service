@@ -9,5 +9,7 @@ import java.util.List;
 public interface StoreModelRepository extends JpaRepository<StoreModel, Integer>, JpaSpecificationExecutor<StoreModel> {
 
     List<StoreModel> findAllByStoreId(Integer storeId);
+
+    List<StoreModel> findAllByProjectId(Integer projectId);
 }
 

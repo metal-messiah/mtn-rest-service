@@ -2,6 +2,8 @@ package com.mtn.model.view.geojson;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.GeometryType;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +16,12 @@ public class PolygonGeometry extends GeometryView {
 
     private List<Double[]> coordinates = new ArrayList<>();
 
-    public PolygonGeometry() {
+    public PolygonGeometry(Polygon polygon) {
         this.type = GeometryType.Point;
+
+        for (Coordinate coordinate : polygon.getCoordinates()) {
+            this.coordinates.add(new Double[]{coordinate.x, coordinate.y});
+        }
     }
 
     public List<Double[]> getCoordinates() {

@@ -1,5 +1,6 @@
 package com.mtn.repository.specification;
 
+import com.mtn.model.domain.Project;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreModel;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,6 +14,7 @@ public class StoreModelSpecifications {
 
     private static final String DELETED_DATE = "deletedDate";
     private static final String ID = "id";
+    private static final String PROJECT = "project";
     private static final String STORE = "store";
 
     public static Specification<StoreModel> idEquals(Integer id) {
@@ -20,6 +22,16 @@ public class StoreModelSpecifications {
             @Override
             public Predicate toPredicate(Root<StoreModel> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.equal(root.get(ID), id);
+            }
+        };
+    }
+
+    public static Specification<StoreModel> projectIdEquals(Integer id) {
+        return new Specification<StoreModel>() {
+            @Override
+            public Predicate toPredicate(Root<StoreModel> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Join<StoreModel, Project> storeModelProjectJoin = root.join(PROJECT);
+                return criteriaBuilder.equal(storeModelProjectJoin.get(ID), id);
             }
         };
     }

@@ -94,7 +94,7 @@ public class Project extends AuditingEntity implements Identifiable {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setIsActive(Boolean active) {
         isActive = active;
     }
 
@@ -102,7 +102,7 @@ public class Project extends AuditingEntity implements Identifiable {
         return isPrimaryData;
     }
 
-    public void setPrimaryData(Boolean primaryData) {
+    public void setIsPrimaryData(Boolean primaryData) {
         isPrimaryData = primaryData;
     }
 

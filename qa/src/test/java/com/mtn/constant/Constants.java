@@ -21,5 +21,5 @@ public class Constants {
     public static final String SERVER_HOST = "http://localhost:8080";
 
     public static final String TEST_USER_USERNAME = "system.administrator@mtnra.com";
-    public static final String TEST_USER_PASSWORD = "TK421whyarentyouatyourpost?";
+    public static final String TEST_USER_PASSWORD = "TK421Whyarentyouatyourpost?";
 }

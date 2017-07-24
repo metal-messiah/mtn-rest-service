@@ -19,8 +19,7 @@ public class Auth0Util {
     }
 
     private static String getUserAccessToken() {
-        AuthRequest authRequest = auth.login(Constants.TEST_USER_USERNAME, Constants.TEST_USER_PASSWORD, Constants.AUTH0_REALM)
-                .setAudience(Constants.AUTH0_API_AUDIENCE);
+        AuthRequest authRequest = auth.login(Constants.TEST_USER_USERNAME, Constants.TEST_USER_PASSWORD, Constants.AUTH0_REALM);
         try {
             TokenHolder tokenHolder = authRequest.execute();
             return tokenHolder.getAccessToken();

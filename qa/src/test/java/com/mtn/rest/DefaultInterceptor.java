@@ -13,8 +13,8 @@ public class DefaultInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
     public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] bytes, ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
-        httpRequest.getHeaders().set(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", Auth0Util.userAccessToken));
-        httpRequest.getHeaders().set("mtn-access-token", Auth0Util.apiAccessToken);
+        httpRequest.getHeaders().set(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", Auth0Util.apiAccessToken));
+        httpRequest.getHeaders().set("mtn-access-token", Auth0Util.userAccessToken);
         return clientHttpRequestExecution.execute(httpRequest, bytes);
     }
 }

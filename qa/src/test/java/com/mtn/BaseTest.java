@@ -9,6 +9,9 @@ import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class BaseTest {
 
     protected static final Logger logger = LoggerFactory.getLogger("BaseTest");
@@ -35,5 +38,14 @@ public class BaseTest {
 
     protected String buildUrl(String relativePath) {
         return String.format("%s%s", Constants.SERVER_HOST, relativePath);
+    }
+
+    protected URI buildUri(String relativePath) {
+        try {
+            return new URI(buildUrl(relativePath));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

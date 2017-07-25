@@ -13,13 +13,12 @@ public abstract class ValidatingDataService<T extends Identifiable> {
 
     public void validateForInsert(T object) {
         validateNotNull(object);
+        validateBusinessRules(object);
         validateDoesNotExist(object);
 
         if (object.getId() != null) {
             throw new IllegalArgumentException(String.format("%s id must be null", getEntityName()));
         }
-
-        validateBusinessRules(object);
     }
 
     public void validateForUpdate(T object) {

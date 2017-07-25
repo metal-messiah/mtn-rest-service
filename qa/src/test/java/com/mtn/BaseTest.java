@@ -18,7 +18,7 @@ public class BaseTest {
 
     protected static final Logger logger = LoggerFactory.getLogger("BaseTest");
 
-    protected static NamedParameterJdbcTemplate jdbcTemplate;
+    private static NamedParameterJdbcTemplate jdbcTemplate;
 
     @BeforeSuite(alwaysRun = true)
     public void beforeSuite() {

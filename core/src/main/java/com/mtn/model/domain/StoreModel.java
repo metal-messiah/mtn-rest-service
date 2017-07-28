@@ -44,7 +44,7 @@ public class StoreModel extends AuditingEntity implements Identifiable {
         this.id = id;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "store_id")
     public Store getStore() {
         return store;
@@ -54,7 +54,7 @@ public class StoreModel extends AuditingEntity implements Identifiable {
         this.store = store;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "project_id")
     public Project getProject() {
         return project;

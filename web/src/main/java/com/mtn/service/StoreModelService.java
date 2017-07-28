@@ -129,6 +129,10 @@ public class StoreModelService extends ValidatingDataService<StoreModel> {
             throw new IllegalArgumentException("StoreModel modelType must be provided");
         } else if (object.getModelDate() == null) {
             throw new IllegalArgumentException("StoreModel modelDate must be provided");
+        } else if (object.getProject() == null) {
+            throw new IllegalArgumentException("StoreModel project must be provided");
+        } else if (object.getStore() == null) {
+            throw new IllegalArgumentException("StoreModel store must be provided");
         }
     }
 

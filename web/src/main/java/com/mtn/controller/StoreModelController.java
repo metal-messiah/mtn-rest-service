@@ -18,6 +18,14 @@ public class StoreModelController {
     @Autowired
     private SecurityService securityService;
 
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity addOne(@RequestBody StoreModel request) {
+        securityService.checkPermission("STORE_MODELS_CREATE");
+
+        StoreModel domainModel = modelService.addOne(request);
+        return ResponseEntity.ok(new StoreModelView(domainModel));
+    }
+
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
         securityService.checkPermission("STORE_MODELS_DELETE");

@@ -38,14 +38,6 @@ public class StoreController {
         return ResponseEntity.ok(new SimpleStoreCasingView(domainModel));
     }
 
-    @RequestMapping(value = "/{id}/store-model", method = RequestMethod.POST)
-    public ResponseEntity addOneStoreModelToStore(@PathVariable("id") Integer storeId, @RequestBody StoreModel request) {
-        securityService.checkPermission("STORE_MODELS_CREATE");
-
-        StoreModel domainModel = storeService.addOneModelToStore(storeId, request);
-        return ResponseEntity.ok(new SimpleStoreModelView(domainModel));
-    }
-
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.POST)
     public ResponseEntity addOneStoreSurveyToStore(@PathVariable("id") Integer storeId, @RequestBody StoreSurvey request) {
         securityService.checkPermission("STORE_SURVEYS_CREATE");

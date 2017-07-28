@@ -1,7 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.ShoppingCenterCasing;
-import com.mtn.model.view.SimpleShoppingCenterCasingView;
+import com.mtn.model.view.ShoppingCenterCasingView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.ShoppingCenterCasingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ShoppingCenterCasingController {
 
         ShoppingCenterCasing domainModel = casingService.findOneUsingSpecs(id);
         if (domainModel != null) {
-            return ResponseEntity.ok(new SimpleShoppingCenterCasingView(domainModel));
+            return ResponseEntity.ok(new ShoppingCenterCasingView(domainModel));
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -42,6 +42,6 @@ public class ShoppingCenterCasingController {
         securityService.checkPermission("SHOPPING_CENTER_CASINGS_UPDATE");
 
         ShoppingCenterCasing domainModel = casingService.updateOne(id, request);
-        return ResponseEntity.ok(new SimpleShoppingCenterCasingView(domainModel));
+        return ResponseEntity.ok(new ShoppingCenterCasingView(domainModel));
     }
 }

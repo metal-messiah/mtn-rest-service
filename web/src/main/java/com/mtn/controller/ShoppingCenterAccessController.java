@@ -1,7 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.ShoppingCenterAccess;
-import com.mtn.model.view.SimpleShoppingCenterAccessView;
+import com.mtn.model.view.ShoppingCenterAccessView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.ShoppingCenterAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class ShoppingCenterAccessController {
 
         ShoppingCenterAccess domainModel = accessService.findOne(id);
         if (domainModel != null) {
-            return ResponseEntity.ok(new SimpleShoppingCenterAccessView(domainModel));
+            return ResponseEntity.ok(new ShoppingCenterAccessView(domainModel));
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -45,6 +45,6 @@ public class ShoppingCenterAccessController {
         securityService.checkPermission("SHOPPING_CENTER_SURVEYS_UPDATE");
 
         ShoppingCenterAccess domainModel = accessService.updateOne(id, request);
-        return ResponseEntity.ok(new SimpleShoppingCenterAccessView(domainModel));
+        return ResponseEntity.ok(new ShoppingCenterAccessView(domainModel));
     }
 }

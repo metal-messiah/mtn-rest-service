@@ -5,6 +5,8 @@ import com.mtn.constant.ConfidenceType;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreCasing;
 
+import java.time.LocalDateTime;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStoreCasingView {
 
@@ -38,6 +40,10 @@ public class SimpleStoreCasingView {
     private ConfidenceType volumeConfidence;
     private Integer version;
     private Integer legacyCasingId;
+    private SimpleUserProfileView createdBy;
+    private LocalDateTime createdDate;
+    private SimpleUserProfileView updatedBy;
+    private LocalDateTime updatedDate;
 
     public SimpleStoreCasingView() {
     }
@@ -73,6 +79,10 @@ public class SimpleStoreCasingView {
         this.volumeConfidence = casing.getVolumeConfidence();
         this.version = casing.getVersion();
         this.legacyCasingId = casing.getLegacyCasingId();
+        this.createdBy = new SimpleUserProfileView(casing.getCreatedBy());
+        this.createdDate = casing.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(casing.getUpdatedBy());
+        this.updatedDate = casing.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -313,5 +323,37 @@ public class SimpleStoreCasingView {
 
     public void setLegacyCasingId(Integer legacyCasingId) {
         this.legacyCasingId = legacyCasingId;
+    }
+
+    public SimpleUserProfileView getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SimpleUserProfileView createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public SimpleUserProfileView getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

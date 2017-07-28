@@ -7,6 +7,7 @@ import com.mtn.constant.StoreFormatType;
 import com.mtn.model.domain.StoreSurvey;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Created by Allen on 6/7/2017.
@@ -86,6 +87,10 @@ public class SimpleStoreSurveyView implements Serializable {
     protected Integer seasonalityDec;
     protected Integer version;
     protected Integer legacyCasingId;
+    protected SimpleUserProfileView createdBy;
+    protected LocalDateTime createdDate;
+    protected SimpleUserProfileView updatedBy;
+    protected LocalDateTime updatedDate;
     
     public SimpleStoreSurveyView() {
     }
@@ -163,6 +168,10 @@ public class SimpleStoreSurveyView implements Serializable {
         this.setSeasonalityDec(storeSurvey.getSeasonalityDec());
         this.setVersion(storeSurvey.getVersion());
         this.setLegacyCasingId(storeSurvey.getLegacyCasingId());
+        this.createdBy = new SimpleUserProfileView(storeSurvey.getCreatedBy());
+        this.createdDate = storeSurvey.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(storeSurvey.getUpdatedBy());
+        this.updatedDate = storeSurvey.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -739,5 +748,37 @@ public class SimpleStoreSurveyView implements Serializable {
 
     public void setLegacyCasingId(Integer legacyCasingId) {
         this.legacyCasingId = legacyCasingId;
+    }
+
+    public SimpleUserProfileView getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SimpleUserProfileView createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public SimpleUserProfileView getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

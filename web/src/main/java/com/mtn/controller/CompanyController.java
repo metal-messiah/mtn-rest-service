@@ -68,6 +68,18 @@ public class CompanyController {
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity findOne(@PathVariable("id") Integer id) {
+        securityService.checkPermission("COMPANIES_READ");
+
+        Company domainModel = companyService.findOne(id);
+        if (domainModel != null) {
+            return ResponseEntity.ok(new CompanyView(domainModel));
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, Company request) {
         securityService.checkPermission("COMPANIES_UPDATE");

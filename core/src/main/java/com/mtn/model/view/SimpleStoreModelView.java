@@ -19,6 +19,10 @@ public class SimpleStoreModelView {
     private LocalDateTime modelDate;
     private Integer version;
     private Integer legacyCasingId;
+    private SimpleUserProfileView createdBy;
+    private LocalDateTime createdDate;
+    private SimpleUserProfileView updatedBy;
+    private LocalDateTime updatedDate;
 
     public SimpleStoreModelView() {
     }
@@ -34,6 +38,10 @@ public class SimpleStoreModelView {
         this.modelDate = model.getModelDate();
         this.version = model.getVersion();
         this.legacyCasingId = model.getLegacyCasingId();
+        this.createdBy = new SimpleUserProfileView(model.getCreatedBy());
+        this.createdDate = model.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(model.getUpdatedBy());
+        this.updatedDate = model.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -114,5 +122,37 @@ public class SimpleStoreModelView {
 
     public void setLegacyCasingId(Integer legacyCasingId) {
         this.legacyCasingId = legacyCasingId;
+    }
+
+    public SimpleUserProfileView getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SimpleUserProfileView createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public SimpleUserProfileView getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

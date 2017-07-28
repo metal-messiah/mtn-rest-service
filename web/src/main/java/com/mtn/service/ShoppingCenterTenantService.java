@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.mtn.repository.specification.ShoppingCenterTenantSpecifications.*;
+import static org.springframework.data.jpa.domain.Specifications.where;
+
 /**
  * Created by Allen on 5/6/2017.
  */
@@ -37,8 +40,22 @@ public class ShoppingCenterTenantService extends ValidatingDataService<ShoppingC
         return tenantRepository.findAllBySurveyId(id);
     }
 
+    public List<ShoppingCenterTenant> findAllBySurveyIdUsingSpecs(Integer id) {
+        return tenantRepository.findAll(
+                where(shoppingCenterSurveyIdEquals(id))
+                        .and(isNotDeleted())
+        );
+    }
+
     public ShoppingCenterTenant findOne(Integer id) {
         return tenantRepository.findOne(id);
+    }
+
+    public ShoppingCenterTenant findOneUsingSpecs(Integer id) {
+        return tenantRepository.findOne(
+                where(idEquals(id))
+                        .and(isNotDeleted())
+        );
     }
 
     @Transactional

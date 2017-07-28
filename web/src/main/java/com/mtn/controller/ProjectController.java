@@ -51,6 +51,14 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity findAll() {
+        securityService.checkPermission("PROJECTS_READ");
+
+        List<Project> domainModels = projectService.findAllUsingSpecs();
+        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
+    }
+
     @RequestMapping(path = "/{id}/store-model", method = RequestMethod.GET)
     public ResponseEntity findAllStoreModelsForProject(@PathVariable("id") Integer projectId) {
         securityService.checkPermission("STORE_MODELS_READ");

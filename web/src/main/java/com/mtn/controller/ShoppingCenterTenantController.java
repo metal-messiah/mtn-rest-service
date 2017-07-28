@@ -32,7 +32,7 @@ public class ShoppingCenterTenantController {
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
         securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
 
-        ShoppingCenterTenant domainModel = tenantService.findOne(id);
+        ShoppingCenterTenant domainModel = tenantService.findOneUsingSpecs(id);
         if (domainModel != null) {
             return ResponseEntity.ok(new SimpleShoppingCenterTenantView(domainModel));
         } else {

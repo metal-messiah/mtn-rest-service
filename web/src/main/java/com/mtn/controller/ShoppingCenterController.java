@@ -103,7 +103,7 @@ public class ShoppingCenterController {
     public ResponseEntity findAllShoppingCenterCasingsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
         securityService.checkPermission("SHOPPING_CENTER_CASINGS_READ");
 
-        List<ShoppingCenterCasing> domainModels = casingService.findAllByShoppingCenterId(shoppingCenterId);
+        List<ShoppingCenterCasing> domainModels = casingService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList()));
     }
 
@@ -111,7 +111,7 @@ public class ShoppingCenterController {
     public ResponseEntity findAllShoppingCenterSurveysForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
         securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
 
-        List<ShoppingCenterSurvey> domainModels = surveyService.findAllByShoppingCenterId(shoppingCenterId);
+        List<ShoppingCenterSurvey> domainModels = surveyService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList()));
     }
 

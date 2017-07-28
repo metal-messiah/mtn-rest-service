@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.mtn.repository.specification.ProjectSpecifications.idEquals;
 import static com.mtn.repository.specification.ProjectSpecifications.isNotDeleted;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -57,6 +59,16 @@ public class ProjectService extends ValidatingDataService<Project> {
         }
 
         existing.setDeletedBy(securityService.getCurrentPersistentUser());
+    }
+
+    public List<Project> findAll() {
+        return projectRepository.findAll();
+    }
+
+    public List<Project> findAllUsingSpecs() {
+        return projectRepository.findAll(
+                where(isNotDeleted())
+        );
     }
 
     public Project findOne(Integer id) {

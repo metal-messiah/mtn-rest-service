@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.mtn.repository.specification.ShoppingCenterCasingSpecifications.idEquals;
-import static com.mtn.repository.specification.ShoppingCenterCasingSpecifications.isNotDeleted;
+import static com.mtn.repository.specification.ShoppingCenterCasingSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
@@ -49,6 +48,13 @@ public class ShoppingCenterCasingService extends ValidatingDataService<ShoppingC
 
     public List<ShoppingCenterCasing> findAllByShoppingCenterId(Integer shoppingCenterId) {
         return casingRepository.findAllByShoppingCenterId(shoppingCenterId);
+    }
+
+    public List<ShoppingCenterCasing> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
+        return casingRepository.findAll(
+                where(shoppingCenterIdEquals(shoppingCenterId))
+                        .and(isNotDeleted())
+        );
     }
 
     public ShoppingCenterCasing findOne(Integer id) {

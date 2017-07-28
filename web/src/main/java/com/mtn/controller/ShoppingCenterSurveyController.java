@@ -61,7 +61,7 @@ public class ShoppingCenterSurveyController {
     public ResponseEntity findAllAccessesForSurvey(@PathVariable("id") Integer surveyId) {
         securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
 
-        List<ShoppingCenterAccess> domainModels = accessService.findAllBySurveyId(surveyId);
+        List<ShoppingCenterAccess> domainModels = accessService.findAllBySurveyIdUsingSpecs(surveyId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList()));
     }
 
@@ -69,7 +69,7 @@ public class ShoppingCenterSurveyController {
     public ResponseEntity findAllTenantsForSurvey(@PathVariable("id") Integer surveyId) {
         securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
 
-        List<ShoppingCenterTenant> domainModels = tenantService.findAllBySurveyId(surveyId);
+        List<ShoppingCenterTenant> domainModels = tenantService.findAllBySurveyIdUsingSpecs(surveyId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterTenantView::new).collect(Collectors.toList()));
     }
 

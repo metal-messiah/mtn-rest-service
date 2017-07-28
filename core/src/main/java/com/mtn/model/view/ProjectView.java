@@ -30,7 +30,7 @@ public class ProjectView extends SimpleProjectView {
         this.updatedBy = new SimpleUserProfileView(project.getUpdatedBy());
         this.updatedDate = project.getUpdatedDate();
 
-        this.models = project.getModels().stream().map(SimpleStoreModelView::new).collect(Collectors.toList());
+        this.models = project.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
     }
 
     public SimpleUserProfileView getCreatedBy() {

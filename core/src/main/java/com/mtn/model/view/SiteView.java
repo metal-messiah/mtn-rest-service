@@ -34,7 +34,7 @@ public class SiteView extends SimpleSiteView {
         this.updatedBy = new SimpleUserProfileView(site.getUpdatedBy());
         this.updatedDate = site.getUpdatedDate();
 
-        this.stores = site.getStores().stream().map(SimpleStoreView::new).collect(Collectors.toList());
+        this.stores = site.getStores().stream().filter(store -> store.getDeletedDate() == null).map(SimpleStoreView::new).collect(Collectors.toList());
     }
 
     public SimpleShoppingCenterView getShoppingCenter() {

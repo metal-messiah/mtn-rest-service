@@ -34,7 +34,7 @@ public class RoleView extends SimpleRoleView {
         this.updatedBy = new SimpleUserProfileView(role.getUpdatedBy());
         this.updatedDate = role.getUpdatedDate();
 
-        this.members = role.getMembers().stream().map(SimpleUserProfileView::new).collect(Collectors.toList());
+        this.members = role.getMembers().stream().filter(member -> member.getDeletedDate() == null).map(SimpleUserProfileView::new).collect(Collectors.toList());
         this.permissions = role.getPermissions().stream().map(SimplePermissionView::new).collect(Collectors.toList());
     }
 

@@ -31,7 +31,7 @@ public class CompanyView extends SimpleCompanyView implements Serializable {
         }
 
         this.childCompanies = company.getChildCompanies().stream().map(SimpleCompanyView::new).collect(Collectors.toList());
-        this.stores = company.getStores().stream().map(SimpleStoreView::new).collect(Collectors.toList());
+        this.stores = company.getStores().stream().filter(store -> store.getDeletedDate() == null).map(SimpleStoreView::new).collect(Collectors.toList());
     }
 
     public CompanyView getParentCompany() {

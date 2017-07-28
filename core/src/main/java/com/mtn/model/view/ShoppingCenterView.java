@@ -34,9 +34,9 @@ public class ShoppingCenterView extends SimpleShoppingCenterView {
         this.updatedBy = new SimpleUserProfileView(shoppingCenter.getUpdatedBy());
         this.updatedDate = shoppingCenter.getUpdatedDate();
 
-        this.casings = shoppingCenter.getCasings().stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList());
-        this.sites = shoppingCenter.getSites().stream().map(SimpleSiteView::new).collect(Collectors.toList());
-        this.surveys = shoppingCenter.getSurveys().stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList());
+        this.casings = shoppingCenter.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList());
+        this.sites = shoppingCenter.getSites().stream().filter(site -> site.getDeletedDate() == null).map(SimpleSiteView::new).collect(Collectors.toList());
+        this.surveys = shoppingCenter.getSurveys().stream().filter(survey -> survey.getDeletedDate() == null).map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList());
     }
 
     public SimpleUserProfileView getCreatedBy() {

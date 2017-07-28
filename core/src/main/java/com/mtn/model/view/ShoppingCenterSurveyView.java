@@ -38,8 +38,8 @@ public class ShoppingCenterSurveyView extends SimpleShoppingCenterSurveyView {
             this.shoppingCenter = new SimpleShoppingCenterView(survey.getShoppingCenter());
         }
 
-        this.accesses = survey.getAccesses().stream().map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList());
-        this.tenants = survey.getTenants().stream().map(SimpleShoppingCenterTenantView::new).collect(Collectors.toList());
+        this.accesses = survey.getAccesses().stream().filter(access -> access.getDeletedDate() == null).map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList());
+        this.tenants = survey.getTenants().stream().filter(tenant -> tenant.getDeletedDate() == null).map(SimpleShoppingCenterTenantView::new).collect(Collectors.toList());
     }
 
     public SimpleUserProfileView getCreatedBy() {

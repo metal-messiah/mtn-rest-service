@@ -33,10 +33,10 @@ public class StoreView extends SimpleStoreView {
             this.parentCompany = new CompanyView(store.getParentCompany());
         }
 
-        this.casings = store.getCasings().stream().map(SimpleStoreCasingView::new).collect(Collectors.toList());
-        this.models = store.getModels().stream().map(SimpleStoreModelView::new).collect(Collectors.toList());
-        this.surveys = store.getSurveys().stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList());
-        this.volumes = store.getVolumes().stream().map(SimpleStoreVolumeView::new).collect(Collectors.toList());
+        this.casings = store.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleStoreCasingView::new).collect(Collectors.toList());
+        this.models = store.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
+        this.surveys = store.getSurveys().stream().filter(storeSurvey -> storeSurvey.getDeletedDate() == null).map(SimpleStoreSurveyView::new).collect(Collectors.toList());
+        this.volumes = store.getVolumes().stream().filter(volume -> volume.getDeletedDate() == null).map(SimpleStoreVolumeView::new).collect(Collectors.toList());
     }
 
     public SimpleSiteView getSite() {

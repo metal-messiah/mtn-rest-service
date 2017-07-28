@@ -21,7 +21,7 @@ public class PermissionView extends SimplePermissionView {
     public PermissionView(Permission permission) {
         super(permission);
 
-        this.roles = permission.getRoles().stream().map(SimpleRoleView::new).collect(Collectors.toList());
+        this.roles = permission.getRoles().stream().filter(role -> role.getDeletedDate() == null).map(SimpleRoleView::new).collect(Collectors.toList());
     }
 
     public List<SimpleRoleView> getRoles() {

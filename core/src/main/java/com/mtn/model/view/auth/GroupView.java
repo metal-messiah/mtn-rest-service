@@ -33,7 +33,7 @@ public class GroupView extends SimpleGroupView {
         this.updatedBy = new SimpleUserProfileView(group.getUpdatedBy());
         this.updatedDate = group.getUpdatedDate();
 
-        this.members = group.getMembers().stream().map(SimpleUserProfileView::new).collect(Collectors.toList());
+        this.members = group.getMembers().stream().filter(member -> member.getDeletedDate() == null).map(SimpleUserProfileView::new).collect(Collectors.toList());
     }
 
     public SimpleUserProfileView getCreatedBy() {

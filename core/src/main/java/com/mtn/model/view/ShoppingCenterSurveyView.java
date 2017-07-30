@@ -3,7 +3,6 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,12 +13,7 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShoppingCenterSurveyView extends SimpleShoppingCenterSurveyView {
 
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
-    protected SimpleShoppingCenterView shoppingCenter;
-
+    protected List<SimpleInteractionView> interactions = new ArrayList<>();
     protected List<SimpleShoppingCenterAccessView> accesses = new ArrayList<>();
     protected List<SimpleShoppingCenterTenantView> tenants = new ArrayList<>();
 
@@ -29,57 +23,17 @@ public class ShoppingCenterSurveyView extends SimpleShoppingCenterSurveyView {
     public ShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
         super(survey);
 
-        this.createdBy = new SimpleUserProfileView(survey.getCreatedBy());
-        this.createdDate = survey.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(survey.getUpdatedBy());
-        this.updatedDate = survey.getUpdatedDate();
-
-        if (survey.getShoppingCenter() != null) {
-            this.shoppingCenter = new SimpleShoppingCenterView(survey.getShoppingCenter());
-        }
-
         this.accesses = survey.getAccesses().stream().filter(access -> access.getDeletedDate() == null).map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList());
+        this.interactions = survey.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
         this.tenants = survey.getTenants().stream().filter(tenant -> tenant.getDeletedDate() == null).map(SimpleShoppingCenterTenantView::new).collect(Collectors.toList());
     }
 
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
+    public List<SimpleInteractionView> getInteractions() {
+        return interactions;
     }
 
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public SimpleShoppingCenterView getShoppingCenter() {
-        return shoppingCenter;
-    }
-
-    public void setShoppingCenter(SimpleShoppingCenterView shoppingCenter) {
-        this.shoppingCenter = shoppingCenter;
+    public void setInteractions(List<SimpleInteractionView> interactions) {
+        this.interactions = interactions;
     }
 
     public List<SimpleShoppingCenterAccessView> getAccesses() {

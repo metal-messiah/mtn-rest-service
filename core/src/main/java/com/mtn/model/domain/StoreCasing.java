@@ -4,6 +4,8 @@ import com.mtn.constant.ConfidenceType;
 import com.mtn.constant.RatingType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -40,6 +42,8 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private ConfidenceType volumeConfidence;
     private Integer version;
     private Integer legacyCasingId;
+
+    private List<Interaction> interactions = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
@@ -312,5 +316,14 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
 
     public void setLegacyCasingId(Integer legacyCasingId) {
         this.legacyCasingId = legacyCasingId;
+    }
+
+    @OneToMany(mappedBy = "storeCasing")
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
     }
 }

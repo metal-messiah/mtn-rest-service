@@ -9,20 +9,24 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleProjectView {
 
-    private Integer id;
-    private String projectName;
-    private String metroArea;
-    private String clientName;
-    private Integer projectYear;
-    private Integer projectMonth;
-    private Boolean isActive = false;
-    private Boolean isPrimaryData = false;
-    private LocalDateTime startedDate;
-    private LocalDateTime completedDate;
-    private String source;
-    private GeoJsonView boundary;
-    private Integer version;
-    private Integer legacyProjectId;
+    protected Integer id;
+    protected String projectName;
+    protected String metroArea;
+    protected String clientName;
+    protected Integer projectYear;
+    protected Integer projectMonth;
+    protected Boolean isActive = false;
+    protected Boolean isPrimaryData = false;
+    protected LocalDateTime startedDate;
+    protected LocalDateTime completedDate;
+    protected String source;
+    protected GeoJsonView boundary;
+    protected Integer version;
+    protected Integer legacyProjectId;
+    protected SimpleUserProfileView createdBy;
+    protected LocalDateTime createdDate;
+    protected SimpleUserProfileView updatedBy;
+    protected LocalDateTime updatedDate;
 
     public SimpleProjectView() {
     }
@@ -42,6 +46,10 @@ public class SimpleProjectView {
         this.boundary = new GeoJsonView(project.getBoundary());
         this.version = project.getVersion();
         this.legacyProjectId = project.getLegacyProjectId();
+        this.createdBy = new SimpleUserProfileView(project.getCreatedBy());
+        this.createdDate = project.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(project.getUpdatedBy());
+        this.updatedDate = project.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -154,5 +162,37 @@ public class SimpleProjectView {
 
     public void setLegacyProjectId(Integer legacyProjectId) {
         this.legacyProjectId = legacyProjectId;
+    }
+
+    public SimpleUserProfileView getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SimpleUserProfileView createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public SimpleUserProfileView getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

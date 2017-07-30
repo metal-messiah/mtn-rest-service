@@ -5,6 +5,8 @@ import com.mtn.constant.StoreFitType;
 import com.mtn.constant.StoreFormatType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allen on 6/7/2017.
@@ -86,6 +88,8 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     private Integer seasonalityDec;
     private Integer version;
     private Integer legacyCasingId;
+
+    private List<Interaction> interactions = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
@@ -693,5 +697,14 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
 
     public void setLegacyCasingId(Integer legacyCasingId) {
         this.legacyCasingId = legacyCasingId;
+    }
+
+    @OneToMany(mappedBy = "storeSurvey")
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
     }
 }

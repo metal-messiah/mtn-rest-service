@@ -3,6 +3,8 @@ package com.mtn.model.domain;
 import com.mtn.constant.RatingType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -17,6 +19,8 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
     private RatingType ratingSynergy;
     private Integer legacyCasingId;
     private Integer version;
+
+    private List<Interaction> interactions = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
@@ -109,5 +113,14 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @OneToMany(mappedBy = "shoppingCenterCasing")
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
     }
 }

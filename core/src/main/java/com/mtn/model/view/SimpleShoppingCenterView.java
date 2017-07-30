@@ -3,6 +3,8 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenter;
 
+import java.time.LocalDateTime;
+
 /**
  * Created by Allen on 4/23/2017.
  */
@@ -15,6 +17,10 @@ public class SimpleShoppingCenterView {
     protected Integer version;
     protected Integer legacyCasingId;
     protected Integer legacyLocationId;
+    private SimpleUserProfileView createdBy;
+    private LocalDateTime createdDate;
+    private SimpleUserProfileView updatedBy;
+    private LocalDateTime updatedDate;
 
     public SimpleShoppingCenterView() {
     }
@@ -26,6 +32,10 @@ public class SimpleShoppingCenterView {
         this.version = shoppingCenter.getVersion();
         this.legacyCasingId = shoppingCenter.getLegacyCasingId();
         this.legacyLocationId = shoppingCenter.getLegacyLocationId();
+        this.createdBy = new SimpleUserProfileView(shoppingCenter.getCreatedBy());
+        this.createdDate = shoppingCenter.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(shoppingCenter.getUpdatedBy());
+        this.updatedDate = shoppingCenter.getUpdatedDate();
     }
 
     public Integer getId() {

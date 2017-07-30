@@ -30,6 +30,7 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
     private Integer version;
 
     private List<ShoppingCenterAccess> accesses = new ArrayList<>();
+    private List<Interaction> interactions = new ArrayList<>();
     private List<ShoppingCenterTenant> tenants = new ArrayList<>();
 
     @PrePersist
@@ -202,5 +203,14 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @OneToMany(mappedBy = "shoppingCenterSurvey")
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
     }
 }

@@ -1,7 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.StoreSurvey;
-import com.mtn.model.view.SimpleStoreSurveyView;
+import com.mtn.model.view.StoreSurveyView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.StoreSurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class StoreSurveyController {
 
         StoreSurvey domainModel = surveyService.findOneUsingSpecs(id);
         if (domainModel != null) {
-            return ResponseEntity.ok(new SimpleStoreSurveyView(domainModel));
+            return ResponseEntity.ok(new StoreSurveyView(domainModel));
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -45,6 +45,6 @@ public class StoreSurveyController {
         securityService.checkPermission("SHOPPING_CENTER_SURVEYS_UPDATE");
 
         StoreSurvey domainModel = surveyService.updateOne(id, request);
-        return ResponseEntity.ok(new SimpleStoreSurveyView(domainModel));
+        return ResponseEntity.ok(new StoreSurveyView(domainModel));
     }
 }

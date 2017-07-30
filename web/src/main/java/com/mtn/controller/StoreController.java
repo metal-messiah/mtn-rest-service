@@ -35,7 +35,7 @@ public class StoreController {
         securityService.checkPermission("STORE_CASINGS_CREATE");
 
         StoreCasing domainModel = storeService.addOneCasingToStore(storeId, request);
-        return ResponseEntity.ok(new SimpleStoreCasingView(domainModel));
+        return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.POST)
@@ -43,7 +43,7 @@ public class StoreController {
         securityService.checkPermission("STORE_SURVEYS_CREATE");
 
         StoreSurvey domainModel = storeService.addOneSurveyToStore(storeId, request);
-        return ResponseEntity.ok(new SimpleStoreSurveyView(domainModel));
+        return ResponseEntity.ok(new StoreSurveyView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/store-volume", method = RequestMethod.POST)

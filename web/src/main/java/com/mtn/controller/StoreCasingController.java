@@ -1,7 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.StoreCasing;
-import com.mtn.model.view.SimpleStoreCasingView;
+import com.mtn.model.view.StoreCasingView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.StoreCasingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class StoreCasingController {
 
         StoreCasing domainModel = storeCasingService.findOneUsingSpecs(id);
         if (domainModel != null) {
-            return ResponseEntity.ok(new SimpleStoreCasingView(domainModel));
+            return ResponseEntity.ok(new StoreCasingView(domainModel));
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -42,7 +42,7 @@ public class StoreCasingController {
         securityService.checkPermission("STORE_CASINGS_UPDATE");
 
         StoreCasing domainModel = storeCasingService.updateOne(id, request);
-        return ResponseEntity.ok(new SimpleStoreCasingView(domainModel));
+        return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
 

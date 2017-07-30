@@ -1,25 +1,25 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.ShoppingCenterCasing;
+import com.mtn.model.domain.StoreCasing;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ShoppingCenterCasingView extends SimpleShoppingCenterCasingView {
+public class StoreCasingView extends SimpleStoreCasingView {
 
     private List<SimpleInteractionView> interactions = new ArrayList<>();
 
-    public ShoppingCenterCasingView() {
+    public StoreCasingView() {
         super();
     }
 
-    public ShoppingCenterCasingView(ShoppingCenterCasing casing) {
-        super(casing);
+    public StoreCasingView(StoreCasing storeCasing) {
+        super(storeCasing);
 
-        this.interactions = casing.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
+        this.interactions = storeCasing.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
     }
 
     public List<SimpleInteractionView> getInteractions() {

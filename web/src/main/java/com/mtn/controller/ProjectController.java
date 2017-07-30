@@ -51,7 +51,7 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll() {
         securityService.checkPermission("PROJECTS_READ");
 

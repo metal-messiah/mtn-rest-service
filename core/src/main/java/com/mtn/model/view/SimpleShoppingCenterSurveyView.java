@@ -3,6 +3,8 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 
+import java.time.LocalDateTime;
+
 /**
  * Created by Allen on 5/4/2017.
  */
@@ -25,6 +27,11 @@ public class SimpleShoppingCenterSurveyView {
     private String note;
     private Integer legacyCasingId;
     private Integer version;
+    private SimpleUserProfileView createdBy;
+    private LocalDateTime createdDate;
+    private SimpleUserProfileView updatedBy;
+    private LocalDateTime updatedDate;
+
 
     public SimpleShoppingCenterSurveyView() {
     }
@@ -46,6 +53,10 @@ public class SimpleShoppingCenterSurveyView {
         this.note = survey.getNote();
         this.legacyCasingId = survey.getLegacyCasingId();
         this.version = survey.getVersion();
+        this.createdBy = new SimpleUserProfileView(survey.getCreatedBy());
+        this.createdDate = survey.getCreatedDate();
+        this.updatedBy = new SimpleUserProfileView(survey.getUpdatedBy());
+        this.updatedDate = survey.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -174,5 +185,37 @@ public class SimpleShoppingCenterSurveyView {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public SimpleUserProfileView getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SimpleUserProfileView createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public SimpleUserProfileView getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

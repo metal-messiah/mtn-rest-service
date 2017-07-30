@@ -26,6 +26,7 @@ public class Project extends AuditingEntity implements Identifiable {
     private Integer version;
     private Integer legacyProjectId;
 
+    private List<Interaction> interactions = new ArrayList<>();
     private List<StoreModel> models = new ArrayList<>();
 
     @PrePersist
@@ -161,5 +162,14 @@ public class Project extends AuditingEntity implements Identifiable {
 
     public void setModels(List<StoreModel> models) {
         this.models = models;
+    }
+
+    @OneToMany(mappedBy = "project")
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
     }
 }

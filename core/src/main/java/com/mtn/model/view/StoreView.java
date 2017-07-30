@@ -17,6 +17,7 @@ public class StoreView extends SimpleStoreView {
     private CompanyView parentCompany;
 
     private List<SimpleStoreCasingView> casings = new ArrayList<>();
+    private List<SimpleInteractionView> interactions = new ArrayList<>();
     private List<SimpleStoreModelView> models = new ArrayList<>();
     private List<SimpleStoreSurveyView> surveys = new ArrayList<>();
     private List<SimpleStoreVolumeView> volumes = new ArrayList<>();
@@ -34,6 +35,7 @@ public class StoreView extends SimpleStoreView {
         }
 
         this.casings = store.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleStoreCasingView::new).collect(Collectors.toList());
+        this.interactions = store.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
         this.models = store.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
         this.surveys = store.getSurveys().stream().filter(storeSurvey -> storeSurvey.getDeletedDate() == null).map(SimpleStoreSurveyView::new).collect(Collectors.toList());
         this.volumes = store.getVolumes().stream().filter(volume -> volume.getDeletedDate() == null).map(SimpleStoreVolumeView::new).collect(Collectors.toList());
@@ -86,5 +88,13 @@ public class StoreView extends SimpleStoreView {
 
     public void setModels(List<SimpleStoreModelView> models) {
         this.models = models;
+    }
+
+    public List<SimpleInteractionView> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<SimpleInteractionView> interactions) {
+        this.interactions = interactions;
     }
 }

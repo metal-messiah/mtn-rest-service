@@ -48,7 +48,7 @@ public class ShoppingCenterController {
         securityService.checkPermission("SHOPPING_CENTER_CASINGS_CREATE");
 
         ShoppingCenterCasing domainModel = shoppingCenterService.addOneCasingToShoppingCenter(shoppingCenterId, request);
-        return ResponseEntity.ok(new SimpleShoppingCenterCasingView(domainModel));
+        return ResponseEntity.ok(new ShoppingCenterCasingView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.POST)

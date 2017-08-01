@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreSurvey;
 import com.mtn.model.view.SimpleProjectView;
@@ -30,7 +31,7 @@ public class StoreSurveyController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_DELETE");
+        securityService.checkPermission(PermissionType.STORE_SURVEYS_DELETE);
 
         surveyService.deleteOne(id);
         return ResponseEntity.noContent().build();
@@ -38,7 +39,7 @@ public class StoreSurveyController {
 
     @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
     public ResponseEntity findAllProjectsForStoreSurvey(@PathVariable("id") Integer storeSurveyId) {
-        securityService.checkPermission("PROJECTS_READ");
+        securityService.checkPermission(PermissionType.PROJECTS_READ);
 
         List<Project> domainModels = projectService.findAllByStoreSurveyId(storeSurveyId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
@@ -46,7 +47,7 @@ public class StoreSurveyController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
+        securityService.checkPermission(PermissionType.STORE_SURVEYS_READ);
 
         StoreSurvey domainModel = surveyService.findOneUsingSpecs(id);
         if (domainModel != null) {
@@ -58,7 +59,7 @@ public class StoreSurveyController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody StoreSurvey request) {
-        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_UPDATE");
+        securityService.checkPermission(PermissionType.STORE_SURVEYS_UPDATE);
 
         StoreSurvey domainModel = surveyService.updateOne(id, request);
         return ResponseEntity.ok(new StoreSurveyView(domainModel));

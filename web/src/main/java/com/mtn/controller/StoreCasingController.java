@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.view.SimpleProjectView;
@@ -27,7 +28,7 @@ public class StoreCasingController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("STORE_CASINGS_DELETE");
+        securityService.checkPermission(PermissionType.STORE_CASINGS_DELETE);
 
         storeCasingService.deleteOne(id);
         return ResponseEntity.noContent().build();
@@ -35,7 +36,7 @@ public class StoreCasingController {
 
     @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
     public ResponseEntity findAllProjectsForStoreCasing(@PathVariable("id") Integer storeCasingId) {
-        securityService.checkPermission("PROJECTS_READ");
+        securityService.checkPermission(PermissionType.PROJECTS_READ);
 
         List<Project> domainModels = projectService.findAllByStoreCasingId(storeCasingId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
@@ -43,7 +44,7 @@ public class StoreCasingController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("STORE_CASINGS_READ");
+        securityService.checkPermission(PermissionType.STORE_CASINGS_READ);
 
         StoreCasing domainModel = storeCasingService.findOneUsingSpecs(id);
         if (domainModel != null) {
@@ -55,7 +56,7 @@ public class StoreCasingController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody StoreCasing request) {
-        securityService.checkPermission("STORE_CASINGS_UPDATE");
+        securityService.checkPermission(PermissionType.STORE_CASINGS_UPDATE);
 
         StoreCasing domainModel = storeCasingService.updateOne(id, request);
         return ResponseEntity.ok(new StoreCasingView(domainModel));

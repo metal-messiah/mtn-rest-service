@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.constant.SearchType;
 import com.mtn.model.view.search.SearchRequest;
 import com.mtn.model.view.search.SearchResultView;
@@ -29,7 +30,7 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity search(@RequestBody SearchRequest request) {
-        securityService.checkPermission("SEARCH_READ");
+        securityService.checkPermission(PermissionType.SEARCH_READ);
 
         validateSearchRequest(request);
 

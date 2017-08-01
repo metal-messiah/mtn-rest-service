@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.StoreModel;
 import com.mtn.model.view.SimpleStoreModelView;
 import com.mtn.model.view.StoreModelView;
@@ -20,7 +21,7 @@ public class StoreModelController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody StoreModel request) {
-        securityService.checkPermission("STORE_MODELS_CREATE");
+        securityService.checkPermission(PermissionType.STORE_MODELS_CREATE);
 
         StoreModel domainModel = modelService.addOne(request);
         return ResponseEntity.ok(new StoreModelView(domainModel));
@@ -28,7 +29,7 @@ public class StoreModelController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("STORE_MODELS_DELETE");
+        securityService.checkPermission(PermissionType.STORE_MODELS_DELETE);
 
         modelService.deleteOne(id);
         return ResponseEntity.noContent().build();
@@ -36,7 +37,7 @@ public class StoreModelController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("STORE_MODELS_READ");
+        securityService.checkPermission(PermissionType.STORE_MODELS_READ);
 
         StoreModel domainModel = modelService.findOneUsingSpecs(id);
         if (domainModel != null) {
@@ -48,7 +49,7 @@ public class StoreModelController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody StoreModel request) {
-        securityService.checkPermission("STORE_MODELS_UPDATE");
+        securityService.checkPermission(PermissionType.STORE_MODELS_UPDATE);
 
         StoreModel domainModel = modelService.updateOne(id, request);
         return ResponseEntity.ok(new SimpleStoreModelView(domainModel));

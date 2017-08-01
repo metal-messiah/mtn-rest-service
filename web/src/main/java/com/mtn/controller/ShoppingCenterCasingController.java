@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.ShoppingCenterCasing;
 import com.mtn.model.view.ShoppingCenterCasingView;
@@ -27,7 +28,7 @@ public class ShoppingCenterCasingController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("SHOPPING_CENTER_CASINGS_DELETE");
+        securityService.checkPermission(PermissionType.SHOPPING_CENTER_CASINGS_DELETE);
 
         casingService.deleteOne(id);
         return ResponseEntity.noContent().build();
@@ -35,7 +36,7 @@ public class ShoppingCenterCasingController {
 
     @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
     public ResponseEntity findAllProjectsForShoppingCenterCasing(@PathVariable("id") Integer shoppingCenterCasingId) {
-        securityService.checkPermission("PROJECTS_READ");
+        securityService.checkPermission(PermissionType.PROJECTS_READ);
 
         List<Project> domainModels = projectService.findAllByShoppingCenterCasingId(shoppingCenterCasingId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
@@ -43,7 +44,7 @@ public class ShoppingCenterCasingController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("SHOPPING_CENTER_CASINGS_READ");
+        securityService.checkPermission(PermissionType.SHOPPING_CENTER_CASINGS_READ);
 
         ShoppingCenterCasing domainModel = casingService.findOneUsingSpecs(id);
         if (domainModel != null) {
@@ -55,7 +56,7 @@ public class ShoppingCenterCasingController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody ShoppingCenterCasing request) {
-        securityService.checkPermission("SHOPPING_CENTER_CASINGS_UPDATE");
+        securityService.checkPermission(PermissionType.SHOPPING_CENTER_CASINGS_UPDATE);
 
         ShoppingCenterCasing domainModel = casingService.updateOne(id, request);
         return ResponseEntity.ok(new ShoppingCenterCasingView(domainModel));

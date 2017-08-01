@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.model.converter.UserProfileToSimpleUserProfileViewConverter;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.UserProfileView;
@@ -26,7 +27,7 @@ public class UserProfileController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody UserProfile request) {
-        securityService.checkPermission("USERS_CREATE");
+        securityService.checkPermission(PermissionType.USERS_CREATE);
 
         UserProfile domainModel = userProfileService.addOne(request);
         return ResponseEntity.ok(new UserProfileView(domainModel));
@@ -34,7 +35,7 @@ public class UserProfileController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("USERS_DELETE");
+        securityService.checkPermission(PermissionType.USERS_DELETE);
 
         userProfileService.deleteOne(id);
         return ResponseEntity.noContent().build();
@@ -42,7 +43,7 @@ public class UserProfileController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(@RequestParam(value = "q", required = false) String q, Pageable page) {
-        securityService.checkPermission("USERS_READ");
+        securityService.checkPermission(PermissionType.USERS_READ);
 
         Page<UserProfile> domainModels;
         if (StringUtils.isNotBlank(q)) {
@@ -56,7 +57,7 @@ public class UserProfileController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("USERS_READ");
+        securityService.checkPermission(PermissionType.USERS_READ);
 
         UserProfile domainModel = userProfileService.findOneUsingSpecs(id);
         if (domainModel != null) {
@@ -68,7 +69,7 @@ public class UserProfileController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody UserProfile request) {
-        securityService.checkPermission("USERS_UPDATE");
+        securityService.checkPermission(PermissionType.USERS_UPDATE);
 
         UserProfile domainModel = userProfileService.updateOne(id, request);
         return ResponseEntity.ok(new UserProfileView(domainModel));

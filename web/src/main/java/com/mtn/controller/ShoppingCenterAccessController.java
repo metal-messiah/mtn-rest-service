@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.view.ShoppingCenterAccessView;
 import com.mtn.service.SecurityService;
@@ -22,7 +23,7 @@ public class ShoppingCenterAccessController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_DELETE");
+        securityService.checkPermission(PermissionType.SHOPPING_CENTER_SURVEYS_DELETE);
 
         accessService.deleteOne(id);
         return ResponseEntity.noContent().build();
@@ -30,7 +31,7 @@ public class ShoppingCenterAccessController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
+        securityService.checkPermission(PermissionType.SHOPPING_CENTER_SURVEYS_READ);
 
         ShoppingCenterAccess domainModel = accessService.findOneUsingSpecs(id);
         if (domainModel != null) {
@@ -42,7 +43,7 @@ public class ShoppingCenterAccessController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody ShoppingCenterAccess request) {
-        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_UPDATE");
+        securityService.checkPermission(PermissionType.SHOPPING_CENTER_SURVEYS_UPDATE);
 
         ShoppingCenterAccess domainModel = accessService.updateOne(id, request);
         return ResponseEntity.ok(new ShoppingCenterAccessView(domainModel));

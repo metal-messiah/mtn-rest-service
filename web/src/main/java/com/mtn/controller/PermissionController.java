@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.model.converter.PermissionToSimplePermissionViewConverter;
 import com.mtn.model.domain.auth.Permission;
 import com.mtn.model.view.auth.PermissionView;
@@ -25,7 +26,7 @@ public class PermissionController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(Pageable page) {
-        securityService.checkPermission("PERMISSIONS_READ");
+        securityService.checkPermission(PermissionType.PERMISSIONS_READ);
 
         Page<Permission> domainModels = permissionService.findAll(page);
         return ResponseEntity.ok(domainModels.map(new PermissionToSimplePermissionViewConverter()));
@@ -33,7 +34,7 @@ public class PermissionController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("PERMISSIONS_READ");
+        securityService.checkPermission(PermissionType.PERMISSIONS_READ);
 
         Permission domainModel = permissionService.findOne(id);
         if (domainModel != null) {
@@ -45,7 +46,7 @@ public class PermissionController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody Permission request) {
-        securityService.checkPermission("PERMISSIONS_UPDATE");
+        securityService.checkPermission(PermissionType.PERMISSIONS_UPDATE);
 
         Permission domainModel = permissionService.updateOne(id, request);
         return ResponseEntity.ok(new PermissionView(domainModel));

@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.view.SimpleStoreView;
@@ -34,7 +35,7 @@ public class SiteController {
             @PathVariable("id") Integer siteId,
             @RequestParam(value = "overrideActiveStore", defaultValue = "false") Boolean overrideActiveStore,
             @RequestBody Store request) {
-        securityService.checkPermission("STORES_CREATE");
+        securityService.checkPermission(PermissionType.STORES_CREATE);
 
         Store domainModel = siteService.addOneStoreToSite(siteId, request, overrideActiveStore);
         return ResponseEntity.ok(new StoreView(domainModel));
@@ -42,7 +43,7 @@ public class SiteController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("SITES_DELETE");
+        securityService.checkPermission(PermissionType.SITES_DELETE);
 
         siteService.deleteOne(id);
         return ResponseEntity.noContent().build();
@@ -50,7 +51,7 @@ public class SiteController {
 
     @RequestMapping(value = "/{id}/store", method = RequestMethod.GET)
     public ResponseEntity findAllStoresForSite(@PathVariable("id") Integer siteId) {
-        securityService.checkPermission("STORES_READ");
+        securityService.checkPermission(PermissionType.STORES_READ);
 
         List<Store> domainModels = storeService.findAllBySiteIdUsingSpecs(siteId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
@@ -58,7 +59,7 @@ public class SiteController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission("SITES_READ");
+        securityService.checkPermission(PermissionType.SITES_READ);
 
         Site domainModel = siteService.findOneUsingSpecs(id);
         if (domainModel != null) {
@@ -70,7 +71,7 @@ public class SiteController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody SiteView request) {
-        securityService.checkPermission("SITES_UPDATE");
+        securityService.checkPermission(PermissionType.SITES_UPDATE);
 
         Site requestModel = new Site((SiteView) request); //Cast ensures correct constructor is called
         Site domainModel = siteService.updateOne(id, requestModel);

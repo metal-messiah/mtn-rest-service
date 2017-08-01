@@ -46,6 +46,10 @@ public class ShoppingCenterCasingService extends ValidatingDataService<ShoppingC
         existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
+    public List<ShoppingCenterCasing> findAllByProjectId(Integer id) {
+        return casingRepository.findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
+    }
+
     public List<ShoppingCenterCasing> findAllByShoppingCenterId(Integer shoppingCenterId) {
         return casingRepository.findAllByShoppingCenterId(shoppingCenterId);
     }

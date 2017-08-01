@@ -29,6 +29,8 @@ public class StoreController {
     private StoreModelService modelService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private ProjectService projectService;
 
     @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.POST)
     public ResponseEntity addOneStoreCasingToStore(@PathVariable("id") Integer storeId, @RequestBody StoreCasing request) {
@@ -76,6 +78,14 @@ public class StoreController {
 
         List<StoreModel> domainModels = modelService.findAllByStoreIdUsingSpecs(storeId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreModelView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
+    public ResponseEntity findAllProjectsForStore(@PathVariable("id") Integer storeId) {
+        securityService.checkPermission("PROJECTS_READ");
+
+        List<Project> domainModels = projectService.findAllByStoreId(storeId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.GET)

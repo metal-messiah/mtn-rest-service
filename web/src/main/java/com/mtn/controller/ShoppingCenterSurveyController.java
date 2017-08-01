@@ -1,15 +1,14 @@
 package com.mtn.controller;
 
+import com.mtn.model.domain.Project;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.ShoppingCenterTenant;
 import com.mtn.model.view.ShoppingCenterSurveyView;
+import com.mtn.model.view.SimpleProjectView;
 import com.mtn.model.view.SimpleShoppingCenterAccessView;
 import com.mtn.model.view.SimpleShoppingCenterTenantView;
-import com.mtn.service.SecurityService;
-import com.mtn.service.ShoppingCenterAccessService;
-import com.mtn.service.ShoppingCenterSurveyService;
-import com.mtn.service.ShoppingCenterTenantService;
+import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +31,8 @@ public class ShoppingCenterSurveyController {
     private ShoppingCenterTenantService tenantService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private ProjectService projectService;
 
     @RequestMapping(path = "/{id}/shopping-center-access", method = RequestMethod.POST)
     public ResponseEntity addOneAccessToSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterAccess request) {
@@ -63,6 +64,14 @@ public class ShoppingCenterSurveyController {
 
         List<ShoppingCenterAccess> domainModels = accessService.findAllBySurveyIdUsingSpecs(surveyId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
+    public ResponseEntity findAllProjectsForShoppingCenterSurvey(@PathVariable("id") Integer shoppingCenterSurveyId) {
+        securityService.checkPermission("PROJECTS_READ");
+
+        List<Project> domainModels = projectService.findAllByShoppingCenterSurveyId(shoppingCenterSurveyId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(path = "/{id}/shopping-center-tenant", method = RequestMethod.GET)

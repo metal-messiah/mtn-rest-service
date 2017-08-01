@@ -1,10 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.converter.ShoppingCenterToSimpleShoppingCenterViewConverter;
-import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.model.domain.ShoppingCenterCasing;
-import com.mtn.model.domain.ShoppingCenterSurvey;
-import com.mtn.model.domain.Site;
+import com.mtn.model.domain.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +31,8 @@ public class ShoppingCenterController {
     private SecurityService securityService;
     @Autowired
     private ShoppingCenterCasingService casingService;
+    @Autowired
+    private ProjectService projectService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody ShoppingCenter request) {
@@ -97,6 +96,14 @@ public class ShoppingCenterController {
         }
 
         return ResponseEntity.ok(domainModels.map(new ShoppingCenterToSimpleShoppingCenterViewConverter()));
+    }
+
+    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
+    public ResponseEntity findAllProjectsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
+        securityService.checkPermission("PROJECTS_READ");
+
+        List<Project> domainModels = projectService.findAllByShoppingCenterId(shoppingCenterId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.GET)

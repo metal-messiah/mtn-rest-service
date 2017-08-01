@@ -46,6 +46,10 @@ public class StoreCasingService extends ValidatingDataService<StoreCasing> {
         existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
+    public List<StoreCasing> findAllByProjectId(Integer id) {
+        return casingRepository.findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
+    }
+
     public List<StoreCasing> findAllByStoreId(Integer storeId) {
         return casingRepository.findAllByStoreId(storeId);
     }

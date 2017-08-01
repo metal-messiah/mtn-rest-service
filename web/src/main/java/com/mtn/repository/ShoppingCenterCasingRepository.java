@@ -12,4 +12,7 @@ import java.util.List;
 public interface ShoppingCenterCasingRepository extends JpaRepository<ShoppingCenterCasing, Integer>, JpaSpecificationExecutor<ShoppingCenterCasing> {
 
     List<ShoppingCenterCasing> findAllByShoppingCenterId(Integer shoppingCenterId);
+
+    List<ShoppingCenterCasing> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
+
 }

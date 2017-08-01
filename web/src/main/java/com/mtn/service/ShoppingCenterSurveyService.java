@@ -78,6 +78,10 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
         return surveyRepository.findAllByShoppingCenterId(shoppingCenterId);
     }
 
+    public List<ShoppingCenterSurvey> findAllByProjectId(Integer id) {
+        return surveyRepository.findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
+    }
+
     public List<ShoppingCenterSurvey> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
         return surveyRepository.findAll(
                 where(shoppingCenterIdEquals(shoppingCenterId))

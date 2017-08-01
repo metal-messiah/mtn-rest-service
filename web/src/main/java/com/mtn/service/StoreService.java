@@ -115,6 +115,10 @@ public class StoreService extends ValidatingDataService<Store> {
         existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
+    public List<Store> findAllByProjectId(Integer id) {
+        return storeRepository.findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
+    }
+
     public List<Store> findAllByParentCompanyId(Integer companyId) {
         Company company = companyService.findOne(companyId);
         if (company == null) {

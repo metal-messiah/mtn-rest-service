@@ -65,6 +65,30 @@ public class ProjectService extends ValidatingDataService<Project> {
         return projectRepository.findAll();
     }
 
+    public List<Project> findAllByShoppingCenterId(Integer id) {
+        return projectRepository.findAllByInteractionsShoppingCenterIdAndDeletedDateIsNull(id);
+    }
+
+    public List<Project> findAllByShoppingCenterSurveyId(Integer id) {
+        return projectRepository.findAllByInteractionsShoppingCenterSurveyIdAndDeletedDateIsNull(id);
+    }
+
+    public List<Project> findAllByShoppingCenterCasingId(Integer id) {
+        return projectRepository.findAllByInteractionsShoppingCenterCasingIdAndDeletedDateIsNull(id);
+    }
+
+    public List<Project> findAllByStoreId(Integer id) {
+        return projectRepository.findAllByInteractionsStoreIdAndDeletedDateIsNull(id);
+    }
+
+    public List<Project> findAllByStoreCasingId(Integer id) {
+        return projectRepository.findAllByInteractionsStoreCasingIdAndDeletedDateIsNull(id);
+    }
+
+    public List<Project> findAllByStoreSurveyId(Integer id) {
+        return projectRepository.findAllByInteractionsStoreSurveyIdAndDeletedDateIsNull(id);
+    }
+
     public List<Project> findAllUsingSpecs() {
         return projectRepository.findAll(
                 where(isNotDeleted())

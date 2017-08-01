@@ -12,4 +12,7 @@ import java.util.List;
 public interface StoreSurveyRepository extends JpaRepository<StoreSurvey, Integer>, JpaSpecificationExecutor<StoreSurvey> {
 
     List<StoreSurvey> findAllByStoreId(Integer storeId);
+
+    List<StoreSurvey> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
+
 }

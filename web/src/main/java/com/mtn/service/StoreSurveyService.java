@@ -46,6 +46,10 @@ public class StoreSurveyService extends ValidatingDataService<StoreSurvey> {
         existing.setDeletedBy(securityService.getCurrentPersistentUser());
     }
 
+    public List<StoreSurvey> findAllByProjectId(Integer id) {
+        return surveyRepository.findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
+    }
+
     public List<StoreSurvey> findAllByStoreId(Integer storeId) {
         return surveyRepository.findAllByStoreId(storeId);
     }

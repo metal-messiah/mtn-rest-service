@@ -1,14 +1,8 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.Project;
-import com.mtn.model.domain.StoreModel;
-import com.mtn.model.view.ProjectView;
-import com.mtn.model.view.SimpleProjectView;
-import com.mtn.model.view.SimpleStoreModelView;
-import com.mtn.model.view.StoreModelView;
-import com.mtn.service.ProjectService;
-import com.mtn.service.SecurityService;
-import com.mtn.service.StoreModelService;
+import com.mtn.model.domain.*;
+import com.mtn.model.view.*;
+import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +20,18 @@ public class ProjectController {
     private StoreModelService modelService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private ShoppingCenterService shoppingCenterService;
+    @Autowired
+    private ShoppingCenterCasingService shoppingCenterCasingService;
+    @Autowired
+    private ShoppingCenterSurveyService shoppingCenterSurveyService;
+    @Autowired
+    private StoreService storeService;
+    @Autowired
+    private StoreCasingService storeCasingService;
+    @Autowired
+    private StoreSurveyService storeSurveyService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(@RequestBody Project request) {
@@ -65,6 +71,54 @@ public class ProjectController {
 
         List<StoreModel> domainModels = modelService.findAllByProjectIdUsingSpecs(projectId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreModelView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(path = "/{id}/shopping-center", method = RequestMethod.GET)
+    public ResponseEntity findAllShoppingCentersForProject(@PathVariable("id") Integer projectId) {
+        securityService.checkPermission("SHOPPING_CENTERS_READ");
+
+        List<ShoppingCenter> domainModels = shoppingCenterService.findAllByProjectId(projectId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(path = "/{id}/shopping-center-casing", method = RequestMethod.GET)
+    public ResponseEntity findAllShoppingCenterCasingsForProject(@PathVariable("id") Integer projectId) {
+        securityService.checkPermission("SHOPPING_CENTER_CASINGS_READ");
+
+        List<ShoppingCenterCasing> domainModels = shoppingCenterCasingService.findAllByProjectId(projectId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(path = "/{id}/shopping-center-survey", method = RequestMethod.GET)
+    public ResponseEntity findAllShoppingCenterSurveysForProject(@PathVariable("id") Integer projectId) {
+        securityService.checkPermission("SHOPPING_CENTER_SURVEYS_READ");
+
+        List<ShoppingCenterSurvey> domainModels = shoppingCenterSurveyService.findAllByProjectId(projectId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(path = "/{id}/store", method = RequestMethod.GET)
+    public ResponseEntity findAllStoresForProject(@PathVariable("id") Integer projectId) {
+        securityService.checkPermission("STORES_READ");
+
+        List<Store> domainModels = storeService.findAllByProjectId(projectId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(path = "/{id}/store-casing", method = RequestMethod.GET)
+    public ResponseEntity findAllStoreCasingsForProject(@PathVariable("id") Integer projectId) {
+        securityService.checkPermission("STORE_CASINGS_READ");
+
+        List<StoreCasing> domainModels = storeCasingService.findAllByProjectId(projectId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(path = "/{id}/store-survey", method = RequestMethod.GET)
+    public ResponseEntity findAllStoreSurveysForProject(@PathVariable("id") Integer projectId) {
+        securityService.checkPermission("STORE_SURVEYS_READ");
+
+        List<StoreSurvey> domainModels = storeSurveyService.findAllByProjectId(projectId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)

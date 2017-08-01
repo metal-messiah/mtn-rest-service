@@ -12,4 +12,6 @@ import java.util.List;
 public interface ShoppingCenterSurveyRepository extends JpaRepository<ShoppingCenterSurvey, Integer>, JpaSpecificationExecutor<ShoppingCenterSurvey> {
 
     List<ShoppingCenterSurvey> findAllByShoppingCenterId(Integer shoppingCenterId);
+
+    List<ShoppingCenterSurvey> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
 }

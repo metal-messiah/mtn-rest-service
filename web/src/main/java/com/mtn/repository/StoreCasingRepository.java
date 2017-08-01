@@ -9,5 +9,8 @@ import java.util.List;
 public interface StoreCasingRepository extends JpaRepository<StoreCasing, Integer>, JpaSpecificationExecutor<StoreCasing> {
 
     List<StoreCasing> findAllByStoreId(Integer storeId);
+
+    List<StoreCasing> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
+
 }
 

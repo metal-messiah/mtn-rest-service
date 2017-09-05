@@ -35,7 +35,9 @@ Follow these steps to get the app up and running locally:
 		* JRE must be a Java 1.8 or higher JDK
 	16. Run the new Spring Boot configuration to start the application
 
-Flyway should run all necessary database migration scripts on application startup. If you encounter an error during the Flyway migration, chances are your connection string information is incorrect.
+Flyway should run all necessary database migration scripts on application startup. If you encounter an error during the Flyway migration, chances are your connection string information is incorrect. 
+
+NOTE: spring.datasource.username needs to be a Superuser to enable the PostGis Extension.
 
 ### Running Without the Admin UI
 Typically, if you are only working on back-end files, or you only need access to the API, and not the Admin UI, you can skip the Gulp process, and simply do:

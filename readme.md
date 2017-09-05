@@ -14,39 +14,39 @@ This collection uses environment variables. You'll want to set up Environments i
 
 ### First-Time Installation
 Follow these steps to get the app up and running locally:
-Markup: 1. Install NodeJS
-1. Check out the project from Bitbucket
-1. Open project in IntelliJ
-1. Open IntelliJ's Terminal (which should open to the project root by default)
-1. Run `mvn clean install` (Must be done once, but then only needs to be done if the Maven dependencies are changed, which should be infrequent. You can also create a Run Configuration in IntelliJ to run this from a single click)
-1. `cd web` to enter the web directory
-1. Run `npm install -g gulp` - Installs Gulp globally (only needs to be done once)
-1. Run `npm install -g bower` - Installs Bower globally (only needs to be done once)
-1. Run `npm install` - Installs all the Node (mostly Gulp) dependencies (Must be done once, but then only needs to be done when the Gulp dependencies are changed, which should be very infrequent)
-1. Run `bower install` - Installs all the front-end dependencies (Must be done once, but then only needs to be done if front-end dependencies are changed, which should also be very infrequent)
-1. Run `gulp build` - Builds and compiles all the front-end files (Must be done at least once, then again when front-end files have changed. It would be good practice to run this before you start the application proper each time. Or, you can alternatively  run `gulp dev` from the Terminal alongside the application, or set up a Gulp Run Configuration to execute the "dev" task. Do this if you're actively developing front-end files, which will watch for changes to front-end files and automatically rebuild them and refresh your browser)
-1. Create an empty Postgres database on your local Postgres server
-1. Navigate in the project to web/src/main/resources, and copy the application-allen.properties file, replacing "allen" with your own name. 
-1. Replace the connection information in your new properties file with the connection information for your new database
-1. Create a Spring Boot Run Configuration called "Local" or some other fancy name
-    * Set the Main Class to `com.mtn.Application`
-    * Set the VM Options to `-Dspring.profiles.active=allen`, where "allen" is replaced with your own name, or the name you used in your new `application-<name>.properties` file
-    * Set the Working Directory to the `web` folder
-    * JRE must be a Java 1.8 or higher JDK
-1. Run the new Spring Boot configuration to start the application
+	1. Install NodeJS
+	2. Check out the project from Bitbucket
+	3. Open project in IntelliJ
+	4. Open IntelliJ's Terminal (which should open to the project root by default)
+	5. Run `mvn clean install` (Must be done once, but then only needs to be done if the Maven dependencies are changed, which should be infrequent. You can also create a Run Configuration in IntelliJ to run this from a single click)
+	6. `cd web` to enter the web directory
+	7. Run `npm install -g gulp` - Installs Gulp globally (only needs to be done once)
+	8. Run `npm install -g bower` - Installs Bower globally (only needs to be done once)
+	9. Run `npm install` - Installs all the Node (mostly Gulp) dependencies (Must be done once, but then only needs to be done when the Gulp dependencies are changed, which should be very infrequent)
+	10. Run `bower install` - Installs all the front-end dependencies (Must be done once, but then only needs to be done if front-end dependencies are changed, which should also be very infrequent)
+	11. Run `gulp build` - Builds and compiles all the front-end files (Must be done at least once, then again when front-end files have changed. It would be good practice to run this before you start the application proper each time. Or, you can alternatively  run `gulp dev` from the Terminal alongside the application, or set up a Gulp Run Configuration to execute the "dev" task. Do this if you're actively developing front-end files, which will watch for changes to front-end files and automatically rebuild them and refresh your browser)
+	12. Create an empty Postgres database on your local Postgres server
+	13. Navigate in the project to web/src/main/resources, and copy the application-allen.properties file, replacing "allen" with your own name. 
+	14. Replace the connection information in your new properties file with the connection information for your new database
+	15. Create a Spring Boot Run Configuration called "Local" or some other fancy name
+		* Set the Main Class to `com.mtn.Application`
+		* Set the VM Options to `-Dspring.profiles.active=allen`, where "allen" is replaced with your own name, or the name you used in your new `application-<name>.properties` file
+		* Set the Working Directory to the `web` folder
+		* JRE must be a Java 1.8 or higher JDK
+	16. Run the new Spring Boot configuration to start the application
 
 Flyway should run all necessary database migration scripts on application startup. If you encounter an error during the Flyway migration, chances are your connection string information is incorrect.
 
 ### Running Without the Admin UI
 Typically, if you are only working on back-end files, or you only need access to the API, and not the Admin UI, you can skip the Gulp process, and simply do:
 1. Run `mvn clean install`
-1. Run/Debug your Spring Boot Run Configuration
+2. Run/Debug your Spring Boot Run Configuration
 
 ### Running With the Admin UI
 If you need the Admin UI, do:
 1. Run `mvn clean install`
-1. Run `gulp build` (or `gulp dev` if you're actively developing the Admin UI)
-1. Run/Debug your Spring Boot Run Configuration
+2. Run `gulp build` (or `gulp dev` if you're actively developing the Admin UI)
+3. Run/Debug your Spring Boot Run Configuration
 
 ### Admin UI Administrator User
 The temporary admin account, which you'll need to use the Admin UI to create your own users, roles, and groups, is:

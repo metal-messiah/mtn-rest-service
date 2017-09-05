@@ -14,7 +14,7 @@ This collection uses environment variables. You'll want to set up Environments i
 
 ### First-Time Installation
 Follow these steps to get the app up and running locally:
-1. Install NodeJS
+Markup: 1. Install NodeJS
 1. Check out the project from Bitbucket
 1. Open project in IntelliJ
 1. Open IntelliJ's Terminal (which should open to the project root by default)

@@ -39,8 +39,8 @@
 
     function configAuth(lockProvider, jwtOptionsProvider) {
         lockProvider.init({
-            clientID: 'FArOoQuRqPT1MZFsNE9qnxeykHp48cIO',
-            domain: 'asudweeks.auth0.com',
+            clientID: 'op5D7TLsM2wDZhg8JLnVh1bn9jgfPWrZ',
+            domain: 'mtnra.auth0.com',
             options: {
                 redirectUrl: location.href.replace('/login', ''),
                 closable: false

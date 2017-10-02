@@ -10,5 +10,5 @@ CREATE TABLE api_client (
 );
 
 INSERT INTO api_client (id, name, client_id, client_secret) VALUES
-  (NEXTVAL('seq_api_client_id'), 'MTN-RS Administration', 'UtMThNghwlK13gzUuRXeF3kUHMQMGMiX',
-   '7m0ykt_SX4wb_aYOTHzNZUkVD73U7c8Cye5gWefdu4eih2oYLN-meuPHKnkwd3V8');
+  (NEXTVAL('seq_api_client_id'), 'MTN-RS Administration', 'YVQTbbTwp4ZIgmC9LtpuoG5gx0i8lUaR',
+   '3nKggQwEUQkWTx-bzkySJ_dQ66ur2W9gxV9Hi3ANM7qWphmJH8dGTOF2rXw-LPg9');

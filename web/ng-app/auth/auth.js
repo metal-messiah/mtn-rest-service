@@ -4,7 +4,7 @@
     angular.module('mtn').factory('Auth', Auth);
 
     function Auth($log, $http, $q, $location, $timeout, lock, authManager, Cache) {
-        var API_CLIENT_ID = 'UtMThNghwlK13gzUuRXeF3kUHMQMGMiX';
+        var API_CLIENT_ID = 'YVQTbbTwp4ZIgmC9LtpuoG5gx0i8lUaR';
 
         var service = {
             getApiAccessToken: getApiAccessToken,

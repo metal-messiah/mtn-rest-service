@@ -2,12 +2,12 @@ package com.mtn.constant;
 
 public class Constants {
 
-    public static final String AUTH0_API_AUDIENCE = "https://mtnra.herokuapp.com";
-    public static final String AUTH0_API_CLIENT_ID = "UtMThNghwlK13gzUuRXeF3kUHMQMGMiX";
-    public static final String AUTH0_API_SECRET = "7m0ykt_SX4wb_aYOTHzNZUkVD73U7c8Cye5gWefdu4eih2oYLN-meuPHKnkwd3V8";
-    public static final String AUTH0_CLIENT_ID = "FArOoQuRqPT1MZFsNE9qnxeykHp48cIO";
-    public static final String AUTH0_DOMAIN = "asudweeks.auth0.com";
-    public static final String AUTH0_SECRET = "cfI8g1OJ0QX8J-edJjypVCXGA6ef5dJMSG0OAiWGJ7Lzs9st-nsRhO0ccDXcAYEU";
+    public static final String AUTH0_API_AUDIENCE = "https//mtnra.herokuapp.com";
+    public static final String AUTH0_API_CLIENT_ID = "WWaSJKlYh7u4p5dF9YXYdhtn81JWiqaL";
+    public static final String AUTH0_API_SECRET = "_tjQVnbUm7RQdkdff-0Syb0-cK_P6TQAX4EoGyudchXGg6bpx3xo-I87n2fK3HiW";
+    public static final String AUTH0_CLIENT_ID = "op5D7TLsM2wDZhg8JLnVh1bn9jgfPWrZ";
+    public static final String AUTH0_DOMAIN = "mtnra.auth0.com";
+    public static final String AUTH0_SECRET = "iUiP6LU6_ziZlbRL_f0mqf5tZ86AscDcGJzR30wNeSgS8MygedmrqMKFxr7fcS8f";
     public static final String AUTH0_REALM = "Username-Password-Authentication";
 
     //WARNING - DO NOT EVER SET THIS TO THE PRODUCTION DATABASE!

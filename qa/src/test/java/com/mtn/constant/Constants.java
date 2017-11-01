@@ -12,7 +12,7 @@ public class Constants {
 
     //WARNING - DO NOT EVER SET THIS TO THE PRODUCTION DATABASE!
     //The test suite is set up to clean the database completely before and after running!
-    public static final String DATASOURCE_URL = "jdbc:postgresql://localhost:5433/mtn";
+    public static final String DATASOURCE_URL = "jdbc:postgresql://localhost:5432/mtn";
     public static final String DATASOURCE_USERNAME = "mtn-service-user";
     public static final String DATASOURCE_PASSWORD = "4ccb15ce-0453-11e7-93ae-92361f002671";
     public static final String DATASOURCE_DRIVER = "org.postgresql.Driver";

@@ -68,7 +68,7 @@ public class AuthTest extends BaseTest {
     @Test
     public void getTokenShouldReturn200WithTokenIfValidMtnClientIdHeaderSent() {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("mtn-client-id", "UtMThNghwlK13gzUuRXeF3kUHMQMGMiX");
+        httpHeaders.set("mtn-client-id", "YVQTbbTwp4ZIgmC9LtpuoG5gx0i8lUaR");
 
         HttpEntity httpEntity = new HttpEntity(httpHeaders);
 

@@ -29,7 +29,7 @@
         <jackson-datatype.version>2.8.8</jackson-datatype.version>
         <mtn-core.version>1.0.0</mtn-core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <postresql.version>9.4.1212</postresql.version>
+        <postgresql.version>9.4.1212</postgresql.version>
     </properties>
 
     <dependencies>

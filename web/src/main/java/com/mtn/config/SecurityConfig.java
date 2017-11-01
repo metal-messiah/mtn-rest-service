@@ -51,7 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/roles/**",
                         "/scripts/**",
                         "/styles/**",
-                        "/users/**")
+                        "/users/**",
+                        "/dashboard/**")
                 .permitAll()
                 .anyRequest().denyAll();
     }

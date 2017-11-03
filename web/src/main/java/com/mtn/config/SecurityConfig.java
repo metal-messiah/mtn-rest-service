@@ -37,23 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .configure(http)
                 .authorizeRequests()
                 .antMatchers("/api/auth/token").permitAll()
-                .antMatchers("/api/**")
-                .authenticated()
-                .antMatchers(
-                        "/",
-                        "/auth/**",
-                        "/groups/**",
-                        "/images/**",
-                        "/lib/**",
-                        "/login/**",
-                        "/nav/**",
-                        "/permissions/**",
-                        "/roles/**",
-                        "/scripts/**",
-                        "/styles/**",
-                        "/users/**",
-                        "/dashboard/**")
-                .permitAll()
+                .antMatchers("/api/**").authenticated()
                 .anyRequest().denyAll();
     }
 }

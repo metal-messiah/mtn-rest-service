@@ -39,7 +39,7 @@ public class GroupService extends ValidatingDataService<Group> {
             return reactivateOne((Group) e.getEntity(), request);
         }
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -58,7 +58,7 @@ public class GroupService extends ValidatingDataService<Group> {
         userProfileService.validateNotNull(member);
 
         group.getMembers().add(member);
-        group.setUpdatedBy(securityService.getCurrentPersistentUser());
+        group.setUpdatedBy(securityService.getCurrentUser());
 
         return group;
     }
@@ -70,7 +70,7 @@ public class GroupService extends ValidatingDataService<Group> {
 
         existing.setMembers(new HashSet<>());
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public Page<Group> findAllUsingSpecs(Pageable page) {
@@ -117,7 +117,7 @@ public class GroupService extends ValidatingDataService<Group> {
         validateNotNull(group);
 
         group.getMembers().removeIf(member -> member.getId().equals(userId));
-        group.setUpdatedBy(securityService.getCurrentPersistentUser());
+        group.setUpdatedBy(securityService.getCurrentUser());
 
         return group;
     }
@@ -137,7 +137,7 @@ public class GroupService extends ValidatingDataService<Group> {
     public Group updateOne(Group existing, Group request) {
         existing.setDisplayName(request.getDisplayName());
         existing.setDescription(request.getDescription());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         updateMembers(existing, request);
 

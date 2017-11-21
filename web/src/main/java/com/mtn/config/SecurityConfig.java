@@ -1,14 +1,41 @@
 package com.mtn.config;
 
+import com.mtn.constant.PermissionType;
+import com.mtn.model.domain.UserProfile;
+import com.mtn.security.CustomJwtAuthenticationProvider;
+import com.mtn.service.UserProfileService;
+import com.mtn.service.AuthCacheService;
+import com.mtn.security.MtnAuthentication;
+
+import com.auth0.client.auth.AuthAPI;
+import com.auth0.exception.Auth0Exception;
+import com.auth0.json.auth.UserInfo;
+import com.auth0.jwk.JwkProvider;
+import com.auth0.jwk.JwkProviderBuilder;
+import com.auth0.net.Request;
+import com.auth0.spring.security.api.authentication.JwtAuthentication;
+import com.auth0.spring.security.api.authentication.PreAuthenticatedAuthenticationJsonWebToken;
 import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
-import com.mtn.security.HybridAuthenticationProvider;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
 
 /**
  * Created by Allen on 5/10/2017.
@@ -18,26 +45,134 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${auth0.issuer}")
+    @Value( "${auth0.api-audience}" )
+    private String apiAudience;
+    @Value( "${auth0.client-id}" )
+    private String clientId;
+    @Value( "${auth0.client-secret}" )
+    private String clientSecret;
+    @Value( "${auth0.domain}" )
+    private String domain;
+    @Value( "${auth0.issuer}" )
     private String issuer;
 
-    @Value("${auth0.api-audience}")
-    private String apiAudience;
+    private AuthAPI authApi;
 
     @Autowired
-    private HybridAuthenticationProvider hybridAuthenticationProvider;
+    private AuthCacheService authCacheService;
+    @Autowired
+    private UserProfileService userProfileService;
+
+    @PostConstruct
+    private void init() {
+        authApi = new AuthAPI( domain, clientId, clientSecret );
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
         http.sessionManagement().disable();
         http.csrf().disable();
 
         JwtWebSecurityConfigurer
-                .forRS256(apiAudience, issuer, hybridAuthenticationProvider)
+                .forRS256( apiAudience, issuer, new MtnAuthenticationProvider() )
                 .configure(http)
                 .authorizeRequests()
-                .antMatchers("/api/auth/token").permitAll()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/auth/user").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/user").hasAuthority(PermissionType.USERS_CREATE)
+                .antMatchers(HttpMethod.GET, "/api/user").hasAuthority(PermissionType.USERS_READ)
+                .antMatchers(HttpMethod.PUT, "/api/user").hasAuthority(PermissionType.USERS_UPDATE)
+                .antMatchers(HttpMethod.DELETE, "/api/user").hasAuthority(PermissionType.USERS_DELETE)
+                .antMatchers(HttpMethod.POST, "/api/role").hasAuthority(PermissionType.ROLES_CREATE)
+                .antMatchers(HttpMethod.GET, "/api/role").hasAuthority(PermissionType.ROLES_READ)
+                .antMatchers(HttpMethod.PUT, "/api/role").hasAuthority(PermissionType.ROLES_UPDATE)
+                .antMatchers(HttpMethod.DELETE, "/api/role").hasAuthority(PermissionType.ROLES_DELETE)
+                .antMatchers(HttpMethod.POST, "/api/group").hasAuthority(PermissionType.GROUPS_CREATE)
+                .antMatchers(HttpMethod.GET, "/api/group").hasAuthority(PermissionType.GROUPS_READ)
+                .antMatchers(HttpMethod.PUT, "/api/group").hasAuthority(PermissionType.GROUPS_UPDATE)
+                .antMatchers(HttpMethod.DELETE, "/api/group").hasAuthority(PermissionType.GROUPS_DELETE)
                 .anyRequest().denyAll();
+    }
+
+    /**
+     * This AuthenticationProvider merges Auth0's JWT token validation with our own custom flow.
+     */
+    private class MtnAuthenticationProvider implements AuthenticationProvider {
+
+        private final CustomJwtAuthenticationProvider jwtAuthenticationProvider;
+
+        /**
+         * We have our own custom JWT AuthenticationProvider based on Auth0's because it's the only way to add "leeway"
+         * time to the token check, allowing for a small difference in clock time between the app server and Auth0's own
+         * servers. They really need to make that easier to configure...
+         */
+        MtnAuthenticationProvider() {
+            JwkProvider jwkProvider = ( new JwkProviderBuilder( issuer ) ).build();
+            this.jwtAuthenticationProvider = new CustomJwtAuthenticationProvider( jwkProvider, issuer, apiAudience );
+        }
+
+        /**
+         * Calls the Auth0 JWT AuthenticationProvider first to validate the token, then performs our custom userProfile lookup
+         * and associates the userProfile record as the Principal in the SecurityContext so we can use it later in the app.
+         */
+        @Override
+        public Authentication authenticate( final Authentication authentication ) throws AuthenticationException {
+            this.jwtAuthenticationProvider.authenticate( authentication );
+
+            UserProfile userProfile = getUserProfileRecord( authentication );
+            return new MtnAuthentication( userProfile );
+        }
+
+        /**
+         * Checks the authentication cache for the given userProfile, then finds or creates the record in the database as
+         * needed.
+         */
+        private UserProfile getUserProfileRecord( Authentication authentication ) {
+
+            String accessToken = ( ( PreAuthenticatedAuthenticationJsonWebToken ) authentication ).getToken();
+            UserProfile cachedUserProfile = authCacheService.findOneByAccessToken( accessToken );
+            if( cachedUserProfile != null ) {
+                return cachedUserProfile;
+            }
+
+            UserInfo userInfo = getUserInfoFromAuthenticationToken( accessToken );
+            if (userInfo == null) {
+                throw new AuthenticationServiceException("Unable to retrieve user information from authentication provider");
+            }
+            String email = (String) userInfo.getValues().get( "email" );
+            UserProfile persistedUserProfile = userProfileService.findAndUpdateOrAddOneByEmail(email);
+            authCacheService.addOne(accessToken, persistedUserProfile);
+            return persistedUserProfile;
+        }
+
+        /**
+         * Calls Auth0 to retrieve the user's profile so we can use it to create our userProfile record
+         */
+        private UserInfo getUserInfoFromAuthenticationToken( final String accessToken ) {
+            Request< UserInfo > request = authApi.userInfo( accessToken );
+            try {
+                return request.execute();
+            }
+            catch( Auth0Exception e ) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        public boolean supports( final Class< ? > authentication ) {
+            return JwtAuthentication.class.isAssignableFrom( authentication );
+        }
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET","PUT","POST","OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", configuration);
+        return source;
     }
 }

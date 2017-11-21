@@ -37,7 +37,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
     public ShoppingCenter addOne(ShoppingCenter request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -50,7 +50,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         validateNotNull(existing);
 
         request.setShoppingCenter(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return casingService.addOne(request);
     }
@@ -61,7 +61,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         validateNotNull(existing);
 
         request.setShoppingCenter(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return siteService.addOne(request);
     }
@@ -72,7 +72,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
         validateNotNull(existing);
 
         request.setShoppingCenter(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return surveyService.addOne(request);
     }
@@ -84,7 +84,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
             throw new IllegalArgumentException("No ShoppingCenter found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public Page<ShoppingCenter> findAllUsingSpecs(Pageable page) {
@@ -150,7 +150,7 @@ public class ShoppingCenterService extends ValidatingDataService<ShoppingCenter>
 
         existing.setName(request.getName());
         existing.setOwner(request.getOwner());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

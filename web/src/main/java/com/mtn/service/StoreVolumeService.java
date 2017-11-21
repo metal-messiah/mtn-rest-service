@@ -30,7 +30,7 @@ public class StoreVolumeService extends ValidatingDataService<StoreVolume> {
     public StoreVolume addOne(StoreVolume request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -44,7 +44,7 @@ public class StoreVolumeService extends ValidatingDataService<StoreVolume> {
             throw new IllegalArgumentException("No StoreVolume found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<StoreVolume> findAllByStoreId(Integer storeId) {
@@ -88,7 +88,7 @@ public class StoreVolumeService extends ValidatingDataService<StoreVolume> {
         existing.setSource(request.getSource());
         existing.setVersion(request.getVersion());
         existing.setLegacyCasingId(request.getLegacyCasingId());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

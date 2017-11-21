@@ -35,7 +35,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
     public ShoppingCenterSurvey addOne(ShoppingCenterSurvey request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -48,7 +48,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
         validateNotNull(existing);
 
         request.setSurvey(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return accessService.addOne(request);
     }
@@ -59,7 +59,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
         validateNotNull(existing);
 
         request.setSurvey(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return tenantService.addOne(request);
     }
@@ -71,7 +71,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
             throw new IllegalArgumentException("No ShoppingCenterSurvey found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<ShoppingCenterSurvey> findAllByShoppingCenterId(Integer shoppingCenterId) {
@@ -126,7 +126,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
         existing.setTenantOccupiedCount(request.getTenantOccupiedCount());
         existing.setTenantVacantCount(request.getTenantVacantCount());
         existing.setSqFtPercentOccupied(request.getSqFtPercentOccupied());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

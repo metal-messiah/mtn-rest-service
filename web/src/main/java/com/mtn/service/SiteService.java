@@ -33,7 +33,7 @@ public class SiteService extends ValidatingDataService<Site> {
     public Site addOne(Site request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -61,11 +61,11 @@ public class SiteService extends ValidatingDataService<Site> {
             //Else if one exists, set it to historical before proceeding
             else if (existingActiveStore != null) {
                 existingActiveStore.setType(StoreType.HISTORICAL);
-                existingActiveStore.setUpdatedBy(securityService.getCurrentPersistentUser());
+                existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
             }
         }
 
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return storeService.addOne(request);
     }
@@ -77,7 +77,7 @@ public class SiteService extends ValidatingDataService<Site> {
             throw new IllegalArgumentException("No Site found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
@@ -121,7 +121,7 @@ public class SiteService extends ValidatingDataService<Site> {
         existing.setIntersectionStreetSecondary(request.getIntersectionStreetSecondary());
         existing.setIntersectionQuad(request.getIntersectionQuad());
         existing.setPositionInCenter(request.getPositionInCenter());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

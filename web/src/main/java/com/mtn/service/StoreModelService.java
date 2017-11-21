@@ -29,7 +29,7 @@ public class StoreModelService extends ValidatingDataService<StoreModel> {
     public StoreModel addOne(StoreModel request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -43,7 +43,7 @@ public class StoreModelService extends ValidatingDataService<StoreModel> {
             throw new IllegalArgumentException("No StoreModel found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<StoreModel> findAllByProjectId(Integer projectId) {
@@ -101,7 +101,7 @@ public class StoreModelService extends ValidatingDataService<StoreModel> {
         existing.setModelDate(request.getModelDate());
         existing.setVersion(request.getVersion());
         existing.setLegacyCasingId(request.getLegacyCasingId());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

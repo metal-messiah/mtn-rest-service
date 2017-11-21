@@ -38,7 +38,7 @@ public class InteractionService extends ValidatingDataService<Interaction> {
     public Interaction addOne(Interaction request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -52,7 +52,7 @@ public class InteractionService extends ValidatingDataService<Interaction> {
             throw new IllegalArgumentException("No Interaction found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<Interaction> findAll() {
@@ -98,7 +98,7 @@ public class InteractionService extends ValidatingDataService<Interaction> {
         existing.setStoreCasing(request.getStoreCasing());
         existing.setStoreSurvey(request.getStoreSurvey());
         existing.setVersion(request.getVersion());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

@@ -33,7 +33,7 @@ public class ProjectService extends ValidatingDataService<Project> {
     public Project addOne(Project request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -46,7 +46,7 @@ public class ProjectService extends ValidatingDataService<Project> {
         validateNotNull(existing);
 
         request.setProject(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return modelService.addOne(request);
     }
@@ -58,7 +58,7 @@ public class ProjectService extends ValidatingDataService<Project> {
             throw new IllegalArgumentException("No Project found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<Project> findAll() {
@@ -122,7 +122,7 @@ public class ProjectService extends ValidatingDataService<Project> {
 
         existing.setVersion(request.getVersion());
         existing.setLegacyProjectId(request.getLegacyProjectId());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

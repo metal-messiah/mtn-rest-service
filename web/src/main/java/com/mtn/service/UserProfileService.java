@@ -40,7 +40,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
             return reactivateOne((UserProfile) e.getEntity(), request);
         }
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -73,7 +73,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
             throw new IllegalArgumentException("No UserProfile found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<UserProfile> findAllByGroupIdUsingSpecs(Integer groupId) {
@@ -177,7 +177,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         existing.setEmail(request.getEmail());
         existing.setFirstName(request.getFirstName());
         existing.setLastName(request.getLastName());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         Group group = null;
         if (request.getGroup() != null) {
@@ -221,5 +221,21 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         if (StringUtils.isBlank(object.getEmail())) {
             throw new IllegalArgumentException("UserProfile email must be provided");
         }
+    }
+
+    /**
+     * This is to be used during the authentication process, in which we retrieve the Auth0 UserInfo, and either update
+     * an existing UserProfile record or create a new one.
+     */
+    @Transactional
+    public UserProfile findAndUpdateOrAddOneByEmail( String email ) {
+        UserProfile userProfile = findOneByEmail( email );
+        return userProfile != null ? mergeOne( userProfile, email ) : addOne( UserProfile.build( email ) );
+    }
+
+    @Transactional
+    protected UserProfile mergeOne( UserProfile existing, String email ) {
+        existing.setEmail( email );
+        return existing;
     }
 }

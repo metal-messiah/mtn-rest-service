@@ -76,7 +76,7 @@ public class ShoppingCenterAccessService extends ValidatingDataService<ShoppingC
         existing.setHasOneWayRoad(request.getHasOneWayRoad());
         existing.setHasRightIn(request.getHasRightIn());
         existing.setHasRightOut(request.getHasRightOut());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

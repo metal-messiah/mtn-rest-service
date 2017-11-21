@@ -1,6 +1,6 @@
 package com.mtn.cache;
 
-import com.mtn.security.HybridAuthenticationProvider;
+import com.mtn.security.MtnAuthentication;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,13 +16,13 @@ import java.util.Map;
 @Service
 public class AuthenticationCache {
 
-    private Map<String, HybridAuthenticationProvider.MtnAuthentication> authenticationMap = new HashMap<>();
+    private Map<String, MtnAuthentication> authenticationMap = new HashMap<>();
 
-    public HybridAuthenticationProvider.MtnAuthentication get(String key) {
+    public MtnAuthentication get(String key) {
         return authenticationMap.get(key);
     }
 
-    public void put(String accessToken, HybridAuthenticationProvider.MtnAuthentication mtnAuthentication) {
+    public void put(String accessToken, MtnAuthentication mtnAuthentication) {
         authenticationMap.put(accessToken, mtnAuthentication);
     }
 

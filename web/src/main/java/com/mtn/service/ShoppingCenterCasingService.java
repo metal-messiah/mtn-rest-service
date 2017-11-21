@@ -29,7 +29,7 @@ public class ShoppingCenterCasingService extends ValidatingDataService<ShoppingC
     public ShoppingCenterCasing addOne(ShoppingCenterCasing request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -43,7 +43,7 @@ public class ShoppingCenterCasingService extends ValidatingDataService<ShoppingC
             throw new IllegalArgumentException("No ShoppingCenterCasing found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<ShoppingCenterCasing> findAllByProjectId(Integer id) {
@@ -86,7 +86,7 @@ public class ShoppingCenterCasingService extends ValidatingDataService<ShoppingC
         }
 
 
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

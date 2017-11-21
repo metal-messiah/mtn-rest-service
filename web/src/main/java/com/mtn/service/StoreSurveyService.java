@@ -29,7 +29,7 @@ public class StoreSurveyService extends ValidatingDataService<StoreSurvey> {
     public StoreSurvey addOne(StoreSurvey request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -43,7 +43,7 @@ public class StoreSurveyService extends ValidatingDataService<StoreSurvey> {
             throw new IllegalArgumentException("No StoreSurvey found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<StoreSurvey> findAllByProjectId(Integer id) {
@@ -154,7 +154,7 @@ public class StoreSurveyService extends ValidatingDataService<StoreSurvey> {
         existing.setSeasonalityNov(request.getSeasonalityNov());
         existing.setSeasonalityDec(request.getSeasonalityDec());
         existing.setLegacyCasingId(request.getLegacyCasingId());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

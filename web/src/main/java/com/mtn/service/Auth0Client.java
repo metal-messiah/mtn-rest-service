@@ -44,20 +44,7 @@ public class Auth0Client {
         authAPI = new AuthAPI(domain, clientId, secret);
     }
 
-    public String getApiAccessToken(String clientId) {
-        ApiClient apiClient = validateClientIdAndFindApiClient(clientId);
-
-        AuthRequest request = new AuthAPI(domain, apiClient.getClientId(), apiClient.getClientSecret()).requestToken(apiAudience);
-        try {
-            TokenHolder tokenHolder = request.execute();
-            return tokenHolder.getAccessToken();
-        } catch (Auth0Exception e) {
-            MtnLogger.error("Failed to retrieve Auth0 API Access Token", e);
-            return null;
-        }
-    }
-
-    public UserInfo getUserProfile(String accessToken) {
+     public UserInfo getUserProfile(String accessToken) {
         Request<UserInfo> request = authAPI.userInfo(accessToken);
         try {
             return request.execute();

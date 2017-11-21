@@ -54,7 +54,7 @@ public class StoreService extends ValidatingDataService<Store> {
     public Store addOne(Store request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -67,7 +67,7 @@ public class StoreService extends ValidatingDataService<Store> {
         validateNotNull(existing);
 
         request.setStore(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return casingService.addOne(request);
     }
@@ -78,7 +78,7 @@ public class StoreService extends ValidatingDataService<Store> {
         validateNotNull(existing);
 
         request.setStore(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return modelService.addOne(request);
     }
@@ -89,20 +89,20 @@ public class StoreService extends ValidatingDataService<Store> {
         validateNotNull(existing);
 
         request.setStore(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return surveyService.addOne(request);
     }
 
     @Transactional
-    public StoreVolume addOneVolumeToStore(Integer storeId, StoreVolume request) {
+    public StoreVolume addOneVolumeToStore(Integer storeId, StoreVolume volume) {
         Store existing = findOneUsingSpecs(storeId);
         validateNotNull(existing);
 
-        request.setStore(existing);
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        volume.setStore(existing);
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
-        return volumeService.addOne(request);
+        return volumeService.addOne(volume);
     }
 
     @Transactional
@@ -112,7 +112,7 @@ public class StoreService extends ValidatingDataService<Store> {
             throw new IllegalArgumentException("No Site found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<Store> findAllByProjectId(Integer id) {
@@ -184,7 +184,7 @@ public class StoreService extends ValidatingDataService<Store> {
             //Else if one exists, set it to historical before proceeding
             else if (existingActiveStore != null) {
                 existingActiveStore.setType(StoreType.HISTORICAL);
-                existingActiveStore.setUpdatedBy(securityService.getCurrentPersistentUser());
+                existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
             }
         }
 
@@ -192,7 +192,7 @@ public class StoreService extends ValidatingDataService<Store> {
         existing.setType(request.getType());
         existing.setOpenedDate(request.getOpenedDate());
         existing.setClosedDate(request.getClosedDate());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

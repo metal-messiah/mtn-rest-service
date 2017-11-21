@@ -29,7 +29,7 @@ public class StoreCasingService extends ValidatingDataService<StoreCasing> {
     public StoreCasing addOne(StoreCasing request) {
         validateForInsert(request);
 
-        UserProfile currentUser = securityService.getCurrentPersistentUser();
+        UserProfile currentUser = securityService.getCurrentUser();
         request.setCreatedBy(currentUser);
         request.setUpdatedBy(currentUser);
 
@@ -43,7 +43,7 @@ public class StoreCasingService extends ValidatingDataService<StoreCasing> {
             throw new IllegalArgumentException("No StoreCasing found with this id");
         }
 
-        existing.setDeletedBy(securityService.getCurrentPersistentUser());
+        existing.setDeletedBy(securityService.getCurrentUser());
     }
 
     public List<StoreCasing> findAllByProjectId(Integer id) {
@@ -114,7 +114,7 @@ public class StoreCasingService extends ValidatingDataService<StoreCasing> {
         existing.setVolumeConfidence(request.getVolumeConfidence());
         existing.setVersion(request.getVersion());
         existing.setLegacyCasingId(request.getLegacyCasingId());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

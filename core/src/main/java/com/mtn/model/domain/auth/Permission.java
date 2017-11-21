@@ -1,6 +1,7 @@
 package com.mtn.model.domain.auth;
 
 import com.mtn.model.domain.Identifiable;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "auth_permission")
-public class Permission implements Identifiable {
+public class Permission implements Identifiable, GrantedAuthority {
 
     private Integer id;
     private String systemName;
@@ -63,5 +64,11 @@ public class Permission implements Identifiable {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    @Transient
+    public String getAuthority() {
+        return getSystemName();
     }
 }

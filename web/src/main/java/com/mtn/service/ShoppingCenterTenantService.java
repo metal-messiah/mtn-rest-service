@@ -75,7 +75,7 @@ public class ShoppingCenterTenantService extends ValidatingDataService<ShoppingC
         existing.setIsAnchor(request.getIsAnchor());
         existing.setIsOutparcel(request.getIsOutparcel());
         existing.setSqft(request.getSqft());
-        existing.setUpdatedBy(securityService.getCurrentPersistentUser());
+        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

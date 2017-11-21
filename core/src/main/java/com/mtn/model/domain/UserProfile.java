@@ -80,4 +80,10 @@ public class UserProfile extends AuditingEntity implements Identifiable {
     public void setGroup(Group group) {
         this.group = group;
     }
+
+    public static UserProfile build( String email ) {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setEmail( email );
+        return userProfile;
+    }
 }

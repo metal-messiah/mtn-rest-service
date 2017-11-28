@@ -1,5 +1,6 @@
 package com.mtn.model.domain.auth;
 
+import com.mtn.constant.CrudAction;
 import com.mtn.model.domain.Identifiable;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -18,6 +19,8 @@ public class Permission implements Identifiable, GrantedAuthority {
     private String systemName;
     private String displayName;
     private String description;
+    private String subject;
+    private CrudAction action;
 
     private List<Role> roles = new ArrayList<>();
 
@@ -55,6 +58,24 @@ public class Permission implements Identifiable, GrantedAuthority {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "action")
+    public CrudAction getAction() {
+        return action;
+    }
+
+    public void setAction(CrudAction action) {
+        this.action = action;
     }
 
     @ManyToMany(mappedBy = "permissions", cascade = {CascadeType.MERGE})

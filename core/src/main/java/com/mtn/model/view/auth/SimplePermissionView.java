@@ -1,6 +1,7 @@
 package com.mtn.model.view.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.constant.CrudAction;
 import com.mtn.model.domain.auth.Permission;
 
 /**
@@ -13,6 +14,8 @@ public class SimplePermissionView {
     protected String systemName;
     protected String displayName;
     protected String description;
+    protected String subject;
+    protected CrudAction action;
 
     public SimplePermissionView() {
     }
@@ -22,6 +25,8 @@ public class SimplePermissionView {
         this.systemName = permission.getSystemName();
         this.displayName = permission.getDisplayName();
         this.description = permission.getDescription();
+        this.subject = permission.getSubject();
+        this.action = permission.getAction();
     }
 
     public Integer getId() {
@@ -54,5 +59,21 @@ public class SimplePermissionView {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public CrudAction getAction() {
+        return action;
+    }
+
+    public void setAction(CrudAction action) {
+        this.action = action;
     }
 }

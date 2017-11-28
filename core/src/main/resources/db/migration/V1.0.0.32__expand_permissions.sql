@@ -1,0 +1,33 @@
+ALTER TABLE "auth_permission"
+  ADD "subject" VARCHAR(64) NOT NULL DEFAULT 'foo',
+  ADD "action" VARCHAR(16) NOT NULL default 'bar' ;
+
+UPDATE "auth_permission"
+SET subject = CASE
+    WHEN system_name LIKE 'COMPANY%' THEN 'COMPANY'
+    WHEN system_name LIKE 'GROUPS%' THEN 'GROUPS'
+    WHEN system_name LIKE 'INTERACTIONS%' THEN 'INTERACTIONS'
+    WHEN system_name LIKE 'PERMISSIONS%' THEN 'PERMISSIONS'
+    WHEN system_name LIKE 'PROJECTS%' THEN 'PROJECTS'
+    WHEN system_name LIKE 'ROLES%' THEN 'ROLES'
+    WHEN system_name LIKE 'SEARCH%' THEN 'SEARCH'
+    WHEN system_name LIKE 'SHOPPING_CENTER_CASING%' THEN 'SHOPPING_CENTER_CASING'
+    WHEN system_name LIKE 'SHOPPING_CENTER_SURVEY%' THEN 'SHOPPING_CENTER_SURVEY'
+    WHEN system_name LIKE 'SHOPPING_CENTER%' THEN 'SHOPPING_CENTER'
+    WHEN system_name LIKE 'SITES%' THEN 'SITES'
+    WHEN system_name LIKE 'STORE_CASING%' THEN 'STORE_CASING'
+    WHEN system_name LIKE 'STORE_MODEL%' THEN 'STORE_MODEL'
+    WHEN system_name LIKE 'STORE_SURVEY%' THEN 'STORE_SURVEY'
+    WHEN system_name LIKE 'STORE_VOLUME%' THEN 'STORE_VOLUME'
+    WHEN system_name LIKE 'STORE%' THEN 'STORE'
+    WHEN system_name LIKE 'USERS%' THEN 'USERS'
+  END,
+action = CASE
+  WHEN system_name LIKE '%CREATE' THEN 'CREATE'
+  WHEN system_name LIKE '%READ' THEN 'READ'
+  WHEN system_name LIKE '%UPDATE' THEN 'UPDATE'
+  WHEN system_name LIKE '%DELETE' THEN 'DELETE'
+END
+WHERE system_name IS NOT NULL;
+
+

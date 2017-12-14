@@ -4,6 +4,7 @@ import com.mtn.model.domain.auth.Group;
 import com.mtn.model.domain.auth.Role;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Created by Allen on 4/21/2017.
@@ -86,4 +87,22 @@ public class UserProfile extends AuditingEntity implements Identifiable {
         userProfile.setEmail( email );
         return userProfile;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof UserProfile)) {
+            return false;
+        }
+
+        UserProfile user = (UserProfile) o;
+
+        return user.id.equals(id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

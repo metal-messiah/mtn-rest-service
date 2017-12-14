@@ -22,7 +22,6 @@ public class Store extends AuditingEntity implements Identifiable {
     private StoreType type;
     private LocalDateTime openedDate;
     private LocalDateTime closedDate;
-    private Integer version;
     private Company parentCompany;
     private String storeNumber;
     private Integer legacyLocationId;
@@ -42,7 +41,6 @@ public class Store extends AuditingEntity implements Identifiable {
         this.type = simpleStoreView.getType();
         this.openedDate = simpleStoreView.getOpenedDate();
         this.closedDate = simpleStoreView.getClosedDate();
-        this.version = simpleStoreView.getVersion();
         this.storeNumber = simpleStoreView.getStoreNumber();
         this.legacyLocationId = simpleStoreView.getLegacyLocationId();
     }
@@ -53,16 +51,6 @@ public class Store extends AuditingEntity implements Identifiable {
         if (storeView.getSite() != null) {
             this.site = new Site(storeView.getSite());
         }
-    }
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
     }
 
     @Id
@@ -121,14 +109,6 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setClosedDate(LocalDateTime closedDate) {
         this.closedDate = closedDate;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     @OneToMany(mappedBy = "store")

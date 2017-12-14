@@ -1,6 +1,7 @@
 package com.mtn.model.domain.auth;
 
 import com.mtn.constant.CrudAction;
+import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Identifiable;
 import org.springframework.security.core.GrantedAuthority;
 

@@ -16,7 +16,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private Integer id;
     private String name;
     private String owner;
-    private Integer version;
     private Integer legacyLocationId;
     private Integer legacyCasingId;
 
@@ -32,19 +31,8 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         this.id = shoppingCenterView.getId();
         this.name = shoppingCenterView.getName();
         this.owner = shoppingCenterView.getOwner();
-        this.version = shoppingCenterView.getVersion();
         this.legacyCasingId = shoppingCenterView.getLegacyCasingId();
         this.legacyLocationId = shoppingCenterView.getLegacyLocationId();
-    }
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
     }
 
     @Id
@@ -74,14 +62,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     @OneToMany(mappedBy = "shoppingCenter")

@@ -18,17 +18,6 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
     private Boolean hasRightIn = false;
     private Boolean hasRightOut = false;
     private Integer legacyCasingId;
-    private Integer version;
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_access_id")
@@ -108,11 +97,4 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
         this.legacyCasingId = legacyCasingId;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 }

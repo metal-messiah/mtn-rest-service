@@ -15,18 +15,7 @@ public class StoreVolume extends AuditingEntity implements Identifiable {
     private LocalDateTime volumeDate;
     private VolumeType volumeType;
     private String source;
-    private Integer version;
     private Integer legacyCasingId;
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_store_volume_id")
@@ -81,14 +70,6 @@ public class StoreVolume extends AuditingEntity implements Identifiable {
 
     public void setSource(String source) {
         this.source = source;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public Integer getLegacyCasingId() {

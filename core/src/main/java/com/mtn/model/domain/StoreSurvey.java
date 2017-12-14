@@ -86,20 +86,9 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     private Integer seasonalityOct;
     private Integer seasonalityNov;
     private Integer seasonalityDec;
-    private Integer version;
     private Integer legacyCasingId;
 
     private List<Interaction> interactions = new ArrayList<>();
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_store_survey_id")
@@ -681,14 +670,6 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
 
     public void setSeasonalityDec(Integer seasonalityDec) {
         this.seasonalityDec = seasonalityDec;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public Integer getLegacyCasingId() {

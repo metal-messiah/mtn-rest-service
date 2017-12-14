@@ -40,20 +40,9 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private String volumeNote;
     private Integer volumeTotal;
     private ConfidenceType volumeConfidence;
-    private Integer version;
     private Integer legacyCasingId;
 
     private List<Interaction> interactions = new ArrayList<>();
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_store_casing_id")
@@ -300,14 +289,6 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
 
     public void setVolumeConfidence(ConfidenceType volumeConfidence) {
         this.volumeConfidence = volumeConfidence;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public Integer getLegacyCasingId() {

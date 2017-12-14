@@ -18,19 +18,8 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
     private RatingType ratingLighting;
     private RatingType ratingSynergy;
     private Integer legacyCasingId;
-    private Integer version;
 
     private List<Interaction> interactions = new ArrayList<>();
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_casing_id")
@@ -105,14 +94,6 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
 
     public void setLegacyCasingId(Integer legacyCasingId) {
         this.legacyCasingId = legacyCasingId;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     @OneToMany(mappedBy = "shoppingCenterCasing")

@@ -19,18 +19,7 @@ public class StoreModel extends AuditingEntity implements Identifiable {
     private Double fitAdjustedPower;
     private ModelType modelType;
     private LocalDateTime modelDate;
-    private Integer version;
     private Integer legacyCasingId;
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_store_model_id")
@@ -119,14 +108,6 @@ public class StoreModel extends AuditingEntity implements Identifiable {
 
     public void setModelDate(LocalDateTime modelDate) {
         this.modelDate = modelDate;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public Integer getLegacyCasingId() {

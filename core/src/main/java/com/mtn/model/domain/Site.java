@@ -40,7 +40,6 @@ public class Site extends AuditingEntity implements Identifiable {
     private String intersectionStreetSecondary;
     private String intersectionQuad;
     private SitePositionType positionInCenter;
-    private Integer version;
 
     private List<Store> stores = new ArrayList<>();
 
@@ -63,7 +62,6 @@ public class Site extends AuditingEntity implements Identifiable {
         this.intersectionStreetSecondary = simpleSiteView.getIntersectionStreetSecondary();
         this.intersectionQuad = simpleSiteView.getIntersectionQuad();
         this.positionInCenter = simpleSiteView.getPositionInCenter();
-        this.version = simpleSiteView.getVersion();
 
         if (simpleSiteView.getLocation() != null) {
             PointGeometry point = (PointGeometry) simpleSiteView.getLocation().getGeometry();
@@ -81,16 +79,6 @@ public class Site extends AuditingEntity implements Identifiable {
         if (siteView.getStores() != null) {
             this.stores = siteView.getStores().stream().map(Store::new).collect(Collectors.toList());
         }
-    }
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
     }
 
     @Id
@@ -238,14 +226,6 @@ public class Site extends AuditingEntity implements Identifiable {
 
     public void setPositionInCenter(SitePositionType positionInCenter) {
         this.positionInCenter = positionInCenter;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     @OneToMany(mappedBy = "site")

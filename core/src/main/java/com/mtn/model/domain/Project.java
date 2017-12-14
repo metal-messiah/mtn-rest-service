@@ -23,21 +23,10 @@ public class Project extends AuditingEntity implements Identifiable {
     private LocalDateTime completedDate;
     private String source;
     private Polygon boundary;
-    private Integer version;
     private Integer legacyProjectId;
 
     private List<Interaction> interactions = new ArrayList<>();
     private List<StoreModel> models = new ArrayList<>();
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_project_id")
@@ -137,14 +126,6 @@ public class Project extends AuditingEntity implements Identifiable {
 
     public void setBoundary(Polygon boundary) {
         this.boundary = boundary;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public Integer getLegacyProjectId() {

@@ -16,6 +16,7 @@ public abstract class AuditingEntity {
     private LocalDateTime deletedDate;
     private UserProfile updatedBy;
     private LocalDateTime updatedDate;
+    private Integer version;
 
     @PreDestroy
     public void genericPreDestroy() {
@@ -26,6 +27,7 @@ public abstract class AuditingEntity {
     public void genericPrePersist() {
         this.createdDate = LocalDateTime.now();
         this.updatedDate = LocalDateTime.now();
+//        this.version = 1;
     }
 
     @PreUpdate
@@ -35,6 +37,8 @@ public abstract class AuditingEntity {
         if (this.deletedBy != null && this.deletedDate == null) {
             this.deletedDate = LocalDateTime.now();
         }
+
+//        this.version++;
     }
 
     @ManyToOne
@@ -92,5 +96,14 @@ public abstract class AuditingEntity {
 
     public void setUpdatedDate(final LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    @Version
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

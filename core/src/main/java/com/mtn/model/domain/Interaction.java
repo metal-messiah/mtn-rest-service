@@ -16,18 +16,7 @@ public class Interaction extends AuditingEntity implements Identifiable {
     private StoreSurvey storeSurvey;
     private StoreCasing storeCasing;
     private LocalDateTime interactionDate;
-    private Integer version;
     private Integer legacyCasingId;
-
-    @PrePersist
-    public void prePersist() {
-        version = 1;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        version++;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_interaction_id")
@@ -117,14 +106,6 @@ public class Interaction extends AuditingEntity implements Identifiable {
 
     public void setInteractionDate(LocalDateTime interactionDate) {
         this.interactionDate = interactionDate;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public Integer getLegacyCasingId() {

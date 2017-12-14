@@ -80,17 +80,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/user").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/user").hasAuthority(PermissionType.USERS_CREATE)
-                .antMatchers(HttpMethod.GET, "/api/user").hasAuthority(PermissionType.USERS_READ)
-                .antMatchers(HttpMethod.PUT, "/api/user").hasAuthority(PermissionType.USERS_UPDATE)
-                .antMatchers(HttpMethod.DELETE, "/api/user").hasAuthority(PermissionType.USERS_DELETE)
+                .antMatchers(HttpMethod.GET, "/api/user/**").hasAuthority(PermissionType.USERS_READ)
+                .antMatchers(HttpMethod.PUT, "/api/user/**").hasAuthority(PermissionType.USERS_UPDATE)
+                .antMatchers(HttpMethod.DELETE, "/api/user/**").hasAuthority(PermissionType.USERS_DELETE)
                 .antMatchers(HttpMethod.POST, "/api/role").hasAuthority(PermissionType.ROLES_CREATE)
-                .antMatchers(HttpMethod.GET, "/api/role").hasAuthority(PermissionType.ROLES_READ)
-                .antMatchers(HttpMethod.PUT, "/api/role").hasAuthority(PermissionType.ROLES_UPDATE)
-                .antMatchers(HttpMethod.DELETE, "/api/role").hasAuthority(PermissionType.ROLES_DELETE)
+                .antMatchers(HttpMethod.GET, "/api/role/**").hasAuthority(PermissionType.ROLES_READ)
+                .antMatchers(HttpMethod.PUT, "/api/role/**").hasAuthority(PermissionType.ROLES_UPDATE)
+                .antMatchers(HttpMethod.DELETE, "/api/role/**").hasAuthority(PermissionType.ROLES_DELETE)
                 .antMatchers(HttpMethod.POST, "/api/group").hasAuthority(PermissionType.GROUPS_CREATE)
-                .antMatchers(HttpMethod.GET, "/api/group").hasAuthority(PermissionType.GROUPS_READ)
-                .antMatchers(HttpMethod.PUT, "/api/group").hasAuthority(PermissionType.GROUPS_UPDATE)
-                .antMatchers(HttpMethod.DELETE, "/api/group").hasAuthority(PermissionType.GROUPS_DELETE)
+                .antMatchers(HttpMethod.GET, "/api/group/**").hasAuthority(PermissionType.GROUPS_READ)
+                .antMatchers(HttpMethod.PUT, "/api/group/**").hasAuthority(PermissionType.GROUPS_UPDATE)
+                .antMatchers(HttpMethod.DELETE, "/api/group/**").hasAuthority(PermissionType.GROUPS_DELETE)
+                .antMatchers(HttpMethod.GET, "/api/permission/**").hasAuthority(PermissionType.PERMISSIONS_READ)
+                .antMatchers(HttpMethod.PUT, "/api/permission/**").hasAuthority(PermissionType.PERMISSIONS_UPDATE)
                 .anyRequest().denyAll();
     }
 
@@ -168,8 +170,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET","PUT","POST","OPTIONS"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://mtn-app-suite.firebaseapp.com"));
+        configuration.setAllowedMethods(Arrays.asList("GET","PUT","POST","DELETE","OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);

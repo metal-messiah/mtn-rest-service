@@ -1,11 +1,9 @@
 package com.mtn.controller;
 
-import com.mtn.constant.PermissionType;
 import com.mtn.model.converter.PermissionToSimplePermissionViewConverter;
 import com.mtn.model.domain.auth.Permission;
 import com.mtn.model.view.auth.PermissionView;
 import com.mtn.service.PermissionService;
-import com.mtn.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,21 +19,15 @@ public class PermissionController {
 
     @Autowired
     private PermissionService permissionService;
-    @Autowired
-    private SecurityService securityService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(Pageable page) {
-        securityService.checkPermission(PermissionType.PERMISSIONS_READ);
-
         Page<Permission> domainModels = permissionService.findAll(page);
         return ResponseEntity.ok(domainModels.map(new PermissionToSimplePermissionViewConverter()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission(PermissionType.PERMISSIONS_READ);
-
         Permission domainModel = permissionService.findOne(id);
         if (domainModel != null) {
             return ResponseEntity.ok(new PermissionView(domainModel));
@@ -46,8 +38,6 @@ public class PermissionController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody Permission request) {
-        securityService.checkPermission(PermissionType.PERMISSIONS_UPDATE);
-
         Permission domainModel = permissionService.updateOne(id, request);
         return ResponseEntity.ok(new PermissionView(domainModel));
     }

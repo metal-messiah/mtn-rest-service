@@ -1,7 +1,7 @@
-package com.mtn.model.view.auth;
+package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.auth.Role;
+import com.mtn.model.domain.Role;
 
 /**
  * Created by Allen on 5/6/2017.

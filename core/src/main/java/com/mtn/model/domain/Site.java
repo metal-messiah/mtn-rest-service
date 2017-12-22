@@ -4,7 +4,7 @@ import com.mtn.constant.IntersectionType;
 import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
 import com.mtn.constant.StoreType;
-import com.mtn.model.view.SimpleSiteView;
+import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.view.SiteView;
 import com.mtn.model.view.geojson.PointGeometry;
 import com.vividsolutions.jts.geom.Coordinate;

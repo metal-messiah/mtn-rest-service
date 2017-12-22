@@ -1,7 +1,7 @@
 package com.mtn.model.converter;
 
-import com.mtn.model.domain.auth.Role;
-import com.mtn.model.view.auth.SimpleRoleView;
+import com.mtn.model.domain.Role;
+import com.mtn.model.simpleView.SimpleRoleView;
 import org.springframework.core.convert.converter.Converter;
 
 /**

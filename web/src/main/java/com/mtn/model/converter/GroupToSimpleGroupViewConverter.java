@@ -1,7 +1,7 @@
 package com.mtn.model.converter;
 
-import com.mtn.model.domain.auth.Group;
-import com.mtn.model.view.auth.SimpleGroupView;
+import com.mtn.model.domain.Group;
+import com.mtn.model.simpleView.SimpleGroupView;
 import org.springframework.core.convert.converter.Converter;
 
 /**

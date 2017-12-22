@@ -1,4 +1,4 @@
-package com.mtn.model.view;
+package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreType;
@@ -17,14 +17,9 @@ public class SimpleStoreView {
     protected StoreType type;
     protected LocalDateTime openedDate;
     protected LocalDateTime closedDate;
-    protected Integer version;
     protected String storeNumber;
     protected Integer legacyLocationId;
     protected SimpleCompanyView parentCompany;
-    protected SimpleUserProfileView createdBy;
-    protected LocalDateTime createdDate;
-    protected SimpleUserProfileView updatedBy;
-    protected LocalDateTime updatedDate;
 
     public SimpleStoreView() {
     }
@@ -35,13 +30,8 @@ public class SimpleStoreView {
         this.type = store.getType();
         this.openedDate = store.getOpenedDate();
         this.closedDate = store.getClosedDate();
-        this.version = store.getVersion();
         this.legacyLocationId = store.getLegacyLocationId();
         this.storeNumber = store.getStoreNumber();
-        this.createdBy = new SimpleUserProfileView(store.getCreatedBy());
-        this.createdDate = store.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(store.getUpdatedBy());
-        this.updatedDate = store.getUpdatedDate();
 
         if (store.getParentCompany() != null) {
             this.parentCompany = new SimpleCompanyView(store.getParentCompany());
@@ -88,14 +78,6 @@ public class SimpleStoreView {
         this.closedDate = closedDate;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
     public SimpleCompanyView getParentCompany() {
         return parentCompany;
     }
@@ -118,37 +100,5 @@ public class SimpleStoreView {
 
     public void setLegacyLocationId(Integer legacyLocationId) {
         this.legacyLocationId = legacyLocationId;
-    }
-
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
     }
 }

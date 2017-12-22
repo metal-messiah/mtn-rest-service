@@ -2,6 +2,8 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.StoreSurvey;
+import com.mtn.model.simpleView.SimpleInteractionView;
+import com.mtn.model.simpleView.SimpleStoreSurveyView;
 
 import java.util.ArrayList;
 import java.util.List;

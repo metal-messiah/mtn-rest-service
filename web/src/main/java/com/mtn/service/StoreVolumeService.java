@@ -3,7 +3,7 @@ package com.mtn.service;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.view.SimpleStoreVolumeView;
+import com.mtn.model.simpleView.SimpleStoreVolumeView;
 import com.mtn.repository.StoreVolumeRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.mtn.service;
 
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.ShoppingCenterAccess;
-import com.mtn.model.view.SimpleShoppingCenterAccessView;
+import com.mtn.model.simpleView.SimpleShoppingCenterAccessView;
 import com.mtn.repository.ShoppingCenterAccessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

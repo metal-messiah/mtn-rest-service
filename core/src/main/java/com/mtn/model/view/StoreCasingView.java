@@ -2,6 +2,8 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.simpleView.SimpleInteractionView;
+import com.mtn.model.simpleView.SimpleStoreCasingView;
 
 import java.util.ArrayList;
 import java.util.List;

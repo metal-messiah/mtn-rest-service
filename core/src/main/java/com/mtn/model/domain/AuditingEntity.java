@@ -27,7 +27,6 @@ public abstract class AuditingEntity {
     public void genericPrePersist() {
         this.createdDate = LocalDateTime.now();
         this.updatedDate = LocalDateTime.now();
-//        this.version = 1;
     }
 
     @PreUpdate
@@ -37,8 +36,6 @@ public abstract class AuditingEntity {
         if (this.deletedBy != null && this.deletedDate == null) {
             this.deletedDate = LocalDateTime.now();
         }
-
-//        this.version++;
     }
 
     @ManyToOne
@@ -106,4 +103,5 @@ public abstract class AuditingEntity {
     public void setVersion(Integer version) {
         this.version = version;
     }
+
 }

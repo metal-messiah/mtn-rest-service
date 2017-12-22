@@ -2,6 +2,8 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterTenant;
+import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
+import com.mtn.model.simpleView.SimpleUserProfileView;
 
 import java.time.LocalDateTime;
 

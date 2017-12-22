@@ -5,7 +5,7 @@ import com.mtn.model.domain.Interaction;
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.view.SimpleInteractionView;
+import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.repository.InteractionRepository;
 import com.mtn.repository.ShoppingCenterRepository;
 import com.mtn.repository.StoreRepository;

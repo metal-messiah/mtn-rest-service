@@ -1,4 +1,4 @@
-package com.mtn.model.view.auth;
+package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

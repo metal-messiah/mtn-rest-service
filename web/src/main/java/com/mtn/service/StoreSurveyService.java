@@ -3,7 +3,7 @@ package com.mtn.service;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.StoreSurvey;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.view.SimpleStoreSurveyView;
+import com.mtn.model.simpleView.SimpleStoreSurveyView;
 import com.mtn.repository.StoreSurveyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

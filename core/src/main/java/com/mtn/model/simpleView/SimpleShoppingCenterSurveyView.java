@@ -1,4 +1,4 @@
-package com.mtn.model.view;
+package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterSurvey;

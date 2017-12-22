@@ -1,7 +1,9 @@
-package com.mtn.model.view.auth;
+package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.auth.Permission;
+import com.mtn.model.domain.Permission;
+import com.mtn.model.simpleView.SimplePermissionView;
+import com.mtn.model.simpleView.SimpleRoleView;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.mtn.test;
 import com.mtn.BaseTest;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.UserProfileView;
-import com.mtn.model.view.auth.SimpleAccessTokenView;
+import com.mtn.model.simpleView.SimpleAccessTokenView;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

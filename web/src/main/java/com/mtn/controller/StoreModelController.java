@@ -2,7 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.StoreModel;
-import com.mtn.model.view.SimpleStoreModelView;
+import com.mtn.model.simpleView.SimpleStoreModelView;
 import com.mtn.model.view.StoreModelView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.StoreModelService;

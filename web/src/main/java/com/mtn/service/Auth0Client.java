@@ -2,11 +2,9 @@ package com.mtn.service;
 
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.exception.Auth0Exception;
-import com.auth0.json.auth.TokenHolder;
 import com.auth0.json.auth.UserInfo;
-import com.auth0.net.AuthRequest;
 import com.auth0.net.Request;
-import com.mtn.model.domain.auth.ApiClient;
+import com.mtn.model.domain.ApiClient;
 import com.mtn.repository.ApiClientRepository;
 import com.mtn.util.MtnLogger;
 import org.apache.commons.lang3.StringUtils;

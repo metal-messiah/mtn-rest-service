@@ -2,8 +2,6 @@ package com.mtn.controller;
 
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.UserProfileView;
-import com.mtn.model.view.auth.SimpleAccessTokenView;
-import com.mtn.service.Auth0Client;
 import com.mtn.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

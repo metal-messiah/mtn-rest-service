@@ -5,7 +5,7 @@ import com.mtn.model.converter.CompanyToSimpleCompanyViewConverter;
 import com.mtn.model.domain.Company;
 import com.mtn.model.domain.Store;
 import com.mtn.model.view.CompanyView;
-import com.mtn.model.view.SimpleStoreView;
+import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.service.CompanyService;
 import com.mtn.service.SecurityService;
 import com.mtn.service.StoreService;

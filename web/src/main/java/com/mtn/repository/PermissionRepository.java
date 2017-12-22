@@ -1,6 +1,6 @@
 package com.mtn.repository;
 
-import com.mtn.model.domain.auth.Permission;
+import com.mtn.model.domain.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

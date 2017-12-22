@@ -2,6 +2,10 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Site;
+import com.mtn.model.simpleView.SimpleShoppingCenterView;
+import com.mtn.model.simpleView.SimpleSiteView;
+import com.mtn.model.simpleView.SimpleStoreView;
+import com.mtn.model.simpleView.SimpleUserProfileView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

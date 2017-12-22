@@ -2,7 +2,7 @@ package com.mtn.service;
 
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.ShoppingCenterTenant;
-import com.mtn.model.view.SimpleShoppingCenterTenantView;
+import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
 import com.mtn.repository.ShoppingCenterTenantRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,7 @@ import com.mtn.correlation.CorrelationIdFilter;
 import com.mtn.correlation.CustomHeadersEnabledServletRequest;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.view.ConflictErrorResponseView;
-import com.mtn.model.view.SimpleErrorResponseView;
+import com.mtn.model.simpleView.SimpleErrorResponseView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;

@@ -1,8 +1,9 @@
-package com.mtn.model.view.auth;
+package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.auth.Group;
-import com.mtn.model.view.SimpleUserProfileView;
+import com.mtn.model.domain.Group;
+import com.mtn.model.simpleView.SimpleGroupView;
+import com.mtn.model.simpleView.SimpleUserProfileView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

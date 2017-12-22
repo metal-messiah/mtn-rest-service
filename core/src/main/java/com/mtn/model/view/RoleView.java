@@ -1,8 +1,10 @@
-package com.mtn.model.view.auth;
+package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.auth.Role;
-import com.mtn.model.view.SimpleUserProfileView;
+import com.mtn.model.domain.Role;
+import com.mtn.model.simpleView.SimplePermissionView;
+import com.mtn.model.simpleView.SimpleRoleView;
+import com.mtn.model.simpleView.SimpleUserProfileView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class RoleView extends SimpleRoleView {
     private LocalDateTime createdDate;
     private SimpleUserProfileView updatedBy;
     private LocalDateTime updatedDate;
+    private Integer version;
 
     private List<SimpleUserProfileView> members = new ArrayList<>();
     private List<SimplePermissionView> permissions = new ArrayList<>();
@@ -33,6 +36,7 @@ public class RoleView extends SimpleRoleView {
         this.createdDate = role.getCreatedDate();
         this.updatedBy = new SimpleUserProfileView(role.getUpdatedBy());
         this.updatedDate = role.getUpdatedDate();
+        this.version = role.getVersion();
 
         this.members = role.getMembers().stream().filter(member -> member.getDeletedDate() == null).map(SimpleUserProfileView::new).collect(Collectors.toList());
         this.permissions = role.getPermissions().stream().map(SimplePermissionView::new).collect(Collectors.toList());
@@ -69,6 +73,10 @@ public class RoleView extends SimpleRoleView {
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
     }
+
+    public Integer getVersion() { return version; }
+
+    public void setVersion(Integer version) { this.version = version; }
 
     public List<SimpleUserProfileView> getMembers() {
         return members;

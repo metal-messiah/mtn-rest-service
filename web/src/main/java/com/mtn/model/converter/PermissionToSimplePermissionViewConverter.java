@@ -1,7 +1,7 @@
 package com.mtn.model.converter;
 
-import com.mtn.model.domain.auth.Permission;
-import com.mtn.model.view.auth.SimplePermissionView;
+import com.mtn.model.domain.Permission;
+import com.mtn.model.simpleView.SimplePermissionView;
 import org.springframework.core.convert.converter.Converter;
 
 /**

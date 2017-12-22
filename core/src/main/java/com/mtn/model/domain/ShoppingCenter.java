@@ -1,6 +1,6 @@
 package com.mtn.model.domain;
 
-import com.mtn.model.view.SimpleShoppingCenterView;
+import com.mtn.model.simpleView.SimpleShoppingCenterView;
 
 import javax.persistence.*;
 import java.util.ArrayList;

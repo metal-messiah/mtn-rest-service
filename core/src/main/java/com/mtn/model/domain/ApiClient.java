@@ -1,4 +1,4 @@
-package com.mtn.model.domain.auth;
+package com.mtn.model.domain;
 
 import javax.persistence.*;
 

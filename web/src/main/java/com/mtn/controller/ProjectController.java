@@ -2,6 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.*;
+import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;

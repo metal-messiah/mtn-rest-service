@@ -1,7 +1,7 @@
 package com.mtn.model.converter;
 
 import com.mtn.model.domain.Company;
-import com.mtn.model.view.SimpleCompanyView;
+import com.mtn.model.simpleView.SimpleCompanyView;
 import org.springframework.core.convert.converter.Converter;
 
 /**

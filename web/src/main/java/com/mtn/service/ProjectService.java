@@ -4,7 +4,7 @@ import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreModel;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.view.SimpleProjectView;
+import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

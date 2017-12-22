@@ -1,8 +1,8 @@
-package com.mtn.model.view.auth;
+package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.CrudAction;
-import com.mtn.model.domain.auth.Permission;
+import com.mtn.model.domain.Permission;
 
 /**
  * Created by Allen on 5/6/2017.

@@ -2,9 +2,9 @@ package com.mtn.controller;
 
 import com.mtn.model.converter.GroupToSimpleGroupViewConverter;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.domain.auth.Group;
-import com.mtn.model.view.SimpleUserProfileView;
-import com.mtn.model.view.auth.GroupView;
+import com.mtn.model.domain.Group;
+import com.mtn.model.simpleView.SimpleUserProfileView;
+import com.mtn.model.view.GroupView;
 import com.mtn.service.GroupService;
 import com.mtn.service.UserProfileService;
 import org.apache.commons.lang3.StringUtils;

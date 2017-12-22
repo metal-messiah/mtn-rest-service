@@ -1,6 +1,7 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.model.simpleView.SimpleErrorResponseView;
 import org.springframework.http.HttpStatus;
 
 /**

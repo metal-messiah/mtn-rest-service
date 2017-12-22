@@ -1,7 +1,7 @@
 package com.mtn.model.converter;
 
 import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.model.view.SimpleShoppingCenterView;
+import com.mtn.model.simpleView.SimpleShoppingCenterView;
 import org.springframework.core.convert.converter.Converter;
 
 /**

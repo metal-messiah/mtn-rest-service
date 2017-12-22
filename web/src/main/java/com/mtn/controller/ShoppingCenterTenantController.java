@@ -2,7 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.ShoppingCenterTenant;
-import com.mtn.model.view.SimpleShoppingCenterTenantView;
+import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.ShoppingCenterTenantService;
 import org.springframework.beans.factory.annotation.Autowired;

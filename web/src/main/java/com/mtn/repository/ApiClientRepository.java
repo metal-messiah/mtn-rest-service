@@ -1,6 +1,6 @@
 package com.mtn.repository;
 
-import com.mtn.model.domain.auth.ApiClient;
+import com.mtn.model.domain.ApiClient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

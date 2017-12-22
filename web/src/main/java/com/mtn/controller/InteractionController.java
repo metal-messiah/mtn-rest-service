@@ -2,7 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Interaction;
-import com.mtn.model.view.SimpleInteractionView;
+import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.service.InteractionService;
 import com.mtn.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;

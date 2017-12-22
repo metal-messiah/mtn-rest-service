@@ -3,7 +3,7 @@ package com.mtn.service;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.view.SimpleStoreCasingView;
+import com.mtn.model.simpleView.SimpleStoreCasingView;
 import com.mtn.repository.StoreCasingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

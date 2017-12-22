@@ -1,7 +1,7 @@
 package com.mtn.security;
 
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.domain.auth.Role;
+import com.mtn.model.domain.Role;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 

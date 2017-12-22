@@ -1,7 +1,7 @@
 package com.mtn.model.domain;
 
 import com.mtn.constant.StoreType;
-import com.mtn.model.view.SimpleStoreView;
+import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.view.StoreView;
 
 import javax.persistence.*;

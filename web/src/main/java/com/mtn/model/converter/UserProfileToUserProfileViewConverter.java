@@ -1,7 +1,6 @@
 package com.mtn.model.converter;
 
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.view.SimpleUserProfileView;
 import com.mtn.model.view.UserProfileView;
 import org.springframework.core.convert.converter.Converter;
 

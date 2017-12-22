@@ -1,6 +1,6 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.auth.Permission;
+import com.mtn.model.domain.Permission;
 import com.mtn.repository.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

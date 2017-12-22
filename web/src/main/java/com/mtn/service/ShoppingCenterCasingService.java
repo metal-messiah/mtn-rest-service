@@ -3,7 +3,7 @@ package com.mtn.service;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.ShoppingCenterCasing;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.view.SimpleShoppingCenterCasingView;
+import com.mtn.model.simpleView.SimpleShoppingCenterCasingView;
 import com.mtn.repository.ShoppingCenterCasingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

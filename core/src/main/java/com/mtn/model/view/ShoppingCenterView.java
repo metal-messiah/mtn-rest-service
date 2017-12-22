@@ -2,6 +2,7 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.simpleView.*;
 
 import java.util.ArrayList;
 import java.util.List;

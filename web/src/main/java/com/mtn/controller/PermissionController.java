@@ -1,8 +1,8 @@
 package com.mtn.controller;
 
 import com.mtn.model.converter.PermissionToSimplePermissionViewConverter;
-import com.mtn.model.domain.auth.Permission;
-import com.mtn.model.view.auth.PermissionView;
+import com.mtn.model.domain.Permission;
+import com.mtn.model.view.PermissionView;
 import com.mtn.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

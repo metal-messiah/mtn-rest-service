@@ -1,4 +1,4 @@
-package com.mtn.model.view;
+package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.RatingType;
@@ -91,7 +91,7 @@ public class SimpleStoreSurveyView implements Serializable {
     protected LocalDateTime createdDate;
     protected SimpleUserProfileView updatedBy;
     protected LocalDateTime updatedDate;
-    
+
     public SimpleStoreSurveyView() {
     }
 

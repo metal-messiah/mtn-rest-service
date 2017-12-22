@@ -4,7 +4,7 @@ import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.ShoppingCenterCasing;
 import com.mtn.model.view.ShoppingCenterCasingView;
-import com.mtn.model.view.SimpleProjectView;
+import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.service.ProjectService;
 import com.mtn.service.SecurityService;
 import com.mtn.service.ShoppingCenterCasingService;

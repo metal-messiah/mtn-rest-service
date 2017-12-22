@@ -2,7 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.StoreVolume;
-import com.mtn.model.view.SimpleStoreVolumeView;
+import com.mtn.model.simpleView.SimpleStoreVolumeView;
 import com.mtn.service.SecurityService;
 import com.mtn.service.StoreVolumeService;
 import org.springframework.beans.factory.annotation.Autowired;

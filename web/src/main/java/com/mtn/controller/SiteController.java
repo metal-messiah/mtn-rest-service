@@ -3,7 +3,7 @@ package com.mtn.controller;
 import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
-import com.mtn.model.view.SimpleStoreView;
+import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
 import com.mtn.service.SecurityService;

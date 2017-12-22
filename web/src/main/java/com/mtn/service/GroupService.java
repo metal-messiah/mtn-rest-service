@@ -2,7 +2,7 @@ package com.mtn.service;
 
 import com.mtn.exception.DeletedEntityReactivationException;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.domain.auth.Group;
+import com.mtn.model.domain.Group;
 import com.mtn.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

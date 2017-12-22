@@ -1,6 +1,6 @@
 package com.mtn.repository.specification;
 
-import com.mtn.model.domain.auth.Group;
+import com.mtn.model.domain.Group;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

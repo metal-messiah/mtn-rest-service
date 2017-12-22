@@ -2,8 +2,12 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Company;
+import com.mtn.model.simpleView.SimpleCompanyView;
+import com.mtn.model.simpleView.SimpleStoreView;
+import com.mtn.model.simpleView.SimpleUserProfileView;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +19,11 @@ import java.util.stream.Collectors;
 public class CompanyView extends SimpleCompanyView implements Serializable {
 
     private CompanyView parentCompany;
+    private SimpleUserProfileView createdBy;
+    private LocalDateTime createdDate;
+    private SimpleUserProfileView updatedBy;
+    private LocalDateTime updatedDate;
+    private Integer version;
 
     private List<SimpleCompanyView> childCompanies = new ArrayList<>();
     private List<SimpleStoreView> stores = new ArrayList<>();
@@ -56,5 +65,45 @@ public class CompanyView extends SimpleCompanyView implements Serializable {
 
     public void setStores(List<SimpleStoreView> stores) {
         this.stores = stores;
+    }
+
+    public SimpleUserProfileView getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SimpleUserProfileView createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public SimpleUserProfileView getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

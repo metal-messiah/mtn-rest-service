@@ -35,6 +35,15 @@ public class RoleSpecifications {
         };
     }
 
+    public static Specification<Role> isNotAdmin() {
+        return new Specification<Role>() {
+            @Override
+            public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.notEqual(root.get(ID), 1);
+            }
+        };
+    }
+
     public static Specification<Role> isNotDeleted() {
         return new Specification<Role>() {
             @Override

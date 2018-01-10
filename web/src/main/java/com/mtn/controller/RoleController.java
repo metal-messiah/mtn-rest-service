@@ -49,19 +49,28 @@ public class RoleController {
 
     @RequestMapping(value = "/{roleId}/member/{userId}", method = RequestMethod.POST)
     public ResponseEntity addOneMemberToRole(@PathVariable("roleId") Integer roleId, @PathVariable("userId") Integer userId) {
+        if (roleId == 1) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         Role domainModel = roleService.addOneMemberToRole(roleId, userId);
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
     @RequestMapping(value = "/{roleId}/permission/{permissionId}", method = RequestMethod.POST)
     public ResponseEntity addOnePermissionToRole(@PathVariable("roleId") Integer roleId, @PathVariable("permissionId") Integer permissionId) {
+        if (roleId == 1) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         Role domainModel = roleService.addOnePermissionToRole(roleId, permissionId);
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        roleService.deleteOne(id);
+    @RequestMapping(value = "/{roleId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteOne(@PathVariable("roleId") Integer roleId) {
+        if (roleId == 1) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        roleService.deleteOne(roleId);
         return ResponseEntity.noContent().build();
     }
 
@@ -99,6 +108,9 @@ public class RoleController {
 
     @RequestMapping(value = "/{roleId}/member/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity removeOneMemberFromRole(@PathVariable("roleId") Integer roleId, @PathVariable("userId") Integer userId) {
+        if (roleId == 1) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         Role domainModel = roleService.removeOneMemberFromRole(roleId, userId);
         if (domainModel == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -108,6 +120,9 @@ public class RoleController {
 
     @RequestMapping(value = "/{roleId}/permission/{permissionId}", method = RequestMethod.DELETE)
     public ResponseEntity removeOnePermissionFromRole(@PathVariable("roleId") Integer roleId, @PathVariable("permissionId") Integer permissionId) {
+        if (roleId == 1) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         Role domainModel = roleService.removeOnePermissionFromRole(roleId, permissionId);
         if (domainModel == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -115,9 +130,12 @@ public class RoleController {
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody Role request) {
-        Role domainModel = roleService.updateOne(id, request);
+    @RequestMapping(value = "/{roleId}", method = RequestMethod.PUT)
+    public ResponseEntity updateOne(@PathVariable("roleId") Integer roleId, @RequestBody Role request) {
+        if (roleId == 1) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        Role domainModel = roleService.updateOne(roleId, request);
         if (domainModel == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

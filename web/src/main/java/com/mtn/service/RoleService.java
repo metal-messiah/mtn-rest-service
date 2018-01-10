@@ -104,6 +104,7 @@ public class RoleService extends ValidatingDataService<Role> {
 	public Page<Role> findAllUsingSpecs(Pageable page) {
 		return roleRepository.findAll(
 				where(isNotDeleted())
+						.and(isNotAdmin())
 				, page
 		);
 	}
@@ -112,6 +113,7 @@ public class RoleService extends ValidatingDataService<Role> {
 		return roleRepository.findAll(
 				where(displayNameContains(name))
 						.and(isNotDeleted())
+						.and(isNotAdmin())
 				, page
 		);
 	}

@@ -15,13 +15,13 @@ public abstract class ValidatingDataService<T extends Identifiable> {
 
     public abstract String getEntityName();
     public abstract void validateBusinessRules(T object);
-    public abstract void validateDoesNotExist(T object);
+    public abstract void validateUnique(T object);
 
     public void validateForInsert(T object) {
         validateNotNull(object);
         validateConstraints(object);
         validateBusinessRules(object);
-        validateDoesNotExist(object);
+        validateUnique(object);
 
         if (object.getId() != null) {
             throw new IllegalArgumentException(String.format("%s id must be null", getEntityName()));

@@ -178,7 +178,7 @@ public class GroupService extends ValidatingDataService<Group> {
     }
 
     @Override
-    public void validateDoesNotExist(Group object) {
+    public void validateUnique(Group object) {
         Group existing = findOneByDisplayName(object.getDisplayName());
         if (existing != null) {
             if (existing.getDeletedDate() != null) {

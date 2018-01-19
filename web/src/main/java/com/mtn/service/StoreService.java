@@ -230,7 +230,7 @@ public class StoreService extends ValidatingDataService<Store> {
     }
 
     @Override
-    public void validateDoesNotExist(Store object) {
+    public void validateUnique(Store object) {
         //No unique constraints to enforce yet
     }
 }

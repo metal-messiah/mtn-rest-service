@@ -140,7 +140,7 @@ public class InteractionService extends ValidatingDataService<Interaction> {
     }
 
     @Override
-    public void validateDoesNotExist(Interaction object) {
+    public void validateUnique(Interaction object) {
         //No unique contraints to enforce
     }
 

@@ -143,7 +143,7 @@ public class SiteService extends ValidatingDataService<Site> {
     }
 
     @Override
-    public void validateDoesNotExist(Site object) {
+    public void validateUnique(Site object) {
         //No unique constraints to enforce yet
     }
 }

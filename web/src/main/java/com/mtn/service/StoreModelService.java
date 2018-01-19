@@ -137,7 +137,7 @@ public class StoreModelService extends ValidatingDataService<StoreModel> {
     }
 
     @Override
-    public void validateDoesNotExist(StoreModel object) {
+    public void validateUnique(StoreModel object) {
         //No unique contraints to enforce
     }
 }

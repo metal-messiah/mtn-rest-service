@@ -182,7 +182,7 @@ public class StoreSurveyService extends ValidatingDataService<StoreSurvey> {
     }
 
     @Override
-    public void validateDoesNotExist(StoreSurvey object) {
+    public void validateUnique(StoreSurvey object) {
         //No unique contraints to enforce
     }
 }

@@ -57,7 +57,7 @@ public class PermissionService extends ValidatingDataService<Permission> {
     }
 
     @Override
-    public void validateDoesNotExist(Permission object) {
+    public void validateUnique(Permission object) {
         //No user-facing unique constraints to enforce yet
     }
 }

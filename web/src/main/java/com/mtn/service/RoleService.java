@@ -13,14 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.mtn.repository.specification.RoleSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -167,7 +162,15 @@ public class RoleService extends ValidatingDataService<Role> {
 	public Role updateOne(Integer id, Role request) {
 		validateForUpdate(request);
 
-		Role existing = findOneUsingSpecs(id);
+		// validate not duplicate displayName
+		Role existing = findOneByDisplayName(request.getDisplayName());
+		if (existing != null && !existing.getId().equals(id)) {
+			throw new IllegalArgumentException(String.format("%s already exists", getEntityName()));
+		}
+		if (existing == null) {
+			existing = findOneUsingSpecs(id);
+		}
+
 		validateNotNull(existing);
 
 		return updateOne(existing, request);
@@ -248,7 +251,7 @@ public class RoleService extends ValidatingDataService<Role> {
 	}
 
 	@Override
-	public void validateDoesNotExist(Role object) {
+	public void validateUnique(Role object) {
 		Role existing = findOneByDisplayName(object.getDisplayName());
 		if (existing != null) {
 			if (existing.getDeletedDate() != null) {

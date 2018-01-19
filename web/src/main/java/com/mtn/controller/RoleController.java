@@ -68,7 +68,7 @@ public class RoleController {
     @RequestMapping(value = "/{roleId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOne(@PathVariable("roleId") Integer roleId) {
         if (roleId == 1) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException(String.format("You may not delete this role!"));
         }
         roleService.deleteOne(roleId);
         return ResponseEntity.noContent().build();
@@ -133,7 +133,7 @@ public class RoleController {
     @RequestMapping(value = "/{roleId}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("roleId") Integer roleId, @RequestBody Role request) {
         if (roleId == 1) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException(String.format("You may not update this role!"));
         }
         Role domainModel = roleService.updateOne(roleId, request);
         if (domainModel == null) {

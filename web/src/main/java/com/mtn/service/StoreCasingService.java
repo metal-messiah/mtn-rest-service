@@ -142,7 +142,7 @@ public class StoreCasingService extends ValidatingDataService<StoreCasing> {
     }
 
     @Override
-    public void validateDoesNotExist(StoreCasing object) {
+    public void validateUnique(StoreCasing object) {
         //No unique contraints to enforce
     }
 }

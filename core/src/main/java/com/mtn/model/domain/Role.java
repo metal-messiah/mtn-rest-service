@@ -32,6 +32,7 @@ public class Role extends AuditingEntity implements Identifiable {
     }
 
     @NotNull
+    @Column(unique = true)
     public String getDisplayName() {
         return displayName;
     }

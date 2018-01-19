@@ -115,11 +115,11 @@ public class CompanyService extends ValidatingDataService<Company> {
     @Override
     public void validateForUpdate(Company object) {
         super.validateForUpdate(object);
-        validateDoesNotExist(object);
+        validateUnique(object);
     }
 
     @Override
-    public void validateDoesNotExist(Company object) {
+    public void validateUnique(Company object) {
         Company existing = findOneByName(object.getName());
         if (existing != null && object.getId().equals(existing.getId())) {
             throw new IllegalArgumentException("Company with this name already exists");

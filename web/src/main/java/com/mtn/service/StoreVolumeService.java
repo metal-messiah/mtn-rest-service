@@ -124,7 +124,7 @@ public class StoreVolumeService extends ValidatingDataService<StoreVolume> {
     }
 
     @Override
-    public void validateDoesNotExist(StoreVolume object) {
+    public void validateUnique(StoreVolume object) {
         //No unique contraints to enforce
     }
 }

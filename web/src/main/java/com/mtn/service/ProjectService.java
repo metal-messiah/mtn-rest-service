@@ -147,7 +147,7 @@ public class ProjectService extends ValidatingDataService<Project> {
     }
 
     @Override
-    public void validateDoesNotExist(Project object) {
+    public void validateUnique(Project object) {
         //No unique contraints to enforce
     }
 }

@@ -102,7 +102,7 @@ public class ShoppingCenterTenantService extends ValidatingDataService<ShoppingC
     }
 
     @Override
-    public void validateDoesNotExist(ShoppingCenterTenant object) {
+    public void validateUnique(ShoppingCenterTenant object) {
         //No unique contraints to enforce
     }
 }

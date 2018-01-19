@@ -154,7 +154,7 @@ public class ShoppingCenterSurveyService extends ValidatingDataService<ShoppingC
     }
 
     @Override
-    public void validateDoesNotExist(ShoppingCenterSurvey object) {
+    public void validateUnique(ShoppingCenterSurvey object) {
         //No unique contraints to enforce
     }
 }

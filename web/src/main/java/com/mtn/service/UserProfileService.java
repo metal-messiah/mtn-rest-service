@@ -46,6 +46,20 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
 
         request.setEmail(request.getEmail().toLowerCase());
 
+        if (request.getRole() != null) {
+			Role role = roleService.findOne(request.getRole().getId());
+			if (role != null) {
+				request.setRole(role);
+			}
+		}
+
+		if (request.getGroup() != null) {
+			Group group = groupService.findOne(request.getGroup().getId());
+			if (group != null) {
+				request.setGroup(group);
+			}
+		}
+
         return userProfileRepository.save(request);
     }
 
@@ -166,7 +180,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
         }
 
         if (!existing.getEmail().equalsIgnoreCase(request.getEmail())) {
-            validateDoesNotExist(request);
+            validateUnique(request);
         }
 
         return updateOne(existing, request);
@@ -200,7 +214,7 @@ public class UserProfileService extends ValidatingDataService<UserProfile> {
     }
 
     @Override
-    public void validateDoesNotExist(UserProfile object) {
+    public void validateUnique(UserProfile object) {
         UserProfile existing = findOneByEmail(object.getEmail().toLowerCase());
         if (existing != null) {
             if (existing.getDeletedDate() != null) {

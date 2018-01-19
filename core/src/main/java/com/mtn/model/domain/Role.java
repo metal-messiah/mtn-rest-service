@@ -49,7 +49,7 @@ public class Role extends AuditingEntity implements Identifiable {
         this.description = description;
     }
 
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "auth_role_auth_permission",
             joinColumns = @JoinColumn(name = "auth_role_id", referencedColumnName = "auth_role_id"),

@@ -1,13 +1,11 @@
 package com.mtn.controller;
 
-import com.mtn.constant.PermissionType;
 import com.mtn.model.converter.CompanyToSimpleCompanyViewConverter;
 import com.mtn.model.domain.Company;
 import com.mtn.model.domain.Store;
 import com.mtn.model.view.CompanyView;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.service.CompanyService;
-import com.mtn.service.SecurityService;
 import com.mtn.service.StoreService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +28,15 @@ public class CompanyController {
     private CompanyService companyService;
     @Autowired
     private StoreService storeService;
-    @Autowired
-    private SecurityService securityService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addOne(Company request) {
-        securityService.checkPermission(PermissionType.COMPANIES_CREATE);
-
         Company domainModel = companyService.addOne(request);
         return ResponseEntity.ok(new CompanyView(domainModel));
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(@RequestParam(value = "name", required = false) String name, Pageable page) {
-        securityService.checkPermission(PermissionType.COMPANIES_READ);
-
         Page<Company> domainModels;
         if (StringUtils.isNotBlank(name)) {
             domainModels = companyService.findAllWhereNameLike(name, page);
@@ -57,8 +49,6 @@ public class CompanyController {
 
     @RequestMapping(value = "/{id}/store", method = RequestMethod.GET)
     public ResponseEntity findAllStoresForCompany(@PathVariable("id") Integer id, @RequestParam(value = "recursive", defaultValue = "false") Boolean doRecursive) {
-        securityService.checkPermission(PermissionType.COMPANIES_READ);
-
         List<Store> domainModels;
         if (doRecursive) {
             domainModels = storeService.findAllByParentCompanyIdRecursive(id);
@@ -71,8 +61,6 @@ public class CompanyController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        securityService.checkPermission(PermissionType.COMPANIES_READ);
-
         Company domainModel = companyService.findOne(id);
         if (domainModel != null) {
             return ResponseEntity.ok(new CompanyView(domainModel));
@@ -83,16 +71,12 @@ public class CompanyController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateOne(@PathVariable("id") Integer id, Company request) {
-        securityService.checkPermission(PermissionType.COMPANIES_UPDATE);
-
         Company domainModel = companyService.updateOne(id, request);
         return ResponseEntity.ok(new CompanyView(domainModel));
     }
 
     @RequestMapping(value = "/{childId}/parent/{parentId}")
     public ResponseEntity updateOneParentCompany(@PathVariable("childId") Integer childId, @PathVariable("parentId") Integer parentId) {
-        securityService.checkPermission(PermissionType.COMPANIES_UPDATE);
-
         Company domainModel = companyService.updateOneParentCompany(childId, parentId);
         return ResponseEntity.ok(new CompanyView(domainModel));
     }

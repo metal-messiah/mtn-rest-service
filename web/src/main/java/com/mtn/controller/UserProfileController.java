@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,11 +53,10 @@ public class UserProfileController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
         UserProfile domainModel = userProfileService.findOneUsingSpecs(id);
-        if (domainModel != null) {
-            return ResponseEntity.ok(new UserProfileView(domainModel));
-        } else {
-            return ResponseEntity.noContent().build();
+        if (domainModel == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+        return ResponseEntity.ok(new UserProfileView(domainModel));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)

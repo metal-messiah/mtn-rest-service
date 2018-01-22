@@ -7,6 +7,7 @@ import com.mtn.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +30,10 @@ public class PermissionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity findOne(@PathVariable("id") Integer id) {
         Permission domainModel = permissionService.findOne(id);
-        if (domainModel != null) {
-            return ResponseEntity.ok(new PermissionView(domainModel));
-        } else {
-            return ResponseEntity.noContent().build();
+        if (domainModel == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+        return ResponseEntity.ok(new PermissionView(domainModel));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)

@@ -1,55 +1,37 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreSurvey;
-import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.view.StoreSurveyView;
-import com.mtn.service.ProjectService;
 import com.mtn.service.StoreSurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 6/7/2017.
  */
 @RestController
 @RequestMapping("/api/store-survey")
-public class StoreSurveyController {
+public class StoreSurveyController extends CrudControllerImpl<StoreSurvey> {
 
     @Autowired
     private StoreSurveyService surveyService;
-    @Autowired
-    private ProjectService projectService;
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        surveyService.deleteOne(id);
-        return ResponseEntity.noContent().build();
+    @Override
+    public StoreSurveyService getEntityService() {
+        return surveyService;
     }
 
-    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-    public ResponseEntity findAllProjectsForStoreSurvey(@PathVariable("id") Integer storeSurveyId) {
-        List<Project> domainModels = projectService.findAllByStoreSurveyId(storeSurveyId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
+    @Override
+    public StoreSurveyView getViewFromModel(Object model) {
+        return new StoreSurveyView((StoreSurvey) model);
     }
+//    @Autowired
+//    private ProjectService projectService;
+//
+//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
+//    public ResponseEntity findAllProjectsForStoreSurvey(@PathVariable("id") Integer storeSurveyId) {
+//        List<Project> domainModels = projectService.findAllByStoreSurveyId(storeSurveyId);
+//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
+//    }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        StoreSurvey domainModel = surveyService.findOneUsingSpecs(id);
-        if (domainModel != null) {
-            return ResponseEntity.ok(new StoreSurveyView(domainModel));
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-    }
-
-    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody StoreSurvey request) {
-        StoreSurvey domainModel = surveyService.updateOne(id, request);
-        return ResponseEntity.ok(new StoreSurveyView(domainModel));
-    }
 }

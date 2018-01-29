@@ -18,6 +18,7 @@ public class UserProfileView extends SimpleUserProfileView {
     private LocalDateTime createdDate;
     private SimpleUserProfileView updatedBy;
     private LocalDateTime updatedDate;
+    private Integer version;
     private SimpleGroupView group;
     private SimpleRoleView role;
 
@@ -31,6 +32,7 @@ public class UserProfileView extends SimpleUserProfileView {
         this.createdDate = userProfile.getCreatedDate();
         this.updatedBy = new SimpleUserProfileView(userProfile.getUpdatedBy());
         this.updatedDate = userProfile.getUpdatedDate();
+        this.version = userProfile.getVersion();
 
         if (userProfile.getGroup() != null) {
             this.group = new SimpleGroupView(userProfile.getGroup());
@@ -72,6 +74,14 @@ public class UserProfileView extends SimpleUserProfileView {
 
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public SimpleGroupView getGroup() {

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/site")
-public class SiteController {
+public class SiteController extends CrudControllerImpl<Site> {
 
     @Autowired
     private SiteService siteService;
@@ -35,32 +35,19 @@ public class SiteController {
         return ResponseEntity.ok(new StoreView(domainModel));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        siteService.deleteOne(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @RequestMapping(value = "/{id}/store", method = RequestMethod.GET)
     public ResponseEntity findAllStoresForSite(@PathVariable("id") Integer siteId) {
         List<Store> domainModels = storeService.findAllBySiteIdUsingSpecs(siteId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        Site domainModel = siteService.findOneUsingSpecs(id);
-        if (domainModel != null) {
-            return ResponseEntity.ok(new SiteView(domainModel));
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+    @Override
+    public SiteService getEntityService() {
+        return siteService;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody SiteView request) {
-        Site requestModel = new Site((SiteView) request); //Cast ensures correct constructor is called
-        Site domainModel = siteService.updateOne(id, requestModel);
-        return ResponseEntity.ok(new SiteView(domainModel));
+    @Override
+    public SiteView getViewFromModel(Object model) {
+        return new SiteView((Site) model);
     }
 }

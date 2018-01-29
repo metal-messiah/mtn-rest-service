@@ -28,24 +28,4 @@ public class SecurityService {
         }
         return null;
     }
-
-    public void checkPermission(String permission) {
-
-        MtnAuthentication currentAuthentication = getCurrentAuthentication();
-
-        if (currentAuthentication != null) {
-            //Check for system admin
-            if (getCurrentUser().getEmail().equals("system.administrator@mtnra.com")) {
-                return;
-            }
-
-            //Check permissions
-            for (GrantedAuthority authority : currentAuthentication.getAuthorities()) {
-                if (authority.getAuthority().equalsIgnoreCase(permission)) {
-                    return;
-                }
-            }
-        }
-        throw new SecurityException();
-    }
 }

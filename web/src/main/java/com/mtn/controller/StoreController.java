@@ -5,7 +5,6 @@ import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/store")
-public class StoreController {
+public class StoreController extends CrudControllerImpl<Store> {
 
     @Autowired
     private StoreService storeService;
@@ -29,8 +28,8 @@ public class StoreController {
     private StoreCasingService casingService;
     @Autowired
     private StoreModelService modelService;
-    @Autowired
-    private ProjectService projectService;
+//    @Autowired
+//    private ProjectService projectService;
 
     @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.POST)
     public ResponseEntity addOneStoreCasingToStore(@PathVariable("id") Integer storeId, @RequestBody StoreCasing request) {
@@ -50,12 +49,6 @@ public class StoreController {
         return ResponseEntity.ok(new SimpleStoreVolumeView(domainModel));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        storeService.deleteOne(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.GET)
     public ResponseEntity findAllCasingsForStore(@PathVariable("id") Integer storeId) {
         List<StoreCasing> domainModels = casingService.findAllByStoreIdUsingSpecs(storeId);
@@ -68,11 +61,11 @@ public class StoreController {
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreModelView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-    public ResponseEntity findAllProjectsForStore(@PathVariable("id") Integer storeId) {
-        List<Project> domainModels = projectService.findAllByStoreId(storeId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-    }
+//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
+//    public ResponseEntity findAllProjectsForStore(@PathVariable("id") Integer storeId) {
+//        List<Project> domainModels = projectService.findAllByStoreId(storeId);
+//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
+//    }
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.GET)
     public ResponseEntity findAllSurveysForStore(@PathVariable("id") Integer storeId) {
@@ -86,27 +79,19 @@ public class StoreController {
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreVolumeView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        Store domainModel = storeService.findOneUsingSpecs(id);
-        if (domainModel == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(new StoreView(domainModel));
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(
-            @PathVariable("id") Integer id,
-            @RequestParam(value = "overrideActiveStore", defaultValue = "false") Boolean overrideActiveStore,
-            @RequestBody StoreView request) {
-        Store domainModel = storeService.updateOne(id, new Store((StoreView) request), overrideActiveStore); //Cast ensures correct constructor is called
-        return ResponseEntity.ok(new StoreView(domainModel));
-    }
-
     @RequestMapping(value = "/{storeId}/company/{companyId}", method = RequestMethod.PUT)
     public ResponseEntity updateOneParentCompany(@PathVariable("storeId") Integer storeId, @PathVariable("companyId") Integer companyId) {
         Store domainModel = storeService.updateOneParentCompany(storeId, companyId);
         return ResponseEntity.ok(new StoreView(domainModel));
+    }
+
+    @Override
+    public StoreService getEntityService() {
+        return storeService;
+    }
+
+    @Override
+    public StoreView getViewFromModel(Object model) {
+        return new StoreView((Store) model);
     }
 }

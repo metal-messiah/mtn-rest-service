@@ -1,6 +1,5 @@
 package com.mtn.controller;
 
-import com.mtn.constant.PermissionType;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.domain.ShoppingCenterSurvey;
@@ -22,33 +21,27 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/shopping-center-survey")
-public class ShoppingCenterSurveyController {
+public class ShoppingCenterSurveyController extends CrudControllerImpl<ShoppingCenterSurvey> {
 
     @Autowired
     private ShoppingCenterAccessService accessService;
     @Autowired
-    private ShoppingCenterSurveyService surveyService;
+    private ShoppingCenterSurveyService shoppingCenterSurveyService;
     @Autowired
     private ShoppingCenterTenantService tenantService;
-    @Autowired
-    private ProjectService projectService;
+//    @Autowired
+//    private ProjectService projectService;
 
     @RequestMapping(path = "/{id}/shopping-center-access", method = RequestMethod.POST)
     public ResponseEntity addOneAccessToSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterAccess request) {
-        ShoppingCenterAccess domainModel = surveyService.addOneAccessToSurvey(surveyId, request);
+        ShoppingCenterAccess domainModel = getEntityService().addOneAccessToSurvey(surveyId, request);
         return ResponseEntity.ok(new SimpleShoppingCenterAccessView(domainModel));
     }
 
     @RequestMapping(path = "/{id}/shopping-center-tenant", method = RequestMethod.POST)
     public ResponseEntity addOneTenantToSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterTenant request) {
-        ShoppingCenterTenant domainModel = surveyService.addOneTenantToSurvey(surveyId, request);
+        ShoppingCenterTenant domainModel = getEntityService().addOneTenantToSurvey(surveyId, request);
         return ResponseEntity.ok(new SimpleShoppingCenterTenantView(domainModel));
-    }
-
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        surveyService.deleteOne(id);
-        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(path = "/{id}/shopping-center-access", method = RequestMethod.GET)
@@ -57,11 +50,11 @@ public class ShoppingCenterSurveyController {
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-    public ResponseEntity findAllProjectsForShoppingCenterSurvey(@PathVariable("id") Integer shoppingCenterSurveyId) {
-        List<Project> domainModels = projectService.findAllByShoppingCenterSurveyId(shoppingCenterSurveyId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-    }
+//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
+//    public ResponseEntity findAllProjectsForShoppingCenterSurvey(@PathVariable("id") Integer shoppingCenterSurveyId) {
+//        List<Project> domainModels = projectService.findAllByShoppingCenterSurveyId(shoppingCenterSurveyId);
+//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
+//    }
 
     @RequestMapping(path = "/{id}/shopping-center-tenant", method = RequestMethod.GET)
     public ResponseEntity findAllTenantsForSurvey(@PathVariable("id") Integer surveyId) {
@@ -69,19 +62,13 @@ public class ShoppingCenterSurveyController {
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterTenantView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        ShoppingCenterSurvey domainModel = surveyService.findOneUsingSpecs(id);
-        if (domainModel != null) {
-            return ResponseEntity.ok(new ShoppingCenterSurveyView(domainModel));
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+    @Override
+    public ShoppingCenterSurveyService getEntityService() {
+        return shoppingCenterSurveyService;
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody ShoppingCenterSurvey request) {
-        ShoppingCenterSurvey domainModel = surveyService.updateOne(id, request);
-        return ResponseEntity.ok(new ShoppingCenterSurveyView(domainModel));
+    @Override
+    public ShoppingCenterSurveyView getViewFromModel(Object model) {
+        return new ShoppingCenterSurveyView((ShoppingCenterSurvey) model);
     }
 }

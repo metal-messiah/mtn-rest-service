@@ -2,7 +2,6 @@ package com.mtn.controller;
 
 import com.mtn.model.converter.ShoppingCenterToSimpleShoppingCenterViewConverter;
 import com.mtn.model.domain.*;
-import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.simpleView.SimpleShoppingCenterCasingView;
 import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
 import com.mtn.model.simpleView.SimpleSiteView;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/shopping-center")
-public class ShoppingCenterController {
+public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter> {
 
     @Autowired
     private ShoppingCenterService shoppingCenterService;
@@ -33,14 +32,8 @@ public class ShoppingCenterController {
     private ShoppingCenterSurveyService surveyService;
     @Autowired
     private ShoppingCenterCasingService casingService;
-    @Autowired
-    private ProjectService projectService;
-
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addOne(@RequestBody ShoppingCenter request) {
-        ShoppingCenter domainModel = shoppingCenterService.addOne(request);
-        return ResponseEntity.ok(new ShoppingCenterView(domainModel));
-    }
+//    @Autowired
+//    private ProjectService projectService;
 
     @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.POST)
     public ResponseEntity addOneShoppingCenterCasingToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterCasing request) {
@@ -59,12 +52,6 @@ public class ShoppingCenterController {
         Site transformedRequest = new Site(request);
         Site domainModel = shoppingCenterService.addOneSiteToShoppingCenter(shoppingCenterId, transformedRequest);
         return ResponseEntity.ok(new SimpleSiteView(domainModel));
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        shoppingCenterService.deleteOne(id);
-        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -88,11 +75,11 @@ public class ShoppingCenterController {
         return ResponseEntity.ok(domainModels.map(new ShoppingCenterToSimpleShoppingCenterViewConverter()));
     }
 
-    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-    public ResponseEntity findAllProjectsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
-        List<Project> domainModels = projectService.findAllByShoppingCenterId(shoppingCenterId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-    }
+//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
+//    public ResponseEntity findAllProjectsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
+//        List<Project> domainModels = projectService.findAllByShoppingCenterId(shoppingCenterId);
+//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
+//    }
 
     @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.GET)
     public ResponseEntity findAllShoppingCenterCasingsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
@@ -112,19 +99,13 @@ public class ShoppingCenterController {
         return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        ShoppingCenter domainModel = shoppingCenterService.findOneUsingSpecs(id);
-        if (domainModel != null) {
-            return ResponseEntity.ok(new ShoppingCenterView(domainModel));
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+    @Override
+    public ShoppingCenterService getEntityService() {
+        return shoppingCenterService;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody ShoppingCenter request) {
-        ShoppingCenter domainModel = shoppingCenterService.updateOne(id, request);
-        return ResponseEntity.ok(new ShoppingCenterView(domainModel));
+    @Override
+    public ShoppingCenterView getViewFromModel(Object model) {
+        return new ShoppingCenterView((ShoppingCenter) model);
     }
 }

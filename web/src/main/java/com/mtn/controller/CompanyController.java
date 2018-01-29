@@ -22,62 +22,51 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/company")
-public class CompanyController {
+public class CompanyController extends CrudControllerImpl<Company> {
 
-    @Autowired
-    private CompanyService companyService;
-    @Autowired
-    private StoreService storeService;
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private StoreService storeService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addOne(Company request) {
-        Company domainModel = companyService.addOne(request);
-        return ResponseEntity.ok(new CompanyView(domainModel));
-    }
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity findAllByName(@RequestParam(value = "name", required = false) String name, Pageable page) {
+		Page<Company> domainModels;
+		if (StringUtils.isNotBlank(name)) {
+			domainModels = getEntityService().findAllWhereNameLike(name, page);
+		} else {
+			domainModels = getEntityService().findAll(page);
+		}
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity findAll(@RequestParam(value = "name", required = false) String name, Pageable page) {
-        Page<Company> domainModels;
-        if (StringUtils.isNotBlank(name)) {
-            domainModels = companyService.findAllWhereNameLike(name, page);
-        } else {
-            domainModels = companyService.findAll(page);
-        }
+		return ResponseEntity.ok(domainModels.map(new CompanyToSimpleCompanyViewConverter()));
+	}
 
-        return ResponseEntity.ok(domainModels.map(new CompanyToSimpleCompanyViewConverter()));
-    }
+	@RequestMapping(value = "/{id}/store", method = RequestMethod.GET)
+	public ResponseEntity findAllStoresForCompany(@PathVariable("id") Integer id, @RequestParam(value = "recursive", defaultValue = "false") Boolean doRecursive) {
+		List<Store> domainModels;
+		if (doRecursive) {
+			domainModels = storeService.findAllByParentCompanyIdRecursive(id);
+		} else {
+			domainModels = storeService.findAllByParentCompanyId(id);
+		}
 
-    @RequestMapping(value = "/{id}/store", method = RequestMethod.GET)
-    public ResponseEntity findAllStoresForCompany(@PathVariable("id") Integer id, @RequestParam(value = "recursive", defaultValue = "false") Boolean doRecursive) {
-        List<Store> domainModels;
-        if (doRecursive) {
-            domainModels = storeService.findAllByParentCompanyIdRecursive(id);
-        } else {
-            domainModels = storeService.findAllByParentCompanyId(id);
-        }
+		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
+	}
 
-        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
-    }
+	@RequestMapping(value = "/{childId}/parent/{parentId}")
+	public ResponseEntity updateOneParentCompany(@PathVariable("childId") Integer childId, @PathVariable("parentId") Integer parentId) {
+		Company domainModel = getEntityService().updateOneParentCompany(childId, parentId);
+		return ResponseEntity.ok(new CompanyView(domainModel));
+	}
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        Company domainModel = companyService.findOne(id);
-        if (domainModel != null) {
-            return ResponseEntity.ok(new CompanyView(domainModel));
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-    }
+	@Override
+	public CompanyService getEntityService() {
+		return companyService;
+	}
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("id") Integer id, Company request) {
-        Company domainModel = companyService.updateOne(id, request);
-        return ResponseEntity.ok(new CompanyView(domainModel));
-    }
+	@Override
+	public CompanyView getViewFromModel(Object model) {
+		return new CompanyView((Company) model);
+	}
 
-    @RequestMapping(value = "/{childId}/parent/{parentId}")
-    public ResponseEntity updateOneParentCompany(@PathVariable("childId") Integer childId, @PathVariable("parentId") Integer parentId) {
-        Company domainModel = companyService.updateOneParentCompany(childId, parentId);
-        return ResponseEntity.ok(new CompanyView(domainModel));
-    }
 }

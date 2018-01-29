@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "auth_permission")
-public class Permission implements Identifiable, GrantedAuthority {
+public class Permission extends AuditingEntity implements Identifiable, GrantedAuthority {
 
     private Integer id;
     private String systemName;

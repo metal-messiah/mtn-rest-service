@@ -8,6 +8,7 @@ import com.mtn.model.domain.Role;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 import com.mtn.model.view.RoleView;
 import com.mtn.model.simpleView.SimplePermissionView;
+import com.mtn.service.EntityService;
 import com.mtn.service.PermissionService;
 import com.mtn.service.RoleService;
 import com.mtn.service.UserProfileService;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/role")
-public class RoleController {
+public class RoleController extends CrudControllerImpl<Role> {
 
     @Autowired
     private RoleService roleService;
@@ -37,22 +38,12 @@ public class RoleController {
     @Autowired
     private UserProfileService userProfileService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addOne(@RequestBody Role request) {
-        try {
-            Role domainModel = roleService.addOne(request);
-            return ResponseEntity.ok(new RoleView(domainModel));
-        } catch (InvalidEntityException e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @RequestMapping(value = "/{roleId}/member/{userId}", method = RequestMethod.POST)
     public ResponseEntity addOneMemberToRole(@PathVariable("roleId") Integer roleId, @PathVariable("userId") Integer userId) {
         if (roleId == 1) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        Role domainModel = roleService.addOneMemberToRole(roleId, userId);
+        Role domainModel = getEntityService().addOneMemberToRole(roleId, userId);
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
@@ -61,17 +52,8 @@ public class RoleController {
         if (roleId == 1) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        Role domainModel = roleService.addOnePermissionToRole(roleId, permissionId);
+        Role domainModel = getEntityService().addOnePermissionToRole(roleId, permissionId);
         return ResponseEntity.ok(new RoleView(domainModel));
-    }
-
-    @RequestMapping(value = "/{roleId}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteOne(@PathVariable("roleId") Integer roleId) {
-        if (roleId == 1) {
-            throw new IllegalArgumentException(String.format("You may not delete this role!"));
-        }
-        roleService.deleteOne(roleId);
-        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -95,15 +77,6 @@ public class RoleController {
     public ResponseEntity findAllPermissionsForRole(@PathVariable("id") Integer roleId) {
         List<Permission> domainModels = permissionService.findAllByRoleId(roleId);
         return ResponseEntity.ok(domainModels.stream().map(SimplePermissionView::new).collect(Collectors.toList()));
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        Role domainModel = roleService.findOneUsingSpecs(id);
-        if (domainModel == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(new RoleView(domainModel));
     }
 
     @RequestMapping(value = "/{roleId}/member/{userId}", method = RequestMethod.DELETE)
@@ -130,15 +103,13 @@ public class RoleController {
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
-    @RequestMapping(value = "/{roleId}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("roleId") Integer roleId, @RequestBody Role request) {
-        if (roleId == 1) {
-            throw new IllegalArgumentException(String.format("You may not update this role!"));
-        }
-        Role domainModel = roleService.updateOne(roleId, request);
-        if (domainModel == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(new RoleView(domainModel));
+    @Override
+    public RoleService getEntityService() {
+        return roleService;
+    }
+
+    @Override
+    public RoleView getViewFromModel(Object model) {
+        return new RoleView((Role) model);
     }
 }

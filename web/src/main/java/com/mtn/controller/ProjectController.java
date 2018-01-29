@@ -5,7 +5,8 @@ import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/project")
-public class ProjectController {
+public class ProjectController extends CrudControllerImpl<Project> {
 
     @Autowired
     private ProjectService projectService;
@@ -33,28 +34,16 @@ public class ProjectController {
     @Autowired
     private StoreSurveyService storeSurveyService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addOne(@RequestBody Project request) {
-        Project domainModel = projectService.addOne(request);
-        return ResponseEntity.ok(new ProjectView(domainModel));
-    }
-
     @RequestMapping(value = "/{id}/store-model", method = RequestMethod.POST)
     public ResponseEntity addOneStoreModelToProject(@PathVariable("id") Integer id, @RequestBody StoreModel request) {
         StoreModel domainModel = projectService.addOneModelToProject(id, request);
         return ResponseEntity.ok(new StoreModelView(domainModel));
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteOne(@PathVariable("id") Integer id) {
-        projectService.deleteOne(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity findAll() {
-        List<Project> domainModels = projectService.findAllUsingSpecs();
-        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
+    public ResponseEntity findAll(Pageable page) {
+        Page<Project> domainModels = getEntityService().findAllUsingSpecs(page);
+        return ResponseEntity.ok(domainModels.map(this::getViewFromModel));
     }
 
     @RequestMapping(path = "/{id}/store-model", method = RequestMethod.GET)
@@ -99,20 +88,14 @@ public class ProjectController {
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity findOne(@PathVariable("id") Integer id) {
-        Project domainModel = projectService.findOneUsingSpecs(id);
-        if (domainModel == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(new ProjectView(domainModel));
+
+    @Override
+    public ProjectService getEntityService() {
+        return projectService;
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity updateOne(@PathVariable("id") Integer id, @RequestBody Project request) {
-        Project domainModel = projectService.updateOne(id, request);
-        return ResponseEntity.ok(new SimpleProjectView(domainModel));
+    @Override
+    public ProjectView getViewFromModel(Object model) {
+        return new ProjectView((Project) model);
     }
-
-
 }

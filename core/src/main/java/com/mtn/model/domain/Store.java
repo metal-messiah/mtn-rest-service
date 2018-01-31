@@ -35,24 +35,6 @@ public class Store extends AuditingEntity implements Identifiable {
     public Store() {
     }
 
-    public Store(SimpleStoreView simpleStoreView) {
-        this.id = simpleStoreView.getId();
-        this.name = simpleStoreView.getName();
-        this.type = simpleStoreView.getType();
-        this.openedDate = simpleStoreView.getOpenedDate();
-        this.closedDate = simpleStoreView.getClosedDate();
-        this.storeNumber = simpleStoreView.getStoreNumber();
-        this.legacyLocationId = simpleStoreView.getLegacyLocationId();
-    }
-
-    public Store(StoreView storeView) {
-        this((SimpleStoreView) storeView);
-
-        if (storeView.getSite() != null) {
-            this.site = new Site(storeView.getSite());
-        }
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_store_id")
     @SequenceGenerator(name = "seq_store_id", sequenceName = "seq_store_id", allocationSize = 1)

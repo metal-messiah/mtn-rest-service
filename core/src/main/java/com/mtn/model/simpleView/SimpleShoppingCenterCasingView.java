@@ -4,26 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.ShoppingCenterCasing;
 
-import java.time.LocalDateTime;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleShoppingCenterCasingView {
 
-    protected Integer id;
-    protected String note;
-    protected RatingType ratingParkingLot;
-    protected RatingType ratingBuildings;
-    protected RatingType ratingLighting;
-    protected RatingType ratingSynergy;
-    protected Integer legacyCasingId;
-    protected Integer version;
-    protected SimpleUserProfileView createdBy;
-    protected LocalDateTime createdDate;
-    protected SimpleUserProfileView updatedBy;
-    protected LocalDateTime updatedDate;
-
-    public SimpleShoppingCenterCasingView() {
-    }
+    private Integer id;
+    private String note;
+    private RatingType ratingParkingLot;
+    private RatingType ratingBuildings;
+    private RatingType ratingLighting;
+    private RatingType ratingSynergy;
+    private Integer legacyCasingId;
 
     public SimpleShoppingCenterCasingView(ShoppingCenterCasing casing) {
         this.id = casing.getId();
@@ -33,12 +23,6 @@ public class SimpleShoppingCenterCasingView {
         this.ratingLighting = casing.getRatingLighting();
         this.ratingSynergy = casing.getRatingSynergy();
         this.legacyCasingId = casing.getLegacyCasingId();
-        this.version = casing.getVersion();
-
-        this.createdBy = new SimpleUserProfileView(casing.getCreatedBy());
-        this.createdDate = casing.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(casing.getUpdatedBy());
-        this.updatedDate = casing.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -97,43 +81,4 @@ public class SimpleShoppingCenterCasingView {
         this.legacyCasingId = legacyCasingId;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 }

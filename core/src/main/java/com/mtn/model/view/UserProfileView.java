@@ -4,35 +4,28 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.simpleView.SimpleGroupView;
 import com.mtn.model.simpleView.SimpleRoleView;
-import com.mtn.model.simpleView.SimpleUserProfileView;
-
-import java.time.LocalDateTime;
 
 /**
  * Created by Allen on 4/22/2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserProfileView extends SimpleUserProfileView {
+public class UserProfileView extends AuditingEntityView {
 
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
-    private Integer version;
+    private Integer id;
+    private String email;
+    private String firstName;
+    private String lastName;
+
     private SimpleGroupView group;
     private SimpleRoleView role;
-
-    public UserProfileView() {
-    }
 
     public UserProfileView(UserProfile userProfile) {
         super(userProfile);
 
-        this.createdBy = new SimpleUserProfileView(userProfile.getCreatedBy());
-        this.createdDate = userProfile.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(userProfile.getUpdatedBy());
-        this.updatedDate = userProfile.getUpdatedDate();
-        this.version = userProfile.getVersion();
+        this.id = userProfile.getId();
+        this.email = userProfile.getEmail();
+        this.firstName = userProfile.getFirstName();
+        this.lastName = userProfile.getLastName();
 
         if (userProfile.getGroup() != null) {
             this.group = new SimpleGroupView(userProfile.getGroup());
@@ -43,45 +36,36 @@ public class UserProfileView extends SimpleUserProfileView {
         }
     }
 
-
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public SimpleGroupView getGroup() {

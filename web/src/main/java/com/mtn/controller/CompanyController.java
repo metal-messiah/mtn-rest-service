@@ -3,6 +3,7 @@ package com.mtn.controller;
 import com.mtn.model.converter.CompanyToSimpleCompanyViewConverter;
 import com.mtn.model.domain.Company;
 import com.mtn.model.domain.Store;
+import com.mtn.model.simpleView.SimpleCompanyView;
 import com.mtn.model.view.CompanyView;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.service.CompanyService;
@@ -65,8 +66,12 @@ public class CompanyController extends CrudControllerImpl<Company> {
 	}
 
 	@Override
-	public CompanyView getViewFromModel(Object model) {
-		return new CompanyView((Company) model);
+	public Object getViewFromModel(Company model) {
+		return new CompanyView(model);
 	}
 
+	@Override
+	public Object getSimpleViewFromModel(Company model) {
+		return new SimpleCompanyView(model);
+	}
 }

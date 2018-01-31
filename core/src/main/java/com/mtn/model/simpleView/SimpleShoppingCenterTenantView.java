@@ -11,20 +11,12 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleShoppingCenterTenantView {
 
-    protected Integer id;
-    protected String name;
-    protected Boolean isAnchor = false;
-    protected Boolean isOutparcel = false;
-    protected Integer sqft;
-    protected Integer legacyCasingId;
-    protected Integer version;
-    protected SimpleUserProfileView createdBy;
-    protected LocalDateTime createdDate;
-    protected SimpleUserProfileView updatedBy;
-    protected LocalDateTime updatedDate;
-
-    public SimpleShoppingCenterTenantView() {
-    }
+    private Integer id;
+    private String name;
+    private Boolean isAnchor;
+    private Boolean isOutparcel;
+    private Integer sqft;
+    private Integer legacyCasingId;
 
     public SimpleShoppingCenterTenantView(ShoppingCenterTenant tenant) {
         this.id = tenant.getId();
@@ -33,12 +25,6 @@ public class SimpleShoppingCenterTenantView {
         this.isOutparcel = tenant.getIsOutparcel();
         this.sqft = tenant.getSqft();
         this.legacyCasingId = tenant.getLegacyCasingId();
-        this.version = tenant.getVersion();
-
-        this.createdBy = new SimpleUserProfileView(tenant.getCreatedBy());
-        this.createdDate = tenant.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(tenant.getUpdatedBy());
-        this.updatedDate = tenant.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -89,11 +75,4 @@ public class SimpleShoppingCenterTenantView {
         this.legacyCasingId = legacyCasingId;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 }

@@ -1,14 +1,14 @@
 package com.mtn.controller;
 
-import com.mtn.exception.InvalidEntityException;
 import com.mtn.model.converter.RoleToSimpleRoleViewConverter;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Permission;
 import com.mtn.model.domain.Role;
+import com.mtn.model.simpleView.SimpleRoleView;
 import com.mtn.model.simpleView.SimpleUserProfileView;
+import com.mtn.model.view.PermissionView;
 import com.mtn.model.view.RoleView;
 import com.mtn.model.simpleView.SimplePermissionView;
-import com.mtn.service.EntityService;
 import com.mtn.service.PermissionService;
 import com.mtn.service.RoleService;
 import com.mtn.service.UserProfileService;
@@ -109,7 +109,12 @@ public class RoleController extends CrudControllerImpl<Role> {
     }
 
     @Override
-    public RoleView getViewFromModel(Object model) {
-        return new RoleView((Role) model);
+    public Object getViewFromModel(Role model) {
+        return new RoleView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(Role model) {
+        return new SimpleRoleView(model);
     }
 }

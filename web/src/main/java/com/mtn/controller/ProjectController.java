@@ -95,7 +95,12 @@ public class ProjectController extends CrudControllerImpl<Project> {
     }
 
     @Override
-    public ProjectView getViewFromModel(Object model) {
-        return new ProjectView((Project) model);
+    public Object getViewFromModel(Project model) {
+        return new ProjectView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(Project model) {
+        return new SimpleProjectView(model);
     }
 }

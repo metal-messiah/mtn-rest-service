@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.mtn.repository.specification.RoleSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -72,7 +73,9 @@ public class RoleServiceImpl extends EntityServiceImpl<Role> implements RoleServ
 
 	@Override
 	public void handleAssociationsOnCreation(Role request) {
-		// TODO Ability to add members and permissions on creation?
+		Set<Permission> permissions = new HashSet<>();
+		request.getPermissions().forEach(permission -> permissions.add(permissionService.findOne(permission.getId())));
+		request.setPermissions(permissions);
 	}
 
 	@Override
@@ -114,7 +117,7 @@ public class RoleServiceImpl extends EntityServiceImpl<Role> implements RoleServ
 
 	@Override
 	public Role findOneByDisplayName(String displayName) {
-		return getEntityRepository().findOneByDisplayName(displayName);
+		return getEntityRepository().findOneByDisplayNameIgnoreCase(displayName);
 	}
 
 	@Override

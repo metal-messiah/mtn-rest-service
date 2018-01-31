@@ -3,6 +3,7 @@ package com.mtn.controller;
 import com.mtn.model.converter.UserProfileToSimpleUserProfileViewConverter;
 import com.mtn.model.converter.UserProfileToUserProfileViewConverter;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.simpleView.SimpleUserProfileView;
 import com.mtn.model.view.UserProfileView;
 import com.mtn.service.UserProfileService;
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +44,12 @@ public class UserProfileController extends CrudControllerImpl<UserProfile> {
     }
 
     @Override
-    public UserProfileView getViewFromModel(Object model) {
-        return new UserProfileView((UserProfile) model);
+    public Object getViewFromModel(UserProfile model) {
+        return new UserProfileView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(UserProfile model) {
+        return new SimpleUserProfileView(model);
     }
 }

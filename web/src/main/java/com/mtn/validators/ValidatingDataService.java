@@ -22,8 +22,19 @@ public abstract class ValidatingDataService<T extends AuditingEntity & Identifia
         // No Special business rules;
     }
 
-    public void validateUnique(T object) {
+    private void validateUnique(T object) {
         // No Unique value check
+        Identifiable existing = getPotentialDuplicate(object);
+        if (existing != null && !existing.getId().equals(object.getId())) {
+            throw new IllegalArgumentException("Duplicate resource exists");
+        }
+    }
+
+    /*
+    Override this method to find duplicate by entity specific attribute (email, displayName, etc.)
+     */
+    public Identifiable getPotentialDuplicate(T object) {
+        return object;
     }
 
     public void validateForInsert(T object) {
@@ -40,11 +51,11 @@ public abstract class ValidatingDataService<T extends AuditingEntity & Identifia
     public void validateForUpdate(T object, T existing) {
         validateNotNull(object);
         validateHasId(object);
+        validateUnique(object);
+        validateConstraints(object);
+        validateBusinessRules(object);
         validateIdsMatch(object, existing);
         validateVersion(object, existing);
-        validateConstraints(object);
-        validateUnique(object);
-        validateBusinessRules(object);
     }
 
     public void validateForDelete(T object) {

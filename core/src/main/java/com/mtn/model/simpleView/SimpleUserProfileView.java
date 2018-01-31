@@ -9,13 +9,10 @@ import com.mtn.model.domain.UserProfile;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleUserProfileView {
 
-    protected Integer id;
-    protected String email;
-    protected String firstName;
-    protected String lastName;
-
-    public SimpleUserProfileView() {
-    }
+    private Integer id;
+    private String email;
+    private String firstName;
+    private String lastName;
 
     public SimpleUserProfileView(UserProfile userProfile) {
         this.id = userProfile.getId();

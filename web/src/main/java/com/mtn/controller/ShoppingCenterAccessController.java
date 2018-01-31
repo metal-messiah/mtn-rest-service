@@ -1,6 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.ShoppingCenterAccess;
+import com.mtn.model.simpleView.SimpleShoppingCenterAccessView;
 import com.mtn.model.view.ShoppingCenterAccessView;
 import com.mtn.service.ShoppingCenterAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,12 @@ public class ShoppingCenterAccessController extends CrudControllerImpl<ShoppingC
     }
 
     @Override
-    public ShoppingCenterAccessView getViewFromModel(Object model) {
-        return new ShoppingCenterAccessView((ShoppingCenterAccess) model);
+    public Object getViewFromModel(ShoppingCenterAccess model) {
+        return new ShoppingCenterAccessView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(ShoppingCenterAccess model) {
+        return new SimpleShoppingCenterAccessView(model);
     }
 }

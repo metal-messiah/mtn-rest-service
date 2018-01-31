@@ -46,41 +46,6 @@ public class Site extends AuditingEntity implements Identifiable {
     public Site() {
     }
 
-    public Site(SimpleSiteView simpleSiteView) {
-        this.id = simpleSiteView.getId();
-        this.type = simpleSiteView.getType();
-        this.intersectionType = simpleSiteView.getIntersectionType();
-        this.address1 = simpleSiteView.getAddress1();
-        this.address2 = simpleSiteView.getAddress2();
-        this.city = simpleSiteView.getCity();
-        this.state = simpleSiteView.getState();
-        this.postalCode = simpleSiteView.getPostalCode();
-        this.county = simpleSiteView.getCounty();
-        this.country = simpleSiteView.getCountry();
-        this.footprintSqft = simpleSiteView.getFootprintSqft();
-        this.intersectionStreetPrimary = simpleSiteView.getIntersectionStreetPrimary();
-        this.intersectionStreetSecondary = simpleSiteView.getIntersectionStreetSecondary();
-        this.intersectionQuad = simpleSiteView.getIntersectionQuad();
-        this.positionInCenter = simpleSiteView.getPositionInCenter();
-
-        if (simpleSiteView.getLocation() != null) {
-            PointGeometry point = (PointGeometry) simpleSiteView.getLocation().getGeometry();
-            this.location = new GeometryFactory().createPoint(new Coordinate(point.getCoordinates()[0], point.getCoordinates()[1]));
-        }
-    }
-
-    public Site(SiteView siteView) {
-        this((SimpleSiteView) siteView);
-
-        if (siteView.getShoppingCenter() != null) {
-            this.shoppingCenter = new ShoppingCenter(siteView.getShoppingCenter());
-        }
-
-        if (siteView.getStores() != null) {
-            this.stores = siteView.getStores().stream().map(Store::new).collect(Collectors.toList());
-        }
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_site_id")
     @SequenceGenerator(name = "seq_site_id", sequenceName = "seq_site_id", allocationSize = 1)

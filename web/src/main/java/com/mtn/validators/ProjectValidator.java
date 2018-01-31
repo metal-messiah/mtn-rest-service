@@ -1,5 +1,6 @@
 package com.mtn.validators;
 
+import com.mtn.model.domain.Identifiable;
 import com.mtn.model.domain.Project;
 import com.mtn.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,8 @@ public class ProjectValidator extends ValidatingDataService<Project> {
 	}
 
 	@Override
-	public void validateUnique(Project object) {
-		Project existing = getEntityService().findOneByProjectName(object.getProjectName());
-		if (existing != null && object.getId().equals(existing.getId())) {
-			throw new IllegalArgumentException("Project with this name already exists");
-		}
+	public Identifiable getPotentialDuplicate(Project object) {
+		return getEntityService().findOneByProjectName(object.getProjectName());
 	}
 
 }

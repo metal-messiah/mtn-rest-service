@@ -2,6 +2,11 @@ package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Group;
+import com.mtn.model.view.AuditingEntityView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 5/6/2017.
@@ -9,12 +14,9 @@ import com.mtn.model.domain.Group;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleGroupView {
 
-    protected Integer id;
-    protected String displayName;
-    protected String description;
-
-    public SimpleGroupView() {
-    }
+    private Integer id;
+    private String displayName;
+    private String description;
 
     public SimpleGroupView(Group group) {
         this.id = group.getId();
@@ -43,6 +45,7 @@ public class SimpleGroupView {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+       this.description = description;
     }
+
 }

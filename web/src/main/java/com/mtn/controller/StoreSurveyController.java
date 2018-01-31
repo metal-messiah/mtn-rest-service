@@ -1,6 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.StoreSurvey;
+import com.mtn.model.simpleView.SimpleStoreSurveyView;
 import com.mtn.model.view.StoreSurveyView;
 import com.mtn.service.StoreSurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,15 @@ public class StoreSurveyController extends CrudControllerImpl<StoreSurvey> {
     }
 
     @Override
-    public StoreSurveyView getViewFromModel(Object model) {
-        return new StoreSurveyView((StoreSurvey) model);
+    public Object getViewFromModel(StoreSurvey model) {
+        return new StoreSurveyView(model);
     }
+
+    @Override
+    public Object getSimpleViewFromModel(StoreSurvey model) {
+        return new SimpleStoreSurveyView(model);
+    }
+
 //    @Autowired
 //    private ProjectService projectService;
 //

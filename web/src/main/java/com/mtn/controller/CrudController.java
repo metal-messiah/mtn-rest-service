@@ -16,5 +16,7 @@ public interface CrudController<T extends AuditingEntity & Identifiable> {
 
 	EntityService<T> getEntityService();
 
-	Object getViewFromModel(Object model);
+	Object getViewFromModel(T model);
+
+	Object getSimpleViewFromModel(T model);
 }

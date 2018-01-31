@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface GroupRepository extends JpaRepository<Group, Integer>, JpaSpecificationExecutor<Group> {
 
-    Group findOneByDisplayName(String displayName);
+    Group findOneByDisplayNameIgnoreCase(String displayName);
 }

@@ -4,6 +4,7 @@ import com.mtn.model.converter.ShoppingCenterToSimpleShoppingCenterViewConverter
 import com.mtn.model.domain.*;
 import com.mtn.model.simpleView.SimpleShoppingCenterCasingView;
 import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
+import com.mtn.model.simpleView.SimpleShoppingCenterView;
 import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
@@ -45,13 +46,6 @@ public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter>
     public ResponseEntity addOneShoppingCenterSurveyToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterSurvey request) {
         ShoppingCenterSurvey domainModel = shoppingCenterService.addOneSurveyToShoppingCenter(shoppingCenterId, request);
         return ResponseEntity.ok(new ShoppingCenterSurveyView(domainModel));
-    }
-
-    @RequestMapping(value = "/{id}/site", method = RequestMethod.POST)
-    public ResponseEntity addOneSiteToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody SimpleSiteView request) {
-        Site transformedRequest = new Site(request);
-        Site domainModel = shoppingCenterService.addOneSiteToShoppingCenter(shoppingCenterId, transformedRequest);
-        return ResponseEntity.ok(new SimpleSiteView(domainModel));
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -105,7 +99,12 @@ public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter>
     }
 
     @Override
-    public ShoppingCenterView getViewFromModel(Object model) {
-        return new ShoppingCenterView((ShoppingCenter) model);
+    public Object getViewFromModel(ShoppingCenter model) {
+        return new ShoppingCenterView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(ShoppingCenter model) {
+        return new SimpleShoppingCenterView(model);
     }
 }

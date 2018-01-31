@@ -1,6 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.StoreModel;
+import com.mtn.model.simpleView.SimpleStoreModelView;
 import com.mtn.model.view.StoreModelView;
 import com.mtn.service.StoreModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,12 @@ public class StoreModelController extends CrudControllerImpl<StoreModel> {
     }
 
     @Override
-    public StoreModelView getViewFromModel(Object model) {
-        return new StoreModelView((StoreModel) model);
+    public Object getViewFromModel(StoreModel model) {
+        return new StoreModelView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(StoreModel model) {
+        return new SimpleStoreModelView(model);
     }
 }

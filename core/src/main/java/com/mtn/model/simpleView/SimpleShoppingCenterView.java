@@ -3,39 +3,24 @@ package com.mtn.model.simpleView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenter;
 
-import java.time.LocalDateTime;
-
 /**
  * Created by Allen on 4/23/2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleShoppingCenterView {
 
-    protected Integer id;
-    protected String name;
-    protected String owner;
-    protected Integer version;
-    protected Integer legacyCasingId;
-    protected Integer legacyLocationId;
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
-
-    public SimpleShoppingCenterView() {
-    }
+    private Integer id;
+    private String name;
+    private String owner;
+    private Integer legacyCasingId;
+    private Integer legacyLocationId;
 
     public SimpleShoppingCenterView(ShoppingCenter shoppingCenter) {
         this.id = shoppingCenter.getId();
         this.name = shoppingCenter.getName();
         this.owner = shoppingCenter.getOwner();
-        this.version = shoppingCenter.getVersion();
         this.legacyCasingId = shoppingCenter.getLegacyCasingId();
         this.legacyLocationId = shoppingCenter.getLegacyLocationId();
-        this.createdBy = new SimpleUserProfileView(shoppingCenter.getCreatedBy());
-        this.createdDate = shoppingCenter.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(shoppingCenter.getUpdatedBy());
-        this.updatedDate = shoppingCenter.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -60,14 +45,6 @@ public class SimpleShoppingCenterView {
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public Integer getLegacyCasingId() {

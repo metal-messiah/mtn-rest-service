@@ -15,9 +15,6 @@ public class SimpleCompanyView implements Serializable {
     private String name;
     private String websiteUrl;
 
-    public SimpleCompanyView() {
-    }
-
     public SimpleCompanyView(Company company) {
         this.id = company.getId();
         this.name = company.getName();

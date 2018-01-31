@@ -92,7 +92,7 @@ public class GroupServiceImpl extends EntityServiceImpl<Group> implements GroupS
 
     @Override
     public Group findOneByDisplayName(String displayName) {
-        return getEntityRepository().findOneByDisplayName(displayName);
+        return getEntityRepository().findOneByDisplayNameIgnoreCase(displayName);
     }
 
     @Override

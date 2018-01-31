@@ -10,15 +10,12 @@ import com.mtn.model.domain.Permission;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimplePermissionView {
 
-    protected Integer id;
-    protected String systemName;
-    protected String displayName;
-    protected String description;
-    protected String subject;
-    protected CrudAction action;
-
-    public SimplePermissionView() {
-    }
+    private Integer id;
+    private String systemName;
+    private String displayName;
+    private String description;
+    private String subject;
+    private CrudAction action;
 
     public SimplePermissionView(Permission permission) {
         this.id = permission.getId();

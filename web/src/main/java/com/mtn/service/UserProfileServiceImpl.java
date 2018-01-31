@@ -97,7 +97,7 @@ public class UserProfileServiceImpl extends EntityServiceImpl<UserProfile> imple
 
     @Override
     public UserProfile findOneByEmail(String email) {
-        return getEntityRepository().findOneByEmail(email);
+        return getEntityRepository().findOneByEmailIgnoreCase(email);
     }
 
     @Override

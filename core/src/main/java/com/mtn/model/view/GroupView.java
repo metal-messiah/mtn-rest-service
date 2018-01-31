@@ -2,11 +2,8 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Group;
-import com.mtn.model.simpleView.SimpleGroupView;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,59 +11,47 @@ import java.util.stream.Collectors;
  * Created by Allen on 5/6/2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GroupView extends SimpleGroupView {
+public class GroupView extends AuditingEntityView {
 
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
+    private Integer id;
+    private String displayName;
+    private String description;
 
-    private List<SimpleUserProfileView> members = new ArrayList<>();
-
-    public GroupView() {
-    }
+    private List<SimpleUserProfileView> members;
 
     public GroupView(Group group) {
         super(group);
-
-        this.createdBy = new SimpleUserProfileView(group.getCreatedBy());
-        this.createdDate = group.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(group.getUpdatedBy());
-        this.updatedDate = group.getUpdatedDate();
-
-        this.members = group.getMembers().stream().filter(member -> member.getDeletedDate() == null).map(SimpleUserProfileView::new).collect(Collectors.toList());
+        this.id = group.getId();
+        this.displayName = group.getDisplayName();
+        this.description = group.getDescription();
+        this.members = group.getMembers().stream()
+                .filter(member -> member.getDeletedDate() == null)
+                .map(SimpleUserProfileView::new)
+                .collect(Collectors.toList());
     }
 
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setDescription(String description) {
+       this.description = description;
     }
 
     public List<SimpleUserProfileView> getMembers() {

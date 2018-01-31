@@ -1,6 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.ShoppingCenterTenant;
+import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
 import com.mtn.model.view.ShoppingCenterTenantView;
 import com.mtn.service.ShoppingCenterTenantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,12 @@ public class ShoppingCenterTenantController extends CrudControllerImpl<ShoppingC
     }
 
     @Override
-    public ShoppingCenterTenantView getViewFromModel(Object model) {
-        return new ShoppingCenterTenantView((ShoppingCenterTenant) model);
+    public Object getViewFromModel(ShoppingCenterTenant model) {
+        return new ShoppingCenterTenantView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(ShoppingCenterTenant model) {
+        return new SimpleShoppingCenterTenantView(model);
     }
 }

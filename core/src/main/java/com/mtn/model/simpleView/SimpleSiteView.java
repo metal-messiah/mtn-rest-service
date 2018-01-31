@@ -13,26 +13,22 @@ import com.mtn.model.view.geojson.GeoJsonView;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleSiteView {
 
-    protected Integer id;
-    protected GeoJsonView location;
-    protected SiteType type;
-    protected IntersectionType intersectionType;
-    protected String address1;
-    protected String address2;
-    protected String city;
-    protected String state;
-    protected String postalCode;
-    protected String county;
-    protected String country;
-    protected Integer footprintSqft;
-    protected String intersectionStreetPrimary;
-    protected String intersectionStreetSecondary;
-    protected String intersectionQuad;
-    protected SitePositionType positionInCenter;
-    protected Integer version;
-
-    public SimpleSiteView() {
-    }
+    private Integer id;
+    private GeoJsonView location;
+    private SiteType type;
+    private IntersectionType intersectionType;
+    private String address1;
+    private String address2;
+    private String city;
+    private String state;
+    private String postalCode;
+    private String county;
+    private String country;
+    private Integer footprintSqft;
+    private String intersectionStreetPrimary;
+    private String intersectionStreetSecondary;
+    private String intersectionQuad;
+    private SitePositionType positionInCenter;
 
     public SimpleSiteView(Site site) {
         this.id = site.getId();
@@ -51,7 +47,6 @@ public class SimpleSiteView {
         this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
         this.intersectionQuad = site.getIntersectionQuad();
         this.positionInCenter = site.getPositionInCenter();
-        this.version = site.getVersion();
     }
 
     public Integer getId() {
@@ -182,11 +177,4 @@ public class SimpleSiteView {
         this.positionInCenter = positionInCenter;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 }

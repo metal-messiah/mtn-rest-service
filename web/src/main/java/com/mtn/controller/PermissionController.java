@@ -2,6 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.model.converter.PermissionToSimplePermissionViewConverter;
 import com.mtn.model.domain.Permission;
+import com.mtn.model.simpleView.SimplePermissionView;
 import com.mtn.model.view.PermissionView;
 import com.mtn.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PermissionController extends CrudControllerImpl<Permission> {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(Pageable page) {
         Page<Permission> domainModels = getEntityService().findAll(page);
-        return ResponseEntity.ok(domainModels.map(new PermissionToSimplePermissionViewConverter()));
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 
     @Override
@@ -32,7 +33,12 @@ public class PermissionController extends CrudControllerImpl<Permission> {
     }
 
     @Override
-    public Object getViewFromModel(Object model) {
-        return new PermissionView((Permission) model);
+    public Object getViewFromModel(Permission model) {
+        return new PermissionView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(Permission model) {
+        return new SimplePermissionView(model);
     }
 }

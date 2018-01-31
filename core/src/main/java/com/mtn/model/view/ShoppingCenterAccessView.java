@@ -2,69 +2,92 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterAccess;
-import com.mtn.model.simpleView.SimpleShoppingCenterAccessView;
-import com.mtn.model.simpleView.SimpleUserProfileView;
-
-import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ShoppingCenterAccessView extends SimpleShoppingCenterAccessView {
+public class ShoppingCenterAccessView extends AuditingEntityView {
 
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
-
-    public ShoppingCenterAccessView() {
-        super();
-    }
+    private Integer id;
+    private Boolean hasLeftIn;
+    private Boolean hasLeftOut;
+    private Boolean hasTrafficLight;
+    private Boolean hasOneWayRoad;
+    private Boolean hasRightIn;
+    private Boolean hasRightOut;
+    private Integer legacyCasingId;
 
     public ShoppingCenterAccessView(ShoppingCenterAccess access) {
         super(access);
-
-        this.createdBy = new SimpleUserProfileView(access.getCreatedBy());
-        this.createdDate = access.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(access.getUpdatedBy());
-        this.updatedDate = access.getUpdatedDate();
+        this.id = access.getId();
+        this.hasLeftIn = access.getHasLeftIn();
+        this.hasLeftOut = access.getHasLeftOut();
+        this.hasTrafficLight = access.getHasTrafficLight();
+        this.hasOneWayRoad = access.getHasOneWayRoad();
+        this.hasRightIn = access.getHasRightIn();
+        this.hasRightOut = access.getHasRightOut();
+        this.legacyCasingId = access.getLegacyCasingId();
     }
 
-    @Override
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
+    public Integer getId() {
+        return id;
     }
 
-    @Override
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    @Override
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public Boolean getHasLeftIn() {
+        return hasLeftIn;
     }
 
-    @Override
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setHasLeftIn(Boolean hasLeftIn) {
+        this.hasLeftIn = hasLeftIn;
     }
 
-    @Override
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
+    public Boolean getHasLeftOut() {
+        return hasLeftOut;
     }
 
-    @Override
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setHasLeftOut(Boolean hasLeftOut) {
+        this.hasLeftOut = hasLeftOut;
     }
 
-    @Override
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
+    public Boolean getHasTrafficLight() {
+        return hasTrafficLight;
     }
 
-    @Override
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setHasTrafficLight(Boolean hasTrafficLight) {
+        this.hasTrafficLight = hasTrafficLight;
+    }
+
+    public Boolean getHasOneWayRoad() {
+        return hasOneWayRoad;
+    }
+
+    public void setHasOneWayRoad(Boolean hasOneWayRoad) {
+        this.hasOneWayRoad = hasOneWayRoad;
+    }
+
+    public Boolean getHasRightIn() {
+        return hasRightIn;
+    }
+
+    public void setHasRightIn(Boolean hasRightIn) {
+        this.hasRightIn = hasRightIn;
+    }
+
+    public Boolean getHasRightOut() {
+        return hasRightOut;
+    }
+
+    public void setHasRightOut(Boolean hasRightOut) {
+        this.hasRightOut = hasRightOut;
+    }
+
+    public Integer getLegacyCasingId() {
+        return legacyCasingId;
+    }
+
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
     }
 }

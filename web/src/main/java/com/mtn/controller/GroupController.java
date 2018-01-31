@@ -1,8 +1,8 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.GroupToSimpleGroupViewConverter;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
+import com.mtn.model.simpleView.SimpleGroupView;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 import com.mtn.model.view.GroupView;
 import com.mtn.service.GroupService;
@@ -43,7 +43,7 @@ public class GroupController extends CrudControllerImpl<Group> {
         } else {
             domainModels = getEntityService().findAllUsingSpecs(page);
         }
-        return ResponseEntity.ok(domainModels.map(new GroupToSimpleGroupViewConverter()));
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 
     @RequestMapping(value = "/{id}/member", method = RequestMethod.GET)
@@ -64,7 +64,12 @@ public class GroupController extends CrudControllerImpl<Group> {
     }
 
     @Override
-    public GroupView getViewFromModel(Object model) {
-        return new GroupView((Group) model);
+    public Object getViewFromModel(Group model) {
+        return new GroupView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(Group model) {
+        return new SimpleGroupView(model);
     }
 }

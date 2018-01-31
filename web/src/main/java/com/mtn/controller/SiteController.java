@@ -2,6 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
+import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
@@ -47,7 +48,12 @@ public class SiteController extends CrudControllerImpl<Site> {
     }
 
     @Override
-    public SiteView getViewFromModel(Object model) {
-        return new SiteView((Site) model);
+    public Object getViewFromModel(Site model) {
+        return new SiteView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(Site model) {
+        return new SimpleSiteView(model);
     }
 }

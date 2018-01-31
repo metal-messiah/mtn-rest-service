@@ -2,61 +2,72 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterTenant;
-import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
-import com.mtn.model.simpleView.SimpleUserProfileView;
-
-import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ShoppingCenterTenantView extends SimpleShoppingCenterTenantView {
+public class ShoppingCenterTenantView extends AuditingEntityView {
 
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
+	private Integer id;
+	private String name;
+	private Boolean isAnchor;
+	private Boolean isOutparcel;
+	private Integer sqft;
+	private Integer legacyCasingId;
 
-    public ShoppingCenterTenantView() {
-        super();
-    }
+	public ShoppingCenterTenantView(ShoppingCenterTenant tenant) {
+		super(tenant);
+		this.id = tenant.getId();
+		this.name = tenant.getName();
+		this.isAnchor = tenant.getIsAnchor();
+		this.isOutparcel = tenant.getIsOutparcel();
+		this.sqft = tenant.getSqft();
+		this.legacyCasingId = tenant.getLegacyCasingId();
+	}
 
-    public ShoppingCenterTenantView(ShoppingCenterTenant tenant) {
-        super(tenant);
+	public Integer getId() {
+		return id;
+	}
 
-        this.createdBy = new SimpleUserProfileView(tenant.getCreatedBy());
-        this.createdDate = tenant.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(tenant.getUpdatedBy());
-        this.updatedDate = tenant.getUpdatedDate();
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
+	public Boolean getAnchor() {
+		return isAnchor;
+	}
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
+	public void setAnchor(Boolean anchor) {
+		isAnchor = anchor;
+	}
 
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
-    }
+	public Boolean getOutparcel() {
+		return isOutparcel;
+	}
 
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
-    }
+	public void setOutparcel(Boolean outparcel) {
+		isOutparcel = outparcel;
+	}
 
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
+	public Integer getSqft() {
+		return sqft;
+	}
 
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
+	public void setSqft(Integer sqft) {
+		this.sqft = sqft;
+	}
+
+	public Integer getLegacyCasingId() {
+		return legacyCasingId;
+	}
+
+	public void setLegacyCasingId(Integer legacyCasingId) {
+		this.legacyCasingId = legacyCasingId;
+	}
 }

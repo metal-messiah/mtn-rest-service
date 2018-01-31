@@ -4,6 +4,7 @@ import com.mtn.model.domain.Project;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.ShoppingCenterTenant;
+import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
 import com.mtn.model.view.ShoppingCenterSurveyView;
 import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.simpleView.SimpleShoppingCenterAccessView;
@@ -68,7 +69,12 @@ public class ShoppingCenterSurveyController extends CrudControllerImpl<ShoppingC
     }
 
     @Override
-    public ShoppingCenterSurveyView getViewFromModel(Object model) {
-        return new ShoppingCenterSurveyView((ShoppingCenterSurvey) model);
+    public Object getViewFromModel(ShoppingCenterSurvey model) {
+        return new ShoppingCenterSurveyView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(ShoppingCenterSurvey model) {
+        return new SimpleShoppingCenterSurveyView(model);
     }
 }

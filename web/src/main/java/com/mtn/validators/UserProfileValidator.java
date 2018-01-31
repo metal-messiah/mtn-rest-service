@@ -1,6 +1,6 @@
 package com.mtn.validators;
 
-import com.mtn.exception.DeletedEntityReactivationException;
+import com.mtn.model.domain.Identifiable;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.service.UserProfileService;
 import org.apache.commons.lang3.StringUtils;
@@ -26,10 +26,7 @@ public class UserProfileValidator extends ValidatingDataService<UserProfile> {
 	}
 
 	@Override
-	public void validateUnique(UserProfile object) {
-		UserProfile existing = getEntityService().findOneByEmail(object.getEmail().toLowerCase());
-		if (existing != null && !existing.getVersion().equals(object.getVersion())) {
-			throw new IllegalArgumentException("UserProfile with this email already exists");
-		}
+	public Identifiable getPotentialDuplicate(UserProfile object) {
+		return getEntityService().findOneByEmail(object.getEmail().toLowerCase());
 	}
 }

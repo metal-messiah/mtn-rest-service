@@ -15,68 +15,47 @@ import java.util.stream.Collectors;
  * Created by Allen on 5/6/2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RoleView extends SimpleRoleView {
+public class RoleView extends AuditingEntityView {
 
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
-    private Integer version;
+    private Integer id;
+    private String displayName;
+    private String description;
 
-    private List<SimpleUserProfileView> members = new ArrayList<>();
-    private List<SimplePermissionView> permissions = new ArrayList<>();
-
-    public RoleView() {
-    }
+    private List<SimpleUserProfileView> members;
+    private List<SimplePermissionView> permissions;
 
     public RoleView(Role role) {
         super(role);
-
-        this.createdBy = new SimpleUserProfileView(role.getCreatedBy());
-        this.createdDate = role.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(role.getUpdatedBy());
-        this.updatedDate = role.getUpdatedDate();
-        this.version = role.getVersion();
-
+        this.id = role.getId();
+        this.displayName = role.getDisplayName();
+        this.description = role.getDescription();
         this.members = role.getMembers().stream().filter(member -> member.getDeletedDate() == null).map(SimpleUserProfileView::new).collect(Collectors.toList());
         this.permissions = role.getPermissions().stream().map(SimplePermissionView::new).collect(Collectors.toList());
     }
 
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public Integer getVersion() { return version; }
-
-    public void setVersion(Integer version) { this.version = version; }
 
     public List<SimpleUserProfileView> getMembers() {
         return members;

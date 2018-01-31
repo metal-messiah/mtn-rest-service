@@ -9,12 +9,9 @@ import com.mtn.model.domain.Role;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleRoleView {
 
-    protected Integer id;
-    protected String displayName;
-    protected String description;
-
-    public SimpleRoleView() {
-    }
+    private Integer id;
+    private String displayName;
+    private String description;
 
     public SimpleRoleView(Role role) {
         this.id = role.getId();

@@ -1,6 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.simpleView.SimpleStoreCasingView;
 import com.mtn.model.view.StoreCasingView;
 import com.mtn.service.StoreCasingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,12 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
     }
 
     @Override
-    public StoreCasingView getViewFromModel(Object model) {
-        return new StoreCasingView((StoreCasing) model);
+    public Object getViewFromModel(StoreCasing model) {
+        return new StoreCasingView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(StoreCasing model) {
+        return new SimpleStoreCasingView(model);
     }
 }

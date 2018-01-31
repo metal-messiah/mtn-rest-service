@@ -17,15 +17,7 @@ public class SimpleStoreModelView {
     private Double fitAdjustedPower;
     private ModelType modelType;
     private LocalDateTime modelDate;
-    private Integer version;
     private Integer legacyCasingId;
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
-
-    public SimpleStoreModelView() {
-    }
 
     public SimpleStoreModelView(StoreModel model) {
         this.id = model.getId();
@@ -36,12 +28,7 @@ public class SimpleStoreModelView {
         this.fitAdjustedPower = model.getFitAdjustedPower();
         this.modelType = model.getModelType();
         this.modelDate = model.getModelDate();
-        this.version = model.getVersion();
         this.legacyCasingId = model.getLegacyCasingId();
-        this.createdBy = new SimpleUserProfileView(model.getCreatedBy());
-        this.createdDate = model.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(model.getUpdatedBy());
-        this.updatedDate = model.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -108,14 +95,6 @@ public class SimpleStoreModelView {
         this.modelDate = modelDate;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
     public Integer getLegacyCasingId() {
         return legacyCasingId;
     }
@@ -124,35 +103,4 @@ public class SimpleStoreModelView {
         this.legacyCasingId = legacyCasingId;
     }
 
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 }

@@ -1,5 +1,6 @@
 package com.mtn.validators;
 
+import com.mtn.model.domain.Identifiable;
 import com.mtn.model.domain.Role;
 import com.mtn.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,8 @@ public class RoleValidator extends ValidatingDataService<Role> {
 	}
 
 	@Override
-	public void validateUnique(Role object) {
-		Role existing = getEntityService().findOneByDisplayName(object.getDisplayName());
-		if (existing != null && object.getId().equals(existing.getId())) {
-			throw new IllegalArgumentException("Role with this name already exists");
-		}
+	public Identifiable getPotentialDuplicate(Role object) {
+		return getEntityService().findOneByDisplayName(object.getDisplayName());
 	}
 
 	@Override

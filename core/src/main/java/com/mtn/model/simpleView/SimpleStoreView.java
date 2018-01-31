@@ -12,17 +12,13 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStoreView {
 
-    protected Integer id;
-    protected String name;
-    protected StoreType type;
-    protected LocalDateTime openedDate;
-    protected LocalDateTime closedDate;
-    protected String storeNumber;
-    protected Integer legacyLocationId;
-    protected SimpleCompanyView parentCompany;
-
-    public SimpleStoreView() {
-    }
+    private Integer id;
+    private String name;
+    private StoreType type;
+    private LocalDateTime openedDate;
+    private LocalDateTime closedDate;
+    private String storeNumber;
+    private Integer legacyLocationId;
 
     public SimpleStoreView(Store store) {
         this.id = store.getId();
@@ -32,10 +28,6 @@ public class SimpleStoreView {
         this.closedDate = store.getClosedDate();
         this.legacyLocationId = store.getLegacyLocationId();
         this.storeNumber = store.getStoreNumber();
-
-        if (store.getParentCompany() != null) {
-            this.parentCompany = new SimpleCompanyView(store.getParentCompany());
-        }
     }
 
     public Integer getId() {
@@ -76,14 +68,6 @@ public class SimpleStoreView {
 
     public void setClosedDate(LocalDateTime closedDate) {
         this.closedDate = closedDate;
-    }
-
-    public SimpleCompanyView getParentCompany() {
-        return parentCompany;
-    }
-
-    public void setParentCompany(SimpleCompanyView parentCompany) {
-        this.parentCompany = parentCompany;
     }
 
     public String getStoreNumber() {

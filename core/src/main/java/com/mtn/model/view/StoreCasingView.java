@@ -1,6 +1,8 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.constant.ConfidenceType;
+import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.model.simpleView.SimpleStoreCasingView;
@@ -10,18 +12,303 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StoreCasingView extends SimpleStoreCasingView {
+public class StoreCasingView extends AuditingEntityView {
 
-    private List<SimpleInteractionView> interactions = new ArrayList<>();
-
-    public StoreCasingView() {
-        super();
-    }
+    private Integer id;
+    private String note;
+    private String status;
+    private RatingType conditionCeiling;
+    private RatingType conditionCheckstands;
+    private RatingType conditionFloors;
+    private RatingType conditionFrozenRefrigerated;
+    private RatingType conditionShelvingGondolas;
+    private RatingType conditionWalls;
+    private Integer fuelGallonsWeekly;
+    private Integer pharmacyScriptsWeekly;
+    private Double pharmacyAvgDollarsPerScript;
+    private Integer pharmacyPharmacistCount;
+    private Integer pharmacyTechnicianCount;
+    private Integer volumeGrocery;
+    private Double volumePercentGrocery;
+    private Integer volumeMeat;
+    private Double volumePercentMeat;
+    private Integer volumeNonFood;
+    private Double volumePercentNonFood;
+    private Integer volumeOther;
+    private Double volumePercentOther;
+    private Integer volumeProduce;
+    private Double volumePercentProduce;
+    private Integer volumePlusMinus;
+    private String volumeNote;
+    private Integer volumeTotal;
+    private ConfidenceType volumeConfidence;
+    private Integer legacyCasingId;
+    private List<SimpleInteractionView> interactions;
 
     public StoreCasingView(StoreCasing storeCasing) {
         super(storeCasing);
-
+        this.id = storeCasing.getId();
+        this.note = storeCasing.getNote();
+        this.status = storeCasing.getStatus();
+        this.conditionCeiling = storeCasing.getConditionCeiling();
+        this.conditionCheckstands = storeCasing.getConditionCheckstands();
+        this.conditionFloors = storeCasing.getConditionFloors();
+        this.conditionFrozenRefrigerated = storeCasing.getConditionFrozenRefrigerated();
+        this.conditionShelvingGondolas = storeCasing.getConditionShelvingGondolas();
+        this.conditionWalls = storeCasing.getConditionWalls();
+        this.fuelGallonsWeekly = storeCasing.getFuelGallonsWeekly();
+        this.pharmacyScriptsWeekly = storeCasing.getPharmacyScriptsWeekly();
+        this.pharmacyAvgDollarsPerScript = storeCasing.getPharmacyAvgDollarsPerScript();
+        this.pharmacyPharmacistCount = storeCasing.getPharmacyPharmacistCount();
+        this.pharmacyTechnicianCount = storeCasing.getPharmacyTechnicianCount();
+        this.volumeGrocery = storeCasing.getVolumeGrocery();
+        this.volumePercentGrocery = storeCasing.getVolumePercentGrocery();
+        this.volumeMeat = storeCasing.getVolumeMeat();
+        this.volumePercentMeat = storeCasing.getVolumePercentMeat();
+        this.volumeNonFood = storeCasing.getVolumeNonFood();
+        this.volumePercentNonFood = storeCasing.getVolumePercentNonFood();
+        this.volumeOther = storeCasing.getVolumeOther();
+        this.volumePercentOther = storeCasing.getVolumePercentOther();
+        this.volumeProduce = storeCasing.getVolumeProduce();
+        this.volumePercentProduce = storeCasing.getVolumePercentProduce();
+        this.volumePlusMinus = storeCasing.getVolumePlusMinus();
+        this.volumeNote = storeCasing.getVolumeNote();
+        this.volumeTotal = storeCasing.getVolumeTotal();
+        this.volumeConfidence = storeCasing.getVolumeConfidence();
+        this.legacyCasingId = storeCasing.getLegacyCasingId();
         this.interactions = storeCasing.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public RatingType getConditionCeiling() {
+        return conditionCeiling;
+    }
+
+    public void setConditionCeiling(RatingType conditionCeiling) {
+        this.conditionCeiling = conditionCeiling;
+    }
+
+    public RatingType getConditionCheckstands() {
+        return conditionCheckstands;
+    }
+
+    public void setConditionCheckstands(RatingType conditionCheckstands) {
+        this.conditionCheckstands = conditionCheckstands;
+    }
+
+    public RatingType getConditionFloors() {
+        return conditionFloors;
+    }
+
+    public void setConditionFloors(RatingType conditionFloors) {
+        this.conditionFloors = conditionFloors;
+    }
+
+    public RatingType getConditionFrozenRefrigerated() {
+        return conditionFrozenRefrigerated;
+    }
+
+    public void setConditionFrozenRefrigerated(RatingType conditionFrozenRefrigerated) {
+        this.conditionFrozenRefrigerated = conditionFrozenRefrigerated;
+    }
+
+    public RatingType getConditionShelvingGondolas() {
+        return conditionShelvingGondolas;
+    }
+
+    public void setConditionShelvingGondolas(RatingType conditionShelvingGondolas) {
+        this.conditionShelvingGondolas = conditionShelvingGondolas;
+    }
+
+    public RatingType getConditionWalls() {
+        return conditionWalls;
+    }
+
+    public void setConditionWalls(RatingType conditionWalls) {
+        this.conditionWalls = conditionWalls;
+    }
+
+    public Integer getFuelGallonsWeekly() {
+        return fuelGallonsWeekly;
+    }
+
+    public void setFuelGallonsWeekly(Integer fuelGallonsWeekly) {
+        this.fuelGallonsWeekly = fuelGallonsWeekly;
+    }
+
+    public Integer getPharmacyScriptsWeekly() {
+        return pharmacyScriptsWeekly;
+    }
+
+    public void setPharmacyScriptsWeekly(Integer pharmacyScriptsWeekly) {
+        this.pharmacyScriptsWeekly = pharmacyScriptsWeekly;
+    }
+
+    public Double getPharmacyAvgDollarsPerScript() {
+        return pharmacyAvgDollarsPerScript;
+    }
+
+    public void setPharmacyAvgDollarsPerScript(Double pharmacyAvgDollarsPerScript) {
+        this.pharmacyAvgDollarsPerScript = pharmacyAvgDollarsPerScript;
+    }
+
+    public Integer getPharmacyPharmacistCount() {
+        return pharmacyPharmacistCount;
+    }
+
+    public void setPharmacyPharmacistCount(Integer pharmacyPharmacistCount) {
+        this.pharmacyPharmacistCount = pharmacyPharmacistCount;
+    }
+
+    public Integer getPharmacyTechnicianCount() {
+        return pharmacyTechnicianCount;
+    }
+
+    public void setPharmacyTechnicianCount(Integer pharmacyTechnicianCount) {
+        this.pharmacyTechnicianCount = pharmacyTechnicianCount;
+    }
+
+    public Integer getVolumeGrocery() {
+        return volumeGrocery;
+    }
+
+    public void setVolumeGrocery(Integer volumeGrocery) {
+        this.volumeGrocery = volumeGrocery;
+    }
+
+    public Double getVolumePercentGrocery() {
+        return volumePercentGrocery;
+    }
+
+    public void setVolumePercentGrocery(Double volumePercentGrocery) {
+        this.volumePercentGrocery = volumePercentGrocery;
+    }
+
+    public Integer getVolumeMeat() {
+        return volumeMeat;
+    }
+
+    public void setVolumeMeat(Integer volumeMeat) {
+        this.volumeMeat = volumeMeat;
+    }
+
+    public Double getVolumePercentMeat() {
+        return volumePercentMeat;
+    }
+
+    public void setVolumePercentMeat(Double volumePercentMeat) {
+        this.volumePercentMeat = volumePercentMeat;
+    }
+
+    public Integer getVolumeNonFood() {
+        return volumeNonFood;
+    }
+
+    public void setVolumeNonFood(Integer volumeNonFood) {
+        this.volumeNonFood = volumeNonFood;
+    }
+
+    public Double getVolumePercentNonFood() {
+        return volumePercentNonFood;
+    }
+
+    public void setVolumePercentNonFood(Double volumePercentNonFood) {
+        this.volumePercentNonFood = volumePercentNonFood;
+    }
+
+    public Integer getVolumeOther() {
+        return volumeOther;
+    }
+
+    public void setVolumeOther(Integer volumeOther) {
+        this.volumeOther = volumeOther;
+    }
+
+    public Double getVolumePercentOther() {
+        return volumePercentOther;
+    }
+
+    public void setVolumePercentOther(Double volumePercentOther) {
+        this.volumePercentOther = volumePercentOther;
+    }
+
+    public Integer getVolumeProduce() {
+        return volumeProduce;
+    }
+
+    public void setVolumeProduce(Integer volumeProduce) {
+        this.volumeProduce = volumeProduce;
+    }
+
+    public Double getVolumePercentProduce() {
+        return volumePercentProduce;
+    }
+
+    public void setVolumePercentProduce(Double volumePercentProduce) {
+        this.volumePercentProduce = volumePercentProduce;
+    }
+
+    public Integer getVolumePlusMinus() {
+        return volumePlusMinus;
+    }
+
+    public void setVolumePlusMinus(Integer volumePlusMinus) {
+        this.volumePlusMinus = volumePlusMinus;
+    }
+
+    public String getVolumeNote() {
+        return volumeNote;
+    }
+
+    public void setVolumeNote(String volumeNote) {
+        this.volumeNote = volumeNote;
+    }
+
+    public Integer getVolumeTotal() {
+        return volumeTotal;
+    }
+
+    public void setVolumeTotal(Integer volumeTotal) {
+        this.volumeTotal = volumeTotal;
+    }
+
+    public ConfidenceType getVolumeConfidence() {
+        return volumeConfidence;
+    }
+
+    public void setVolumeConfidence(ConfidenceType volumeConfidence) {
+        this.volumeConfidence = volumeConfidence;
+    }
+
+    public Integer getLegacyCasingId() {
+        return legacyCasingId;
+    }
+
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
     }
 
     public List<SimpleInteractionView> getInteractions() {

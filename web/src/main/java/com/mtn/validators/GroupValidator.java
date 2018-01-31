@@ -1,6 +1,7 @@
 package com.mtn.validators;
 
 import com.mtn.model.domain.Group;
+import com.mtn.model.domain.Identifiable;
 import com.mtn.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,8 @@ public class GroupValidator extends ValidatingDataService<Group> {
 	private GroupService groupService;
 
 	@Override
-	public void validateUnique(Group object) {
-		Group existing = groupService.findOneByDisplayName(object.getDisplayName());
-		if (existing != null) {
-			throw new IllegalArgumentException("Group with this displayName already exists");
-		}
+	public Identifiable getPotentialDuplicate(Group object) {
+		return groupService.findOneByDisplayName(object.getDisplayName());
 	}
 
 	@Override

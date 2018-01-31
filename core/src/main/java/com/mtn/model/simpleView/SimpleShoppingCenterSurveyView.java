@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 public class SimpleShoppingCenterSurveyView {
 
     private Integer id;
-    private Boolean flowHasLandscaping = false;
-    private Boolean flowHasStopSigns = false;
-    private Boolean flowHasOneWayAisles = false;
-    private Boolean flowHasSpeedBumps = false;
-    private Boolean parkingHasAngledSpaces = false;
-    private Boolean parkingHasParkingHog = false;
-    private Boolean parkingIsPoorlyLit = false;
+    private Boolean flowHasLandscaping;
+    private Boolean flowHasStopSigns;
+    private Boolean flowHasOneWayAisles;
+    private Boolean flowHasSpeedBumps;
+    private Boolean parkingHasAngledSpaces;
+    private Boolean parkingHasParkingHog;
+    private Boolean parkingIsPoorlyLit;
     private Integer parkingSpaceCount;
     private Integer tenantOccupiedCount;
     private Integer tenantVacantCount;
@@ -26,15 +26,6 @@ public class SimpleShoppingCenterSurveyView {
     private String type;
     private String note;
     private Integer legacyCasingId;
-    private Integer version;
-    private SimpleUserProfileView createdBy;
-    private LocalDateTime createdDate;
-    private SimpleUserProfileView updatedBy;
-    private LocalDateTime updatedDate;
-
-
-    public SimpleShoppingCenterSurveyView() {
-    }
 
     public SimpleShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
         this.id = survey.getId();
@@ -52,11 +43,6 @@ public class SimpleShoppingCenterSurveyView {
         this.type = survey.getType();
         this.note = survey.getNote();
         this.legacyCasingId = survey.getLegacyCasingId();
-        this.version = survey.getVersion();
-        this.createdBy = new SimpleUserProfileView(survey.getCreatedBy());
-        this.createdDate = survey.getCreatedDate();
-        this.updatedBy = new SimpleUserProfileView(survey.getUpdatedBy());
-        this.updatedDate = survey.getUpdatedDate();
     }
 
     public Integer getId() {
@@ -179,43 +165,4 @@ public class SimpleShoppingCenterSurveyView {
         this.legacyCasingId = legacyCasingId;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public SimpleUserProfileView getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(SimpleUserProfileView createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public SimpleUserProfileView getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 }

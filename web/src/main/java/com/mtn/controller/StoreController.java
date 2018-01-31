@@ -46,7 +46,7 @@ public class StoreController extends CrudControllerImpl<Store> {
     @RequestMapping(value = "/{id}/store-volume", method = RequestMethod.POST)
     public ResponseEntity addOneStoreVolumeToStore(@PathVariable("id") Integer storeId, @RequestBody StoreVolume request) {
         StoreVolume domainModel = storeService.addOneVolumeToStore(storeId, request);
-        return ResponseEntity.ok(new SimpleStoreVolumeView(domainModel));
+        return ResponseEntity.ok(new StoreVolumeView(domainModel));
     }
 
     @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.GET)
@@ -76,7 +76,7 @@ public class StoreController extends CrudControllerImpl<Store> {
     @RequestMapping(value = "/{id}/store-volume", method = RequestMethod.GET)
     public ResponseEntity findAllVolumesForStore(@PathVariable("id") Integer storeId) {
         List<StoreVolume> domainModels = volumeService.findAllByStoreIdUsingSpecs(storeId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreVolumeView::new).collect(Collectors.toList()));
+        return ResponseEntity.ok(domainModels.stream().map(StoreVolumeView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{storeId}/company/{companyId}", method = RequestMethod.PUT)
@@ -91,7 +91,12 @@ public class StoreController extends CrudControllerImpl<Store> {
     }
 
     @Override
-    public StoreView getViewFromModel(Object model) {
-        return new StoreView((Store) model);
+    public Object getViewFromModel(Store model) {
+        return new StoreView(model);
+    }
+
+    @Override
+    public Object getSimpleViewFromModel(Store model) {
+        return new SimpleStoreView(model);
     }
 }

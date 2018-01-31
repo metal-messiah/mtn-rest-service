@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -96,13 +95,13 @@ public class UserProfileServiceImpl extends EntityServiceImpl<UserProfile> imple
     }
 
     @Override
-    public UserProfile findOneByEmail(String email) {
-        return getEntityRepository().findOneByEmailIgnoreCase(email);
+    public UserProfile findOneByEmailUsingSpecs(String email) {
+        return getEntityRepository().findOneByEmailAndDeletedDateIsNullIgnoreCase(email);
     }
 
     @Override
-    public UserProfile findSystemAdministrator() {
-        return findOne(1);
+    public UserProfile findOneByEmail(String email) {
+        return getEntityRepository().findOneByEmailIgnoreCase(email);
     }
 
     @Override
@@ -148,22 +147,5 @@ public class UserProfileServiceImpl extends EntityServiceImpl<UserProfile> imple
     @Override
     public void handleAssociationsOnDeletion(UserProfile existing) {
         // No Associations
-    }
-
-    /**
-     * This is to be used during the authentication process, in which we retrieve the Auth0 UserInfo, and either update
-     * an existing UserProfile record or create a new one.
-     */
-    @Override
-    @Transactional
-    public UserProfile findAndUpdateOrAddOneByEmail(String email) {
-        UserProfile userProfile = findOneByEmail( email );
-        return userProfile != null ? mergeOne( userProfile, email ) : addOne( UserProfile.build( email ) );
-    }
-
-    @Transactional
-    protected UserProfile mergeOne( UserProfile existing, String email ) {
-        existing.setEmail( email );
-        return existing;
     }
 }

@@ -142,7 +142,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 throw new AuthenticationServiceException("Unable to retrieve user information from authentication provider");
             }
             String email = (String) userInfo.getValues().get( "email" );
-            UserProfile persistedUserProfile = userProfileService.findAndUpdateOrAddOneByEmail(email);
+            UserProfile persistedUserProfile = userProfileService.findOneByEmailUsingSpecs(email);
+            if (persistedUserProfile == null) {
+                throw new AuthenticationServiceException("User not found");
+            }
             authCacheService.addOne(accessToken, persistedUserProfile);
             return persistedUserProfile;
         }

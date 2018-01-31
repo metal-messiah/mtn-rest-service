@@ -11,5 +11,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface UserProfileRepository extends JpaRepository<UserProfile, Integer>, JpaSpecificationExecutor<UserProfile> {
 
+    UserProfile findOneByEmailAndDeletedDateIsNullIgnoreCase(@Param("email") String email);
     UserProfile findOneByEmailIgnoreCase(@Param("email") String email);
 }

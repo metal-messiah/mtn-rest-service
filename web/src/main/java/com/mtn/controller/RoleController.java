@@ -6,7 +6,6 @@ import com.mtn.model.domain.Permission;
 import com.mtn.model.domain.Role;
 import com.mtn.model.simpleView.SimpleRoleView;
 import com.mtn.model.simpleView.SimpleUserProfileView;
-import com.mtn.model.view.PermissionView;
 import com.mtn.model.view.RoleView;
 import com.mtn.model.simpleView.SimplePermissionView;
 import com.mtn.service.PermissionService;

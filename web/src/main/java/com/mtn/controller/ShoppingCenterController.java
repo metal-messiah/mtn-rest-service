@@ -1,6 +1,5 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.ShoppingCenterToSimpleShoppingCenterViewConverter;
 import com.mtn.model.domain.*;
 import com.mtn.model.simpleView.SimpleShoppingCenterCasingView;
 import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
@@ -66,7 +65,7 @@ public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter>
             domainModels = shoppingCenterService.findAllUsingSpecs(page);
         }
 
-        return ResponseEntity.ok(domainModels.map(new ShoppingCenterToSimpleShoppingCenterViewConverter()));
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 
 //    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)

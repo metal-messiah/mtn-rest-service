@@ -1,6 +1,5 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.PermissionToSimplePermissionViewConverter;
 import com.mtn.model.domain.Permission;
 import com.mtn.model.simpleView.SimplePermissionView;
 import com.mtn.model.view.PermissionView;

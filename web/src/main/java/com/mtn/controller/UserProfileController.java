@@ -1,7 +1,5 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.UserProfileToSimpleUserProfileViewConverter;
-import com.mtn.model.converter.UserProfileToUserProfileViewConverter;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 import com.mtn.model.view.UserProfileView;
@@ -33,9 +31,9 @@ public class UserProfileController extends CrudControllerImpl<UserProfile> {
         }
 
         if(simple != null && simple.equals("false")) {
-            return ResponseEntity.ok(domainModels.map(new UserProfileToUserProfileViewConverter()));
+            return ResponseEntity.ok(domainModels.map(this::getViewFromModel));
         }
-        return ResponseEntity.ok(domainModels.map(new UserProfileToSimpleUserProfileViewConverter()));
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 
     @Override

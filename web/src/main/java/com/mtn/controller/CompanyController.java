@@ -1,6 +1,5 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.CompanyToSimpleCompanyViewConverter;
 import com.mtn.model.domain.Company;
 import com.mtn.model.domain.Store;
 import com.mtn.model.simpleView.SimpleCompanyView;
@@ -39,7 +38,7 @@ public class CompanyController extends CrudControllerImpl<Company> {
 			domainModels = getEntityService().findAll(page);
 		}
 
-		return ResponseEntity.ok(domainModels.map(new CompanyToSimpleCompanyViewConverter()));
+		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
 	}
 
 	@RequestMapping(value = "/{id}/store", method = RequestMethod.GET)

@@ -1,6 +1,5 @@
 package com.mtn.controller;
 
-import com.mtn.model.converter.RoleToSimpleRoleViewConverter;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Permission;
 import com.mtn.model.domain.Role;
@@ -63,7 +62,7 @@ public class RoleController extends CrudControllerImpl<Role> {
         } else {
             domainModels = roleService.findAllUsingSpecs(page);
         }
-        return ResponseEntity.ok(domainModels.map(new RoleToSimpleRoleViewConverter()));
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 
     @RequestMapping(value = "/{id}/member", method = RequestMethod.GET)

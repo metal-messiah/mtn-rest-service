@@ -1,8 +1,10 @@
 package com.mtn.config;
 
 import com.mtn.constant.PermissionType;
+import com.mtn.model.domain.Role;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.security.CustomJwtAuthenticationProvider;
+import com.mtn.service.RoleService;
 import com.mtn.service.UserProfileService;
 import com.mtn.service.AuthCacheService;
 import com.mtn.security.MtnAuthentication;
@@ -132,10 +134,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         private UserProfile getUserProfileRecord( Authentication authentication ) {
 
             String accessToken = ( ( PreAuthenticatedAuthenticationJsonWebToken ) authentication ).getToken();
-            UserProfile cachedUserProfile = authCacheService.findOneByAccessToken( accessToken );
-            if( cachedUserProfile != null ) {
-                return cachedUserProfile;
-            }
 
             UserInfo userInfo = getUserInfoFromAuthenticationToken( accessToken );
             if (userInfo == null) {
@@ -146,7 +144,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             if (persistedUserProfile == null) {
                 throw new AuthenticationServiceException("User not found");
             }
-            authCacheService.addOne(accessToken, persistedUserProfile);
             return persistedUserProfile;
         }
 
@@ -154,9 +151,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          * Calls Auth0 to retrieve the user's profile so we can use it to create our userProfile record
          */
         private UserInfo getUserInfoFromAuthenticationToken( final String accessToken ) {
+            UserInfo cached = authCacheService.findOneByAccessToken(accessToken);
+            if (cached != null) {
+                return cached;
+            }
             Request< UserInfo > request = authApi.userInfo( accessToken );
             try {
-                return request.execute();
+                UserInfo retrieved = request.execute();
+                authCacheService.addOne(accessToken, retrieved);
+                return retrieved;
             }
             catch( Auth0Exception e ) {
                 e.printStackTrace();

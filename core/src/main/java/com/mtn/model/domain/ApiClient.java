@@ -15,8 +15,7 @@ public class ApiClient {
     private String clientSecret;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_api_access_token_id")
-    @SequenceGenerator(name = "seq_api_access_token_id", sequenceName = "seq_api_access_token_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "api_client_id")
     public Integer getId() {
         return id;

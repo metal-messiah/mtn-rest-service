@@ -22,8 +22,7 @@ public class StoreModel extends AuditingEntity implements Identifiable {
     private Integer legacyCasingId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_store_model_id")
-    @SequenceGenerator(name = "seq_store_model_id", sequenceName = "seq_store_model_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "store_model_id")
     public Integer getId() {
         return id;

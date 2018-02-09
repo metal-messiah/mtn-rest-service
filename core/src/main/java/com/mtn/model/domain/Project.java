@@ -29,8 +29,7 @@ public class Project extends AuditingEntity implements Identifiable {
     private List<StoreModel> models = new ArrayList<>();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_project_id")
-    @SequenceGenerator(name = "seq_project_id", sequenceName = "seq_project_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "project_id")
     public Integer getId() {
         return id;

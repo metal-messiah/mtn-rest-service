@@ -20,8 +20,7 @@ public class Company extends AuditingEntity implements Identifiable {
     private List<Store> stores = new ArrayList<>();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_company_id")
-    @SequenceGenerator(name = "seq_company_id", sequenceName = "seq_company_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "company_id")
     public Integer getId() {
         return id;

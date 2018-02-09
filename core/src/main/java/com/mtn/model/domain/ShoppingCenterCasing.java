@@ -22,8 +22,7 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
     private List<Interaction> interactions = new ArrayList<>();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_casing_id")
-    @SequenceGenerator(name = "seq_shopping_center_casing_id", sequenceName = "seq_shopping_center_casing_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "shopping_center_casing_id")
     public Integer getId() {
         return id;

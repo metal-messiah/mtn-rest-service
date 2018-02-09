@@ -36,8 +36,7 @@ public class Store extends AuditingEntity implements Identifiable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_store_id")
-    @SequenceGenerator(name = "seq_store_id", sequenceName = "seq_store_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "store_id")
     public Integer getId() {
         return id;

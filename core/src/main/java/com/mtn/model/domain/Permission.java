@@ -24,8 +24,7 @@ public class Permission extends AuditingEntity implements Identifiable, GrantedA
     private List<Role> roles = new ArrayList<>();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_permission_id")
-    @SequenceGenerator(name = "seq_auth_permission_id", sequenceName = "seq_auth_permission_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "auth_permission_id")
     public Integer getId() {
         return id;

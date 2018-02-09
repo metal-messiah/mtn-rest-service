@@ -19,8 +19,7 @@ public class Interaction extends AuditingEntity implements Identifiable {
     private Integer legacyCasingId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_interaction_id")
-    @SequenceGenerator(name = "seq_interaction_id", sequenceName = "seq_interaction_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "interaction_id")
     public Integer getId() {
         return id;

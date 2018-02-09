@@ -36,8 +36,7 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_id")
-    @SequenceGenerator(name = "seq_shopping_center_id", sequenceName = "seq_shopping_center_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "shopping_center_id")
     public Integer getId() {
         return id;

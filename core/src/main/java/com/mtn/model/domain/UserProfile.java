@@ -24,8 +24,7 @@ public class UserProfile extends AuditingEntity implements Identifiable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_profile_id")
-    @SequenceGenerator(name = "seq_user_profile_id", sequenceName = "seq_user_profile_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "user_profile_id")
     public Integer getId() {
         return id;

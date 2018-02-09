@@ -20,8 +20,7 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
     private Integer legacyCasingId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_shopping_center_access_id")
-    @SequenceGenerator(name = "seq_shopping_center_access_id", sequenceName = "seq_shopping_center_access_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "shopping_center_access_id")
     public Integer getId() {
         return id;

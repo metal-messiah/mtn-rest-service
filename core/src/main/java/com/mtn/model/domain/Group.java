@@ -22,8 +22,7 @@ public class Group extends AuditingEntity implements Identifiable {
     private Set<UserProfile> members = new HashSet<>();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_group_id")
-    @SequenceGenerator(name = "seq_auth_group_id", sequenceName = "seq_auth_group_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "auth_group_id")
     public Integer getId() {
         return id;

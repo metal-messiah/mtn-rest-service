@@ -20,8 +20,7 @@ public class Role extends AuditingEntity implements Identifiable {
     private Set<UserProfile> members = new HashSet<>();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_role_id")
-    @SequenceGenerator(name = "seq_auth_role_id", sequenceName = "seq_auth_role_id", allocationSize = 1)
+    @GeneratedValue
     @Column(name = "auth_role_id")
     public Integer getId() {
         return id;

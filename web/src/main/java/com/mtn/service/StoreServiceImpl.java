@@ -11,10 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.mtn.repository.specification.StoreSpecifications.*;
@@ -31,6 +28,8 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     @Autowired
     private StoreSurveyService surveyService;
     @Autowired
+    private BannerService bannerService;
+    @Autowired
     private CompanyService companyService;
     @Autowired
     private StoreCasingService casingService;
@@ -46,8 +45,8 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     private static final String QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST = "" +
             "SELECT s.* " +
             "FROM store s " +
-            "RIGHT JOIN company c ON c.id = s.parent_company_id " +
-            "WHERE c.id IN :companyIds " +
+            "RIGHT JOIN banner c ON c.id = s.banner_id " +
+            "WHERE c.id IN :bannerIds " +
             "AND s.deleted_date IS NULL";
 
     @Override
@@ -104,13 +103,13 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     }
 
     @Override
-    public List<Store> findAllByParentCompanyId(Integer companyId) {
-        Company company = companyService.findOne(companyId);
-        if (company == null) {
-            throw new IllegalArgumentException("No Company found with this id");
+    public List<Store> findAllByBannerId(Integer bannerId) {
+        Banner banner = bannerService.findOne(bannerId);
+        if (banner == null) {
+            throw new IllegalArgumentException("No banner found with this id");
         }
 
-        return company.getStores()
+        return banner.getStores()
                 .stream()
                 .filter(store -> store.getDeletedDate() == null)
                 .collect(Collectors.toList());
@@ -123,10 +122,18 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
             throw new IllegalArgumentException("No Company found with this id");
         }
 
-        Set<Integer> companyIds = companyService.findAllChildCompanyIdsRecursive(company);
+        Set<Company> companies = companyService.findAllChildCompaniesRecursive(company);
+
+        Set<Integer> bannerIds = new HashSet<>();
+        for (Company childCompany : companies) {
+            List<Banner> banners = childCompany.getBanners();
+            for (Banner banner : banners) {
+                bannerIds.add(banner.getId());
+            }
+        }
 
         Map<String, Object> params = new HashMap<>();
-        params.put("companyIds", companyIds);
+        params.put("bannerIds", bannerIds);
 
         return jdbcTemplate.queryForList(QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST, params, Store.class);
     }
@@ -156,40 +163,40 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     public Store getUpdatedEntity(Store existing, Store request) {
 
         //If the store is changing status to active, we have some special handling to do
-        if (request.getType() == StoreType.ACTIVE && request.getType() != existing.getType()) {
+        if (request.getStoreType() == StoreType.ACTIVE && request.getStoreType() != existing.getStoreType()) {
             //Find any existing ACTIVE store for the site
             Site site = existing.getSite();
             Store existingActiveStore = site.findActiveStore();
 
             if (existingActiveStore != null) {
-                existingActiveStore.setType(StoreType.HISTORICAL);
+                existingActiveStore.setStoreType(StoreType.HISTORICAL);
                 existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
             }
         }
 
-        existing.setName(request.getName());
-        existing.setType(request.getType());
-        existing.setOpenedDate(request.getOpenedDate());
-        existing.setClosedDate(request.getClosedDate());
+        existing.setStoreName(request.getStoreName());
+        existing.setStoreType(request.getStoreType());
+        existing.setDateOpened(request.getDateOpened());
+        existing.setDateClosed(request.getDateClosed());
 
         return existing;
     }
 
     @Override
     @Transactional
-    public Store updateOneParentCompany(Integer storeId, Integer companyId) {
+    public Store updateOneBanner(Integer storeId, Integer bannerId) {
         Store store = findOneUsingSpecs(storeId);
         if (store == null) {
             throw new IllegalArgumentException("No Store found with this id");
         }
 
-        Company company = companyService.findOne(companyId);
-        if (company == null) {
-            throw new IllegalArgumentException("No Company found with this id");
+        Banner banner = bannerService.findOne(bannerId);
+        if (banner == null) {
+            throw new IllegalArgumentException("No Banner found with this id");
         }
 
-        store.setParentCompany(company);
-        company.getStores().add(store);
+        store.setBanner(banner);
+        banner.getStores().add(store);
 
         return store;
     }

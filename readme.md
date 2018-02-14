@@ -19,11 +19,11 @@ Follow these steps to get the app up and running locally:
 4. Open IntelliJ's Terminal (which should open to the project root by default)
 5. Run `mvn clean install` (Must be done once, but then only needs to be done if the Maven dependencies are changed, which should be infrequent. You can also create a Run Configuration in IntelliJ to run this from a single click)
 6. Create an empty Postgres database on your local Postgres server
-13. Navigate in the project to core/src/main/resources, and copy the application-allen.properties file, replacing "allen" with your own name. 
+13. Navigate in the project to core/src/main/resources, and copy the application-allen.properties file, replacing "allen" with your own storeName. 
 14. Replace the connection information in your new properties file with the connection information for your new database
-15. Create a Spring Boot Run Configuration called "Local" or some other fancy name
+15. Create a Spring Boot Run Configuration called "Local" or some other fancy storeName
 	* Set the Main Class to `com.mtn.Application`
-	* Set the VM Options to `-Dspring.profiles.active=allen`, where "allen" is replaced with your own name, or the name you used in your new `application-<name>.properties` file
+	* Set the VM Options to `-Dspring.profiles.active=allen`, where "allen" is replaced with your own storeName, or the storeName you used in your new `application-<storeName>.properties` file
 	* Set the Working Directory to the `web` folder
 	* JRE must be a Java 1.8 or higher JDK
 16. Run the new Spring Boot configuration to start the application

@@ -1,45 +1,37 @@
 package com.mtn.model.domain;
 
-import com.mtn.constant.IntersectionType;
-import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
 import com.mtn.constant.StoreType;
-import com.mtn.model.simpleView.SimpleSiteView;
-import com.mtn.model.view.SiteView;
-import com.mtn.model.view.geojson.PointGeometry;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 4/24/2017.
  */
 @Entity
 @Table
-public class Site extends AuditingEntity implements Identifiable {
+public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     private Integer id;
     private ShoppingCenter shoppingCenter;
-    private Point location;
+//    private Point location;
     private SiteType type;
-    private IntersectionType intersectionType;
+    private Integer footprintSqft;
+    private String positionInCenter;
     private String address1;
     private String address2;
     private String city;
+    private String county;
     private String state;
     private String postalCode;
-    private String county;
     private String country;
-    private Integer footprintSqft;
+    private String intersectionType;
+    private String quad;
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
-    private String intersectionQuad;
-    private SitePositionType positionInCenter;
 
     private List<Store> stores = new ArrayList<>();
 
@@ -67,13 +59,13 @@ public class Site extends AuditingEntity implements Identifiable {
         this.shoppingCenter = shoppingCenter;
     }
 
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
-    }
+//    public Point getLocation() {
+//        return location;
+//    }
+//
+//    public void setLocation(Point location) {
+//        this.location = location;
+//    }
 
     @Enumerated(EnumType.STRING)
     public SiteType getType() {
@@ -84,12 +76,11 @@ public class Site extends AuditingEntity implements Identifiable {
         this.type = type;
     }
 
-    @Enumerated(EnumType.STRING)
-    public IntersectionType getIntersectionType() {
+    public String getIntersectionType() {
         return intersectionType;
     }
 
-    public void setIntersectionType(IntersectionType intersectionType) {
+    public void setIntersectionType(String intersectionType) {
         this.intersectionType = intersectionType;
     }
 
@@ -175,20 +166,19 @@ public class Site extends AuditingEntity implements Identifiable {
         this.intersectionStreetSecondary = intersectionStreetSecondary;
     }
 
-    public String getIntersectionQuad() {
-        return intersectionQuad;
+    public String getQuad() {
+        return quad;
     }
 
-    public void setIntersectionQuad(String intersectionQuad) {
-        this.intersectionQuad = intersectionQuad;
+    public void setQuad(String quad) {
+        this.quad = quad;
     }
 
-    @Enumerated(EnumType.STRING)
-    public SitePositionType getPositionInCenter() {
+    public String getPositionInCenter() {
         return positionInCenter;
     }
 
-    public void setPositionInCenter(SitePositionType positionInCenter) {
+    public void setPositionInCenter(String positionInCenter) {
         this.positionInCenter = positionInCenter;
     }
 
@@ -203,6 +193,6 @@ public class Site extends AuditingEntity implements Identifiable {
 
     @Transient
     public Store findActiveStore() {
-        return this.stores.stream().filter(store -> store.getType() == StoreType.ACTIVE).findFirst().orElse(null);
+        return this.stores.stream().filter(store -> store.getStoreType() == StoreType.ACTIVE).findFirst().orElse(null);
     }
 }

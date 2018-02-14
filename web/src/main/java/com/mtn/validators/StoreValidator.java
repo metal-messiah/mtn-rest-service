@@ -22,7 +22,7 @@ public class StoreValidator extends ValidatingDataService<Store> {
 	public void validateBusinessRules(Store object) {
 		if (object.getSite() == null) {
 			throw new IllegalStateException("Store Site should have been set by now");
-		} else if (object.getType() == null) {
+		} else if (object.getStoreType() == null) {
 			throw new IllegalArgumentException(String.format("Store type must be one of: %s", StringUtils.join(StoreType.values(), ", ")));
 		}
 	}

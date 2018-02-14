@@ -23,8 +23,8 @@ public class StoreSearchResult {
 
     private Integer storeId;
     private String name;
-    private LocalDateTime closedDate;
-    private LocalDateTime openedDate;
+    private LocalDateTime dateClosed;
+    private LocalDateTime dateOpened;
 
     public Integer getSiteId() {
         return siteId;
@@ -130,19 +130,19 @@ public class StoreSearchResult {
         this.name = name;
     }
 
-    public LocalDateTime getClosedDate() {
-        return closedDate;
+    public LocalDateTime getDateClosed() {
+        return dateClosed;
     }
 
-    public void setClosedDate(LocalDateTime closedDate) {
-        this.closedDate = closedDate;
+    public void setDateClosed(LocalDateTime dateClosed) {
+        this.dateClosed = dateClosed;
     }
 
-    public LocalDateTime getOpenedDate() {
-        return openedDate;
+    public LocalDateTime getDateOpened() {
+        return dateOpened;
     }
 
-    public void setOpenedDate(LocalDateTime openedDate) {
-        this.openedDate = openedDate;
+    public void setDateOpened(LocalDateTime dateOpened) {
+        this.dateOpened = dateOpened;
     }
 }

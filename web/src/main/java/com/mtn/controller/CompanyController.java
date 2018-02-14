@@ -30,10 +30,10 @@ public class CompanyController extends CrudControllerImpl<Company> {
 	private StoreService storeService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity findAllByName(@RequestParam(value = "name", required = false) String name, Pageable page) {
+	public ResponseEntity findAllByCompanyName(@RequestParam(value = "name", required = false) String name, Pageable page) {
 		Page<Company> domainModels;
 		if (StringUtils.isNotBlank(name)) {
-			domainModels = getEntityService().findAllWhereNameLike(name, page);
+			domainModels = getEntityService().findAllByCompanyNameLike(name, page);
 		} else {
 			domainModels = getEntityService().findAll(page);
 		}
@@ -47,7 +47,7 @@ public class CompanyController extends CrudControllerImpl<Company> {
 		if (doRecursive) {
 			domainModels = storeService.findAllByParentCompanyIdRecursive(id);
 		} else {
-			domainModels = storeService.findAllByParentCompanyId(id);
+			domainModels = storeService.findAllByBannerId(id);
 		}
 
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));

@@ -12,14 +12,12 @@ public class SimpleShoppingCenterView {
     private Integer id;
     private String name;
     private String owner;
-    private Integer legacyCasingId;
     private Integer legacyLocationId;
 
     public SimpleShoppingCenterView(ShoppingCenter shoppingCenter) {
         this.id = shoppingCenter.getId();
         this.name = shoppingCenter.getName();
         this.owner = shoppingCenter.getOwner();
-        this.legacyCasingId = shoppingCenter.getLegacyCasingId();
         this.legacyLocationId = shoppingCenter.getLegacyLocationId();
     }
 
@@ -45,14 +43,6 @@ public class SimpleShoppingCenterView {
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public Integer getLegacyCasingId() {
-        return legacyCasingId;
-    }
-
-    public void setLegacyCasingId(Integer legacyCasingId) {
-        this.legacyCasingId = legacyCasingId;
     }
 
     public Integer getLegacyLocationId() {

@@ -1,8 +1,6 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.IntersectionType;
-import com.mtn.constant.SitePositionType;
 import com.mtn.constant.SiteType;
 import com.mtn.model.domain.Site;
 import com.mtn.model.simpleView.SimpleShoppingCenterView;
@@ -21,7 +19,7 @@ public class SiteView extends AuditingEntityView {
     private Integer id;
     private GeoJsonView location;
     private SiteType type;
-    private IntersectionType intersectionType;
+    private String intersectionType;
     private String address1;
     private String address2;
     private String city;
@@ -32,8 +30,8 @@ public class SiteView extends AuditingEntityView {
     private Integer footprintSqft;
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
-    private String intersectionQuad;
-    private SitePositionType positionInCenter;
+    private String quad;
+    private String positionInCenter;
 
     private SimpleShoppingCenterView shoppingCenter;
 
@@ -42,7 +40,7 @@ public class SiteView extends AuditingEntityView {
     public SiteView(Site site) {
         super(site);
         this.id = site.getId();
-        this.location = new GeoJsonView(site.getLocation());
+//        this.location = new GeoJsonView(site.getLocation());
         this.type = site.getType();
         this.intersectionType = site.getIntersectionType();
         this.address1 = site.getAddress1();
@@ -55,7 +53,7 @@ public class SiteView extends AuditingEntityView {
         this.footprintSqft = site.getFootprintSqft();
         this.intersectionStreetPrimary = site.getIntersectionStreetPrimary();
         this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
-        this.intersectionQuad = site.getIntersectionQuad();
+        this.quad = site.getQuad();
         this.positionInCenter = site.getPositionInCenter();
 
         this.shoppingCenter = new SimpleShoppingCenterView(site.getShoppingCenter());
@@ -86,11 +84,11 @@ public class SiteView extends AuditingEntityView {
         this.type = type;
     }
 
-    public IntersectionType getIntersectionType() {
+    public String getIntersectionType() {
         return intersectionType;
     }
 
-    public void setIntersectionType(IntersectionType intersectionType) {
+    public void setIntersectionType(String intersectionType) {
         this.intersectionType = intersectionType;
     }
 
@@ -174,19 +172,19 @@ public class SiteView extends AuditingEntityView {
         this.intersectionStreetSecondary = intersectionStreetSecondary;
     }
 
-    public String getIntersectionQuad() {
-        return intersectionQuad;
+    public String getQuad() {
+        return quad;
     }
 
-    public void setIntersectionQuad(String intersectionQuad) {
-        this.intersectionQuad = intersectionQuad;
+    public void setQuad(String quad) {
+        this.quad = quad;
     }
 
-    public SitePositionType getPositionInCenter() {
+    public String getPositionInCenter() {
         return positionInCenter;
     }
 
-    public void setPositionInCenter(SitePositionType positionInCenter) {
+    public void setPositionInCenter(String positionInCenter) {
         this.positionInCenter = positionInCenter;
     }
 

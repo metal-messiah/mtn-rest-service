@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS api_client;
 CREATE TABLE IF NOT EXISTS api_client (
   api_client_id int NOT NULL AUTO_INCREMENT,
-  name varchar(64) NOT NULL,
+  storeName varchar(64) NOT NULL,
   client_id varchar(64) NOT NULL,
   client_secret varchar(64) NOT NULL,
   PRIMARY KEY (api_client_id),
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS project (
 DROP TABLE IF EXISTS shopping_center;
 CREATE TABLE IF NOT EXISTS shopping_center (
   shopping_center_id int NOT NULL AUTO_INCREMENT,
-  name varchar(128) CHARACTER SET latin1 DEFAULT NULL,
+  storeName varchar(128) CHARACTER SET latin1 DEFAULT NULL,
   owner varchar(128) CHARACTER SET latin1 DEFAULT NULL,
   created_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   created_by int NOT NULL,
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS site (
   shopping_center_id int NOT NULL DEFAULT '0',
   latitude double NOT NULL,
   longitude double NOT NULL,
-  type enum('PLACEHOLDER','ANCHOR','DEFAULT') DEFAULT 'DEFAULT',
+  storeType enum('PLACEHOLDER','ANCHOR','DEFAULT') DEFAULT 'DEFAULT',
   footprint_sqft int DEFAULT NULL,
   position_in_center varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   address_1 varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,

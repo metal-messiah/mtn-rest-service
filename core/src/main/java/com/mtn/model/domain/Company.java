@@ -12,12 +12,12 @@ import java.util.List;
 public class Company extends AuditingEntity implements Identifiable {
 
     private Integer id;
-    private String name;
+    private String companyName;
     private String websiteUrl;
     private Company parentCompany;
 
     private List<Company> childCompanies = new ArrayList<>();
-    private List<Store> stores = new ArrayList<>();
+    private List<Banner> banners = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -30,12 +30,12 @@ public class Company extends AuditingEntity implements Identifiable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getWebsiteUrl() {
@@ -65,12 +65,12 @@ public class Company extends AuditingEntity implements Identifiable {
         this.childCompanies = childCompanies;
     }
 
-    @OneToMany(mappedBy = "parentCompany")
-    public List<Store> getStores() {
-        return stores;
+    @OneToMany(mappedBy = "company")
+    public List<Banner> getBanners() {
+        return banners;
     }
 
-    public void setStores(List<Store> stores) {
-        this.stores = stores;
+    public void setBanners(List<Banner> banners) {
+        this.banners = banners;
     }
 }

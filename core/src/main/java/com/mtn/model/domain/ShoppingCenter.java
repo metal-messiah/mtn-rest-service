@@ -17,7 +17,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private String name;
     private String owner;
     private Integer legacyLocationId;
-    private Integer legacyCasingId;
 
     private List<ShoppingCenterCasing> casings = new ArrayList<>();
     private List<Interaction> interactions = new ArrayList<>();
@@ -31,7 +30,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         this.id = shoppingCenterView.getId();
         this.name = shoppingCenterView.getName();
         this.owner = shoppingCenterView.getOwner();
-        this.legacyCasingId = shoppingCenterView.getLegacyCasingId();
         this.legacyLocationId = shoppingCenterView.getLegacyLocationId();
     }
 
@@ -46,7 +44,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         this.id = id;
     }
 
-    @Column(name = "shopping_center_name")
     public String getName() {
         return name;
     }
@@ -87,14 +84,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
 
     public void setLegacyLocationId(Integer legacyLocationId) {
         this.legacyLocationId = legacyLocationId;
-    }
-
-    public Integer getLegacyCasingId() {
-        return legacyCasingId;
-    }
-
-    public void setLegacyCasingId(Integer legacyCasingId) {
-        this.legacyCasingId = legacyCasingId;
     }
 
     @OneToMany(mappedBy = "shoppingCenter")

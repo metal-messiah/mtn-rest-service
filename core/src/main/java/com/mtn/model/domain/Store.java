@@ -1,8 +1,6 @@
 package com.mtn.model.domain;
 
 import com.mtn.constant.StoreType;
-import com.mtn.model.simpleView.SimpleStoreView;
-import com.mtn.model.view.StoreView;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,13 +16,13 @@ public class Store extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private Site site;
-    private String name;
-    private StoreType type;
-    private LocalDateTime openedDate;
-    private LocalDateTime closedDate;
-    private Company parentCompany;
+    private String storeName;
+    private StoreType storeType;
+    private LocalDateTime dateOpened;
+    private LocalDateTime dateClosed;
     private String storeNumber;
     private Integer legacyLocationId;
+    private Banner banner;
 
     private List<StoreCasing> casings = new ArrayList<>();
     private List<Interaction> interactions = new ArrayList<>();
@@ -56,40 +54,37 @@ public class Store extends AuditingEntity implements Identifiable {
         this.site = site;
     }
 
-    public String getName() {
-        return name;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "store_type")
-    public StoreType getType() {
-        return type;
+    public StoreType getStoreType() {
+        return storeType;
     }
 
-    public void setType(StoreType type) {
-        this.type = type;
+    public void setStoreType(StoreType storeType) {
+        this.storeType = storeType;
     }
 
-    @Column(name = "opened_date")
-    public LocalDateTime getOpenedDate() {
-        return openedDate;
+    public LocalDateTime getDateOpened() {
+        return dateOpened;
     }
 
-    public void setOpenedDate(LocalDateTime openedDate) {
-        this.openedDate = openedDate;
+    public void setDateOpened(LocalDateTime dateOpened) {
+        this.dateOpened = dateOpened;
     }
 
-    @Column(name = "closed_date")
-    public LocalDateTime getClosedDate() {
-        return closedDate;
+    public LocalDateTime getDateClosed() {
+        return dateClosed;
     }
 
-    public void setClosedDate(LocalDateTime closedDate) {
-        this.closedDate = closedDate;
+    public void setDateClosed(LocalDateTime dateClosed) {
+        this.dateClosed = dateClosed;
     }
 
     @OneToMany(mappedBy = "store")
@@ -102,13 +97,13 @@ public class Store extends AuditingEntity implements Identifiable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "parent_company_id")
-    public Company getParentCompany() {
-        return parentCompany;
+    @JoinColumn(name = "banner_id")
+    public Banner getBanner() {
+        return banner;
     }
 
-    public void setParentCompany(Company parentCompany) {
-        this.parentCompany = parentCompany;
+    public void setBanner(Banner banner) {
+        this.banner = banner;
     }
 
     public String getStoreNumber() {

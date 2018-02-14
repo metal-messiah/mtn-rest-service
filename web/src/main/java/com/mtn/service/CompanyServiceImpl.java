@@ -47,26 +47,26 @@ public class CompanyServiceImpl extends EntityServiceImpl<Company> implements Co
 	}
 
 	@Override
-	public Set<Integer> findAllChildCompanyIdsRecursive(Company company) {
-		Set<Integer> ids = new HashSet<>();
-		ids.add(company.getId());
+	public Set<Company> findAllChildCompaniesRecursive(Company company) {
+		Set<Company> companies = new HashSet<>();
+		companies.add(company);
 
 		for (Company childCompany : company.getChildCompanies()) {
-			ids.addAll(findAllChildCompanyIdsRecursive(childCompany));
+			companies.addAll(findAllChildCompaniesRecursive(childCompany));
 		}
 
-		return ids;
+		return companies;
 	}
 
 	@Override
-	public Page<Company> findAllWhereNameLike(String name, Pageable page) {
+	public Page<Company> findAllByCompanyNameLike(String name, Pageable page) {
 		name = String.format("%%%s%%", name.toLowerCase());
-		return getEntityRepository().findAllWhereNameLike(name, page);
+		return getEntityRepository().findAllByCompanyNameLikeAndDeletedDateIsNull(name, page);
 	}
 
 	@Override
-	public Company findOneByName(String name) {
-		return getEntityRepository().findOneByName(name);
+	public Company findOneByCompanyName(String name) {
+		return getEntityRepository().findOneByCompanyName(name);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class CompanyServiceImpl extends EntityServiceImpl<Company> implements Co
 
 	@Override
 	public Company getUpdatedEntity(Company existing, Company request) {
-		existing.setName(request.getName());
+		existing.setCompanyName(request.getCompanyName());
 		existing.setWebsiteUrl(request.getWebsiteUrl());
 
 		return existing;

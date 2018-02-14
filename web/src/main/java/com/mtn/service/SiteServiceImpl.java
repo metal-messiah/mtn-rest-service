@@ -37,7 +37,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
         request.setSite(existing);
 
         //If the new store is ACTIVE, we have some special handling to do
-        if (request.getType() == StoreType.ACTIVE) {
+        if (request.getStoreType() == StoreType.ACTIVE) {
             //First, ensure the request is valid for insert
             storeService.getValidator().validateForInsert(request);
 
@@ -50,7 +50,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
             }
             //Else if one exists, set it to historical before proceeding
             else if (existingActiveStore != null) {
-                existingActiveStore.setType(StoreType.HISTORICAL);
+                existingActiveStore.setStoreType(StoreType.HISTORICAL);
                 existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
             }
         }
@@ -83,7 +83,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
     @Override
     public Site getUpdatedEntity(Site existing, Site request) {
-        existing.setLocation(request.getLocation());
+//        existing.setLocation(request.getLocation());
         existing.setType(request.getType());
         existing.setIntersectionType(request.getIntersectionType());
         existing.setAddress1(request.getAddress1());
@@ -96,7 +96,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
         existing.setFootprintSqft(request.getFootprintSqft());
         existing.setIntersectionStreetPrimary(request.getIntersectionStreetPrimary());
         existing.setIntersectionStreetSecondary(request.getIntersectionStreetSecondary());
-        existing.setIntersectionQuad(request.getIntersectionQuad());
+        existing.setQuad(request.getQuad());
         existing.setPositionInCenter(request.getPositionInCenter());
 
         return existing;

@@ -16,11 +16,11 @@ public interface StoreService extends EntityService<Store> {
 
 	List<Store> findAllByProjectId(Integer id);
 
-	List<Store> findAllByParentCompanyId(Integer companyId);
+	List<Store> findAllByBannerId(Integer companyId);
 
 	List<Store> findAllByParentCompanyIdRecursive(Integer companyId);
 
 	List<Store> findAllBySiteIdUsingSpecs(Integer siteId);
 
-	Store updateOneParentCompany(Integer storeId, Integer companyId);
+	Store updateOneBanner(Integer storeId, Integer bannerId);
 }

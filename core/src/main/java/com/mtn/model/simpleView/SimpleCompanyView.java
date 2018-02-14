@@ -12,12 +12,12 @@ import java.io.Serializable;
 public class SimpleCompanyView implements Serializable {
 
     private Integer id;
-    private String name;
+    private String companyName;
     private String websiteUrl;
 
     public SimpleCompanyView(Company company) {
         this.id = company.getId();
-        this.name = company.getName();
+        this.companyName = company.getCompanyName();
         this.websiteUrl = company.getWebsiteUrl();
     }
 
@@ -29,12 +29,12 @@ public class SimpleCompanyView implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getWebsiteUrl() {

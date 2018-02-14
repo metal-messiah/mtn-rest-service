@@ -79,9 +79,9 @@ public class StoreController extends CrudControllerImpl<Store> {
         return ResponseEntity.ok(domainModels.stream().map(StoreVolumeView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{storeId}/company/{companyId}", method = RequestMethod.PUT)
-    public ResponseEntity updateOneParentCompany(@PathVariable("storeId") Integer storeId, @PathVariable("companyId") Integer companyId) {
-        Store domainModel = storeService.updateOneParentCompany(storeId, companyId);
+    @RequestMapping(value = "/{storeId}/banner/{bannerId}", method = RequestMethod.PUT)
+    public ResponseEntity updateOneBanner(@PathVariable("storeId") Integer storeId, @PathVariable("bannerId") Integer bannerId) {
+        Store domainModel = storeService.updateOneBanner(storeId, bannerId);
         return ResponseEntity.ok(new StoreView(domainModel));
     }
 

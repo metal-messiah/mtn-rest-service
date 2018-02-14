@@ -19,7 +19,7 @@ public class CompanyValidator extends ValidatingDataService<Company> {
 
 	@Override
 	public Identifiable getPotentialDuplicate(Company object) {
-		return getEntityService().findOneByName(object.getName());
+		return getEntityService().findOneByCompanyName(object.getCompanyName());
 	}
 
 }

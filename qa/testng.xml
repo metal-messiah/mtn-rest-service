@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="default-suite" verbose="1">
+<suite storeName="default-suite" verbose="1">
 
-    <test name="Default">
+    <test storeName="Default">
         <packages>
-            <package name="com.mtn.test.*"/>
+            <package storeName="com.mtn.test.*"/>
         </packages>
     </test>
 

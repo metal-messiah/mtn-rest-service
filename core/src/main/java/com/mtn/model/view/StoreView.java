@@ -6,7 +6,6 @@ import com.mtn.model.domain.Store;
 import com.mtn.model.simpleView.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,13 +18,13 @@ public class StoreView extends AuditingEntityView {
     private Integer id;
     private String name;
     private StoreType type;
-    private LocalDateTime openedDate;
-    private LocalDateTime closedDate;
+    private LocalDateTime dateOpened;
+    private LocalDateTime dateClosed;
     private String storeNumber;
     private Integer legacyLocationId;
 
     private SimpleSiteView site;
-    private SimpleCompanyView parentCompany;
+    private SimpleBannerView banner;
 
     private List<SimpleStoreCasingView> casings;
     private List<SimpleInteractionView> interactions;
@@ -37,17 +36,17 @@ public class StoreView extends AuditingEntityView {
         super(store);
 
         this.id = store.getId();
-        this.name = store.getName();
-        this.type = store.getType();
-        this.openedDate = store.getOpenedDate();
-        this.closedDate = store.getClosedDate();
+        this.name = store.getStoreName();
+        this.type = store.getStoreType();
+        this.dateOpened = store.getDateOpened();
+        this.dateClosed = store.getDateClosed();
         this.legacyLocationId = store.getLegacyLocationId();
         this.storeNumber = store.getStoreNumber();
 
         this.site = new SimpleSiteView(store.getSite());
 
-        if (store.getParentCompany() != null) {
-            this.parentCompany = new SimpleCompanyView(store.getParentCompany());
+        if (store.getBanner() != null) {
+            this.banner = new SimpleBannerView(store.getBanner());
         }
 
         this.casings = store.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleStoreCasingView::new).collect(Collectors.toList());
@@ -81,20 +80,20 @@ public class StoreView extends AuditingEntityView {
         this.type = type;
     }
 
-    public LocalDateTime getOpenedDate() {
-        return openedDate;
+    public LocalDateTime getDateOpened() {
+        return dateOpened;
     }
 
-    public void setOpenedDate(LocalDateTime openedDate) {
-        this.openedDate = openedDate;
+    public void setDateOpened(LocalDateTime dateOpened) {
+        this.dateOpened = dateOpened;
     }
 
-    public LocalDateTime getClosedDate() {
-        return closedDate;
+    public LocalDateTime getDateClosed() {
+        return dateClosed;
     }
 
-    public void setClosedDate(LocalDateTime closedDate) {
-        this.closedDate = closedDate;
+    public void setDateClosed(LocalDateTime dateClosed) {
+        this.dateClosed = dateClosed;
     }
 
     public String getStoreNumber() {
@@ -129,12 +128,12 @@ public class StoreView extends AuditingEntityView {
         this.surveys = surveys;
     }
 
-    public SimpleCompanyView getParentCompany() {
-        return parentCompany;
+    public SimpleBannerView getBanner() {
+        return banner;
     }
 
-    public void setParentCompany(SimpleCompanyView parentCompany) {
-        this.parentCompany = parentCompany;
+    public void setBanner(SimpleBannerView banner) {
+        this.banner = banner;
     }
 
     public List<SimpleStoreCasingView> getCasings() {

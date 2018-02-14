@@ -47,8 +47,8 @@ public class StoreSearchService {
             "  s.intersection_street_secondary, " +
             "  st.id AS store_id, " +
             "  st.name, " +
-            "  st.closed_date," +
-            "  st.opened_date " +
+            "  st.date_closed," +
+            "  st.date_opened " +
             "FROM store st " +
             "  LEFT JOIN site s ON s.id = st.site_id " +
             "WHERE";
@@ -71,14 +71,14 @@ public class StoreSearchService {
                 model.setIntersectionStreetPrimary(resultSet.getString("intersection_street_primary"));
                 model.setIntersectionStreetSecondary(resultSet.getString("intersection_street_secondary"));
 
-                Date closedDate = resultSet.getDate("closed_date");
-                if (closedDate != null) {
-                    model.setClosedDate(LocalDateTime.ofInstant(closedDate.toInstant(), ZoneId.systemDefault()));
+                Date dateClosed = resultSet.getDate("date_closed");
+                if (dateClosed != null) {
+                    model.setDateClosed(LocalDateTime.ofInstant(dateClosed.toInstant(), ZoneId.systemDefault()));
                 }
 
-                Date openedDate = resultSet.getDate("opened_date");
-                if (openedDate != null) {
-                    model.setOpenedDate(LocalDateTime.ofInstant(openedDate.toInstant(), ZoneId.systemDefault()));
+                Date dateOpened = resultSet.getDate("date_opened");
+                if (dateOpened != null) {
+                    model.setDateOpened(LocalDateTime.ofInstant(dateOpened.toInstant(), ZoneId.systemDefault()));
                 }
 
                 Point point = null;
@@ -102,19 +102,19 @@ public class StoreSearchService {
         private static final String COLUMN_SITE_LOCATION = "s.location";
         private static final String COLUMN_SITE_POSTAL_CODE = "s.postal_code";
         private static final String COLUMN_SITE_STATE = "s.state";
-        private static final String COLUMN_STORE_CLOSED_DATE = "st.closed_date";
+        private static final String COLUMN_STORE_DATE_CLOSED = "st.date_closed";
         private static final String COLUMN_STORE_DELETED_DATE = "st.deleted_date";
         private static final String COLUMN_STORE_NAME = "st.name";
-        private static final String COLUMN_STORE_OPENED_DATE = "st.opened_date";
+        private static final String COLUMN_STORE_DATE_OPENED = "st.date_opened";
 
         private static final String PARAM_CITY = "city";
-        private static final String PARAM_CLOSED_DATE_END = "closedDateEnd";
-        private static final String PARAM_CLOSED_DATE_START = "closedDateStart";
+        private static final String PARAM_DATE_CLOSED_END = "dateClosedEnd";
+        private static final String PARAM_DATE_CLOSED_START = "dateClosedStart";
         private static final String PARAM_COUNTY = "county";
         private static final String PARAM_DISTANCE = "distance";
         private static final String PARAM_NAME = "name";
-        private static final String PARAM_OPENED_DATE_START = "openedDateStart";
-        private static final String PARAM_OPENED_DATE_END = "openedDateEnd";
+        private static final String PARAM_DATE_OPENED_START = "dateOpenedStart";
+        private static final String PARAM_DATE_OPENED_END = "dateOpenedEnd";
         private static final String PARAM_POLYGON = "polygon";
         private static final String PARAM_POSTAL_CODE = "postalCode";
         private static final String PARAM_STATE = "state";
@@ -158,26 +158,26 @@ public class StoreSearchService {
                 params.put(PARAM_STATE, QueryUtil.contains(searchRequest.getState()));
             }
             if (searchRequest.getClosedBefore() != null && searchRequest.getClosedAfter() != null) {
-                clauses.add(QueryUtil.betweenClause(COLUMN_STORE_CLOSED_DATE, PARAM_CLOSED_DATE_START, PARAM_CLOSED_DATE_END));
-                params.put(PARAM_CLOSED_DATE_START, searchRequest.getClosedAfter());
-                params.put(PARAM_CLOSED_DATE_END, searchRequest.getClosedBefore());
+                clauses.add(QueryUtil.betweenClause(COLUMN_STORE_DATE_CLOSED, PARAM_DATE_CLOSED_START, PARAM_DATE_CLOSED_END));
+                params.put(PARAM_DATE_CLOSED_START, searchRequest.getClosedAfter());
+                params.put(PARAM_DATE_CLOSED_END, searchRequest.getClosedBefore());
             } else if (searchRequest.getClosedBefore() != null) {
-                clauses.add(QueryUtil.isLessThanClause(COLUMN_STORE_CLOSED_DATE, PARAM_CLOSED_DATE_END));
-                params.put(PARAM_CLOSED_DATE_END, searchRequest.getClosedBefore());
+                clauses.add(QueryUtil.isLessThanClause(COLUMN_STORE_DATE_CLOSED, PARAM_DATE_CLOSED_END));
+                params.put(PARAM_DATE_CLOSED_END, searchRequest.getClosedBefore());
             } else if (searchRequest.getClosedAfter() != null) {
-                clauses.add(QueryUtil.isGreaterThanClause(COLUMN_STORE_CLOSED_DATE, PARAM_CLOSED_DATE_START));
-                params.put(PARAM_CLOSED_DATE_START, searchRequest.getClosedAfter());
+                clauses.add(QueryUtil.isGreaterThanClause(COLUMN_STORE_DATE_CLOSED, PARAM_DATE_CLOSED_START));
+                params.put(PARAM_DATE_CLOSED_START, searchRequest.getClosedAfter());
             }
             if (searchRequest.getOpenedBefore() != null && searchRequest.getOpenedAfter() != null) {
-                clauses.add(QueryUtil.betweenClause(COLUMN_STORE_OPENED_DATE, PARAM_OPENED_DATE_START, PARAM_OPENED_DATE_END));
-                params.put(PARAM_OPENED_DATE_START, searchRequest.getOpenedAfter());
-                params.put(PARAM_OPENED_DATE_END, searchRequest.getOpenedBefore());
+                clauses.add(QueryUtil.betweenClause(COLUMN_STORE_DATE_OPENED, PARAM_DATE_OPENED_START, PARAM_DATE_OPENED_END));
+                params.put(PARAM_DATE_OPENED_START, searchRequest.getOpenedAfter());
+                params.put(PARAM_DATE_OPENED_END, searchRequest.getOpenedBefore());
             } else if (searchRequest.getOpenedBefore() != null) {
-                clauses.add(QueryUtil.isLessThanClause(COLUMN_STORE_OPENED_DATE, PARAM_OPENED_DATE_END));
-                params.put(PARAM_OPENED_DATE_END, searchRequest.getOpenedBefore());
+                clauses.add(QueryUtil.isLessThanClause(COLUMN_STORE_DATE_OPENED, PARAM_DATE_OPENED_END));
+                params.put(PARAM_DATE_OPENED_END, searchRequest.getOpenedBefore());
             } else if (searchRequest.getOpenedAfter() != null) {
-                clauses.add(QueryUtil.isGreaterThanClause(COLUMN_STORE_OPENED_DATE, PARAM_OPENED_DATE_START));
-                params.put(PARAM_OPENED_DATE_START, searchRequest.getOpenedAfter());
+                clauses.add(QueryUtil.isGreaterThanClause(COLUMN_STORE_DATE_OPENED, PARAM_DATE_OPENED_START));
+                params.put(PARAM_DATE_OPENED_START, searchRequest.getOpenedAfter());
             }
 
             clauses.add(QueryUtil.isNullClause(COLUMN_SITE_DELETED_DATE));

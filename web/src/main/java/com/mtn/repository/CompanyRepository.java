@@ -12,8 +12,7 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface CompanyRepository extends JpaRepository<Company, Integer>, JpaSpecificationExecutor<Company> {
 
-    @Query("from Company c where lower(c.name) like :name")
-    Page<Company> findAllWhereNameLike(String name, Pageable page);
+    Page<Company> findAllByCompanyNameLikeAndDeletedDateIsNull(String companyName, Pageable pageable);
 
-    Company findOneByName(String name);
+    Company findOneByCompanyName(String name);
 }

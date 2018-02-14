@@ -16,7 +16,6 @@ public class ShoppingCenterView extends AuditingEntityView {
     private Integer id;
     private String name;
     private String owner;
-    private Integer legacyCasingId;
     private Integer legacyLocationId;
     private List<SimpleShoppingCenterCasingView> casings;
     private List<SimpleInteractionView> interactions;
@@ -28,7 +27,6 @@ public class ShoppingCenterView extends AuditingEntityView {
         this.id = shoppingCenter.getId();
         this.name = shoppingCenter.getName();
         this.owner = shoppingCenter.getOwner();
-        this.legacyCasingId = shoppingCenter.getLegacyCasingId();
         this.legacyLocationId = shoppingCenter.getLegacyLocationId();
         this.casings = shoppingCenter.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList());
         this.interactions = shoppingCenter.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
@@ -58,14 +56,6 @@ public class ShoppingCenterView extends AuditingEntityView {
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public Integer getLegacyCasingId() {
-        return legacyCasingId;
-    }
-
-    public void setLegacyCasingId(Integer legacyCasingId) {
-        this.legacyCasingId = legacyCasingId;
     }
 
     public Integer getLegacyLocationId() {

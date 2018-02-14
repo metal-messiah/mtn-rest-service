@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 public class StoreSearchResultView {
 
     private Integer id;
-    private LocalDateTime closedDate;
+    private LocalDateTime dateClosed;
     private String name;
-    private LocalDateTime openedDate;
+    private LocalDateTime dateOpened;
 
     public StoreSearchResultView() {
     }
@@ -22,8 +22,8 @@ public class StoreSearchResultView {
     public StoreSearchResultView(StoreSearchResult searchResult) {
         this.id = searchResult.getStoreId();
         this.name = searchResult.getName();
-        this.closedDate = searchResult.getClosedDate();
-        this.openedDate = searchResult.getOpenedDate();
+        this.dateClosed = searchResult.getDateClosed();
+        this.dateOpened = searchResult.getDateOpened();
     }
 
     public Integer getId() {
@@ -42,19 +42,19 @@ public class StoreSearchResultView {
         this.name = name;
     }
 
-    public LocalDateTime getClosedDate() {
-        return closedDate;
+    public LocalDateTime getDateClosed() {
+        return dateClosed;
     }
 
-    public void setClosedDate(LocalDateTime closedDate) {
-        this.closedDate = closedDate;
+    public void setDateClosed(LocalDateTime dateClosed) {
+        this.dateClosed = dateClosed;
     }
 
-    public LocalDateTime getOpenedDate() {
-        return openedDate;
+    public LocalDateTime getDateOpened() {
+        return dateOpened;
     }
 
-    public void setOpenedDate(LocalDateTime openedDate) {
-        this.openedDate = openedDate;
+    public void setDateOpened(LocalDateTime dateOpened) {
+        this.dateOpened = dateOpened;
     }
 }

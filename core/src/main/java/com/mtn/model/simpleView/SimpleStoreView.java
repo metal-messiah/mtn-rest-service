@@ -15,17 +15,17 @@ public class SimpleStoreView {
     private Integer id;
     private String name;
     private StoreType type;
-    private LocalDateTime openedDate;
-    private LocalDateTime closedDate;
+    private LocalDateTime dateOpened;
+    private LocalDateTime dateClosed;
     private String storeNumber;
     private Integer legacyLocationId;
 
     public SimpleStoreView(Store store) {
         this.id = store.getId();
-        this.name = store.getName();
-        this.type = store.getType();
-        this.openedDate = store.getOpenedDate();
-        this.closedDate = store.getClosedDate();
+        this.name = store.getStoreName();
+        this.type = store.getStoreType();
+        this.dateOpened = store.getDateOpened();
+        this.dateClosed = store.getDateClosed();
         this.legacyLocationId = store.getLegacyLocationId();
         this.storeNumber = store.getStoreNumber();
     }
@@ -54,20 +54,20 @@ public class SimpleStoreView {
         this.type = type;
     }
 
-    public LocalDateTime getOpenedDate() {
-        return openedDate;
+    public LocalDateTime getDateOpened() {
+        return dateOpened;
     }
 
-    public void setOpenedDate(LocalDateTime openedDate) {
-        this.openedDate = openedDate;
+    public void setDateOpened(LocalDateTime dateOpened) {
+        this.dateOpened = dateOpened;
     }
 
-    public LocalDateTime getClosedDate() {
-        return closedDate;
+    public LocalDateTime getDateClosed() {
+        return dateClosed;
     }
 
-    public void setClosedDate(LocalDateTime closedDate) {
-        this.closedDate = closedDate;
+    public void setDateClosed(LocalDateTime dateClosed) {
+        this.dateClosed = dateClosed;
     }
 
     public String getStoreNumber() {

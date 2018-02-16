@@ -2,9 +2,12 @@ package com.mtn.test;
 
 import com.mtn.BaseTest;
 import com.mtn.model.CustomPageImpl;
+import com.mtn.model.domain.Group;
+import com.mtn.model.domain.Role;
+import com.mtn.model.domain.UserProfile;
+import com.mtn.model.simpleView.SimpleGroupView;
+import com.mtn.model.simpleView.SimpleRoleView;
 import com.mtn.model.view.UserProfileView;
-import com.mtn.model.view.GroupView;
-import com.mtn.model.view.RoleView;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -23,7 +26,7 @@ public class UserTest extends BaseTest {
     @Test(expectedExceptions = {RestClientException.class}, dataProvider = "endpointMappings")
     public void eachEndpointShouldReturn401IfNotAuthenticated(HttpMethod httpMethod, String path) {
         try {
-            unauthorizedRestTemplate().exchange(buildUri(path), httpMethod, new HttpEntity<>(new UserProfileView()), String.class);
+            unauthorizedRestTemplate().exchange(buildUri(path), httpMethod, new HttpEntity<>(new UserProfileView(new UserProfile())), String.class);
         } catch (RestClientResponseException e) {
             Assert.assertEquals(e.getRawStatusCode(), 401);
             throw e;
@@ -43,7 +46,7 @@ public class UserTest extends BaseTest {
     @Test(expectedExceptions = {RestClientException.class})
     public void postUserShouldReturn400IfEmailAlreadyExists() {
         //Step 1 - Create valid user
-        UserProfileView request = new UserProfileView();
+        UserProfileView request = new UserProfileView(new UserProfile());
         request.setEmail("emailalreadyexists@email.com");
         request.setFirstName("Test");
         request.setLastName("Test");
@@ -62,18 +65,18 @@ public class UserTest extends BaseTest {
     @Test
     public void postUserShouldReturn200WithFullyPopulatedUserProfile() {
         //Step 1 - Create group and role
-        GroupView groupRequest = new GroupView();
+        SimpleGroupView groupRequest = new SimpleGroupView(new Group());
         groupRequest.setDisplayName("Valid User Test Group");
-        ResponseEntity<GroupView> groupResponse = restTemplate().postForEntity(buildUri("/api/group"), groupRequest, GroupView.class);
-        GroupView group = groupResponse.getBody();
+        ResponseEntity<SimpleGroupView> groupResponse = restTemplate().postForEntity(buildUri("/api/group"), groupRequest, SimpleGroupView.class);
+        SimpleGroupView group = groupResponse.getBody();
 
-        RoleView roleRequest = new RoleView();
+        SimpleRoleView roleRequest = new SimpleRoleView(new Role());
         roleRequest.setDisplayName("Valid User Test Role");
-        ResponseEntity<RoleView> roleResponse = restTemplate().postForEntity(buildUri("/api/role"), roleRequest, RoleView.class);
-        RoleView role = roleResponse.getBody();
+        ResponseEntity<SimpleRoleView> roleResponse = restTemplate().postForEntity(buildUri("/api/role"), roleRequest, SimpleRoleView.class);
+        SimpleRoleView role = roleResponse.getBody();
 
         //Step 2 - Create user
-        UserProfileView userRequest = new UserProfileView();
+        UserProfileView userRequest = new UserProfileView(new UserProfile());
         userRequest.setEmail("validrequest@email.com");
         userRequest.setFirstName("Test");
         userRequest.setLastName("Test");
@@ -100,7 +103,7 @@ public class UserTest extends BaseTest {
 
     @Test
     public void postUserShouldForceEmailToLowercase() {
-        UserProfileView userRequest = new UserProfileView();
+        UserProfileView userRequest = new UserProfileView(new UserProfile());
         userRequest.setEmail("LOWEREMAILTEST@EMAIL.COM");
         userRequest.setFirstName("Test");
         userRequest.setLastName("Test");
@@ -113,7 +116,7 @@ public class UserTest extends BaseTest {
 
     @Test
     public void deleteUserShouldSetDeletedByAndDeletedDateInDatabase() {
-        UserProfileView userRequest = new UserProfileView();
+        UserProfileView userRequest = new UserProfileView(new UserProfile());
         userRequest.setEmail("deleteusertest@email.com");
         userRequest.setFirstName("Test");
         userRequest.setLastName("Test");
@@ -145,7 +148,7 @@ public class UserTest extends BaseTest {
 
     @Test(expectedExceptions = {RestClientException.class})
     public void deleteUserShouldReturn400IfAlreadyDeleted() {
-        UserProfileView userRequest = new UserProfileView();
+        UserProfileView userRequest = new UserProfileView(new UserProfile());
         userRequest.setEmail("deleteusertwicetest@email.com");
         userRequest.setFirstName("Test");
         userRequest.setLastName("Test");
@@ -165,7 +168,7 @@ public class UserTest extends BaseTest {
 
     @Test
     public void getUserShouldNotReturnDeletedResult() {
-        UserProfileView userRequest = new UserProfileView();
+        UserProfileView userRequest = new UserProfileView(new UserProfile());
         userRequest.setEmail("nodeleteduseringetalltest@email.com");
         userRequest.setFirstName("Test");
         userRequest.setLastName("Test");
@@ -186,7 +189,7 @@ public class UserTest extends BaseTest {
 
     @Test
     public void getUserByIdShouldReturn204ForDeletedResult() {
-        UserProfileView userRequest = new UserProfileView();
+        UserProfileView userRequest = new UserProfileView(new UserProfile());
         userRequest.setEmail("nodeleteduseringettest@email.com");
         userRequest.setFirstName("Test");
         userRequest.setLastName("Test");
@@ -226,13 +229,13 @@ public class UserTest extends BaseTest {
 
     @DataProvider(name = "invalidPostRequestObjects")
     public static Object[][] invalidPostRequestObjects() {
-        UserProfileView alreadyHasId = new UserProfileView();
+        UserProfileView alreadyHasId = new UserProfileView(new UserProfile());
         alreadyHasId.setId(1);
         alreadyHasId.setEmail("test@email.com");
         alreadyHasId.setFirstName("test");
         alreadyHasId.setLastName("test");
 
-        UserProfileView missingEmail = new UserProfileView();
+        UserProfileView missingEmail = new UserProfileView(new UserProfile());
         missingEmail.setFirstName("test");
         missingEmail.setLastName("test");
 
@@ -244,12 +247,12 @@ public class UserTest extends BaseTest {
 
     @DataProvider(name = "invalidPutRequestObjects")
     public static Object[][] invalidPutRequestObjects() {
-        UserProfileView missingId = new UserProfileView();
+        UserProfileView missingId = new UserProfileView(new UserProfile());
         missingId.setEmail("test@email.com");
         missingId.setFirstName("test");
         missingId.setLastName("test");
 
-        UserProfileView missingEmail = new UserProfileView();
+        UserProfileView missingEmail = new UserProfileView(new UserProfile());
         missingEmail.setFirstName("test");
         missingEmail.setLastName("test");
 

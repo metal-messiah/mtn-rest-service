@@ -44,6 +44,7 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         this.id = id;
     }
 
+    @Column(name = "shopping_center_name")
     public String getName() {
         return name;
     }

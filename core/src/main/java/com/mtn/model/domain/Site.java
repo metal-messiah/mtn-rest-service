@@ -69,6 +69,7 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     }
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "site_type")
     public SiteType getType() {
         return type;
     }

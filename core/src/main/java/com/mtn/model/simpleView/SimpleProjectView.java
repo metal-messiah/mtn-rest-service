@@ -2,7 +2,7 @@ package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Project;
-import com.mtn.model.view.geojson.GeoJsonView;
+import com.vividsolutions.jts.geom.Polygon;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +20,7 @@ public class SimpleProjectView {
     private LocalDateTime startedDate;
     private LocalDateTime completedDate;
     private String source;
-    private GeoJsonView boundary;
+    private Polygon boundary;
     private Integer legacyProjectId;
 
     public SimpleProjectView(Project project) {
@@ -35,7 +35,7 @@ public class SimpleProjectView {
         this.startedDate = project.getStartedDate();
         this.completedDate = project.getCompletedDate();
         this.source = project.getSource();
-        this.boundary = new GeoJsonView(project.getBoundary());
+        this.boundary = project.getBoundary();
         this.legacyProjectId = project.getLegacyProjectId();
     }
 
@@ -127,11 +127,11 @@ public class SimpleProjectView {
         this.source = source;
     }
 
-    public GeoJsonView getBoundary() {
+    public Polygon getBoundary() {
         return boundary;
     }
 
-    public void setBoundary(GeoJsonView boundary) {
+    public void setBoundary(Polygon boundary) {
         this.boundary = boundary;
     }
 

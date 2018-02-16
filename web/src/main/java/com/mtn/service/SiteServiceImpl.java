@@ -75,15 +75,12 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
     @Override
     public Site findOneUsingSpecs(Integer id) {
-        return getEntityRepository().findOne(
-                where(idEquals(id))
-                        .and(isNotDeleted())
-        );
+        return getEntityRepository().findByIdAndDeletedDateIsNull(id);
     }
 
     @Override
     public Site getUpdatedEntity(Site existing, Site request) {
-//        existing.setLocation(request.getLocation());
+        existing.setLocation(request.getLocation());
         existing.setType(request.getType());
         existing.setIntersectionType(request.getIntersectionType());
         existing.setAddress1(request.getAddress1());

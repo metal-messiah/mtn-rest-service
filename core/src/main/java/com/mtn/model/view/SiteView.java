@@ -5,7 +5,7 @@ import com.mtn.constant.SiteType;
 import com.mtn.model.domain.Site;
 import com.mtn.model.simpleView.SimpleShoppingCenterView;
 import com.mtn.model.simpleView.SimpleStoreView;
-import com.mtn.model.view.geojson.GeoJsonView;
+import com.vividsolutions.jts.geom.Point;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class SiteView extends AuditingEntityView {
 
     private Integer id;
-    private GeoJsonView location;
+    private Point location;
     private SiteType type;
     private String intersectionType;
     private String address1;
@@ -40,7 +40,7 @@ public class SiteView extends AuditingEntityView {
     public SiteView(Site site) {
         super(site);
         this.id = site.getId();
-//        this.location = new GeoJsonView(site.getLocation());
+        this.location = site.getLocation();
         this.type = site.getType();
         this.intersectionType = site.getIntersectionType();
         this.address1 = site.getAddress1();
@@ -68,11 +68,11 @@ public class SiteView extends AuditingEntityView {
         this.id = id;
     }
 
-    public GeoJsonView getLocation() {
+    public Point getLocation() {
         return location;
     }
 
-    public void setLocation(GeoJsonView location) {
+    public void setLocation(Point location) {
         this.location = location;
     }
 

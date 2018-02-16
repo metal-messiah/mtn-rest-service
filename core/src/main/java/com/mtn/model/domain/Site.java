@@ -2,6 +2,7 @@ package com.mtn.model.domain;
 
 import com.mtn.constant.SiteType;
 import com.mtn.constant.StoreType;
+import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,7 +18,7 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     private Integer id;
     private ShoppingCenter shoppingCenter;
-//    private Point location;
+    private Point location;
     private SiteType type;
     private Integer footprintSqft;
     private String positionInCenter;
@@ -59,13 +60,13 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
         this.shoppingCenter = shoppingCenter;
     }
 
-//    public Point getLocation() {
-//        return location;
-//    }
-//
-//    public void setLocation(Point location) {
-//        this.location = location;
-//    }
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
 
     @Enumerated(EnumType.STRING)
     public SiteType getType() {

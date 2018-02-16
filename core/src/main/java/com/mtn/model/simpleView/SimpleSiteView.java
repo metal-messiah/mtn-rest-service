@@ -3,7 +3,7 @@ package com.mtn.model.simpleView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.SiteType;
 import com.mtn.model.domain.Site;
-import com.mtn.model.view.geojson.GeoJsonView;
+import com.vividsolutions.jts.geom.Point;
 
 /**
  * Created by Allen on 4/24/2017.
@@ -12,7 +12,7 @@ import com.mtn.model.view.geojson.GeoJsonView;
 public class SimpleSiteView {
 
     private Integer id;
-    private GeoJsonView location;
+    private Point location;
     private SiteType type;
     private String intersectionType;
     private String address1;
@@ -30,7 +30,7 @@ public class SimpleSiteView {
 
     public SimpleSiteView(Site site) {
         this.id = site.getId();
-//        this.location = new GeoJsonView(site.getLocation());
+        this.location = site.getLocation();
         this.type = site.getType();
         this.intersectionType = site.getIntersectionType();
         this.address1 = site.getAddress1();
@@ -55,11 +55,11 @@ public class SimpleSiteView {
         this.id = id;
     }
 
-    public GeoJsonView getLocation() {
+    public Point getLocation() {
         return location;
     }
 
-    public void setLocation(GeoJsonView location) {
+    public void setLocation(Point location) {
         this.location = location;
     }
 

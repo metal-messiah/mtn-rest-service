@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Project;
 import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.model.simpleView.SimpleStoreModelView;
-import com.mtn.model.view.geojson.GeoJsonView;
+import com.vividsolutions.jts.geom.Polygon;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +24,7 @@ public class ProjectView extends AuditingEntityView {
     private LocalDateTime startedDate;
     private LocalDateTime completedDate;
     private String source;
-    private GeoJsonView boundary;
+    private Polygon boundary;
     private Integer legacyProjectId;
 
     private List<SimpleInteractionView> interactions;
@@ -43,7 +43,7 @@ public class ProjectView extends AuditingEntityView {
         this.startedDate = project.getStartedDate();
         this.completedDate = project.getCompletedDate();
         this.source = project.getSource();
-        this.boundary = new GeoJsonView(project.getBoundary());
+        this.boundary = project.getBoundary();
         this.legacyProjectId = project.getLegacyProjectId();
         this.interactions = project.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
         this.models = project.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
@@ -137,11 +137,11 @@ public class ProjectView extends AuditingEntityView {
         this.source = source;
     }
 
-    public GeoJsonView getBoundary() {
+    public Polygon getBoundary() {
         return boundary;
     }
 
-    public void setBoundary(GeoJsonView boundary) {
+    public void setBoundary(Polygon boundary) {
         this.boundary = boundary;
     }
 

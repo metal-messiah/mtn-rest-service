@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * Created by Allen on 4/24/2017.
  */
 public interface SiteRepository extends JpaRepository<Site, Integer>, JpaSpecificationExecutor<Site> {
-
+	Site findByIdAndDeletedDateIsNull(Integer locationId);
 }

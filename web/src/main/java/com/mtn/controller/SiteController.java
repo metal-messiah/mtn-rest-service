@@ -8,7 +8,10 @@ import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
 import com.mtn.service.SiteService;
 import com.mtn.service.StoreService;
+import com.mtn.util.MtnLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +43,24 @@ public class SiteController extends CrudControllerImpl<Site> {
     public ResponseEntity findAllStoresForSite(@PathVariable("id") Integer siteId) {
         List<Store> domainModels = storeService.findAllBySiteIdUsingSpecs(siteId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"north", "south", "east", "west"})
+    public ResponseEntity findAllInBounds(@RequestParam("north") Float north,
+                                          @RequestParam("south") Float south,
+                                          @RequestParam("east") Float east,
+                                          @RequestParam("west") Float west,
+                                          Pageable page) {
+        MtnLogger.info("North " + north + ", South " + south + ", East " + east + ", West " + west);
+
+        Page<Site> domainModels = siteService.findAllInBoundsUsingSpecs(north, south, east, west, page);
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity findAll(Pageable page) {
+        Page<Site> domainModels = siteService.findAllUsingSpecs(page);
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 
     @Override

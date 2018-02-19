@@ -5,12 +5,14 @@ import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.repository.SiteRepository;
 import com.mtn.validators.SiteValidator;
+import com.vividsolutions.jts.geom.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mtn.repository.specification.SiteSpecifications.*;
@@ -70,7 +72,20 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
     @Override
     public Page<Site> findAllUsingSpecs(Pageable page) {
-        return getEntityRepository().findAll(where(isNotDeleted()), page);
+        return getEntityRepository().findAllByIdLessThanAndDeletedDateIsNull(10, page);
+    }
+
+    @Override
+    public Page<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west, Pageable page) {
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate[] coords = new Coordinate[5];
+        coords[0] = new Coordinate(east, north);
+        coords[1] = new Coordinate(west, north);
+        coords[2] = new Coordinate(west, south);
+        coords[3] = new Coordinate(east, south);
+        coords[4] = new Coordinate(east, north);
+        Polygon boundary = geometryFactory.createPolygon(coords);
+        return getEntityRepository().findLocationWithin(boundary, page);
     }
 
     @Override

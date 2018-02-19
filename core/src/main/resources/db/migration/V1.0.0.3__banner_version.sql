@@ -1,0 +1,1 @@
+ALTER TABLE mtn_dev.banner ADD COLUMN `version` INT(11) NOT NULL DEFAULT '1' AFTER `default_sales_area`;

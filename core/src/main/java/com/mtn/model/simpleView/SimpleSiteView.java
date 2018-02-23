@@ -1,9 +1,11 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.SiteType;
 import com.mtn.model.domain.Site;
 import com.vividsolutions.jts.geom.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allen on 4/24/2017.
@@ -13,38 +15,30 @@ public class SimpleSiteView {
 
     private Integer id;
     private Point location;
-    private SiteType type;
-    private String intersectionType;
     private String address1;
     private String address2;
     private String city;
     private String state;
     private String postalCode;
-    private String county;
-    private String country;
-    private Integer footprintSqft;
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
     private String quad;
-    private String positionInCenter;
+
+    private List<SimpleStoreView> stores;
 
     public SimpleSiteView(Site site) {
         this.id = site.getId();
         this.location = site.getLocation();
-        this.type = site.getType();
-        this.intersectionType = site.getIntersectionType();
         this.address1 = site.getAddress1();
         this.address2 = site.getAddress2();
         this.city = site.getCity();
         this.state = site.getState();
         this.postalCode = site.getPostalCode();
-        this.county = site.getCounty();
-        this.country = site.getCountry();
-        this.footprintSqft = site.getFootprintSqft();
         this.intersectionStreetPrimary = site.getIntersectionStreetPrimary();
         this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
         this.quad = site.getQuad();
-        this.positionInCenter = site.getPositionInCenter();
+        this.stores = new ArrayList<>();
+        site.getStores().forEach(store -> this.stores.add(new SimpleStoreView(store)));
     }
 
     public Integer getId() {
@@ -61,22 +55,6 @@ public class SimpleSiteView {
 
     public void setLocation(Point location) {
         this.location = location;
-    }
-
-    public SiteType getType() {
-        return type;
-    }
-
-    public void setType(SiteType type) {
-        this.type = type;
-    }
-
-    public String getIntersectionType() {
-        return intersectionType;
-    }
-
-    public void setIntersectionType(String intersectionType) {
-        this.intersectionType = intersectionType;
     }
 
     public String getAddress1() {
@@ -119,30 +97,6 @@ public class SimpleSiteView {
         this.postalCode = postalCode;
     }
 
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public Integer getFootprintSqft() {
-        return footprintSqft;
-    }
-
-    public void setFootprintSqft(Integer footprintSqft) {
-        this.footprintSqft = footprintSqft;
-    }
-
     public String getIntersectionStreetPrimary() {
         return intersectionStreetPrimary;
     }
@@ -167,12 +121,11 @@ public class SimpleSiteView {
         this.quad = quad;
     }
 
-    public String getPositionInCenter() {
-        return positionInCenter;
+    public List<SimpleStoreView> getStores() {
+        return stores;
     }
 
-    public void setPositionInCenter(String positionInCenter) {
-        this.positionInCenter = positionInCenter;
+    public void setStores(List<SimpleStoreView> stores) {
+        this.stores = stores;
     }
-
 }

@@ -2,6 +2,7 @@ package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreType;
+import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Store;
 
 import java.time.LocalDateTime;
@@ -13,21 +14,26 @@ import java.time.LocalDateTime;
 public class SimpleStoreView {
 
     private Integer id;
-    private String name;
-    private StoreType type;
+    private String storeName;
+    private StoreType storeType;
     private LocalDateTime dateOpened;
     private LocalDateTime dateClosed;
     private String storeNumber;
     private Integer legacyLocationId;
+    private SimpleBannerView banner;
 
     public SimpleStoreView(Store store) {
         this.id = store.getId();
-        this.name = store.getStoreName();
-        this.type = store.getStoreType();
+        this.storeName = store.getStoreName();
+        this.storeType = store.getStoreType();
         this.dateOpened = store.getDateOpened();
         this.dateClosed = store.getDateClosed();
         this.legacyLocationId = store.getLegacyLocationId();
         this.storeNumber = store.getStoreNumber();
+        Banner banner = store.getBanner();
+        if (banner != null) {
+            this.banner = new SimpleBannerView(store.getBanner());
+        }
     }
 
     public Integer getId() {
@@ -38,20 +44,20 @@ public class SimpleStoreView {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
-    public StoreType getType() {
-        return type;
+    public StoreType getStoreType() {
+        return storeType;
     }
 
-    public void setType(StoreType type) {
-        this.type = type;
+    public void setStoreType(StoreType storeType) {
+        this.storeType = storeType;
     }
 
     public LocalDateTime getDateOpened() {
@@ -84,5 +90,13 @@ public class SimpleStoreView {
 
     public void setLegacyLocationId(Integer legacyLocationId) {
         this.legacyLocationId = legacyLocationId;
+    }
+
+    public SimpleBannerView getBanner() {
+        return banner;
+    }
+
+    public void setBanner(SimpleBannerView banner) {
+        this.banner = banner;
     }
 }

@@ -1,8 +1,6 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.StoreFitType;
-import com.mtn.constant.StoreFormatType;
 import com.mtn.model.domain.StoreSurvey;
 
 import java.io.Serializable;
@@ -14,8 +12,8 @@ import java.io.Serializable;
 public class SimpleStoreSurveyView implements Serializable {
 
     private Integer id;
-    private StoreFitType fit;
-    private StoreFormatType format;
+    private String fit;
+    private String format;
     private Integer areaSales;
     private String note;
 
@@ -39,19 +37,19 @@ public class SimpleStoreSurveyView implements Serializable {
         this.id = id;
     }
 
-    public StoreFitType getFit() {
+    public String getFit() {
         return fit;
     }
 
-    public void setFit(StoreFitType fit) {
+    public void setFit(String fit) {
         this.fit = fit;
     }
 
-    public StoreFormatType getFormat() {
+    public String getFormat() {
         return format;
     }
 
-    public void setFormat(StoreFormatType format) {
+    public void setFormat(String format) {
         this.format = format;
     }
 

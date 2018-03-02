@@ -1,7 +1,9 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
 import com.vividsolutions.jts.geom.Point;
 
 import java.util.ArrayList;
@@ -23,8 +25,8 @@ public class SimpleSiteView {
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
     private String quad;
-
-    private List<SimpleStoreView> stores;
+    private SimpleStoreView activeStore;
+    private Boolean hasPlannedStore;
 
     public SimpleSiteView(Site site) {
         this.id = site.getId();
@@ -37,8 +39,15 @@ public class SimpleSiteView {
         this.intersectionStreetPrimary = site.getIntersectionStreetPrimary();
         this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
         this.quad = site.getQuad();
-        this.stores = new ArrayList<>();
-        site.getStores().forEach(store -> this.stores.add(new SimpleStoreView(store)));
+        site.getStores().stream()
+                .filter(s -> s.getStoreType().equals(StoreType.ACTIVE))
+                .findFirst().ifPresent(store -> this.activeStore = new SimpleStoreView(store));
+        for (Store store : site.getStores()) {
+            if (store.getStoreType().equals(StoreType.FUTURE)) {
+                this.hasPlannedStore = true;
+                break;
+            }
+        }
     }
 
     public Integer getId() {
@@ -121,11 +130,19 @@ public class SimpleSiteView {
         this.quad = quad;
     }
 
-    public List<SimpleStoreView> getStores() {
-        return stores;
+    public SimpleStoreView getActiveStore() {
+        return activeStore;
     }
 
-    public void setStores(List<SimpleStoreView> stores) {
-        this.stores = stores;
+    public void setActiveStore(SimpleStoreView activeStore) {
+        this.activeStore = activeStore;
+    }
+
+    public Boolean getHasPlannedStore() {
+        return hasPlannedStore;
+    }
+
+    public void setHasPlannedStore(Boolean hasPlannedStore) {
+        this.hasPlannedStore = hasPlannedStore;
     }
 }

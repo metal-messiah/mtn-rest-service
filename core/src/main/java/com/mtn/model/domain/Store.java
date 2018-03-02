@@ -24,6 +24,12 @@ public class Store extends AuditingEntity implements Identifiable {
     private Integer legacyLocationId;
     private Banner banner;
 
+    private Integer latestSalesArea;
+    private Integer latestTotalArea;
+    private Integer latestVolume;
+    private LocalDateTime latestVolumeDate;
+    private String currentStatus;
+
     private List<StoreCasing> casings = new ArrayList<>();
     private List<Interaction> interactions = new ArrayList<>();
     private List<StoreModel> models = new ArrayList<>();
@@ -156,5 +162,45 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setInteractions(List<Interaction> interactions) {
         this.interactions = interactions;
+    }
+
+    public Integer getLatestSalesArea() {
+        return latestSalesArea;
+    }
+
+    public void setLatestSalesArea(Integer latestSalesArea) {
+        this.latestSalesArea = latestSalesArea;
+    }
+
+    public Integer getLatestTotalArea() {
+        return latestTotalArea;
+    }
+
+    public void setLatestTotalArea(Integer latestTotalArea) {
+        this.latestTotalArea = latestTotalArea;
+    }
+
+    public Integer getLatestVolume() {
+        return latestVolume;
+    }
+
+    public void setLatestVolume(Integer latestVolume) {
+        this.latestVolume = latestVolume;
+    }
+
+    public LocalDateTime getLatestVolumeDate() {
+        return latestVolumeDate;
+    }
+
+    public void setLatestVolumeDate(LocalDateTime latestVolumeDate) {
+        this.latestVolumeDate = latestVolumeDate;
+    }
+
+    public String getCurrentStatus() {
+        return currentStatus;
+    }
+
+    public void setCurrentStatus(String currentStatus) {
+        this.currentStatus = currentStatus;
     }
 }

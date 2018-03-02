@@ -1,0 +1,2 @@
+ALTER TABLE `store_survey` CHANGE COLUMN `store_survey_date` `store_survey_date` TIMESTAMP NULL DEFAULT NULL AFTER `store_id`;
+ALTER TABLE `store_survey`	CHANGE COLUMN `department_pepared_foods` `department_prepared_foods` TINYINT(4) NULL DEFAULT NULL AFTER `department_pharmacy`;

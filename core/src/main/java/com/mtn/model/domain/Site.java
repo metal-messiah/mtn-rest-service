@@ -33,6 +33,7 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     private String quad;
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
+    private Store activeStore;
 
     private List<Store> stores = new ArrayList<>();
 
@@ -196,5 +197,15 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     @Transient
     public Store findActiveStore() {
         return this.stores.stream().filter(store -> store.getStoreType() == StoreType.ACTIVE).findFirst().orElse(null);
+    }
+
+    @OneToOne
+    @JoinColumn(name = "active_store_id")
+    public Store getActiveStore() {
+        return activeStore;
+    }
+
+    public void setActiveStore(Store activeStore) {
+        this.activeStore = activeStore;
     }
 }

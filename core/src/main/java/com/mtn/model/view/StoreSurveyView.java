@@ -2,8 +2,6 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.RatingType;
-import com.mtn.constant.StoreFitType;
-import com.mtn.constant.StoreFormatType;
 import com.mtn.model.domain.StoreSurvey;
 import com.mtn.model.simpleView.SimpleInteractionView;
 
@@ -14,8 +12,8 @@ import java.util.stream.Collectors;
 public class StoreSurveyView extends AuditingEntityView {
 
     private Integer id;
-    private StoreFitType fit;
-    private StoreFormatType format;
+    private String fit;
+    private String format;
     private Integer areaSales;
     private Double areaSalesPercentOfTotal;
     private Integer areaTotal;
@@ -171,19 +169,19 @@ public class StoreSurveyView extends AuditingEntityView {
         this.id = id;
     }
 
-    public StoreFitType getFit() {
+    public String getFit() {
         return fit;
     }
 
-    public void setFit(StoreFitType fit) {
+    public void setFit(String fit) {
         this.fit = fit;
     }
 
-    public StoreFormatType getFormat() {
+    public String getFormat() {
         return format;
     }
 
-    public void setFormat(StoreFormatType format) {
+    public void setFormat(String format) {
         this.format = format;
     }
 

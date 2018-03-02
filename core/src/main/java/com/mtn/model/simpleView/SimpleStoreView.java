@@ -1,7 +1,6 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Store;
 
@@ -15,25 +14,27 @@ public class SimpleStoreView {
 
     private Integer id;
     private String storeName;
-    private StoreType storeType;
-    private LocalDateTime dateOpened;
-    private LocalDateTime dateClosed;
     private String storeNumber;
-    private Integer legacyLocationId;
-    private SimpleBannerView banner;
+    private String bannerName;
+    private Integer latestSalesArea;
+    private Integer latestTotalArea;
+    private Integer latestVolume;
+    private LocalDateTime latestVolumeDate;
+    private String currentStoreStatus;
 
     public SimpleStoreView(Store store) {
         this.id = store.getId();
         this.storeName = store.getStoreName();
-        this.storeType = store.getStoreType();
-        this.dateOpened = store.getDateOpened();
-        this.dateClosed = store.getDateClosed();
-        this.legacyLocationId = store.getLegacyLocationId();
         this.storeNumber = store.getStoreNumber();
         Banner banner = store.getBanner();
         if (banner != null) {
-            this.banner = new SimpleBannerView(store.getBanner());
+            this.bannerName = store.getBanner().getBannerName();
         }
+        this.latestSalesArea = store.getLatestSalesArea();
+        this.latestTotalArea = store.getLatestTotalArea();
+        this.latestVolume = store.getLatestVolume();
+        this.latestVolumeDate = store.getLatestVolumeDate();
+        this.currentStoreStatus = store.getCurrentStatus();
     }
 
     public Integer getId() {
@@ -52,30 +53,6 @@ public class SimpleStoreView {
         this.storeName = storeName;
     }
 
-    public StoreType getStoreType() {
-        return storeType;
-    }
-
-    public void setStoreType(StoreType storeType) {
-        this.storeType = storeType;
-    }
-
-    public LocalDateTime getDateOpened() {
-        return dateOpened;
-    }
-
-    public void setDateOpened(LocalDateTime dateOpened) {
-        this.dateOpened = dateOpened;
-    }
-
-    public LocalDateTime getDateClosed() {
-        return dateClosed;
-    }
-
-    public void setDateClosed(LocalDateTime dateClosed) {
-        this.dateClosed = dateClosed;
-    }
-
     public String getStoreNumber() {
         return storeNumber;
     }
@@ -84,19 +61,51 @@ public class SimpleStoreView {
         this.storeNumber = storeNumber;
     }
 
-    public Integer getLegacyLocationId() {
-        return legacyLocationId;
+    public String getBannerName() {
+        return bannerName;
     }
 
-    public void setLegacyLocationId(Integer legacyLocationId) {
-        this.legacyLocationId = legacyLocationId;
+    public void setBannerName(String bannerName) {
+        this.bannerName = bannerName;
     }
 
-    public SimpleBannerView getBanner() {
-        return banner;
+    public Integer getLatestSalesArea() {
+        return latestSalesArea;
     }
 
-    public void setBanner(SimpleBannerView banner) {
-        this.banner = banner;
+    public void setLatestSalesArea(Integer latestSalesArea) {
+        this.latestSalesArea = latestSalesArea;
+    }
+
+    public Integer getLatestTotalArea() {
+        return latestTotalArea;
+    }
+
+    public void setLatestTotalArea(Integer latestTotalArea) {
+        this.latestTotalArea = latestTotalArea;
+    }
+
+    public Integer getLatestVolume() {
+        return latestVolume;
+    }
+
+    public void setLatestVolume(Integer latestVolume) {
+        this.latestVolume = latestVolume;
+    }
+
+    public LocalDateTime getLatestVolumeDate() {
+        return latestVolumeDate;
+    }
+
+    public void setLatestVolumeDate(LocalDateTime latestVolumeDate) {
+        this.latestVolumeDate = latestVolumeDate;
+    }
+
+    public String getCurrentStoreStatus() {
+        return currentStoreStatus;
+    }
+
+    public void setCurrentStoreStatus(String currentStoreStatus) {
+        this.currentStoreStatus = currentStoreStatus;
     }
 }

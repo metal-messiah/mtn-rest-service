@@ -1,10 +1,9 @@
 package com.mtn.model.domain;
 
 import com.mtn.constant.RatingType;
-import com.mtn.constant.StoreFitType;
-import com.mtn.constant.StoreFormatType;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +16,9 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private Store store;
-    private StoreFitType fit;
-    private StoreFormatType format;
+    private LocalDateTime storeSurveyDate;
+    private String fit;
+    private String format;
     private Integer areaSales;
     private Double areaSalesPercentOfTotal;
     private Integer areaTotal;
@@ -111,23 +111,21 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.store = store;
     }
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "store_fit")
-    public StoreFitType getFit() {
+    public String getFit() {
         return fit;
     }
 
-    public void setFit(StoreFitType fit) {
+    public void setFit(String fit) {
         this.fit = fit;
     }
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "store_format")
-    public StoreFormatType getFormat() {
+    public String getFormat() {
         return format;
     }
 
-    public void setFormat(StoreFormatType format) {
+    public void setFormat(String format) {
         this.format = format;
     }
 
@@ -163,6 +161,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.areaIsEstimate = areaIsEstimate;
     }
 
+    @Column(name = "store_survey_notes")
     public String getNote() {
         return note;
     }
@@ -171,6 +170,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.note = note;
     }
 
+    @Column(name = "store_is_open_24")
     public Boolean getStoreIsOpen24() {
         return storeIsOpen24;
     }
@@ -219,6 +219,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.fuelDispenserCount = fuelDispenserCount;
     }
 
+    @Column(name = "fuel_is_open_24")
     public Boolean getFuelIsOpen24() {
         return fuelIsOpen24;
     }
@@ -227,6 +228,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.fuelIsOpen24 = fuelIsOpen24;
     }
 
+    @Column(name = "pharmacy_is_open_24")
     public Boolean getPharmacyIsOpen24() {
         return pharmacyIsOpen24;
     }
@@ -687,4 +689,13 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     public void setInteractions(List<Interaction> interactions) {
         this.interactions = interactions;
     }
+
+    public LocalDateTime getStoreSurveyDate() {
+        return storeSurveyDate;
+    }
+
+    public void setStoreSurveyDate(LocalDateTime storeSurveyDate) {
+        this.storeSurveyDate = storeSurveyDate;
+    }
+
 }

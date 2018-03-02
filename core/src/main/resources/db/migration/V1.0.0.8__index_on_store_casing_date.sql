@@ -1,0 +1,1 @@
+ALTER TABLE `store_casing` ADD INDEX `Index 4` (`store_casing_date`);

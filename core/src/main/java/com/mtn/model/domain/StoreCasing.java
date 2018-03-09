@@ -4,6 +4,7 @@ import com.mtn.constant.ConfidenceType;
 import com.mtn.constant.RatingType;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private Store store;
+    private LocalDateTime casingDate;
     private String note;
     private String status;
     private RatingType conditionCeiling;
@@ -63,6 +65,15 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    @Column(name = "store_casing_date")
+    public LocalDateTime getCasingDate() {
+        return casingDate;
+    }
+
+    public void setCasingDate(LocalDateTime casingDate) {
+        this.casingDate = casingDate;
     }
 
     @Column(name = "store_casing_note")

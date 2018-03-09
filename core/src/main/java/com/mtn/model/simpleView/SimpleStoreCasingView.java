@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.ConfidenceType;
 import com.mtn.model.domain.StoreCasing;
 
+import java.time.LocalDateTime;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStoreCasingView {
 
     private Integer id;
+    private LocalDateTime casingDate;
     private String note;
     private String status;
     private String volumeNote;
@@ -16,6 +19,7 @@ public class SimpleStoreCasingView {
 
     public SimpleStoreCasingView(StoreCasing casing) {
         this.id = casing.getId();
+        this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
         this.status = casing.getStatus();
         this.volumeNote = casing.getVolumeNote();
@@ -29,6 +33,14 @@ public class SimpleStoreCasingView {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public LocalDateTime getCasingDate() {
+        return casingDate;
+    }
+
+    public void setCasingDate(LocalDateTime casingDate) {
+        this.casingDate = casingDate;
     }
 
     public String getNote() {

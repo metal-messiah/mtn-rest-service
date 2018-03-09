@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 public class SimpleShoppingCenterSurveyView {
 
     private Integer id;
+    private LocalDateTime surveyDate;
+    private String centerType;
+    private String note;
     private Boolean flowHasLandscaping;
     private Boolean flowHasStopSigns;
     private Boolean flowHasOneWayAisles;
@@ -23,12 +26,13 @@ public class SimpleShoppingCenterSurveyView {
     private Integer tenantOccupiedCount;
     private Integer tenantVacantCount;
     private Double sqFtPercentOccupied;
-    private String type;
-    private String note;
     private Integer legacyCasingId;
 
     public SimpleShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
         this.id = survey.getId();
+        this.surveyDate = survey.getSurveyDate();
+        this.centerType = survey.getCenterType();
+        this.note = survey.getNote();
         this.flowHasLandscaping = survey.getFlowHasLandscaping();
         this.flowHasStopSigns = survey.getFlowHasStopSigns();
         this.flowHasOneWayAisles = survey.getFlowHasOneWayAisles();
@@ -40,8 +44,6 @@ public class SimpleShoppingCenterSurveyView {
         this.tenantOccupiedCount = survey.getTenantOccupiedCount();
         this.tenantVacantCount = survey.getTenantVacantCount();
         this.sqFtPercentOccupied = survey.getSqFtPercentOccupied();
-        this.type = survey.getType();
-        this.note = survey.getNote();
         this.legacyCasingId = survey.getLegacyCasingId();
     }
 
@@ -141,12 +143,12 @@ public class SimpleShoppingCenterSurveyView {
         this.sqFtPercentOccupied = sqFtPercentOccupied;
     }
 
-    public String getType() {
-        return type;
+    public String getCenterType() {
+        return centerType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCenterType(String centerType) {
+        this.centerType = centerType;
     }
 
     public String getNote() {

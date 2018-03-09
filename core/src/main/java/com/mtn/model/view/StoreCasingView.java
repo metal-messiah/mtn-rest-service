@@ -7,6 +7,7 @@ import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.model.simpleView.SimpleStoreCasingView;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class StoreCasingView extends AuditingEntityView {
 
     private Integer id;
+    private LocalDateTime casingDate;
     private String note;
     private String status;
     private RatingType conditionCeiling;
@@ -48,6 +50,7 @@ public class StoreCasingView extends AuditingEntityView {
     public StoreCasingView(StoreCasing storeCasing) {
         super(storeCasing);
         this.id = storeCasing.getId();
+        this.casingDate = storeCasing.getCasingDate();
         this.note = storeCasing.getNote();
         this.status = storeCasing.getStatus();
         this.conditionCeiling = storeCasing.getConditionCeiling();
@@ -85,6 +88,14 @@ public class StoreCasingView extends AuditingEntityView {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public LocalDateTime getCasingDate() {
+        return casingDate;
+    }
+
+    public void setCasingDate(LocalDateTime casingDate) {
+        this.casingDate = casingDate;
     }
 
     public String getNote() {

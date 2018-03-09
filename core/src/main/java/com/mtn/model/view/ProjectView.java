@@ -21,8 +21,8 @@ public class ProjectView extends AuditingEntityView {
     private Integer projectMonth;
     private Boolean isActive;
     private Boolean isPrimaryData;
-    private LocalDateTime startedDate;
-    private LocalDateTime completedDate;
+    private LocalDateTime dateStarted;
+    private LocalDateTime dateCompleted;
     private String source;
     private Polygon boundary;
     private Integer legacyProjectId;
@@ -40,8 +40,8 @@ public class ProjectView extends AuditingEntityView {
         this.projectMonth = project.getProjectMonth();
         this.isActive = project.getIsActive();
         this.isPrimaryData = project.getIsPrimaryData();
-        this.startedDate = project.getStartedDate();
-        this.completedDate = project.getCompletedDate();
+        this.dateStarted = project.getDateStarted();
+        this.dateCompleted = project.getDateCompleted();
         this.source = project.getSource();
         this.boundary = project.getBoundary();
         this.legacyProjectId = project.getLegacyProjectId();
@@ -113,20 +113,20 @@ public class ProjectView extends AuditingEntityView {
         isPrimaryData = primaryData;
     }
 
-    public LocalDateTime getStartedDate() {
-        return startedDate;
+    public LocalDateTime getDateStarted() {
+        return dateStarted;
     }
 
-    public void setStartedDate(LocalDateTime startedDate) {
-        this.startedDate = startedDate;
+    public void setDateStarted(LocalDateTime dateStarted) {
+        this.dateStarted = dateStarted;
     }
 
-    public LocalDateTime getCompletedDate() {
-        return completedDate;
+    public LocalDateTime getDateCompleted() {
+        return dateCompleted;
     }
 
-    public void setCompletedDate(LocalDateTime completedDate) {
-        this.completedDate = completedDate;
+    public void setDateCompleted(LocalDateTime dateCompleted) {
+        this.dateCompleted = dateCompleted;
     }
 
     public String getSource() {

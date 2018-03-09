@@ -3,8 +3,6 @@ package com.mtn.model.simpleView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterTenant;
 
-import java.time.LocalDateTime;
-
 /**
  * Created by Allen on 5/4/2017.
  */
@@ -15,7 +13,7 @@ public class SimpleShoppingCenterTenantView {
     private String name;
     private Boolean isAnchor;
     private Boolean isOutparcel;
-    private Integer sqft;
+    private Integer tenantSqft;
     private Integer legacyCasingId;
 
     public SimpleShoppingCenterTenantView(ShoppingCenterTenant tenant) {
@@ -23,7 +21,7 @@ public class SimpleShoppingCenterTenantView {
         this.name = tenant.getName();
         this.isAnchor = tenant.getIsAnchor();
         this.isOutparcel = tenant.getIsOutparcel();
-        this.sqft = tenant.getSqft();
+        this.tenantSqft = tenant.getTenantSqft();
         this.legacyCasingId = tenant.getLegacyCasingId();
     }
 
@@ -59,12 +57,12 @@ public class SimpleShoppingCenterTenantView {
         isOutparcel = outparcel;
     }
 
-    public Integer getSqft() {
-        return sqft;
+    public Integer getTenantSqft() {
+        return tenantSqft;
     }
 
-    public void setSqft(Integer sqft) {
-        this.sqft = sqft;
+    public void setTenantSqft(Integer tenantSqft) {
+        this.tenantSqft = tenantSqft;
     }
 
     public Integer getLegacyCasingId() {

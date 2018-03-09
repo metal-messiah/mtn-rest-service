@@ -90,7 +90,7 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
 
     @Override
     public ShoppingCenterSurvey getUpdatedEntity(ShoppingCenterSurvey existing, ShoppingCenterSurvey request) {
-        existing.setType(request.getType());
+        existing.setCenterType(request.getCenterType());
         existing.setNote(request.getNote());
         existing.setFlowHasLandscaping(request.getFlowHasLandscaping());
         existing.setFlowHasSpeedBumps(request.getFlowHasSpeedBumps());

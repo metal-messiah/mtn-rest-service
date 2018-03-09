@@ -1,12 +1,14 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.constant.AccessType;
 import com.mtn.model.domain.ShoppingCenterAccess;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShoppingCenterAccessView extends AuditingEntityView {
 
     private Integer id;
+    private AccessType accessType;
     private Boolean hasLeftIn;
     private Boolean hasLeftOut;
     private Boolean hasTrafficLight;
@@ -18,6 +20,7 @@ public class ShoppingCenterAccessView extends AuditingEntityView {
     public ShoppingCenterAccessView(ShoppingCenterAccess access) {
         super(access);
         this.id = access.getId();
+        this.accessType = access.getAccessType();
         this.hasLeftIn = access.getHasLeftIn();
         this.hasLeftOut = access.getHasLeftOut();
         this.hasTrafficLight = access.getHasTrafficLight();
@@ -33,6 +36,14 @@ public class ShoppingCenterAccessView extends AuditingEntityView {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public AccessType getAccessType() {
+        return accessType;
+    }
+
+    public void setAccessType(AccessType accessType) {
+        this.accessType = accessType;
     }
 
     public Boolean getHasLeftIn() {

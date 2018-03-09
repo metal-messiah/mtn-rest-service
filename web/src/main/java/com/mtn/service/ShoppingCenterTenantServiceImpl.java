@@ -57,7 +57,7 @@ public class ShoppingCenterTenantServiceImpl extends EntityServiceImpl<ShoppingC
 		existing.setName(request.getName());
 		existing.setIsAnchor(request.getIsAnchor());
 		existing.setIsOutparcel(request.getIsOutparcel());
-		existing.setSqft(request.getSqft());
+		existing.setTenantSqft(request.getTenantSqft());
 
 		return existing;
 	}

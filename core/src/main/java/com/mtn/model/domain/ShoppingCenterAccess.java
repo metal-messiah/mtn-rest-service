@@ -1,6 +1,7 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
+import com.mtn.constant.AccessType;
 
 /**
  * Created by Allen on 5/4/2017.
@@ -11,10 +12,11 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
 
     private Integer id;
     private ShoppingCenterSurvey survey;
+    private AccessType accessType;
     private Boolean hasLeftIn = false;
+    private Boolean hasOneWayRoad = false;
     private Boolean hasLeftOut = false;
     private Boolean hasTrafficLight = false;
-    private Boolean hasOneWayRoad = false;
     private Boolean hasRightIn = false;
     private Boolean hasRightOut = false;
     private Integer legacyCasingId;
@@ -38,6 +40,14 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
 
     public void setSurvey(ShoppingCenterSurvey survey) {
         this.survey = survey;
+    }
+
+    public AccessType getAccessType() {
+        return accessType;
+    }
+
+    public void setAccessType(AccessType accessType) {
+        this.accessType = accessType;
     }
 
     public Boolean getHasLeftIn() {

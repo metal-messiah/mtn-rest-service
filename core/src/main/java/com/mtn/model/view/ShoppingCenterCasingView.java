@@ -5,6 +5,7 @@ import com.mtn.constant.RatingType;
 import com.mtn.model.domain.ShoppingCenterCasing;
 import com.mtn.model.simpleView.SimpleInteractionView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 public class ShoppingCenterCasingView extends AuditingEntityView {
 
     private Integer id;
+    private LocalDateTime casingDate;
     private String note;
     private RatingType ratingParkingLot;
     private RatingType ratingBuildings;
@@ -24,6 +26,7 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
     public ShoppingCenterCasingView(ShoppingCenterCasing casing) {
         super(casing);
         this.id = casing.getId();
+        this.casingDate = getCasingDate();
         this.note = casing.getNote();
         this.ratingBuildings = casing.getRatingBuildings();
         this.ratingParkingLot = casing.getRatingParkingLot();
@@ -39,6 +42,14 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public LocalDateTime getCasingDate() {
+        return casingDate;
+    }
+
+    public void setCasingDate(LocalDateTime casingDate) {
+        this.casingDate = casingDate;
     }
 
     public String getNote() {

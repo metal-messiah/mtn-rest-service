@@ -1,6 +1,7 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +14,13 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
 
     private Integer id;
     private ShoppingCenter shoppingCenter;
+    private LocalDateTime surveyDate;
+    private String centerType;
+    private String note;
     private Boolean flowHasLandscaping = false;
+    private Boolean flowHasSpeedBumps = false;
     private Boolean flowHasStopSigns = false;
     private Boolean flowHasOneWayAisles = false;
-    private Boolean flowHasSpeedBumps = false;
     private Boolean parkingHasAngledSpaces = false;
     private Boolean parkingHasParkingHog = false;
     private Boolean parkingIsPoorlyLit = false;
@@ -24,8 +28,6 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
     private Integer tenantOccupiedCount;
     private Integer tenantVacantCount;
     private Double sqFtPercentOccupied;
-    private String type;
-    private String note;
     private Integer legacyCasingId;
 
     private List<ShoppingCenterAccess> accesses = new ArrayList<>();
@@ -159,13 +161,12 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
         this.sqFtPercentOccupied = sqFtPercentOccupied;
     }
 
-    @Column(name = "shopping_center_type")
-    public String getType() {
-        return type;
+    public String getCenterType() {
+        return centerType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCenterType(String centerType) {
+        this.centerType = centerType;
     }
 
     @Column(name = "shopping_center_survey_note")
@@ -192,5 +193,14 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
 
     public void setInteractions(List<Interaction> interactions) {
         this.interactions = interactions;
+    }
+
+    @Column(name = "shopping_center_survey_date")
+    public LocalDateTime getSurveyDate() {
+        return surveyDate;
+    }
+
+    public void setSurveyDate(LocalDateTime surveyDate) {
+        this.surveyDate = surveyDate;
     }
 }

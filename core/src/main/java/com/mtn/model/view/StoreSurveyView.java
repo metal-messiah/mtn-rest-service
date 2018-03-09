@@ -5,6 +5,7 @@ import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreSurvey;
 import com.mtn.model.simpleView.SimpleInteractionView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 public class StoreSurveyView extends AuditingEntityView {
 
     private Integer id;
+    private LocalDateTime surveyDate;
     private String fit;
     private String format;
     private Integer areaSales;
@@ -45,6 +47,7 @@ public class StoreSurveyView extends AuditingEntityView {
     private Boolean departmentMeat = false;
     private Boolean departmentNatural = false;
     private Boolean departmentOliveBar = false;
+    private Boolean departmentOnlinePickup = false;
     private Boolean departmentPharmacy = false;
     private Boolean departmentPreparedFoods = false;
     private Boolean departmentSaladBar = false;
@@ -82,12 +85,14 @@ public class StoreSurveyView extends AuditingEntityView {
     private Integer seasonalityNov;
     private Integer seasonalityDec;
     private Integer legacyCasingId;
+
     private List<SimpleInteractionView> interactions;
 
     public StoreSurveyView(StoreSurvey storeSurvey) {
         super(storeSurvey);
 
         this.id = storeSurvey.getId();
+        this.surveyDate = storeSurvey.getSurveyDate();
         this.fit = storeSurvey.getFit();
         this.format = storeSurvey.getFormat();
         this.areaSales = storeSurvey.getAreaSales();
@@ -122,6 +127,7 @@ public class StoreSurveyView extends AuditingEntityView {
         this.setDepartmentMeat(storeSurvey.getDepartmentMeat());
         this.setDepartmentNatural(storeSurvey.getDepartmentNatural());
         this.setDepartmentOliveBar(storeSurvey.getDepartmentOliveBar());
+        this.setDepartmentOnlinePickup(storeSurvey.getDepartmentOnlinePickup());
         this.setDepartmentPharmacy(storeSurvey.getDepartmentPharmacy());
         this.setDepartmentPreparedFoods(storeSurvey.getDepartmentPreparedFoods());
         this.setDepartmentSaladBar(storeSurvey.getDepartmentSaladBar());
@@ -167,6 +173,14 @@ public class StoreSurveyView extends AuditingEntityView {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public LocalDateTime getSurveyDate() {
+        return surveyDate;
+    }
+
+    public void setSurveyDate(LocalDateTime surveyDate) {
+        this.surveyDate = surveyDate;
     }
 
     public String getFit() {
@@ -431,6 +445,14 @@ public class StoreSurveyView extends AuditingEntityView {
 
     public void setDepartmentOliveBar(Boolean departmentOliveBar) {
         this.departmentOliveBar = departmentOliveBar;
+    }
+
+    public Boolean getDepartmentOnlinePickup() {
+        return departmentOnlinePickup;
+    }
+
+    public void setDepartmentOnlinePickup(Boolean departmentOnlinePickup) {
+        this.departmentOnlinePickup = departmentOnlinePickup;
     }
 
     public Boolean getDepartmentPharmacy() {

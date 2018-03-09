@@ -3,6 +3,7 @@ package com.mtn.model.domain;
 import com.mtn.constant.RatingType;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
 
     private Integer id;
     private ShoppingCenter shoppingCenter;
+    private LocalDateTime casingDate;
     private String note;
     private RatingType ratingParkingLot;
     private RatingType ratingBuildings;
@@ -40,6 +42,15 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
 
     public void setShoppingCenter(ShoppingCenter shoppingCenter) {
         this.shoppingCenter = shoppingCenter;
+    }
+
+    @Column(name = "shopping_center_casing_date")
+    public LocalDateTime getCasingDate() {
+        return casingDate;
+    }
+
+    public void setCasingDate(LocalDateTime casingDate) {
+        this.casingDate = casingDate;
     }
 
     @Column(name = "shopping_center_casing_note")

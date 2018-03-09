@@ -1,6 +1,7 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.constant.AccessType;
 import com.mtn.model.domain.ShoppingCenterAccess;
 
 /**
@@ -10,23 +11,11 @@ import com.mtn.model.domain.ShoppingCenterAccess;
 public class SimpleShoppingCenterAccessView {
 
     private Integer id;
-    private Boolean hasLeftIn;
-    private Boolean hasLeftOut;
-    private Boolean hasTrafficLight;
-    private Boolean hasOneWayRoad;
-    private Boolean hasRightIn;
-    private Boolean hasRightOut;
-    private Integer legacyCasingId;
+    private AccessType accessType;
 
     public SimpleShoppingCenterAccessView(ShoppingCenterAccess access) {
         this.id = access.getId();
-        this.hasLeftIn = access.getHasLeftIn();
-        this.hasLeftOut = access.getHasLeftOut();
-        this.hasTrafficLight = access.getHasTrafficLight();
-        this.hasOneWayRoad = access.getHasOneWayRoad();
-        this.hasRightIn = access.getHasRightIn();
-        this.hasRightOut = access.getHasRightOut();
-        this.legacyCasingId = access.getLegacyCasingId();
+        this.accessType = access.getAccessType();
     }
 
     public Integer getId() {
@@ -37,60 +26,11 @@ public class SimpleShoppingCenterAccessView {
         this.id = id;
     }
 
-    public Boolean getHasLeftIn() {
-        return hasLeftIn;
+    public AccessType getAccessType() {
+        return accessType;
     }
 
-    public void setHasLeftIn(Boolean hasLeftIn) {
-        this.hasLeftIn = hasLeftIn;
+    public void setAccessType(AccessType accessType) {
+        this.accessType = accessType;
     }
-
-    public Boolean getHasLeftOut() {
-        return hasLeftOut;
-    }
-
-    public void setHasLeftOut(Boolean hasLeftOut) {
-        this.hasLeftOut = hasLeftOut;
-    }
-
-    public Boolean getHasTrafficLight() {
-        return hasTrafficLight;
-    }
-
-    public void setHasTrafficLight(Boolean hasTrafficLight) {
-        this.hasTrafficLight = hasTrafficLight;
-    }
-
-    public Boolean getHasOneWayRoad() {
-        return hasOneWayRoad;
-    }
-
-    public void setHasOneWayRoad(Boolean hasOneWayRoad) {
-        this.hasOneWayRoad = hasOneWayRoad;
-    }
-
-    public Boolean getHasRightIn() {
-        return hasRightIn;
-    }
-
-    public void setHasRightIn(Boolean hasRightIn) {
-        this.hasRightIn = hasRightIn;
-    }
-
-    public Boolean getHasRightOut() {
-        return hasRightOut;
-    }
-
-    public void setHasRightOut(Boolean hasRightOut) {
-        this.hasRightOut = hasRightOut;
-    }
-
-    public Integer getLegacyCasingId() {
-        return legacyCasingId;
-    }
-
-    public void setLegacyCasingId(Integer legacyCasingId) {
-        this.legacyCasingId = legacyCasingId;
-    }
-
 }

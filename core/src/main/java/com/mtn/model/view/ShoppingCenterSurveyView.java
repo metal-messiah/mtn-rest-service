@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.model.simpleView.SimpleShoppingCenterAccessView;
-import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
 import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 public class ShoppingCenterSurveyView extends AuditingEntityView {
 
     private Integer id;
+    private LocalDateTime surveyDate;
+    private String centerType;
+    private String note;
     private Boolean flowHasLandscaping;
     private Boolean flowHasStopSigns;
     private Boolean flowHasOneWayAisles;
@@ -29,18 +32,19 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
     private Integer tenantOccupiedCount;
     private Integer tenantVacantCount;
     private Double sqFtPercentOccupied;
-    private String type;
-    private String note;
     private Integer legacyCasingId;
 
-    private List<SimpleInteractionView> interactions = new ArrayList<>();
     private List<SimpleShoppingCenterAccessView> accesses = new ArrayList<>();
+    private List<SimpleInteractionView> interactions = new ArrayList<>();
     private List<SimpleShoppingCenterTenantView> tenants = new ArrayList<>();
 
     public ShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
         super(survey);
 
         this.id = survey.getId();
+        this.surveyDate = survey.getSurveyDate();
+        this.centerType = survey.getCenterType();
+        this.note = survey.getNote();
         this.flowHasLandscaping = survey.getFlowHasLandscaping();
         this.flowHasStopSigns = survey.getFlowHasStopSigns();
         this.flowHasOneWayAisles = survey.getFlowHasOneWayAisles();
@@ -52,8 +56,6 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
         this.tenantOccupiedCount = survey.getTenantOccupiedCount();
         this.tenantVacantCount = survey.getTenantVacantCount();
         this.sqFtPercentOccupied = survey.getSqFtPercentOccupied();
-        this.type = survey.getType();
-        this.note = survey.getNote();
         this.legacyCasingId = survey.getLegacyCasingId();
 
         this.accesses = survey.getAccesses().stream().filter(access -> access.getDeletedDate() == null).map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList());
@@ -157,12 +159,12 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
         this.sqFtPercentOccupied = sqFtPercentOccupied;
     }
 
-    public String getType() {
-        return type;
+    public String getCenterType() {
+        return centerType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCenterType(String centerType) {
+        this.centerType = centerType;
     }
 
     public String getNote() {
@@ -203,5 +205,13 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
 
     public void setTenants(List<SimpleShoppingCenterTenantView> tenants) {
         this.tenants = tenants;
+    }
+
+    public LocalDateTime getSurveyDate() {
+        return surveyDate;
+    }
+
+    public void setSurveyDate(LocalDateTime surveyDate) {
+        this.surveyDate = surveyDate;
     }
 }

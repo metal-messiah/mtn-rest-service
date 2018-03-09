@@ -19,8 +19,8 @@ public class Project extends AuditingEntity implements Identifiable {
     private Integer projectMonth;
     private Boolean isActive = false;
     private Boolean isPrimaryData = false;
-    private LocalDateTime startedDate;
-    private LocalDateTime completedDate;
+    private LocalDateTime dateStarted;
+    private LocalDateTime dateCompleted;
     private String source;
     private Polygon boundary;
     private Integer legacyProjectId;
@@ -95,20 +95,20 @@ public class Project extends AuditingEntity implements Identifiable {
         isPrimaryData = primaryData;
     }
 
-    public LocalDateTime getStartedDate() {
-        return startedDate;
+    public LocalDateTime getDateStarted() {
+        return dateStarted;
     }
 
-    public void setStartedDate(LocalDateTime startedDate) {
-        this.startedDate = startedDate;
+    public void setDateStarted(LocalDateTime dateStarted) {
+        this.dateStarted = dateStarted;
     }
 
-    public LocalDateTime getCompletedDate() {
-        return completedDate;
+    public LocalDateTime getDateCompleted() {
+        return dateCompleted;
     }
 
-    public void setCompletedDate(LocalDateTime completedDate) {
-        this.completedDate = completedDate;
+    public void setDateCompleted(LocalDateTime dateCompleted) {
+        this.dateCompleted = dateCompleted;
     }
 
     public String getSource() {

@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.ShoppingCenterCasing;
 
+import java.time.LocalDateTime;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleShoppingCenterCasingView {
 
     private Integer id;
+    private LocalDateTime casingDate;
     private String note;
     private RatingType ratingParkingLot;
     private RatingType ratingBuildings;
@@ -17,6 +20,7 @@ public class SimpleShoppingCenterCasingView {
 
     public SimpleShoppingCenterCasingView(ShoppingCenterCasing casing) {
         this.id = casing.getId();
+        this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
         this.ratingBuildings = casing.getRatingBuildings();
         this.ratingParkingLot = casing.getRatingParkingLot();
@@ -31,6 +35,14 @@ public class SimpleShoppingCenterCasingView {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public LocalDateTime getCasingDate() {
+        return casingDate;
+    }
+
+    public void setCasingDate(LocalDateTime casingDate) {
+        this.casingDate = casingDate;
     }
 
     public String getNote() {

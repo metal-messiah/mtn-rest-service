@@ -14,7 +14,7 @@ public class ShoppingCenterTenant extends AuditingEntity implements Identifiable
     private String name;
     private Boolean isAnchor = false;
     private Boolean isOutparcel = false;
-    private Integer sqft;
+    private Integer tenantSqft;
     private Integer legacyCasingId;
 
     @Id
@@ -55,12 +55,12 @@ public class ShoppingCenterTenant extends AuditingEntity implements Identifiable
         isOutparcel = outparcel;
     }
 
-    public Integer getSqft() {
-        return sqft;
+    public Integer getTenantSqft() {
+        return tenantSqft;
     }
 
-    public void setSqft(Integer sqft) {
-        this.sqft = sqft;
+    public void setTenantSqft(Integer tenantSqft) {
+        this.tenantSqft = tenantSqft;
     }
 
     public Boolean getIsAnchor() {

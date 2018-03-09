@@ -16,14 +16,14 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private Store store;
-    private LocalDateTime storeSurveyDate;
+    private LocalDateTime surveyDate;
+    private String note;
     private String fit;
     private String format;
     private Integer areaSales;
     private Double areaSalesPercentOfTotal;
     private Integer areaTotal;
     private Boolean areaIsEstimate = true;
-    private String note;
     private Boolean storeIsOpen24 = false;
     private Boolean naturalFoodsAreIntegrated = false;
     private Integer registerCountNormal;
@@ -50,6 +50,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     private Boolean departmentMeat = false;
     private Boolean departmentNatural = false;
     private Boolean departmentOliveBar = false;
+    private Boolean departmentOnlinePickup = false;
     private Boolean departmentPharmacy = false;
     private Boolean departmentPreparedFoods = false;
     private Boolean departmentSaladBar = false;
@@ -161,7 +162,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.areaIsEstimate = areaIsEstimate;
     }
 
-    @Column(name = "store_survey_notes")
+    @Column(name = "store_survey_note")
     public String getNote() {
         return note;
     }
@@ -379,6 +380,14 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
 
     public void setDepartmentOliveBar(Boolean departmentOliveBar) {
         this.departmentOliveBar = departmentOliveBar;
+    }
+
+    public Boolean getDepartmentOnlinePickup() {
+        return departmentOnlinePickup;
+    }
+
+    public void setDepartmentOnlinePickup(Boolean departmentOnlinePickup) {
+        this.departmentOnlinePickup = departmentOnlinePickup;
     }
 
     public Boolean getDepartmentPharmacy() {
@@ -690,12 +699,12 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.interactions = interactions;
     }
 
-    public LocalDateTime getStoreSurveyDate() {
-        return storeSurveyDate;
+    public LocalDateTime getSurveyDate() {
+        return surveyDate;
     }
 
-    public void setStoreSurveyDate(LocalDateTime storeSurveyDate) {
-        this.storeSurveyDate = storeSurveyDate;
+    public void setSurveyDate(LocalDateTime surveyDate) {
+        this.surveyDate = surveyDate;
     }
 
 }

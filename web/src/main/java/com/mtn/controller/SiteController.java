@@ -51,8 +51,6 @@ public class SiteController extends CrudControllerImpl<Site> {
                                           @RequestParam("east") Float east,
                                           @RequestParam("west") Float west,
                                           Pageable page) {
-        MtnLogger.info("North " + north + ", South " + south + ", East " + east + ", West " + west);
-
         Page<Site> domainModels = siteService.findAllInBoundsUsingSpecs(north, south, east, west, page);
         return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }

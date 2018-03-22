@@ -4,6 +4,7 @@ import com.mtn.model.domain.*;
 import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,9 +42,17 @@ public class ProjectController extends CrudControllerImpl<Project> {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity findAll(Pageable page) {
-        Page<Project> domainModels = getEntityService().findAllUsingSpecs(page);
-        return ResponseEntity.ok(domainModels.map(this::getViewFromModel));
+    public ResponseEntity findAll(Pageable page,
+                                  @RequestParam(value = "query", required = false) String query,
+                                  @RequestParam(value = "active", required = false) Boolean active,
+                                  @RequestParam(value = "primaryData", required = false) Boolean primaryData) {
+        Page<Project> domainModels;
+        if (query != null || active != null || primaryData != null) {
+            domainModels = getEntityService().findAllUsingSpecs(page, query, active, primaryData);
+        } else {
+            domainModels = getEntityService().findAllUsingSpecs(page);
+        }
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 
     @RequestMapping(path = "/{id}/store-model", method = RequestMethod.GET)

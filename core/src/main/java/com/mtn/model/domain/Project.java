@@ -1,7 +1,5 @@
 package com.mtn.model.domain;
 
-import com.vividsolutions.jts.geom.Polygon;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +20,6 @@ public class Project extends AuditingEntity implements Identifiable {
     private LocalDateTime dateStarted;
     private LocalDateTime dateCompleted;
     private String source;
-    private Polygon boundary;
     private Integer legacyProjectId;
 
     private List<Interaction> interactions = new ArrayList<>();
@@ -117,14 +114,6 @@ public class Project extends AuditingEntity implements Identifiable {
 
     public void setSource(String source) {
         this.source = source;
-    }
-
-    public Polygon getBoundary() {
-        return boundary;
-    }
-
-    public void setBoundary(Polygon boundary) {
-        this.boundary = boundary;
     }
 
     public Integer getLegacyProjectId() {

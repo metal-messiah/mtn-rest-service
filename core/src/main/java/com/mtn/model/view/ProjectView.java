@@ -24,7 +24,7 @@ public class ProjectView extends AuditingEntityView {
     private LocalDateTime dateStarted;
     private LocalDateTime dateCompleted;
     private String source;
-    private Polygon boundary;
+//    private Polygon boundary;
     private Integer legacyProjectId;
 
     private List<SimpleInteractionView> interactions;
@@ -43,7 +43,7 @@ public class ProjectView extends AuditingEntityView {
         this.dateStarted = project.getDateStarted();
         this.dateCompleted = project.getDateCompleted();
         this.source = project.getSource();
-        this.boundary = project.getBoundary();
+//        this.boundary = project.getBoundary();
         this.legacyProjectId = project.getLegacyProjectId();
         this.interactions = project.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
         this.models = project.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
@@ -137,13 +137,13 @@ public class ProjectView extends AuditingEntityView {
         this.source = source;
     }
 
-    public Polygon getBoundary() {
-        return boundary;
-    }
-
-    public void setBoundary(Polygon boundary) {
-        this.boundary = boundary;
-    }
+//    public Polygon getBoundary() {
+//        return boundary;
+//    }
+//
+//    public void setBoundary(Polygon boundary) {
+//        this.boundary = boundary;
+//    }
 
     public Integer getLegacyProjectId() {
         return legacyProjectId;

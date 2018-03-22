@@ -4,14 +4,21 @@ import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreModel;
 import com.mtn.repository.ProjectRepository;
 import com.mtn.validators.ProjectValidator;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.mtn.repository.specification.ProjectSpecifications.idEquals;
-import static com.mtn.repository.specification.ProjectSpecifications.isNotDeleted;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import static com.mtn.repository.specification.ProjectSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
@@ -26,6 +33,8 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 	private StoreModelService modelService;
 	@Autowired
 	private ProjectValidator projectValidator;
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 
 	@Override
 	@Transactional
@@ -69,10 +78,25 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 //	}
 
 	@Override
+	public Page<Project> findAllUsingSpecs(Pageable page, String query, Boolean active, Boolean primaryData) {
+		Specifications<Project> spec = where(isNotDeleted());
+
+		if (query != null) {
+			spec = spec.and(projectNameIsLike("%" + query + "%"));
+		}
+		if (active != null && active) {
+			spec = spec.and(isActive());
+		}
+		if (primaryData != null && primaryData) {
+			spec = spec.and(isPrimaryData());
+		}
+
+		return getEntityRepository().findAll(spec, page);
+	}
+
+	@Override
 	public Page<Project> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(
-				where(isNotDeleted()), page
-		);
+		return getEntityRepository().findAll(where(isNotDeleted()), page);
 	}
 
 	@Override

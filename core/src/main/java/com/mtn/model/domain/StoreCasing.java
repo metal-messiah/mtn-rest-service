@@ -39,8 +39,8 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private Integer volumeProduce;
     private Double volumePercentProduce;
     private Integer volumePlusMinus;
+    private StoreVolume storeVolume;
     private String volumeNote;
-    private Integer volumeTotal;
     private ConfidenceType volumeConfidence;
     private Integer legacyCasingId;
 
@@ -276,20 +276,22 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
         this.volumePlusMinus = volumePlusMinus;
     }
 
+    @OneToOne
+    @JoinColumn(name = "store_volume_id")
+    public StoreVolume getStoreVolume() {
+        return storeVolume;
+    }
+
+    public void setStoreVolume(StoreVolume storeVolume) {
+        this.storeVolume = storeVolume;
+    }
+
     public String getVolumeNote() {
         return volumeNote;
     }
 
     public void setVolumeNote(String volumeNote) {
         this.volumeNote = volumeNote;
-    }
-
-    public Integer getVolumeTotal() {
-        return volumeTotal;
-    }
-
-    public void setVolumeTotal(Integer volumeTotal) {
-        this.volumeTotal = volumeTotal;
     }
 
     @Enumerated(EnumType.STRING)

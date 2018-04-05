@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.ConfidenceType;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.model.simpleView.SimpleStoreCasingView;
 
@@ -42,7 +43,7 @@ public class StoreCasingView extends AuditingEntityView {
     private Double volumePercentProduce;
     private Integer volumePlusMinus;
     private String volumeNote;
-    private Integer volumeTotal;
+    private StoreVolume storeVolume;
     private ConfidenceType volumeConfidence;
     private Integer legacyCasingId;
     private List<SimpleInteractionView> interactions;
@@ -76,7 +77,7 @@ public class StoreCasingView extends AuditingEntityView {
         this.volumePercentProduce = storeCasing.getVolumePercentProduce();
         this.volumePlusMinus = storeCasing.getVolumePlusMinus();
         this.volumeNote = storeCasing.getVolumeNote();
-        this.volumeTotal = storeCasing.getVolumeTotal();
+        this.storeVolume = storeCasing.getStoreVolume();
         this.volumeConfidence = storeCasing.getVolumeConfidence();
         this.legacyCasingId = storeCasing.getLegacyCasingId();
         this.interactions = storeCasing.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
@@ -298,12 +299,12 @@ public class StoreCasingView extends AuditingEntityView {
         this.volumeNote = volumeNote;
     }
 
-    public Integer getVolumeTotal() {
-        return volumeTotal;
+    public StoreVolume getStoreVolume() {
+        return storeVolume;
     }
 
-    public void setVolumeTotal(Integer volumeTotal) {
-        this.volumeTotal = volumeTotal;
+    public void setStoreVolume(StoreVolume storeVolume) {
+        this.storeVolume = storeVolume;
     }
 
     public ConfidenceType getVolumeConfidence() {

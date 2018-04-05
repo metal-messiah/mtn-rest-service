@@ -14,7 +14,7 @@ public class SimpleStoreCasingView {
     private String note;
     private String status;
     private String volumeNote;
-    private Integer volumeTotal;
+    private SimpleStoreVolumeView storeVolume;
     private ConfidenceType volumeConfidence;
 
     public SimpleStoreCasingView(StoreCasing casing) {
@@ -23,7 +23,7 @@ public class SimpleStoreCasingView {
         this.note = casing.getNote();
         this.status = casing.getStatus();
         this.volumeNote = casing.getVolumeNote();
-        this.volumeTotal = casing.getVolumeTotal();
+        this.storeVolume = new SimpleStoreVolumeView(casing.getStoreVolume());
         this.volumeConfidence = casing.getVolumeConfidence();
     }
 
@@ -67,12 +67,12 @@ public class SimpleStoreCasingView {
         this.volumeNote = volumeNote;
     }
 
-    public Integer getVolumeTotal() {
-        return volumeTotal;
+    public SimpleStoreVolumeView getStoreVolume() {
+        return storeVolume;
     }
 
-    public void setVolumeTotal(Integer volumeTotal) {
-        this.volumeTotal = volumeTotal;
+    public void setStoreVolume(SimpleStoreVolumeView storeVolume) {
+        this.storeVolume = storeVolume;
     }
 
     public ConfidenceType getVolumeConfidence() {

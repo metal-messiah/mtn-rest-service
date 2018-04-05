@@ -82,9 +82,10 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
         existing.setVolumeProduce(request.getVolumeProduce());
         existing.setVolumePlusMinus(request.getVolumePlusMinus());
         existing.setVolumeNote(request.getVolumeNote());
-        existing.setVolumeTotal(request.getVolumeTotal());
         existing.setVolumeConfidence(request.getVolumeConfidence());
         existing.setLegacyCasingId(request.getLegacyCasingId());
+
+        // TODO Save storeVolume
 
         return existing;
     }

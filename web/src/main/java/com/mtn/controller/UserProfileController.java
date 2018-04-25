@@ -22,7 +22,7 @@ public class UserProfileController extends CrudControllerImpl<UserProfile> {
     private UserProfileService userProfileService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity findAll(@RequestParam(value = "q", required = false) String q, @RequestParam(value = "simple", required = false) String simple, Pageable page) {
+    public ResponseEntity findAll(@RequestParam(value = "q", required = false) String q, Pageable page) {
         Page<UserProfile> domainModels;
         if (StringUtils.isNotBlank(q)) {
             domainModels = userProfileService.query(q, page);
@@ -30,10 +30,7 @@ public class UserProfileController extends CrudControllerImpl<UserProfile> {
             domainModels = userProfileService.findAllUsingSpecs(page);
         }
 
-        if(simple != null && simple.equals("false")) {
-            return ResponseEntity.ok(domainModels.map(this::getViewFromModel));
-        }
-        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+        return ResponseEntity.ok(domainModels.map(this::getViewFromModel));
     }
 
     @Override

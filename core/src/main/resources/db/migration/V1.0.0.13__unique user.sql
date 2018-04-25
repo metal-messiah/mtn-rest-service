@@ -1,0 +1,1 @@
+ALTER TABLE `user_profile`	ADD UNIQUE INDEX `Index 3` (`email`);

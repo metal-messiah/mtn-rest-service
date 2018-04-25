@@ -24,7 +24,6 @@ public class ProjectView extends AuditingEntityView {
     private LocalDateTime dateStarted;
     private LocalDateTime dateCompleted;
     private String source;
-//    private Polygon boundary;
     private Integer legacyProjectId;
 
     private List<SimpleInteractionView> interactions;

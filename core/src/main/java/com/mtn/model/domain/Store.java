@@ -17,18 +17,13 @@ public class Store extends AuditingEntity implements Identifiable {
     private Integer id;
     private Site site;
     private String storeName;
+    private String storeNumber;
     private StoreType storeType;
     private LocalDateTime dateOpened;
     private LocalDateTime dateClosed;
-    private String storeNumber;
     private Integer legacyLocationId;
     private Banner banner;
-
-    private Integer latestSalesArea;
-    private Integer latestTotalArea;
-    private Integer latestVolume;
-    private LocalDateTime latestVolumeDate;
-    private String currentStatus;
+    private StoreStatus currentStatus;
 
     private List<StoreCasing> casings = new ArrayList<>();
     private List<Interaction> interactions = new ArrayList<>();
@@ -112,6 +107,16 @@ public class Store extends AuditingEntity implements Identifiable {
         this.banner = banner;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "current_store_status_id")
+    public StoreStatus getCurrentStatus() {
+        return currentStatus;
+    }
+
+    public void setCurrentStatus(StoreStatus currentStatus) {
+        this.currentStatus = currentStatus;
+    }
+
     public String getStoreNumber() {
         return storeNumber;
     }
@@ -164,43 +169,4 @@ public class Store extends AuditingEntity implements Identifiable {
         this.interactions = interactions;
     }
 
-    public Integer getLatestSalesArea() {
-        return latestSalesArea;
-    }
-
-    public void setLatestSalesArea(Integer latestSalesArea) {
-        this.latestSalesArea = latestSalesArea;
-    }
-
-    public Integer getLatestTotalArea() {
-        return latestTotalArea;
-    }
-
-    public void setLatestTotalArea(Integer latestTotalArea) {
-        this.latestTotalArea = latestTotalArea;
-    }
-
-    public Integer getLatestVolume() {
-        return latestVolume;
-    }
-
-    public void setLatestVolume(Integer latestVolume) {
-        this.latestVolume = latestVolume;
-    }
-
-    public LocalDateTime getLatestVolumeDate() {
-        return latestVolumeDate;
-    }
-
-    public void setLatestVolumeDate(LocalDateTime latestVolumeDate) {
-        this.latestVolumeDate = latestVolumeDate;
-    }
-
-    public String getCurrentStatus() {
-        return currentStatus;
-    }
-
-    public void setCurrentStatus(String currentStatus) {
-        this.currentStatus = currentStatus;
-    }
 }

@@ -7,6 +7,8 @@ import com.mtn.validators.StoreValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +50,17 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
             "RIGHT JOIN banner c ON c.id = s.banner_id " +
             "WHERE c.id IN :bannerIds " +
             "AND s.deleted_date IS NULL";
+
+    @Override
+    public Page<Store> findAllOfTypeInBounds(Float north, Float south, Float east, Float west, String storeType, Pageable page) {
+        Specification<Store> spec = where(isNotDeleted()).and(withinBoundingBox(north, south, east, west));
+
+        if (storeType != null) {
+            spec = ((Specifications<Store>) spec).and(ofType(storeType));
+        }
+
+        return getEntityRepository().findAll(spec, page);
+    }
 
     @Override
     @Transactional

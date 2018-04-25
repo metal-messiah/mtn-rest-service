@@ -16,7 +16,7 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private Store store;
     private LocalDateTime casingDate;
     private String note;
-    private String status;
+    private StoreStatus storeStatus;
     private RatingType conditionCeiling;
     private RatingType conditionCheckstands;
     private RatingType conditionFloors;
@@ -85,13 +85,14 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
         this.note = note;
     }
 
-    @Column(name = "store_status")
-    public String getStatus() {
-        return status;
+    @OneToOne
+    @JoinColumn(name = "store_status_id")
+    public StoreStatus getStoreStatus() {
+        return storeStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStoreStatus(StoreStatus storeStatus) {
+        this.storeStatus = storeStatus;
     }
 
     @Enumerated(EnumType.STRING)

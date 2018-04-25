@@ -26,13 +26,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     public ShoppingCenter() {
     }
 
-    public ShoppingCenter(SimpleShoppingCenterView shoppingCenterView) {
-        this.id = shoppingCenterView.getId();
-        this.name = shoppingCenterView.getName();
-        this.owner = shoppingCenterView.getOwner();
-        this.legacyLocationId = shoppingCenterView.getLegacyLocationId();
-    }
-
     @Id
     @GeneratedValue
     @Column(name = "shopping_center_id")

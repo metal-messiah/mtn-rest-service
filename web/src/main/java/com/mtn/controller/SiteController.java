@@ -8,7 +8,6 @@ import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
 import com.mtn.service.SiteService;
 import com.mtn.service.StoreService;
-import com.mtn.util.MtnLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,8 +49,9 @@ public class SiteController extends CrudControllerImpl<Site> {
                                           @RequestParam("south") Float south,
                                           @RequestParam("east") Float east,
                                           @RequestParam("west") Float west,
+                                          @RequestParam("store_type") String storeType,
                                           Pageable page) {
-        Page<Site> domainModels = siteService.findAllInBoundsUsingSpecs(north, south, east, west, page);
+        Page<Site> domainModels = siteService.findAllInBoundsUsingSpecs(north, south, east, west, storeType, page);
         return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 

@@ -5,6 +5,8 @@ import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +30,17 @@ public class StoreController extends CrudControllerImpl<Store> {
     private StoreCasingService casingService;
     @Autowired
     private StoreModelService modelService;
-//    @Autowired
-//    private ProjectService projectService;
+
+    @RequestMapping(method = RequestMethod.GET, params = {"north", "south", "east", "west"})
+    public ResponseEntity findAllInBounds(@RequestParam("north") Float north,
+                                          @RequestParam("south") Float south,
+                                          @RequestParam("east") Float east,
+                                          @RequestParam("west") Float west,
+                                          @RequestParam("store_type") String storeType,
+                                          Pageable page) {
+        Page<Store> domainModels = storeService.findAllOfTypeInBounds(north, south, east, west, storeType, page);
+        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+    }
 
     @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.POST)
     public ResponseEntity addOneStoreCasingToStore(@PathVariable("id") Integer storeId, @RequestBody StoreCasing request) {
@@ -60,12 +71,6 @@ public class StoreController extends CrudControllerImpl<Store> {
         List<StoreModel> domainModels = modelService.findAllByStoreIdUsingSpecs(storeId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreModelView::new).collect(Collectors.toList()));
     }
-
-//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-//    public ResponseEntity findAllProjectsForStore(@PathVariable("id") Integer storeId) {
-//        List<Project> domainModels = projectService.findAllByStoreId(storeId);
-//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-//    }
 
     @RequestMapping(value = "/{id}/store-survey", method = RequestMethod.GET)
     public ResponseEntity findAllSurveysForStore(@PathVariable("id") Integer storeId) {

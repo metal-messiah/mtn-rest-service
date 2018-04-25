@@ -15,7 +15,6 @@ public class SimpleStoreSurveyView implements Serializable {
     private Integer id;
     private LocalDateTime surveyDate;
     private String fit;
-    private String format;
     private Integer areaSales;
     private Integer areaTotal;
     private String note;
@@ -26,7 +25,6 @@ public class SimpleStoreSurveyView implements Serializable {
         this.id = storeSurvey.getId();
         this.surveyDate = storeSurvey.getSurveyDate();
         this.fit = storeSurvey.getFit();
-        this.format = storeSurvey.getFormat();
         this.areaSales = storeSurvey.getAreaSales();
         this.areaTotal = storeSurvey.getAreaTotal();
         this.note = storeSurvey.getNote();
@@ -63,14 +61,6 @@ public class SimpleStoreSurveyView implements Serializable {
 
     public void setFit(String fit) {
         this.fit = fit;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
     }
 
     public Integer getAreaSales() {

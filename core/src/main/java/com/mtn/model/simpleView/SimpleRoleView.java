@@ -11,12 +11,10 @@ public class SimpleRoleView {
 
     private Integer id;
     private String displayName;
-    private String description;
 
     public SimpleRoleView(Role role) {
         this.id = role.getId();
         this.displayName = role.getDisplayName();
-        this.description = role.getDescription();
     }
 
     public Integer getId() {
@@ -35,11 +33,4 @@ public class SimpleRoleView {
         this.displayName = displayName;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

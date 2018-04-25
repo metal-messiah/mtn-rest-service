@@ -699,6 +699,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.interactions = interactions;
     }
 
+    @Column(name = "store_survey_date")
     public LocalDateTime getSurveyDate() {
         return surveyDate;
     }

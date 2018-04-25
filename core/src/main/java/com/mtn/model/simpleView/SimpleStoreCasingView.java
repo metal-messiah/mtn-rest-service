@@ -12,19 +12,23 @@ public class SimpleStoreCasingView {
     private Integer id;
     private LocalDateTime casingDate;
     private String note;
-    private String status;
+    private SimpleStoreStatusView storeStatus;
     private String volumeNote;
-    private SimpleStoreVolumeView storeVolume;
     private ConfidenceType volumeConfidence;
+    private SimpleStoreVolumeView storeVolume;
 
     public SimpleStoreCasingView(StoreCasing casing) {
         this.id = casing.getId();
         this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
-        this.status = casing.getStatus();
         this.volumeNote = casing.getVolumeNote();
-        this.storeVolume = new SimpleStoreVolumeView(casing.getStoreVolume());
         this.volumeConfidence = casing.getVolumeConfidence();
+        if (casing.getStoreStatus() != null) {
+            this.storeStatus = new SimpleStoreStatusView(casing.getStoreStatus());
+        }
+        if (casing.getStoreVolume() != null) {
+            this.storeVolume = new SimpleStoreVolumeView(casing.getStoreVolume());
+        }
     }
 
     public Integer getId() {
@@ -51,12 +55,12 @@ public class SimpleStoreCasingView {
         this.note = note;
     }
 
-    public String getStatus() {
-        return status;
+    public SimpleStoreStatusView getStoreStatus() {
+        return storeStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStoreStatus(SimpleStoreStatusView storeStatus) {
+        this.storeStatus = storeStatus;
     }
 
     public String getVolumeNote() {

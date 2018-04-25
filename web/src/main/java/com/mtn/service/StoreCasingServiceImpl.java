@@ -58,7 +58,7 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
     @Override
     public StoreCasing getUpdatedEntity(StoreCasing existing, StoreCasing request) {
         existing.setNote(request.getNote());
-        existing.setStatus(request.getStatus());
+        existing.setStoreStatus(request.getStoreStatus());
         existing.setConditionCeiling(request.getConditionCeiling());
         existing.setConditionCheckstands(request.getConditionCheckstands());
         existing.setConditionFloors(request.getConditionFloors());

@@ -22,6 +22,7 @@ public class StoreView extends AuditingEntityView {
     private LocalDateTime dateClosed;
     private String storeNumber;
     private Integer legacyLocationId;
+    private SimpleStoreStatusView currentStoreStatus;
 
     private SimpleSiteView site;
     private SimpleBannerView banner;
@@ -30,7 +31,7 @@ public class StoreView extends AuditingEntityView {
     private List<SimpleInteractionView> interactions;
     private List<SimpleStoreModelView> models;
     private List<SimpleStoreSurveyView> surveys;
-    private List<StoreVolumeView> volumes;
+    private List<SimpleStoreVolumeView> volumes;
 
     public StoreView(Store store) {
         super(store);
@@ -45,6 +46,9 @@ public class StoreView extends AuditingEntityView {
 
         this.site = new SimpleSiteView(store.getSite());
 
+        if (store.getCurrentStatus() != null) {
+            this.currentStoreStatus = new SimpleStoreStatusView(store.getCurrentStatus());
+        }
         if (store.getBanner() != null) {
             this.banner = new SimpleBannerView(store.getBanner());
         }
@@ -53,7 +57,7 @@ public class StoreView extends AuditingEntityView {
         this.interactions = store.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
         this.models = store.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
         this.surveys = store.getSurveys().stream().filter(storeSurvey -> storeSurvey.getDeletedDate() == null).map(SimpleStoreSurveyView::new).collect(Collectors.toList());
-        this.volumes = store.getVolumes().stream().filter(volume -> volume.getDeletedDate() == null).map(StoreVolumeView::new).collect(Collectors.toList());
+        this.volumes = store.getVolumes().stream().filter(volume -> volume.getDeletedDate() == null).map(SimpleStoreVolumeView::new).collect(Collectors.toList());
     }
 
     public Integer getId() {
@@ -144,11 +148,11 @@ public class StoreView extends AuditingEntityView {
         this.casings = casings;
     }
 
-    public List<StoreVolumeView> getVolumes() {
+    public List<SimpleStoreVolumeView> getVolumes() {
         return volumes;
     }
 
-    public void setVolumes(List<StoreVolumeView> volumes) {
+    public void setVolumes(List<SimpleStoreVolumeView> volumes) {
         this.volumes = volumes;
     }
 
@@ -168,4 +172,11 @@ public class StoreView extends AuditingEntityView {
         this.interactions = interactions;
     }
 
+    public SimpleStoreStatusView getCurrentStoreStatus() {
+        return currentStoreStatus;
+    }
+
+    public void setCurrentStoreStatus(SimpleStoreStatusView currentStoreStatus) {
+        this.currentStoreStatus = currentStoreStatus;
+    }
 }

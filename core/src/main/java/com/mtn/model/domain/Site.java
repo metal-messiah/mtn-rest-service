@@ -2,7 +2,6 @@ package com.mtn.model.domain;
 
 import com.mtn.constant.SiteType;
 import com.mtn.constant.StoreType;
-import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,7 +17,8 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     private Integer id;
     private ShoppingCenter shoppingCenter;
-    private Point location;
+    private Float latitude;
+    private Float longitude;
     private SiteType type;
     private Integer footprintSqft;
     private String positionInCenter;
@@ -34,6 +34,7 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
     private Store activeStore;
+    private Boolean duplicate;
 
     private List<Store> stores = new ArrayList<>();
 
@@ -61,12 +62,20 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
         this.shoppingCenter = shoppingCenter;
     }
 
-    public Point getLocation() {
-        return location;
+    public Float getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
     }
 
     @Enumerated(EnumType.STRING)
@@ -207,5 +216,14 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     public void setActiveStore(Store activeStore) {
         this.activeStore = activeStore;
+    }
+
+    @Column(name = "is_duplicate")
+    public Boolean getDuplicate() {
+        return duplicate;
+    }
+
+    public void setDuplicate(Boolean duplicate) {
+        this.duplicate = duplicate;
     }
 }

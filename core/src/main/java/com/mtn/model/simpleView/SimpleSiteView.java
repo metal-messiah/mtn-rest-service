@@ -16,7 +16,8 @@ import java.util.List;
 public class SimpleSiteView {
 
     private Integer id;
-    private Point location;
+    private Float latitude;
+    private Float longitude;
     private String address1;
     private String address2;
     private String city;
@@ -25,12 +26,11 @@ public class SimpleSiteView {
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
     private String quad;
-    private SimpleStoreView activeStore;
-    private Boolean hasPlannedStore;
 
     public SimpleSiteView(Site site) {
         this.id = site.getId();
-        this.location = site.getLocation();
+        this.latitude = site.getLatitude();
+        this.longitude = site.getLongitude();
         this.address1 = site.getAddress1();
         this.address2 = site.getAddress2();
         this.city = site.getCity();
@@ -39,15 +39,6 @@ public class SimpleSiteView {
         this.intersectionStreetPrimary = site.getIntersectionStreetPrimary();
         this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
         this.quad = site.getQuad();
-        site.getStores().stream()
-                .filter(s -> s.getStoreType().equals(StoreType.ACTIVE))
-                .findFirst().ifPresent(store -> this.activeStore = new SimpleStoreView(store));
-        for (Store store : site.getStores()) {
-            if (store.getStoreType().equals(StoreType.FUTURE)) {
-                this.hasPlannedStore = true;
-                break;
-            }
-        }
     }
 
     public Integer getId() {
@@ -58,12 +49,20 @@ public class SimpleSiteView {
         this.id = id;
     }
 
-    public Point getLocation() {
-        return location;
+    public Float getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
     }
 
     public String getAddress1() {
@@ -130,19 +129,4 @@ public class SimpleSiteView {
         this.quad = quad;
     }
 
-    public SimpleStoreView getActiveStore() {
-        return activeStore;
-    }
-
-    public void setActiveStore(SimpleStoreView activeStore) {
-        this.activeStore = activeStore;
-    }
-
-    public Boolean getHasPlannedStore() {
-        return hasPlannedStore;
-    }
-
-    public void setHasPlannedStore(Boolean hasPlannedStore) {
-        this.hasPlannedStore = hasPlannedStore;
-    }
 }

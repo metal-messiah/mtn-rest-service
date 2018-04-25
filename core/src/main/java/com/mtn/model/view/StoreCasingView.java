@@ -6,10 +6,9 @@ import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.simpleView.SimpleInteractionView;
-import com.mtn.model.simpleView.SimpleStoreCasingView;
+import com.mtn.model.simpleView.SimpleStoreStatusView;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ public class StoreCasingView extends AuditingEntityView {
     private Integer id;
     private LocalDateTime casingDate;
     private String note;
-    private String status;
+    private SimpleStoreStatusView storeStatus;
     private RatingType conditionCeiling;
     private RatingType conditionCheckstands;
     private RatingType conditionFloors;
@@ -53,7 +52,9 @@ public class StoreCasingView extends AuditingEntityView {
         this.id = storeCasing.getId();
         this.casingDate = storeCasing.getCasingDate();
         this.note = storeCasing.getNote();
-        this.status = storeCasing.getStatus();
+        if (storeCasing.getStoreStatus() != null) {
+            this.storeStatus = new SimpleStoreStatusView(storeCasing.getStoreStatus());
+        }
         this.conditionCeiling = storeCasing.getConditionCeiling();
         this.conditionCheckstands = storeCasing.getConditionCheckstands();
         this.conditionFloors = storeCasing.getConditionFloors();
@@ -107,12 +108,12 @@ public class StoreCasingView extends AuditingEntityView {
         this.note = note;
     }
 
-    public String getStatus() {
-        return status;
+    public SimpleStoreStatusView getStoreStatus() {
+        return storeStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStoreStatus(SimpleStoreStatusView storeStatus) {
+        this.storeStatus = storeStatus;
     }
 
     public RatingType getConditionCeiling() {

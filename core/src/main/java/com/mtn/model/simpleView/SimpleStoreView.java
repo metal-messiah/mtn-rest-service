@@ -3,6 +3,7 @@ package com.mtn.model.simpleView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreStatus;
 
 import java.time.LocalDateTime;
 
@@ -13,28 +14,25 @@ import java.time.LocalDateTime;
 public class SimpleStoreView {
 
     private Integer id;
+    private SimpleSiteView site;
     private String storeName;
     private String storeNumber;
-    private String bannerName;
-    private Integer latestSalesArea;
-    private Integer latestTotalArea;
-    private Integer latestVolume;
-    private LocalDateTime latestVolumeDate;
-    private String currentStoreStatus;
+    private SimpleBannerView banner;
+    private SimpleStoreStatusView currentStoreStatus;
 
     public SimpleStoreView(Store store) {
         this.id = store.getId();
+        this.site = new SimpleSiteView(store.getSite());
         this.storeName = store.getStoreName();
         this.storeNumber = store.getStoreNumber();
         Banner banner = store.getBanner();
         if (banner != null) {
-            this.bannerName = store.getBanner().getBannerName();
+            this.banner = new SimpleBannerView(banner);
         }
-        this.latestSalesArea = store.getLatestSalesArea();
-        this.latestTotalArea = store.getLatestTotalArea();
-        this.latestVolume = store.getLatestVolume();
-        this.latestVolumeDate = store.getLatestVolumeDate();
-        this.currentStoreStatus = store.getCurrentStatus();
+        StoreStatus status = store.getCurrentStatus();
+        if (status != null) {
+            this.currentStoreStatus = new SimpleStoreStatusView(store.getCurrentStatus());
+        }
     }
 
     public Integer getId() {
@@ -43,6 +41,14 @@ public class SimpleStoreView {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public SimpleSiteView getSite() {
+        return site;
+    }
+
+    public void setSite(SimpleSiteView site) {
+        this.site = site;
     }
 
     public String getStoreName() {
@@ -61,51 +67,19 @@ public class SimpleStoreView {
         this.storeNumber = storeNumber;
     }
 
-    public String getBannerName() {
-        return bannerName;
+    public SimpleBannerView getBanner() {
+        return banner;
     }
 
-    public void setBannerName(String bannerName) {
-        this.bannerName = bannerName;
+    public void setBanner(SimpleBannerView banner) {
+        this.banner = banner;
     }
 
-    public Integer getLatestSalesArea() {
-        return latestSalesArea;
-    }
-
-    public void setLatestSalesArea(Integer latestSalesArea) {
-        this.latestSalesArea = latestSalesArea;
-    }
-
-    public Integer getLatestTotalArea() {
-        return latestTotalArea;
-    }
-
-    public void setLatestTotalArea(Integer latestTotalArea) {
-        this.latestTotalArea = latestTotalArea;
-    }
-
-    public Integer getLatestVolume() {
-        return latestVolume;
-    }
-
-    public void setLatestVolume(Integer latestVolume) {
-        this.latestVolume = latestVolume;
-    }
-
-    public LocalDateTime getLatestVolumeDate() {
-        return latestVolumeDate;
-    }
-
-    public void setLatestVolumeDate(LocalDateTime latestVolumeDate) {
-        this.latestVolumeDate = latestVolumeDate;
-    }
-
-    public String getCurrentStoreStatus() {
+    public SimpleStoreStatusView getCurrentStoreStatus() {
         return currentStoreStatus;
     }
 
-    public void setCurrentStoreStatus(String currentStoreStatus) {
+    public void setCurrentStoreStatus(SimpleStoreStatusView currentStoreStatus) {
         this.currentStoreStatus = currentStoreStatus;
     }
 }

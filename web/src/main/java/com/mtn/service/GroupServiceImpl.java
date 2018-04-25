@@ -62,7 +62,7 @@ public class GroupServiceImpl extends EntityServiceImpl<Group> implements GroupS
 
     @Override
     public void handleAssociationsOnDeletion(Group existing) {
-        existing.setMembers(new HashSet<>());
+        existing.getMembers().forEach(member -> member.setGroup(null));
     }
 
     @Override

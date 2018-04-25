@@ -20,6 +20,6 @@ public interface SiteRepository extends JpaRepository<Site, Integer>, JpaSpecifi
 
 	Page<Site> findAllByIdLessThanAndDeletedDateIsNull(Integer maxId, Pageable page);
 
-	@Query(value = "select l from Site l where within(l.location, :boundary) = true")
-	Page<Site> findLocationWithin(@Param("boundary") Geometry boundary, Pageable page);
+//	@Query(value = "select l from Site l where within(l.location, :boundary) = true")
+//	Page<Site> findLocationWithin(@Param("boundary") Geometry boundary, Pageable page);
 }

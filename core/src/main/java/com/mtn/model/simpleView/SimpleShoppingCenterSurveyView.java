@@ -11,160 +11,49 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleShoppingCenterSurveyView {
 
-    private Integer id;
-    private LocalDateTime surveyDate;
-    private String centerType;
-    private String note;
-    private Boolean flowHasLandscaping;
-    private Boolean flowHasStopSigns;
-    private Boolean flowHasOneWayAisles;
-    private Boolean flowHasSpeedBumps;
-    private Boolean parkingHasAngledSpaces;
-    private Boolean parkingHasParkingHog;
-    private Boolean parkingIsPoorlyLit;
-    private Integer parkingSpaceCount;
-    private Integer tenantOccupiedCount;
-    private Integer tenantVacantCount;
-    private Double sqFtPercentOccupied;
-    private Integer legacyCasingId;
+	private Integer id;
+	private LocalDateTime surveyDate;
+	private String centerType;
+	private String note;
 
-    public SimpleShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
-        this.id = survey.getId();
-        this.surveyDate = survey.getSurveyDate();
-        this.centerType = survey.getCenterType();
-        this.note = survey.getNote();
-        this.flowHasLandscaping = survey.getFlowHasLandscaping();
-        this.flowHasStopSigns = survey.getFlowHasStopSigns();
-        this.flowHasOneWayAisles = survey.getFlowHasOneWayAisles();
-        this.flowHasSpeedBumps = survey.getFlowHasSpeedBumps();
-        this.parkingHasAngledSpaces = survey.getParkingHasAngledSpaces();
-        this.parkingHasParkingHog = survey.getParkingHasParkingHog();
-        this.parkingIsPoorlyLit = survey.getParkingIsPoorlyLit();
-        this.parkingSpaceCount = survey.getParkingSpaceCount();
-        this.tenantOccupiedCount = survey.getTenantOccupiedCount();
-        this.tenantVacantCount = survey.getTenantVacantCount();
-        this.sqFtPercentOccupied = survey.getSqFtPercentOccupied();
-        this.legacyCasingId = survey.getLegacyCasingId();
-    }
+	public SimpleShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
+		this.id = survey.getId();
+		this.surveyDate = survey.getSurveyDate();
+		this.centerType = survey.getCenterType();
+		this.note = survey.getNote();
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Boolean getFlowHasLandscaping() {
-        return flowHasLandscaping;
-    }
+	public LocalDateTime getSurveyDate() {
+		return surveyDate;
+	}
 
-    public void setFlowHasLandscaping(Boolean flowHasLandscaping) {
-        this.flowHasLandscaping = flowHasLandscaping;
-    }
+	public void setSurveyDate(LocalDateTime surveyDate) {
+		this.surveyDate = surveyDate;
+	}
 
-    public Boolean getFlowHasStopSigns() {
-        return flowHasStopSigns;
-    }
+	public String getCenterType() {
+		return centerType;
+	}
 
-    public void setFlowHasStopSigns(Boolean flowHasStopSigns) {
-        this.flowHasStopSigns = flowHasStopSigns;
-    }
+	public void setCenterType(String centerType) {
+		this.centerType = centerType;
+	}
 
-    public Boolean getFlowHasOneWayAisles() {
-        return flowHasOneWayAisles;
-    }
+	public String getNote() {
+		return note;
+	}
 
-    public void setFlowHasOneWayAisles(Boolean flowHasOneWayAisles) {
-        this.flowHasOneWayAisles = flowHasOneWayAisles;
-    }
+	public void setNote(String note) {
+		this.note = note;
+	}
 
-    public Boolean getFlowHasSpeedBumps() {
-        return flowHasSpeedBumps;
-    }
-
-    public void setFlowHasSpeedBumps(Boolean flowHasSpeedBumps) {
-        this.flowHasSpeedBumps = flowHasSpeedBumps;
-    }
-
-    public Boolean getParkingHasAngledSpaces() {
-        return parkingHasAngledSpaces;
-    }
-
-    public void setParkingHasAngledSpaces(Boolean parkingHasAngledSpaces) {
-        this.parkingHasAngledSpaces = parkingHasAngledSpaces;
-    }
-
-    public Boolean getParkingHasParkingHog() {
-        return parkingHasParkingHog;
-    }
-
-    public void setParkingHasParkingHog(Boolean parkingHasParkingHog) {
-        this.parkingHasParkingHog = parkingHasParkingHog;
-    }
-
-    public Boolean getParkingIsPoorlyLit() {
-        return parkingIsPoorlyLit;
-    }
-
-    public void setParkingIsPoorlyLit(Boolean parkingIsPoorlyLit) {
-        this.parkingIsPoorlyLit = parkingIsPoorlyLit;
-    }
-
-    public Integer getParkingSpaceCount() {
-        return parkingSpaceCount;
-    }
-
-    public void setParkingSpaceCount(Integer parkingSpaceCount) {
-        this.parkingSpaceCount = parkingSpaceCount;
-    }
-
-    public Integer getTenantOccupiedCount() {
-        return tenantOccupiedCount;
-    }
-
-    public void setTenantOccupiedCount(Integer tenantOccupiedCount) {
-        this.tenantOccupiedCount = tenantOccupiedCount;
-    }
-
-    public Integer getTenantVacantCount() {
-        return tenantVacantCount;
-    }
-
-    public void setTenantVacantCount(Integer tenantVacantCount) {
-        this.tenantVacantCount = tenantVacantCount;
-    }
-
-    public Double getSqFtPercentOccupied() {
-        return sqFtPercentOccupied;
-    }
-
-    public void setSqFtPercentOccupied(Double sqFtPercentOccupied) {
-        this.sqFtPercentOccupied = sqFtPercentOccupied;
-    }
-
-    public String getCenterType() {
-        return centerType;
-    }
-
-    public void setCenterType(String centerType) {
-        this.centerType = centerType;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public Integer getLegacyCasingId() {
-        return legacyCasingId;
-    }
-
-    public void setLegacyCasingId(Integer legacyCasingId) {
-        this.legacyCasingId = legacyCasingId;
-    }
 
 }

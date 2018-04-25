@@ -16,12 +16,10 @@ public class SimpleGroupView {
 
     private Integer id;
     private String displayName;
-    private String description;
 
     public SimpleGroupView(Group group) {
         this.id = group.getId();
         this.displayName = group.getDisplayName();
-        this.description = group.getDescription();
     }
 
     public Integer getId() {
@@ -38,14 +36,6 @@ public class SimpleGroupView {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-       this.description = description;
     }
 
 }

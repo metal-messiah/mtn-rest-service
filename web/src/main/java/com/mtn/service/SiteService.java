@@ -2,6 +2,7 @@ package com.mtn.service;
 
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
+import com.vividsolutions.jts.geom.Coordinate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,5 +14,5 @@ public interface SiteService extends EntityService<Site> {
 
 	List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId);
 
-	Page<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west, Pageable page);
+	Page<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west, String storeType, Pageable page);
 }

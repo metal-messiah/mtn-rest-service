@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 public class SiteView extends AuditingEntityView {
 
     private Integer id;
-    private Point location;
+    private Float latitude;
+    private Float longitude;
     private SiteType type;
     private String intersectionType;
     private String address1;
@@ -40,7 +41,8 @@ public class SiteView extends AuditingEntityView {
     public SiteView(Site site) {
         super(site);
         this.id = site.getId();
-        this.location = site.getLocation();
+        this.latitude = site.getLatitude();
+        this.longitude = site.getLongitude();
         this.type = site.getType();
         this.intersectionType = site.getIntersectionType();
         this.address1 = site.getAddress1();
@@ -68,12 +70,20 @@ public class SiteView extends AuditingEntityView {
         this.id = id;
     }
 
-    public Point getLocation() {
-        return location;
+    public Float getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
     }
 
     public SiteType getType() {

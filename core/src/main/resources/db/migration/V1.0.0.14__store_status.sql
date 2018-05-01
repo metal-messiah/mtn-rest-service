@@ -1,7 +1,7 @@
 CREATE TABLE `store_status` (
 	`store_status_id` INT(11) NOT NULL AUTO_INCREMENT,
 	`store_id` INT(11) NOT NULL,
-	`storeStatus` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci',
+	`status` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci',
 	`status_start_date` TIMESTAMP NULL DEFAULT NULL,
 	`created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`created_by` INT(11) NOT NULL DEFAULT '0',

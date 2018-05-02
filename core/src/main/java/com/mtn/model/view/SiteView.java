@@ -3,10 +3,12 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.SiteType;
 import com.mtn.model.domain.Site;
+import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.model.simpleView.SimpleShoppingCenterView;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.vividsolutions.jts.geom.Point;
 
+import javax.persistence.Column;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,10 +35,11 @@ public class SiteView extends AuditingEntityView {
     private String intersectionStreetSecondary;
     private String quad;
     private String positionInCenter;
+    private Boolean duplicate;
 
     private SimpleShoppingCenterView shoppingCenter;
-
     private List<SimpleStoreView> stores;
+    private List<SimpleInteractionView> interactions;
 
     public SiteView(Site site) {
         super(site);
@@ -57,9 +60,23 @@ public class SiteView extends AuditingEntityView {
         this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
         this.quad = site.getQuad();
         this.positionInCenter = site.getPositionInCenter();
+        this.duplicate = site.getDuplicate();
 
-        this.shoppingCenter = new SimpleShoppingCenterView(site.getShoppingCenter());
-        this.stores = site.getStores().stream().filter(store -> store.getDeletedDate() == null).map(SimpleStoreView::new).collect(Collectors.toList());
+        if (site.getShoppingCenter() != null) {
+            this.shoppingCenter = new SimpleShoppingCenterView(site.getShoppingCenter());
+        }
+        if (site.getStores() != null) {
+            this.stores = site.getStores().stream()
+                    .filter(store -> store.getDeletedDate() == null)
+                    .map(SimpleStoreView::new)
+                    .collect(Collectors.toList());
+        }
+        if (site.getInteractions() != null) {
+            this.interactions = site.getInteractions().stream()
+                    .filter(interaction ->  interaction.getDeletedDate() == null)
+                    .map(SimpleInteractionView::new)
+                    .collect(Collectors.toList());
+        }
     }
 
     public Integer getId() {
@@ -212,5 +229,21 @@ public class SiteView extends AuditingEntityView {
 
     public void setStores(List<SimpleStoreView> stores) {
         this.stores = stores;
+    }
+
+    public Boolean getDuplicate() {
+        return duplicate;
+    }
+
+    public void setDuplicate(Boolean duplicate) {
+        this.duplicate = duplicate;
+    }
+
+    public List<SimpleInteractionView> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<SimpleInteractionView> interactions) {
+        this.interactions = interactions;
     }
 }

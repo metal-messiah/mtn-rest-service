@@ -17,6 +17,7 @@ public class InteractionView extends AuditingEntityView {
     private SimpleShoppingCenterSurveyView shoppingCenterSurvey;
     private SimpleShoppingCenterCasingView shoppingCenterCasing;
     private SimpleStoreView store;
+    private SimpleSiteView site;
     private SimpleStoreSurveyView storeSurvey;
     private SimpleStoreCasingView storeCasing;
 
@@ -44,6 +45,10 @@ public class InteractionView extends AuditingEntityView {
 
         if (interaction.getStore() != null) {
             this.store = new SimpleStoreView(interaction.getStore());
+        }
+
+        if (interaction.getSite() != null) {
+            this.site = new SimpleSiteView(interaction.getSite());
         }
 
         if (interaction.getStoreCasing() != null) {
@@ -101,6 +106,14 @@ public class InteractionView extends AuditingEntityView {
 
     public void setStore(SimpleStoreView store) {
         this.store = store;
+    }
+
+    public SimpleSiteView getSite() {
+        return site;
+    }
+
+    public void setSite(SimpleSiteView site) {
+        this.site = site;
     }
 
     public SimpleStoreSurveyView getStoreSurvey() {

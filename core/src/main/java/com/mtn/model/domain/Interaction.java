@@ -13,6 +13,7 @@ public class Interaction extends AuditingEntity implements Identifiable {
     private ShoppingCenterSurvey shoppingCenterSurvey;
     private ShoppingCenterCasing shoppingCenterCasing;
     private Store store;
+    private Site site;
     private StoreSurvey storeSurvey;
     private StoreCasing storeCasing;
     private LocalDateTime interactionDate;
@@ -77,6 +78,16 @@ public class Interaction extends AuditingEntity implements Identifiable {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "site_id")
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     @ManyToOne

@@ -26,6 +26,7 @@ public class SimpleSiteView {
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
     private String quad;
+    private Boolean duplicate;
 
     public SimpleSiteView(Site site) {
         this.id = site.getId();
@@ -39,6 +40,7 @@ public class SimpleSiteView {
         this.intersectionStreetPrimary = site.getIntersectionStreetPrimary();
         this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
         this.quad = site.getQuad();
+        this.duplicate = site.getDuplicate();
     }
 
     public Integer getId() {
@@ -129,4 +131,11 @@ public class SimpleSiteView {
         this.quad = quad;
     }
 
+    public Boolean getDuplicate() {
+        return duplicate;
+    }
+
+    public void setDuplicate(Boolean duplicate) {
+        this.duplicate = duplicate;
+    }
 }

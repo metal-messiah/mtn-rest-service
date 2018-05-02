@@ -16,7 +16,6 @@ import java.util.List;
 public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     private Integer id;
-    private ShoppingCenter shoppingCenter;
     private Float latitude;
     private Float longitude;
     private SiteType type;
@@ -33,10 +32,11 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     private String quad;
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
-    private Store activeStore;
     private Boolean duplicate;
 
+    private ShoppingCenter shoppingCenter;
     private List<Store> stores = new ArrayList<>();
+    private List<Interaction> interactions = new ArrayList<>();
 
     public Site() {
     }
@@ -203,21 +203,6 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
         this.stores = stores;
     }
 
-    @Transient
-    public Store findActiveStore() {
-        return this.stores.stream().filter(store -> store.getStoreType() == StoreType.ACTIVE).findFirst().orElse(null);
-    }
-
-    @OneToOne
-    @JoinColumn(name = "active_store_id")
-    public Store getActiveStore() {
-        return activeStore;
-    }
-
-    public void setActiveStore(Store activeStore) {
-        this.activeStore = activeStore;
-    }
-
     @Column(name = "is_duplicate")
     public Boolean getDuplicate() {
         return duplicate;
@@ -226,4 +211,20 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     public void setDuplicate(Boolean duplicate) {
         this.duplicate = duplicate;
     }
+
+    @OneToMany(mappedBy = "site")
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
+    }
+
+    @Transient
+    public Store findActiveStore() {
+        return this.stores.stream().filter(store -> store.getStoreType() == StoreType.ACTIVE).findFirst().orElse(null);
+    }
+
+
 }

@@ -12,7 +12,7 @@ public class ShoppingCenterAccessView extends AuditingEntityView {
     private Boolean hasLeftIn;
     private Boolean hasLeftOut;
     private Boolean hasTrafficLight;
-    private Boolean hasOneWayRoad;
+    private Boolean oneWayRoad;
     private Boolean hasRightIn;
     private Boolean hasRightOut;
     private Integer legacyCasingId;
@@ -24,7 +24,7 @@ public class ShoppingCenterAccessView extends AuditingEntityView {
         this.hasLeftIn = access.getHasLeftIn();
         this.hasLeftOut = access.getHasLeftOut();
         this.hasTrafficLight = access.getHasTrafficLight();
-        this.hasOneWayRoad = access.getHasOneWayRoad();
+        this.oneWayRoad = access.getOneWayRoad();
         this.hasRightIn = access.getHasRightIn();
         this.hasRightOut = access.getHasRightOut();
         this.legacyCasingId = access.getLegacyCasingId();
@@ -70,12 +70,12 @@ public class ShoppingCenterAccessView extends AuditingEntityView {
         this.hasTrafficLight = hasTrafficLight;
     }
 
-    public Boolean getHasOneWayRoad() {
-        return hasOneWayRoad;
+    public Boolean getOneWayRoad() {
+        return oneWayRoad;
     }
 
-    public void setHasOneWayRoad(Boolean hasOneWayRoad) {
-        this.hasOneWayRoad = hasOneWayRoad;
+    public void setOneWayRoad(Boolean oneWayRoad) {
+        this.oneWayRoad = oneWayRoad;
     }
 
     public Boolean getHasRightIn() {

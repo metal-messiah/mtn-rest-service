@@ -1,7 +1,5 @@
 package com.mtn.model.domain;
 
-import com.mtn.model.simpleView.SimpleShoppingCenterView;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private Integer legacyLocationId;
 
     private List<ShoppingCenterCasing> casings = new ArrayList<>();
-    private List<Interaction> interactions = new ArrayList<>();
     private List<Site> sites = new ArrayList<>();
     private List<ShoppingCenterSurvey> surveys = new ArrayList<>();
 
@@ -89,12 +86,4 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         this.casings = casings;
     }
 
-    @OneToMany(mappedBy = "shoppingCenter")
-    public List<Interaction> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
-    }
 }

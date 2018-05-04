@@ -5,8 +5,6 @@ import com.mtn.model.domain.StoreSurvey;
 import java.util.List;
 
 public interface StoreSurveyService extends EntityService<StoreSurvey> {
-	List<StoreSurvey> findAllByProjectId(Integer id);
-
 	List<StoreSurvey> findAllByStoreId(Integer storeId);
 
 	List<StoreSurvey> findAllByStoreIdUsingSpecs(Integer storeId);

@@ -26,7 +26,6 @@ public class Store extends AuditingEntity implements Identifiable {
     private StoreStatus currentStatus;
 
     private List<StoreCasing> casings = new ArrayList<>();
-    private List<Interaction> interactions = new ArrayList<>();
     private List<StoreModel> models = new ArrayList<>();
     private List<StoreSurvey> surveys = new ArrayList<>();
     private List<StoreVolume> volumes = new ArrayList<>();
@@ -158,15 +157,6 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setModels(List<StoreModel> models) {
         this.models = models;
-    }
-
-    @OneToMany(mappedBy = "store")
-    public List<Interaction> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
     }
 
 }

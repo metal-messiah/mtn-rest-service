@@ -73,12 +73,6 @@ public class ProjectController extends CrudControllerImpl<Project> {
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(path = "/{id}/shopping-center-survey", method = RequestMethod.GET)
-    public ResponseEntity findAllShoppingCenterSurveysForProject(@PathVariable("id") Integer projectId) {
-        List<ShoppingCenterSurvey> domainModels = shoppingCenterSurveyService.findAllByProjectId(projectId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList()));
-    }
-
     @RequestMapping(path = "/{id}/store", method = RequestMethod.GET)
     public ResponseEntity findAllStoresForProject(@PathVariable("id") Integer projectId) {
         List<Store> domainModels = storeService.findAllByProjectId(projectId);
@@ -90,13 +84,6 @@ public class ProjectController extends CrudControllerImpl<Project> {
         List<StoreCasing> domainModels = storeCasingService.findAllByProjectId(projectId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
     }
-
-    @RequestMapping(path = "/{id}/store-survey", method = RequestMethod.GET)
-    public ResponseEntity findAllStoreSurveysForProject(@PathVariable("id") Integer projectId) {
-        List<StoreSurvey> domainModels = storeSurveyService.findAllByProjectId(projectId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
-    }
-
 
     @Override
     public ProjectService getEntityService() {

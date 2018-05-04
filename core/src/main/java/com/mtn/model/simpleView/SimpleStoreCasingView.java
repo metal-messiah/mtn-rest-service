@@ -5,6 +5,9 @@ import com.mtn.constant.ConfidenceType;
 import com.mtn.model.domain.StoreCasing;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStoreCasingView {
@@ -17,6 +20,9 @@ public class SimpleStoreCasingView {
     private ConfidenceType volumeConfidence;
     private SimpleStoreVolumeView storeVolume;
 
+    private List<SimpleProjectView> projects = new ArrayList<>();
+    private SimpleStoreSurveyView storeSurvey;
+
     public SimpleStoreCasingView(StoreCasing casing) {
         this.id = casing.getId();
         this.casingDate = casing.getCasingDate();
@@ -28,6 +34,15 @@ public class SimpleStoreCasingView {
         }
         if (casing.getStoreVolume() != null) {
             this.storeVolume = new SimpleStoreVolumeView(casing.getStoreVolume());
+        }
+        if (casing.getStoreSurvey() != null) {
+            this.storeSurvey = new SimpleStoreSurveyView(casing.getStoreSurvey());
+        }
+        if (casing.getProjects() != null) {
+            this.projects = casing.getProjects().stream()
+                    .filter(project -> project.getDeletedDate() == null)
+                    .map(SimpleProjectView::new)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -87,4 +102,19 @@ public class SimpleStoreCasingView {
         this.volumeConfidence = volumeConfidence;
     }
 
+    public List<SimpleProjectView> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<SimpleProjectView> projects) {
+        this.projects = projects;
+    }
+
+    public SimpleStoreSurveyView getStoreSurvey() {
+        return storeSurvey;
+    }
+
+    public void setStoreSurvey(SimpleStoreSurveyView storeSurvey) {
+        this.storeSurvey = storeSurvey;
+    }
 }

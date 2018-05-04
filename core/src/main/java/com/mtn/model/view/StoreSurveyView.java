@@ -3,10 +3,8 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreSurvey;
-import com.mtn.model.simpleView.SimpleInteractionView;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -86,8 +84,6 @@ public class StoreSurveyView extends AuditingEntityView {
     private Integer seasonalityDec;
     private Integer legacyCasingId;
 
-    private List<SimpleInteractionView> interactions;
-
     public StoreSurveyView(StoreSurvey storeSurvey) {
         super(storeSurvey);
 
@@ -164,7 +160,6 @@ public class StoreSurveyView extends AuditingEntityView {
         this.setSeasonalityNov(storeSurvey.getSeasonalityNov());
         this.setSeasonalityDec(storeSurvey.getSeasonalityDec());
         this.setLegacyCasingId(storeSurvey.getLegacyCasingId());
-        this.interactions = storeSurvey.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
     }
 
     public Integer getId() {
@@ -751,11 +746,4 @@ public class StoreSurveyView extends AuditingEntityView {
         this.legacyCasingId = legacyCasingId;
     }
 
-    public List<SimpleInteractionView> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<SimpleInteractionView> interactions) {
-        this.interactions = interactions;
-    }
 }

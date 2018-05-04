@@ -14,7 +14,7 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
     private ShoppingCenterSurvey survey;
     private AccessType accessType;
     private Boolean hasLeftIn = false;
-    private Boolean hasOneWayRoad = false;
+    private Boolean oneWayRoad = false;
     private Boolean hasLeftOut = false;
     private Boolean hasTrafficLight = false;
     private Boolean hasRightIn = false;
@@ -42,6 +42,7 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
         this.survey = survey;
     }
 
+    @Enumerated(EnumType.STRING)
     public AccessType getAccessType() {
         return accessType;
     }
@@ -74,12 +75,12 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
         this.hasTrafficLight = hasTrafficLight;
     }
 
-    public Boolean getHasOneWayRoad() {
-        return hasOneWayRoad;
+    public Boolean getOneWayRoad() {
+        return oneWayRoad;
     }
 
-    public void setHasOneWayRoad(Boolean hasOneWayRoad) {
-        this.hasOneWayRoad = hasOneWayRoad;
+    public void setOneWayRoad(Boolean oneWayRoad) {
+        this.oneWayRoad = oneWayRoad;
     }
 
     public Boolean getHasRightIn() {

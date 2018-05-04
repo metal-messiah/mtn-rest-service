@@ -2,9 +2,7 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Project;
-import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.model.simpleView.SimpleStoreModelView;
-import com.vividsolutions.jts.geom.Polygon;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +24,6 @@ public class ProjectView extends AuditingEntityView {
     private String source;
     private Integer legacyProjectId;
 
-    private List<SimpleInteractionView> interactions;
     private List<SimpleStoreModelView> models;
 
     public ProjectView(Project project) {
@@ -44,7 +41,6 @@ public class ProjectView extends AuditingEntityView {
         this.source = project.getSource();
 //        this.boundary = project.getBoundary();
         this.legacyProjectId = project.getLegacyProjectId();
-        this.interactions = project.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
         this.models = project.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
     }
 
@@ -150,14 +146,6 @@ public class ProjectView extends AuditingEntityView {
 
     public void setLegacyProjectId(Integer legacyProjectId) {
         this.legacyProjectId = legacyProjectId;
-    }
-
-    public List<SimpleInteractionView> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<SimpleInteractionView> interactions) {
-        this.interactions = interactions;
     }
 
     public List<SimpleStoreModelView> getModels() {

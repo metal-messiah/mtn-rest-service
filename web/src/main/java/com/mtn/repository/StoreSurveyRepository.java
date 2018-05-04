@@ -13,6 +13,4 @@ public interface StoreSurveyRepository extends JpaRepository<StoreSurvey, Intege
 
     List<StoreSurvey> findAllByStoreId(Integer storeId);
 
-    List<StoreSurvey> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
-
 }

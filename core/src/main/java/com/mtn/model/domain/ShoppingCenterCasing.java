@@ -21,7 +21,8 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
     private RatingType ratingSynergy;
     private Integer legacyCasingId;
 
-    private List<Interaction> interactions = new ArrayList<>();
+    private ShoppingCenterSurvey shoppingCenterSurvey;
+    private List<Project> projects = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -106,12 +107,22 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
         this.legacyCasingId = legacyCasingId;
     }
 
-    @OneToMany(mappedBy = "shoppingCenterCasing")
-    public List<Interaction> getInteractions() {
-        return interactions;
+    @ManyToOne
+    @JoinColumn(name = "shopping_center_survey_id")
+    public ShoppingCenterSurvey getShoppingCenterSurvey() {
+        return shoppingCenterSurvey;
     }
 
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
+    public void setShoppingCenterSurvey(ShoppingCenterSurvey shoppingCenterSurvey) {
+        this.shoppingCenterSurvey = shoppingCenterSurvey;
+    }
+
+    @ManyToMany(mappedBy = "shoppingCenterCasings")
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

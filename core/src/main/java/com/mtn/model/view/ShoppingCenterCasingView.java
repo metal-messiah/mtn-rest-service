@@ -3,9 +3,10 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.ShoppingCenterCasing;
-import com.mtn.model.simpleView.SimpleInteractionView;
+import com.mtn.model.simpleView.SimpleProjectView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,8 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
     private RatingType ratingSynergy;
     private Integer legacyCasingId;
 
-    private List<SimpleInteractionView> interactions;
+    private List<SimpleProjectView> projects = new ArrayList<>();
+    private ShoppingCenterSurveyView shoppingCenterSurvey;
 
     public ShoppingCenterCasingView(ShoppingCenterCasing casing) {
         super(casing);
@@ -33,7 +35,16 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
         this.ratingLighting = casing.getRatingLighting();
         this.ratingSynergy = casing.getRatingSynergy();
         this.legacyCasingId = casing.getLegacyCasingId();
-        this.interactions = casing.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
+
+        if (casing.getShoppingCenterSurvey() != null) {
+            this.shoppingCenterSurvey = new ShoppingCenterSurveyView(casing.getShoppingCenterSurvey());
+        }
+        if(casing.getProjects() != null) {
+            this.projects = casing.getProjects().stream()
+                    .filter(project -> project.getDeletedDate() == null)
+                    .map(SimpleProjectView::new)
+                    .collect(Collectors.toList());
+        }
     }
 
     public Integer getId() {
@@ -100,11 +111,19 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
         this.legacyCasingId = legacyCasingId;
     }
 
-    public List<SimpleInteractionView> getInteractions() {
-        return interactions;
+    public ShoppingCenterSurveyView getShoppingCenterSurvey() {
+        return shoppingCenterSurvey;
     }
 
-    public void setInteractions(List<SimpleInteractionView> interactions) {
-        this.interactions = interactions;
+    public void setShoppingCenterSurvey(ShoppingCenterSurveyView shoppingCenterSurvey) {
+        this.shoppingCenterSurvey = shoppingCenterSurvey;
+    }
+
+    public List<SimpleProjectView> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<SimpleProjectView> projects) {
+        this.projects = projects;
     }
 }

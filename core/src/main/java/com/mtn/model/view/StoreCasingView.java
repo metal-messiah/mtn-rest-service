@@ -5,10 +5,11 @@ import com.mtn.constant.ConfidenceType;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreVolume;
-import com.mtn.model.simpleView.SimpleInteractionView;
+import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.simpleView.SimpleStoreStatusView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,9 @@ public class StoreCasingView extends AuditingEntityView {
     private StoreVolume storeVolume;
     private ConfidenceType volumeConfidence;
     private Integer legacyCasingId;
-    private List<SimpleInteractionView> interactions;
+
+    private List<SimpleProjectView> projects = new ArrayList<>();
+    private StoreSurveyView surveyView;
 
     public StoreCasingView(StoreCasing storeCasing) {
         super(storeCasing);
@@ -81,7 +84,16 @@ public class StoreCasingView extends AuditingEntityView {
         this.storeVolume = storeCasing.getStoreVolume();
         this.volumeConfidence = storeCasing.getVolumeConfidence();
         this.legacyCasingId = storeCasing.getLegacyCasingId();
-        this.interactions = storeCasing.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
+
+        if (storeCasing.getStoreSurvey() != null) {
+            this.surveyView = new StoreSurveyView(storeCasing.getStoreSurvey());
+        }
+        if (storeCasing.getProjects() != null)  {
+            this.projects = storeCasing.getProjects().stream()
+                    .filter(project -> project.getDeletedDate() == null)
+                    .map(SimpleProjectView::new)
+                    .collect(Collectors.toList());
+        }
     }
 
     public Integer getId() {
@@ -324,11 +336,20 @@ public class StoreCasingView extends AuditingEntityView {
         this.legacyCasingId = legacyCasingId;
     }
 
-    public List<SimpleInteractionView> getInteractions() {
-        return interactions;
+    public List<SimpleProjectView> getProjects() {
+        return projects;
     }
 
-    public void setInteractions(List<SimpleInteractionView> interactions) {
-        this.interactions = interactions;
+    public void setProjects(List<SimpleProjectView> projects) {
+        this.projects = projects;
     }
+
+    public StoreSurveyView getSurveyView() {
+        return surveyView;
+    }
+
+    public void setSurveyView(StoreSurveyView surveyView) {
+        this.surveyView = surveyView;
+    }
+
 }

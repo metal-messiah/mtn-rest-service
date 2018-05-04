@@ -112,7 +112,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 
     @Override
     public List<Store> findAllByProjectId(Integer id) {
-        return getEntityRepository().findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
+        return getEntityRepository().findAllByCasingsProjectsIdAndDeletedDateIsNull(id);
     }
 
     @Override
@@ -221,12 +221,12 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 
     @Override
     public void handleAssociationsOnDeletion(Store existing) {
-        // TODO - casings, interactions, models, surveys, volumes
+        // TODO - casings, models, surveys, volumes
     }
 
     @Override
     public void handleAssociationsOnCreation(Store request) {
-        // TODO - casings, interactions, models, surveys, volumes
+        // TODO - casings, models, surveys, volumes
     }
 
     @Override

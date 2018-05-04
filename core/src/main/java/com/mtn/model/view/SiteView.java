@@ -3,12 +3,7 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.SiteType;
 import com.mtn.model.domain.Site;
-import com.mtn.model.simpleView.SimpleInteractionView;
-import com.mtn.model.simpleView.SimpleShoppingCenterView;
-import com.mtn.model.simpleView.SimpleStoreView;
-import com.vividsolutions.jts.geom.Point;
 
-import javax.persistence.Column;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,9 +32,8 @@ public class SiteView extends AuditingEntityView {
     private String positionInCenter;
     private Boolean duplicate;
 
-    private SimpleShoppingCenterView shoppingCenter;
-    private List<SimpleStoreView> stores;
-    private List<SimpleInteractionView> interactions;
+    private ShoppingCenterView shoppingCenter;
+    private List<StoreView> stores;
 
     public SiteView(Site site) {
         super(site);
@@ -63,18 +57,12 @@ public class SiteView extends AuditingEntityView {
         this.duplicate = site.getDuplicate();
 
         if (site.getShoppingCenter() != null) {
-            this.shoppingCenter = new SimpleShoppingCenterView(site.getShoppingCenter());
+            this.shoppingCenter = new ShoppingCenterView(site.getShoppingCenter());
         }
         if (site.getStores() != null) {
             this.stores = site.getStores().stream()
                     .filter(store -> store.getDeletedDate() == null)
-                    .map(SimpleStoreView::new)
-                    .collect(Collectors.toList());
-        }
-        if (site.getInteractions() != null) {
-            this.interactions = site.getInteractions().stream()
-                    .filter(interaction ->  interaction.getDeletedDate() == null)
-                    .map(SimpleInteractionView::new)
+                    .map(StoreView::new)
                     .collect(Collectors.toList());
         }
     }
@@ -215,19 +203,19 @@ public class SiteView extends AuditingEntityView {
         this.positionInCenter = positionInCenter;
     }
 
-    public SimpleShoppingCenterView getShoppingCenter() {
+    public ShoppingCenterView getShoppingCenter() {
         return shoppingCenter;
     }
 
-    public void setShoppingCenter(SimpleShoppingCenterView shoppingCenter) {
+    public void setShoppingCenter(ShoppingCenterView shoppingCenter) {
         this.shoppingCenter = shoppingCenter;
     }
 
-    public List<SimpleStoreView> getStores() {
+    public List<StoreView> getStores() {
         return stores;
     }
 
-    public void setStores(List<SimpleStoreView> stores) {
+    public void setStores(List<StoreView> stores) {
         this.stores = stores;
     }
 
@@ -239,11 +227,4 @@ public class SiteView extends AuditingEntityView {
         this.duplicate = duplicate;
     }
 
-    public List<SimpleInteractionView> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<SimpleInteractionView> interactions) {
-        this.interactions = interactions;
-    }
 }

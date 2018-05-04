@@ -17,5 +17,5 @@ public interface ShoppingCenterRepository extends JpaRepository<ShoppingCenter, 
 
     ShoppingCenter findOneBySitesStoresId(Integer id);
 
-    List<ShoppingCenter> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
+    List<ShoppingCenter> findAllByCasingsProjectsIdAndDeletedDateIsNull(Integer id);
 }

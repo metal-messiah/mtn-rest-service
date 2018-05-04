@@ -13,6 +13,6 @@ public interface ShoppingCenterCasingRepository extends JpaRepository<ShoppingCe
 
     List<ShoppingCenterCasing> findAllByShoppingCenterId(Integer shoppingCenterId);
 
-    List<ShoppingCenterCasing> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
+    List<ShoppingCenterCasing> findAllByProjectsIdAndDeletedDateIsNull(Integer id);
 
 }

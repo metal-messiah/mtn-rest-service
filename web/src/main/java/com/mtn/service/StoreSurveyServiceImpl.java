@@ -25,11 +25,6 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
     private StoreSurveyValidator storeSurveyValidator;
 
     @Override
-    public List<StoreSurvey> findAllByProjectId(Integer id) {
-        return getEntityRepository().findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
-    }
-
-    @Override
     public List<StoreSurvey> findAllByStoreId(Integer storeId) {
         return getEntityRepository().findAllByStoreId(storeId);
     }
@@ -137,12 +132,12 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 
     @Override
     public void handleAssociationsOnDeletion(StoreSurvey existing) {
-        // TODO - handle interactions
+        // TODO
     }
 
     @Override
     public void handleAssociationsOnCreation(StoreSurvey request) {
-        // TODO - handle interactions
+        // TODO
     }
 
     @Override

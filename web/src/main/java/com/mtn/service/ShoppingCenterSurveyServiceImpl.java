@@ -61,11 +61,6 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
     }
 
     @Override
-	public List<ShoppingCenterSurvey> findAllByProjectId(Integer id) {
-        return getEntityRepository().findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
-    }
-
-    @Override
 	public List<ShoppingCenterSurvey> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
         return getEntityRepository().findAll(
                 where(shoppingCenterIdEquals(shoppingCenterId))
@@ -114,12 +109,12 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
 
     @Override
     public void handleAssociationsOnDeletion(ShoppingCenterSurvey existing) {
-        // TODO - Handel Accesses, Interactions, Tenants
+        // TODO - Handle Accesses, Tenants, Casings
     }
 
     @Override
     public void handleAssociationsOnCreation(ShoppingCenterSurvey request) {
-        // TODO - Handel Accesses, Interactions, Tenants
+        // TODO - Handle Accesses, Tenants, Casings
     }
 
     @Override

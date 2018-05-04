@@ -30,8 +30,9 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
     private Double sqFtPercentOccupied;
     private Integer legacyCasingId;
 
+    private List<ShoppingCenterCasing> shoppingCenterCasings = new ArrayList<>();
+
     private List<ShoppingCenterAccess> accesses = new ArrayList<>();
-    private List<Interaction> interactions = new ArrayList<>();
     private List<ShoppingCenterTenant> tenants = new ArrayList<>();
 
     @Id
@@ -186,15 +187,6 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
         this.legacyCasingId = legacyCasingId;
     }
 
-    @OneToMany(mappedBy = "shoppingCenterSurvey")
-    public List<Interaction> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
-    }
-
     @Column(name = "shopping_center_survey_date")
     public LocalDateTime getSurveyDate() {
         return surveyDate;
@@ -202,5 +194,14 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
 
     public void setSurveyDate(LocalDateTime surveyDate) {
         this.surveyDate = surveyDate;
+    }
+
+    @OneToMany(mappedBy = "shoppingCenterSurvey")
+    public List<ShoppingCenterCasing> getShoppingCenterCasings() {
+        return shoppingCenterCasings;
+    }
+
+    public void setShoppingCenterCasings(List<ShoppingCenterCasing> shoppingCenterCasings) {
+        this.shoppingCenterCasings = shoppingCenterCasings;
     }
 }

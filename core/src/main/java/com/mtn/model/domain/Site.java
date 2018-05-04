@@ -36,7 +36,6 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     private ShoppingCenter shoppingCenter;
     private List<Store> stores = new ArrayList<>();
-    private List<Interaction> interactions = new ArrayList<>();
 
     public Site() {
     }
@@ -210,15 +209,6 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     public void setDuplicate(Boolean duplicate) {
         this.duplicate = duplicate;
-    }
-
-    @OneToMany(mappedBy = "site")
-    public List<Interaction> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
     }
 
     @Transient

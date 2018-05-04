@@ -27,11 +27,9 @@ public class StoreView extends AuditingEntityView {
     private SimpleSiteView site;
     private SimpleBannerView banner;
 
-    private List<SimpleStoreCasingView> casings;
-    private List<SimpleInteractionView> interactions;
-    private List<SimpleStoreModelView> models;
-    private List<SimpleStoreSurveyView> surveys;
-    private List<SimpleStoreVolumeView> volumes;
+    private List<SimpleStoreCasingView> storeCasings;
+    private List<SimpleStoreModelView> storeModels;
+    private List<SimpleStoreVolumeView> storeVolumes;
 
     public StoreView(Store store) {
         super(store);
@@ -53,11 +51,15 @@ public class StoreView extends AuditingEntityView {
             this.banner = new SimpleBannerView(store.getBanner());
         }
 
-        this.casings = store.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleStoreCasingView::new).collect(Collectors.toList());
-        this.interactions = store.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
-        this.models = store.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
-        this.surveys = store.getSurveys().stream().filter(storeSurvey -> storeSurvey.getDeletedDate() == null).map(SimpleStoreSurveyView::new).collect(Collectors.toList());
-        this.volumes = store.getVolumes().stream().filter(volume -> volume.getDeletedDate() == null).map(SimpleStoreVolumeView::new).collect(Collectors.toList());
+        if (store.getCasings() != null) {
+            this.storeCasings = store.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleStoreCasingView::new).collect(Collectors.toList());
+        }
+        if (store.getModels() != null) {
+            this.storeModels = store.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
+        }
+        if (store.getVolumes() != null) {
+            this.storeVolumes = store.getVolumes().stream().filter(volume -> volume.getDeletedDate() == null).map(SimpleStoreVolumeView::new).collect(Collectors.toList());
+        }
     }
 
     public Integer getId() {
@@ -124,14 +126,6 @@ public class StoreView extends AuditingEntityView {
         this.site = site;
     }
 
-    public List<SimpleStoreSurveyView> getSurveys() {
-        return surveys;
-    }
-
-    public void setSurveys(List<SimpleStoreSurveyView> surveys) {
-        this.surveys = surveys;
-    }
-
     public SimpleBannerView getBanner() {
         return banner;
     }
@@ -140,36 +134,28 @@ public class StoreView extends AuditingEntityView {
         this.banner = banner;
     }
 
-    public List<SimpleStoreCasingView> getCasings() {
-        return casings;
+    public List<SimpleStoreCasingView> getStoreCasings() {
+        return storeCasings;
     }
 
-    public void setCasings(List<SimpleStoreCasingView> casings) {
-        this.casings = casings;
+    public void setStoreCasings(List<SimpleStoreCasingView> storeCasings) {
+        this.storeCasings = storeCasings;
     }
 
-    public List<SimpleStoreVolumeView> getVolumes() {
-        return volumes;
+    public List<SimpleStoreVolumeView> getStoreVolumes() {
+        return storeVolumes;
     }
 
-    public void setVolumes(List<SimpleStoreVolumeView> volumes) {
-        this.volumes = volumes;
+    public void setStoreVolumes(List<SimpleStoreVolumeView> storeVolumes) {
+        this.storeVolumes = storeVolumes;
     }
 
-    public List<SimpleStoreModelView> getModels() {
-        return models;
+    public List<SimpleStoreModelView> getStoreModels() {
+        return storeModels;
     }
 
-    public void setModels(List<SimpleStoreModelView> models) {
-        this.models = models;
-    }
-
-    public List<SimpleInteractionView> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<SimpleInteractionView> interactions) {
-        this.interactions = interactions;
+    public void setStoreModels(List<SimpleStoreModelView> storeModels) {
+        this.storeModels = storeModels;
     }
 
     public SimpleStoreStatusView getCurrentStoreStatus() {

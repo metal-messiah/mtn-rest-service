@@ -53,7 +53,7 @@ public class ShoppingCenterAccessServiceImpl extends EntityServiceImpl<ShoppingC
 		existing.setHasLeftIn(request.getHasLeftIn());
 		existing.setHasLeftOut(request.getHasLeftOut());
 		existing.setHasTrafficLight(request.getHasTrafficLight());
-		existing.setHasOneWayRoad(request.getHasOneWayRoad());
+		existing.setOneWayRoad(request.getOneWayRoad());
 		existing.setHasRightIn(request.getHasRightIn());
 		existing.setHasRightOut(request.getHasRightOut());
 

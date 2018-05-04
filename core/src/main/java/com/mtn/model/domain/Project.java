@@ -22,8 +22,9 @@ public class Project extends AuditingEntity implements Identifiable {
     private String source;
     private Integer legacyProjectId;
 
-    private List<Interaction> interactions = new ArrayList<>();
     private List<StoreModel> models = new ArrayList<>();
+    private List<StoreCasing> storeCasings = new ArrayList<>();
+    private List<ShoppingCenterCasing> shoppingCenterCasings = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -133,12 +134,31 @@ public class Project extends AuditingEntity implements Identifiable {
         this.models = models;
     }
 
-    @OneToMany(mappedBy = "project")
-    public List<Interaction> getInteractions() {
-        return interactions;
+    @ManyToMany
+    @JoinTable(
+            name = "store_casing_project",
+            joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "store_casing_id", referencedColumnName = "store_casing_id")
+    )
+    public List<StoreCasing> getStoreCasings() {
+        return storeCasings;
     }
 
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
+    public void setStoreCasings(List<StoreCasing> storeCasings) {
+        this.storeCasings = storeCasings;
+    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "shopping_center_casing_project",
+            joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "shopping_center_casing_id", referencedColumnName = "shopping_center_casing_id")
+    )
+    public List<ShoppingCenterCasing> getShoppingCenterCasings() {
+        return shoppingCenterCasings;
+    }
+
+    public void setShoppingCenterCasings(List<ShoppingCenterCasing> shoppingCenterCasings) {
+        this.shoppingCenterCasings = shoppingCenterCasings;
     }
 }

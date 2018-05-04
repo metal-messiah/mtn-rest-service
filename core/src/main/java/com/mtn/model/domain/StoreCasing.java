@@ -44,7 +44,8 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private ConfidenceType volumeConfidence;
     private Integer legacyCasingId;
 
-    private List<Interaction> interactions = new ArrayList<>();
+    private StoreSurvey storeSurvey;
+    private List<Project> projects = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -312,12 +313,22 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
         this.legacyCasingId = legacyCasingId;
     }
 
-    @OneToMany(mappedBy = "storeCasing")
-    public List<Interaction> getInteractions() {
-        return interactions;
+    @ManyToOne
+    @JoinColumn(name = "store_survey_id")
+    public StoreSurvey getStoreSurvey() {
+        return storeSurvey;
     }
 
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
+    public void setStoreSurvey(StoreSurvey storeSurvey) {
+        this.storeSurvey = storeSurvey;
+    }
+
+    @ManyToMany(mappedBy = "storeCasings")
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

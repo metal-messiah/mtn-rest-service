@@ -17,10 +17,8 @@ public class ShoppingCenterView extends AuditingEntityView {
     private String name;
     private String owner;
     private Integer legacyLocationId;
-    private List<SimpleShoppingCenterCasingView> casings;
-    private List<SimpleInteractionView> interactions;
+    private List<SimpleShoppingCenterCasingView> shoppingCenterCasings;
     private List<SimpleSiteView> sites;
-    private List<SimpleShoppingCenterSurveyView> surveys;
 
     public ShoppingCenterView(ShoppingCenter shoppingCenter) {
         super(shoppingCenter);
@@ -28,10 +26,12 @@ public class ShoppingCenterView extends AuditingEntityView {
         this.name = shoppingCenter.getName();
         this.owner = shoppingCenter.getOwner();
         this.legacyLocationId = shoppingCenter.getLegacyLocationId();
-        this.casings = shoppingCenter.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList());
-        this.interactions = shoppingCenter.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
-        this.sites = shoppingCenter.getSites().stream().filter(site -> site.getDeletedDate() == null).map(SimpleSiteView::new).collect(Collectors.toList());
-        this.surveys = shoppingCenter.getSurveys().stream().filter(survey -> survey.getDeletedDate() == null).map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList());
+        if (shoppingCenter.getCasings() != null) {
+            this.shoppingCenterCasings = shoppingCenter.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList());
+        }
+        if (shoppingCenter.getSites() != null) {
+            this.sites = shoppingCenter.getSites().stream().filter(site -> site.getDeletedDate() == null).map(SimpleSiteView::new).collect(Collectors.toList());
+        }
     }
 
     public Integer getId() {
@@ -74,27 +74,11 @@ public class ShoppingCenterView extends AuditingEntityView {
         this.sites = sites;
     }
 
-    public List<SimpleInteractionView> getInteractions() {
-        return interactions;
+    public List<SimpleShoppingCenterCasingView> getShoppingCenterCasings() {
+        return shoppingCenterCasings;
     }
 
-    public void setInteractions(List<SimpleInteractionView> interactions) {
-        this.interactions = interactions;
-    }
-
-    public List<SimpleShoppingCenterSurveyView> getSurveys() {
-        return surveys;
-    }
-
-    public void setSurveys(List<SimpleShoppingCenterSurveyView> surveys) {
-        this.surveys = surveys;
-    }
-
-    public List<SimpleShoppingCenterCasingView> getCasings() {
-        return casings;
-    }
-
-    public void setCasings(List<SimpleShoppingCenterCasingView> casings) {
-        this.casings = casings;
+    public void setShoppingCenterCasings(List<SimpleShoppingCenterCasingView> shoppingCenterCasings) {
+        this.shoppingCenterCasings = shoppingCenterCasings;
     }
 }

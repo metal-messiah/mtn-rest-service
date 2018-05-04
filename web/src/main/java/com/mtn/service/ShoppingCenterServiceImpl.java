@@ -76,8 +76,8 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
     }
 
     @Override
-    public List<ShoppingCenter> findAllByProjectId(Integer id) {
-        return getEntityRepository().findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
+    public List<ShoppingCenter> findAllByProjectId(Integer projectId) {
+        return getEntityRepository().findAllByCasingsProjectsIdAndDeletedDateIsNull(projectId);
     }
 
     @Override
@@ -132,12 +132,12 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
 
     @Override
     public void handleAssociationsOnDeletion(ShoppingCenter existing) {
-        // TODO - handle casings, interactions, sites, surveys
+        // TODO - handle casings, sites, surveys
     }
 
     @Override
     public void handleAssociationsOnCreation(ShoppingCenter request) {
-        // TODO - handle casings, interactions, sites, surveys
+        // TODO - handle casings, sites, surveys
     }
 
     @Override

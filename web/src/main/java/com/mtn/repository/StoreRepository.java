@@ -15,6 +15,6 @@ public interface StoreRepository extends JpaRepository<Store, Integer>, JpaSpeci
 
     Store findOneByCasingsId(Integer id);
 
-    List<Store> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
+    List<Store> findAllByCasingsProjectsIdAndDeletedDateIsNull(Integer id);
 
 }

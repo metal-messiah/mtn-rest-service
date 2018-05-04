@@ -9,9 +9,6 @@ public class PermissionType {
     public static final String GROUPS_READ = "GROUPS_READ";
     public static final String GROUPS_UPDATE = "GROUPS_UPDATE";
     public static final String GROUPS_DELETE = "GROUPS_DELETE";
-    public static final String INTERACTIONS_CREATE = "INTERACTIONS_CREATE";
-    public static final String INTERACTIONS_READ = "INTERACTIONS_READ";
-    public static final String INTERACTIONS_DELETE = "INTERACTIONS_DELETE";
     public static final String PERMISSIONS_READ = "PERMISSIONS_READ";
     public static final String PERMISSIONS_UPDATE = "PERMISSIONS_UPDATE";
     public static final String PROJECTS_CREATE = "PROJECTS_CREATE";

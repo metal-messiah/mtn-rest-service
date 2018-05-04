@@ -10,7 +10,7 @@ public interface StoreCasingRepository extends JpaRepository<StoreCasing, Intege
 
     List<StoreCasing> findAllByStoreId(Integer storeId);
 
-    List<StoreCasing> findAllByInteractionsProjectIdAndDeletedDateIsNull(Integer id);
+    List<StoreCasing> findAllByProjectsIdAndDeletedDateIsNull(Integer id);
 
 }
 

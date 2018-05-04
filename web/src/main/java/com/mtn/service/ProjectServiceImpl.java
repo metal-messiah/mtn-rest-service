@@ -48,30 +48,6 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 		return getEntityRepository().findOneByProjectName(projectName);
 	}
 
-//	public List<Project> findAllByShoppingCenterId(Interaction interaction) {
-//		return getEntityRepository().findAllByInteractionsShoppingCenterIdAndDeletedDateIsNull(interaction);
-//	}
-//
-//	public List<Project> findAllByShoppingCenterSurveyId(Interaction id) {
-//		return getEntityRepository().findAllByInteractionsShoppingCenterSurveyIdAndDeletedDateIsNull(id);
-//	}
-//
-//	public List<Project> findAllByShoppingCenterCasingId(Interaction id) {
-//		return getEntityRepository().findAllByInteractionsShoppingCenterCasingIdAndDeletedDateIsNull(id);
-//	}
-//
-//	public List<Project> findAllByStoreId(Interaction id) {
-//		return getEntityRepository().findAllByInteractionsStoreIdAndDeletedDateIsNull(id);
-//	}
-//
-//	public List<Project> findAllByStoreCasingId(Interaction id) {
-//		return getEntityRepository().findAllByInteractionsStoreCasingIdAndDeletedDateIsNull(id);
-//	}
-//
-//	public List<Project> findAllByStoreSurveyId(Interaction id) {
-//		return getEntityRepository().findAllByInteractionsStoreSurveyIdAndDeletedDateIsNull(id);
-//	}
-
 	@Override
 	public Page<Project> findAllUsingSpecs(Pageable page, String query, Boolean active, Boolean primaryData) {
 		Specifications<Project> spec = where(isNotDeleted());

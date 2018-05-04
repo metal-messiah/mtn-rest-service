@@ -25,8 +25,8 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
     private StoreCasingValidator storeCasingValidator;
 
     @Override
-	public List<StoreCasing> findAllByProjectId(Integer id) {
-        return getEntityRepository().findAllByInteractionsProjectIdAndDeletedDateIsNull(id);
+	public List<StoreCasing> findAllByProjectId(Integer projectId) {
+        return getEntityRepository().findAllByProjectsIdAndDeletedDateIsNull(projectId);
     }
 
     @Override
@@ -97,12 +97,12 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 
     @Override
     public void handleAssociationsOnDeletion(StoreCasing existing) {
-        // TODO - Handle Store and Interactions
+        // TODO - Handle Store and Survey
     }
 
     @Override
     public void handleAssociationsOnCreation(StoreCasing request) {
-        // TODO - Handle Store and Interactions
+        // TODO - Handle Store and Survey
     }
 
     @Override

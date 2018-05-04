@@ -14,14 +14,6 @@ public class ShoppingCenterCasingController extends CrudControllerImpl<ShoppingC
 
     @Autowired
     private ShoppingCenterCasingService shoppingCenterCasingService;
-//    @Autowired
-//    private ProjectService projectService;
-//
-//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-//    public ResponseEntity findAllProjectsForShoppingCenterCasing(@PathVariable("id") Integer shoppingCenterCasingId) {
-//        List<Project> domainModels = projectService.findAllByShoppingCenterCasingId(shoppingCenterCasingId);
-//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-//    }
 
     @Override
     public ShoppingCenterCasingService getEntityService() {

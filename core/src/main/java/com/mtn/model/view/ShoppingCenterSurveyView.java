@@ -2,7 +2,6 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterSurvey;
-import com.mtn.model.simpleView.SimpleInteractionView;
 import com.mtn.model.simpleView.SimpleShoppingCenterAccessView;
 import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
 
@@ -34,9 +33,8 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
     private Double sqFtPercentOccupied;
     private Integer legacyCasingId;
 
-    private List<SimpleShoppingCenterAccessView> accesses = new ArrayList<>();
-    private List<SimpleInteractionView> interactions = new ArrayList<>();
-    private List<SimpleShoppingCenterTenantView> tenants = new ArrayList<>();
+    private List<ShoppingCenterAccessView> accesses = new ArrayList<>();
+    private List<ShoppingCenterTenantView> tenants = new ArrayList<>();
 
     public ShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
         super(survey);
@@ -58,9 +56,18 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
         this.sqFtPercentOccupied = survey.getSqFtPercentOccupied();
         this.legacyCasingId = survey.getLegacyCasingId();
 
-        this.accesses = survey.getAccesses().stream().filter(access -> access.getDeletedDate() == null).map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList());
-        this.interactions = survey.getInteractions().stream().filter(interaction -> interaction.getDeletedDate() == null).map(SimpleInteractionView::new).collect(Collectors.toList());
-        this.tenants = survey.getTenants().stream().filter(tenant -> tenant.getDeletedDate() == null).map(SimpleShoppingCenterTenantView::new).collect(Collectors.toList());
+        if (survey.getAccesses() != null) {
+            this.accesses = survey.getAccesses().stream()
+                    .filter(access -> access.getDeletedDate() == null)
+                    .map(ShoppingCenterAccessView::new)
+                    .collect(Collectors.toList());
+        }
+        if (survey.getTenants() != null) {
+            this.tenants = survey.getTenants().stream()
+                    .filter(tenant -> tenant.getDeletedDate() == null)
+                    .map(ShoppingCenterTenantView::new)
+                    .collect(Collectors.toList());
+        }
     }
 
     public Integer getId() {
@@ -183,27 +190,19 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
         this.legacyCasingId = legacyCasingId;
     }
 
-    public List<SimpleInteractionView> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<SimpleInteractionView> interactions) {
-        this.interactions = interactions;
-    }
-
-    public List<SimpleShoppingCenterAccessView> getAccesses() {
+    public List<ShoppingCenterAccessView> getAccesses() {
         return accesses;
     }
 
-    public void setAccesses(List<SimpleShoppingCenterAccessView> accesses) {
+    public void setAccesses(List<ShoppingCenterAccessView> accesses) {
         this.accesses = accesses;
     }
 
-    public List<SimpleShoppingCenterTenantView> getTenants() {
+    public List<ShoppingCenterTenantView> getTenants() {
         return tenants;
     }
 
-    public void setTenants(List<SimpleShoppingCenterTenantView> tenants) {
+    public void setTenants(List<ShoppingCenterTenantView> tenants) {
         this.tenants = tenants;
     }
 

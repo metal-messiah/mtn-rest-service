@@ -89,7 +89,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     private Integer seasonalityDec;
     private Integer legacyCasingId;
 
-    private List<Interaction> interactions = new ArrayList<>();
+    private List<StoreCasing> storeCasings = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -690,15 +690,6 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.legacyCasingId = legacyCasingId;
     }
 
-    @OneToMany(mappedBy = "storeSurvey")
-    public List<Interaction> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(List<Interaction> interactions) {
-        this.interactions = interactions;
-    }
-
     @Column(name = "store_survey_date")
     public LocalDateTime getSurveyDate() {
         return surveyDate;
@@ -708,4 +699,12 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.surveyDate = surveyDate;
     }
 
+    @OneToMany(mappedBy = "storeSurvey")
+    public List<StoreCasing> getStoreCasings() {
+        return storeCasings;
+    }
+
+    public void setStoreCasings(List<StoreCasing> storeCasings) {
+        this.storeCasings = storeCasings;
+    }
 }

@@ -36,6 +36,7 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     private ShoppingCenter shoppingCenter;
     private List<Store> stores = new ArrayList<>();
+    private UserProfile assignee;
 
     public Site() {
     }
@@ -216,5 +217,13 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
         return this.stores.stream().filter(store -> store.getStoreType() == StoreType.ACTIVE).findFirst().orElse(null);
     }
 
+    @ManyToOne
+    @JoinColumn(name = "assignee_id")
+    public UserProfile getAssignee() {
+        return assignee;
+    }
 
+    public void setAssignee(UserProfile assignee) {
+        this.assignee = assignee;
+    }
 }

@@ -3,6 +3,7 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.SiteType;
 import com.mtn.model.domain.Site;
+import com.mtn.model.simpleView.SimpleUserProfileView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ public class SiteView extends AuditingEntityView {
 
     private ShoppingCenterView shoppingCenter;
     private List<StoreView> stores;
+    private SimpleUserProfileView assignee;
 
     public SiteView(Site site) {
         super(site);
@@ -64,6 +66,9 @@ public class SiteView extends AuditingEntityView {
                     .filter(store -> store.getDeletedDate() == null)
                     .map(StoreView::new)
                     .collect(Collectors.toList());
+        }
+        if (site.getAssignee() != null) {
+            this.assignee = new SimpleUserProfileView(site.getAssignee());
         }
     }
 
@@ -227,4 +232,11 @@ public class SiteView extends AuditingEntityView {
         this.duplicate = duplicate;
     }
 
+    public SimpleUserProfileView getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(SimpleUserProfileView assignee) {
+        this.assignee = assignee;
+    }
 }

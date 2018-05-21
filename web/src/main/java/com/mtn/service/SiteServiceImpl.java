@@ -3,6 +3,7 @@ package com.mtn.service;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.repository.SiteRepository;
 import com.mtn.validators.SiteValidator;
 import com.vividsolutions.jts.geom.*;
@@ -121,6 +122,12 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
         existing.setIntersectionStreetSecondary(request.getIntersectionStreetSecondary());
         existing.setQuad(request.getQuad());
         existing.setPositionInCenter(request.getPositionInCenter());
+        if (request.getAssignee() != null) {
+            UserProfile assignee = userProfileService.findOne(request.getAssignee().getId());
+            existing.setAssignee(assignee);
+        } else {
+            existing.setAssignee(null);
+        }
 
         return existing;
     }

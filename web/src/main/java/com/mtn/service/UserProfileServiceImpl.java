@@ -8,6 +8,7 @@ import com.mtn.validators.UserProfileValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -78,11 +79,9 @@ public class UserProfileServiceImpl extends EntityServiceImpl<UserProfile> imple
     }
 
     public Page<UserProfile> findAllUsingSpecs(Pageable page) {
-        return getEntityRepository().findAll(
-                where(isNotSystemAdministrator())
-                        .and(isNotDeleted()),
-                page
-        );
+        Specification<UserProfile> spec = where(isNotSystemAdministrator()).and(isNotDeleted());
+
+        return getEntityRepository().findAll(spec, page);
     }
 
     @Override

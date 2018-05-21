@@ -28,8 +28,6 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 	private StoreModelService modelService;
 	@Autowired
 	private ProjectValidator projectValidator;
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
 
 	@Override
 	@Transactional

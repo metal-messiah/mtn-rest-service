@@ -27,13 +27,9 @@ public class ProjectController extends CrudControllerImpl<Project> {
     @Autowired
     private ShoppingCenterCasingService shoppingCenterCasingService;
     @Autowired
-    private ShoppingCenterSurveyService shoppingCenterSurveyService;
-    @Autowired
     private StoreService storeService;
     @Autowired
     private StoreCasingService storeCasingService;
-    @Autowired
-    private StoreSurveyService storeSurveyService;
 
     @RequestMapping(value = "/{id}/store-model", method = RequestMethod.POST)
     public ResponseEntity addOneStoreModelToProject(@PathVariable("id") Integer id, @RequestBody StoreModel request) {

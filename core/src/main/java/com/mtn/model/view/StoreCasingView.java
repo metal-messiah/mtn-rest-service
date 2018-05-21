@@ -7,6 +7,7 @@ import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.simpleView.SimpleStoreStatusView;
+import com.mtn.model.simpleView.SimpleStoreVolumeView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ public class StoreCasingView extends AuditingEntityView {
     private Integer id;
     private LocalDateTime casingDate;
     private String note;
-    private SimpleStoreStatusView storeStatus;
     private RatingType conditionCeiling;
     private RatingType conditionCheckstands;
     private RatingType conditionFloors;
@@ -43,21 +43,20 @@ public class StoreCasingView extends AuditingEntityView {
     private Double volumePercentProduce;
     private Integer volumePlusMinus;
     private String volumeNote;
-    private StoreVolume storeVolume;
     private ConfidenceType volumeConfidence;
     private Integer legacyCasingId;
 
-    private List<SimpleProjectView> projects = new ArrayList<>();
+    private SimpleStoreStatusView storeStatus;
+    private StoreVolumeView storeVolume;
     private StoreSurveyView surveyView;
+
+    private List<SimpleProjectView> projects = new ArrayList<>();
 
     public StoreCasingView(StoreCasing storeCasing) {
         super(storeCasing);
         this.id = storeCasing.getId();
         this.casingDate = storeCasing.getCasingDate();
         this.note = storeCasing.getNote();
-        if (storeCasing.getStoreStatus() != null) {
-            this.storeStatus = new SimpleStoreStatusView(storeCasing.getStoreStatus());
-        }
         this.conditionCeiling = storeCasing.getConditionCeiling();
         this.conditionCheckstands = storeCasing.getConditionCheckstands();
         this.conditionFloors = storeCasing.getConditionFloors();
@@ -81,10 +80,16 @@ public class StoreCasingView extends AuditingEntityView {
         this.volumePercentProduce = storeCasing.getVolumePercentProduce();
         this.volumePlusMinus = storeCasing.getVolumePlusMinus();
         this.volumeNote = storeCasing.getVolumeNote();
-        this.storeVolume = storeCasing.getStoreVolume();
         this.volumeConfidence = storeCasing.getVolumeConfidence();
         this.legacyCasingId = storeCasing.getLegacyCasingId();
 
+
+        if (storeCasing.getStoreStatus() != null) {
+            this.storeStatus = new SimpleStoreStatusView(storeCasing.getStoreStatus());
+        }
+        if (storeCasing.getStoreVolume() != null) {
+            this.storeVolume = new StoreVolumeView(storeCasing.getStoreVolume());
+        }
         if (storeCasing.getStoreSurvey() != null) {
             this.surveyView = new StoreSurveyView(storeCasing.getStoreSurvey());
         }
@@ -312,11 +317,11 @@ public class StoreCasingView extends AuditingEntityView {
         this.volumeNote = volumeNote;
     }
 
-    public StoreVolume getStoreVolume() {
+    public StoreVolumeView getStoreVolume() {
         return storeVolume;
     }
 
-    public void setStoreVolume(StoreVolume storeVolume) {
+    public void setStoreVolume(StoreVolume storeVolumeView) {
         this.storeVolume = storeVolume;
     }
 

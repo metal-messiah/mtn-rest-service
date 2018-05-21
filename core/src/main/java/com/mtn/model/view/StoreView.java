@@ -23,6 +23,7 @@ public class StoreView extends AuditingEntityView {
     private String storeNumber;
     private Integer legacyLocationId;
     private SimpleStoreStatusView currentStoreStatus;
+    private SimpleStoreSurveyView currentStoreSurvey;
 
     private SimpleSiteView site;
     private SimpleBannerView banner;
@@ -46,6 +47,9 @@ public class StoreView extends AuditingEntityView {
 
         if (store.getCurrentStatus() != null) {
             this.currentStoreStatus = new SimpleStoreStatusView(store.getCurrentStatus());
+        }
+        if (store.getCurrentStoreSurvey() != null) {
+            this.currentStoreSurvey = new SimpleStoreSurveyView((store.getCurrentStoreSurvey()));
         }
         if (store.getBanner() != null) {
             this.banner = new SimpleBannerView(store.getBanner());
@@ -164,5 +168,13 @@ public class StoreView extends AuditingEntityView {
 
     public void setCurrentStoreStatus(SimpleStoreStatusView currentStoreStatus) {
         this.currentStoreStatus = currentStoreStatus;
+    }
+
+    public SimpleStoreSurveyView getCurrentStoreSurvey() {
+        return currentStoreSurvey;
+    }
+
+    public void setCurrentStoreSurvey(SimpleStoreSurveyView currentStoreSurvey) {
+        this.currentStoreSurvey = currentStoreSurvey;
     }
 }

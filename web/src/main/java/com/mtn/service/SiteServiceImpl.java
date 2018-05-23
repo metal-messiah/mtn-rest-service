@@ -74,7 +74,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
     @Override
     public Page<Site> findAllUsingSpecs(Pageable page) {
-        return getEntityRepository().findAllByIdLessThanAndDeletedDateIsNull(10, page);
+        return getEntityRepository().findAllByDeletedDateIsNull(page);
     }
 
     @Override
@@ -158,5 +158,14 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
         return siteValidator;
     }
 
-
+    @Override
+    @Transactional
+    public List<Site> assignSitesToUser(Integer[] siteIds, Integer userId) {
+        final UserProfile selectedUser = (userId != null) ? userProfileService.findOne(userId) : null;
+        List<Site> sites = this.siteRepository.findAllByIdIn(siteIds);
+        sites.forEach(site -> {
+            site.setAssignee(selectedUser);
+        });
+        return sites;
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,5 +75,11 @@ public class SiteController extends CrudControllerImpl<Site> {
     @Override
     public Object getSimpleViewFromModel(Site model) {
         return new SimpleSiteView(model);
+    }
+
+    @RequestMapping(value = "/assign-to-user", method = RequestMethod.POST)
+    public ResponseEntity assignToUser(@RequestBody Integer[] siteIds, @RequestParam(value = "user-id", required = false) Integer userId) {
+        List<Site> sites = siteService.assignSitesToUser(siteIds, userId);
+        return ResponseEntity.ok(sites.stream().map(SiteView::new).collect(Collectors.toList()));
     }
 }

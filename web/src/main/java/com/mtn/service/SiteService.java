@@ -15,4 +15,6 @@ public interface SiteService extends EntityService<Site> {
 	List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId);
 
 	Page<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west, String storeType, Pageable page);
+
+	List<Site> assignSitesToUser(Integer[] siteIds, Integer userId);
 }

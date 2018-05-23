@@ -96,6 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/permission/**").hasAuthority(PermissionType.PERMISSIONS_READ)
                 .antMatchers(HttpMethod.PUT, "/api/permission/**").hasAuthority(PermissionType.PERMISSIONS_UPDATE)
                 .antMatchers(HttpMethod.POST, "/api/site").hasAuthority(PermissionType.SITES_CREATE)
+                .antMatchers(HttpMethod.POST, "/api/site/assign-to-user").hasAuthority(PermissionType.SITES_CREATE)
                 .antMatchers(HttpMethod.GET, "/api/site/**").hasAuthority(PermissionType.SITES_READ)
                 .antMatchers(HttpMethod.PUT, "/api/site/**").hasAuthority(PermissionType.SITES_UPDATE)
                 .antMatchers(HttpMethod.DELETE, "/api/site/**").hasAuthority(PermissionType.SITES_DELETE)

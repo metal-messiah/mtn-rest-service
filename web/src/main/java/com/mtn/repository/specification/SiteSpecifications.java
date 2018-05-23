@@ -7,6 +7,7 @@ import com.mtn.model.domain.Store;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 
 /**
  * Created by Allen on 4/24/2017.

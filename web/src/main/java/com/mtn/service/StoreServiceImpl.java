@@ -43,6 +43,8 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     private StoreVolumeService volumeService;
     @Autowired
     private StoreValidator storeValidator;
+    @Autowired
+    private StoreStatusService storeStatusService;
 
     private static final String QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST = "" +
             "SELECT s.* " +
@@ -175,7 +177,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     @Override
     public Store getUpdatedEntity(Store existing, Store request) {
 
-        //If the store is changing status to active, we have some special handling to do
+        //If the store is changing type to active, we have some special handling to do
         if (request.getStoreType() == StoreType.ACTIVE && request.getStoreType() != existing.getStoreType()) {
             //Find any existing ACTIVE store for the site
             Site site = existing.getSite();
@@ -198,7 +200,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     @Override
     @Transactional
     public Store updateOneBanner(Integer storeId, Integer bannerId) {
-        Store store = findOneUsingSpecs(storeId);
+        Store store = findOne(storeId);
         if (store == null) {
             throw new IllegalArgumentException("No Store found with this id");
         }
@@ -210,6 +212,24 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 
         store.setBanner(banner);
         banner.getStores().add(store);
+
+        return store;
+    }
+
+    @Override
+    @Transactional
+    public Store setCurrentStoreStatus(Integer storeId, Integer storeStatusId) {
+        Store store = findOne(storeId);
+        if (store == null) {
+            throw new IllegalArgumentException("No store found with this id");
+        }
+
+        StoreStatus status = storeStatusService.findOne(storeStatusId);
+        if (status == null) {
+            throw new IllegalArgumentException("No store status with this id");
+        }
+
+        store.setCurrentStatus(status);
 
         return store;
     }

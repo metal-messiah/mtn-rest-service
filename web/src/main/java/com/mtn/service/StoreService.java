@@ -28,4 +28,6 @@ public interface StoreService extends EntityService<Store> {
 	List<Store> findAllBySiteIdUsingSpecs(Integer siteId);
 
 	Store updateOneBanner(Integer storeId, Integer bannerId);
+
+	Store setCurrentStoreStatus(Integer storeId, Integer statusId);
 }

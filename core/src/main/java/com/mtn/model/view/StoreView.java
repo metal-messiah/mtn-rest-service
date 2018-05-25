@@ -46,7 +46,7 @@ public class StoreView extends AuditingEntityView {
 
         this.site = new SimpleSiteView(store.getSite());
 
-        if (store.getCurrentStatus() != null) {
+        if (store.getCurrentStatus() != null && store.getCurrentStatus().getDeletedDate() == null) {
             this.currentStoreStatus = new SimpleStoreStatusView(store.getCurrentStatus());
         }
         if (store.getCurrentStoreSurvey() != null) {

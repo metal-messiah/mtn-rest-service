@@ -250,6 +250,12 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     }
 
     @Override
+    @Transactional
+    public void deleteStoreStatus(Integer storeId, Integer statusId) {
+        storeStatusService.deleteOne(statusId);
+    }
+
+    @Override
     public String getEntityName() {
         return "Store";
     }

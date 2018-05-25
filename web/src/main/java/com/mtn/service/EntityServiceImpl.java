@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 public abstract class EntityServiceImpl<T extends AuditingEntity & Identifiable> implements EntityService<T> {
 
 	@Autowired
@@ -48,6 +50,7 @@ public abstract class EntityServiceImpl<T extends AuditingEntity & Identifiable>
 		handleAssociationsOnDeletion(existing);
 
 		existing.setDeletedBy(securityService.getCurrentUser());
+		existing.setDeletedDate(LocalDateTime.now());
 	}
 
 	@Override

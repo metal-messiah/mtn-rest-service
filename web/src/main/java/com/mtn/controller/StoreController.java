@@ -105,6 +105,14 @@ public class StoreController extends CrudControllerImpl<Store> {
         return ResponseEntity.ok(new StoreView(domainModel));
     }
 
+    @RequestMapping(value = "/{id}/store-statuses/{statusId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteStoreStatus(@PathVariable("id") Integer storeId, @PathVariable Integer statusId) {
+        storeService.deleteStoreStatus(storeId, statusId);
+        Store domainModel = storeService.findOne(storeId);
+        return ResponseEntity.ok(new StoreView(domainModel));
+    }
+
+
     @Override
     public StoreService getEntityService() {
         return storeService;

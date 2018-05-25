@@ -30,6 +30,8 @@ public class StoreController extends CrudControllerImpl<Store> {
     private StoreCasingService casingService;
     @Autowired
     private StoreModelService modelService;
+    @Autowired
+    StoreStatusService storeStatusService;
 
     @RequestMapping(method = RequestMethod.GET, params = {"north", "south", "east", "west"})
     public ResponseEntity findAllInBounds(@RequestParam("north") Float north,
@@ -93,6 +95,13 @@ public class StoreController extends CrudControllerImpl<Store> {
     @RequestMapping(value = "/{id}/current-store-status/{statusId}", method = RequestMethod.PUT)
     public ResponseEntity setCurrentStoreStatus(@PathVariable("id") Integer storeId, @PathVariable("statusId") Integer statusId) {
         Store domainModel = storeService.setCurrentStoreStatus(storeId, statusId);
+        return ResponseEntity.ok(new StoreView(domainModel));
+    }
+
+    @RequestMapping(value = "/{id}/store-statuses", method = RequestMethod.POST)
+    public ResponseEntity createNewStoreStatus(@PathVariable("id") Integer storeId, @RequestBody StoreStatus storeStatus) {
+        StoreStatus createdStatus = storeService.createNewStoreStatus(storeId, storeStatus);
+        Store domainModel = storeService.findOne(storeId);
         return ResponseEntity.ok(new StoreView(domainModel));
     }
 

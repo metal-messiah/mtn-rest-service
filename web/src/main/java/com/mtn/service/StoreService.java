@@ -3,7 +3,6 @@ package com.mtn.service;
 import com.mtn.model.domain.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,4 +29,6 @@ public interface StoreService extends EntityService<Store> {
 	Store updateOneBanner(Integer storeId, Integer bannerId);
 
 	Store setCurrentStoreStatus(Integer storeId, Integer statusId);
+
+	StoreStatus createNewStoreStatus(Integer storeId, StoreStatus storeStatus);
 }

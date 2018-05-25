@@ -3,6 +3,7 @@ package com.mtn.service;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
 import com.mtn.repository.StoreRepository;
+import com.mtn.validators.StoreStatusValidator;
 import com.mtn.validators.StoreValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,8 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     private StoreValidator storeValidator;
     @Autowired
     private StoreStatusService storeStatusService;
+    @Autowired
+    private StoreStatusValidator storeStatusValidator;
 
     private static final String QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST = "" +
             "SELECT s.* " +
@@ -235,18 +238,30 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     }
 
     @Override
+    @Transactional
+    public StoreStatus createNewStoreStatus(Integer storeId, StoreStatus storeStatus) {
+        Store store = findOne(storeId);
+        getValidator().validateNotNull(store);
+
+        storeStatus.setStore(store);
+        store.setUpdatedBy(securityService.getCurrentUser());
+
+        return storeStatusService.addOne(storeStatus);
+    }
+
+    @Override
     public String getEntityName() {
         return "Store";
     }
 
     @Override
     public void handleAssociationsOnDeletion(Store existing) {
-        // TODO - casings, models, surveys, volumes
+        // TODO - casings, models, surveys, volumes, statuses
     }
 
     @Override
     public void handleAssociationsOnCreation(Store request) {
-        // TODO - casings, models, surveys, volumes
+        // TODO - casings, models, surveys, volumes, statuses
     }
 
     @Override

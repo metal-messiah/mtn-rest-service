@@ -5,6 +5,8 @@ import com.mtn.service.StoreStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StoreStatusValidator extends ValidatingDataService<StoreStatus> {
 

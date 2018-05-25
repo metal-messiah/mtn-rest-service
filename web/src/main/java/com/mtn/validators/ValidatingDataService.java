@@ -34,7 +34,7 @@ public abstract class ValidatingDataService<T extends AuditingEntity & Identifia
     Override this method to find duplicate by entity specific attribute (email, displayName, etc.)
      */
     public Identifiable getPotentialDuplicate(T object) {
-        return object;
+        return null;
     }
 
     public void validateForInsert(T object) {

@@ -56,12 +56,6 @@ public class StoreController extends CrudControllerImpl<Store> {
         return ResponseEntity.ok(new StoreSurveyView(domainModel));
     }
 
-    @RequestMapping(value = "/{id}/store-volume", method = RequestMethod.POST)
-    public ResponseEntity addOneStoreVolumeToStore(@PathVariable("id") Integer storeId, @RequestBody StoreVolume request) {
-        StoreVolume domainModel = storeService.addOneVolumeToStore(storeId, request);
-        return ResponseEntity.ok(new StoreVolumeView(domainModel));
-    }
-
     @RequestMapping(value = "/{id}/store-casing", method = RequestMethod.GET)
     public ResponseEntity findAllCasingsForStore(@PathVariable("id") Integer storeId) {
         List<StoreCasing> domainModels = casingService.findAllByStoreIdUsingSpecs(storeId);
@@ -99,8 +93,8 @@ public class StoreController extends CrudControllerImpl<Store> {
     }
 
     @RequestMapping(value = "/{id}/store-statuses", method = RequestMethod.POST)
-    public ResponseEntity createNewStoreStatus(@PathVariable("id") Integer storeId, @RequestBody StoreStatus storeStatus) {
-        StoreStatus createdStatus = storeService.createNewStoreStatus(storeId, storeStatus);
+    public ResponseEntity addOneStoreStatusToStore(@PathVariable("id") Integer storeId, @RequestBody StoreStatus storeStatus) {
+        StoreStatus createdStatus = storeService.addOneStatusToStore(storeId, storeStatus);
         Store domainModel = storeService.findOne(storeId);
         return ResponseEntity.ok(new StoreView(domainModel));
     }
@@ -112,6 +106,19 @@ public class StoreController extends CrudControllerImpl<Store> {
         return ResponseEntity.ok(new StoreView(domainModel));
     }
 
+    @RequestMapping(value = "/{id}/store-volumes", method = RequestMethod.POST)
+    public ResponseEntity addOneStoreVolumeToStore(@PathVariable("id") Integer storeId, @RequestBody StoreVolume request) {
+        StoreVolume createdVolume = storeService.addOneVolumeToStore(storeId, request);
+        Store domainModel = storeService.findOne(storeId);
+        return ResponseEntity.ok(new StoreView(domainModel));
+    }
+
+    @RequestMapping(value = "/{id}/store-volumes/{volumeId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteStoreVolume(@PathVariable("id") Integer storeId, @PathVariable Integer volumeId) {
+        storeService.deleteStoreVolume(storeId, volumeId);
+        Store domainModel = storeService.findOne(storeId);
+        return ResponseEntity.ok(new StoreView(domainModel));
+    }
 
     @Override
     public StoreService getEntityService() {

@@ -41,7 +41,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
     @Autowired
-    private StoreVolumeService volumeService;
+    private StoreVolumeService storeVolumeService;
     @Autowired
     private StoreValidator storeValidator;
     @Autowired
@@ -112,7 +112,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
         volume.setStore(existing);
         existing.setUpdatedBy(securityService.getCurrentUser());
 
-        return volumeService.addOne(volume);
+        return storeVolumeService.addOne(volume);
     }
 
     @Override
@@ -239,7 +239,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 
     @Override
     @Transactional
-    public StoreStatus createNewStoreStatus(Integer storeId, StoreStatus storeStatus) {
+    public StoreStatus addOneStatusToStore(Integer storeId, StoreStatus storeStatus) {
         Store store = findOne(storeId);
         getValidator().validateNotNull(store);
 
@@ -253,6 +253,12 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     @Transactional
     public void deleteStoreStatus(Integer storeId, Integer statusId) {
         storeStatusService.deleteOne(statusId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteStoreVolume(Integer storeId, Integer volumeId) {
+        storeVolumeService.deleteOne(volumeId);
     }
 
     @Override

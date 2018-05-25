@@ -30,7 +30,9 @@ public interface StoreService extends EntityService<Store> {
 
 	Store setCurrentStoreStatus(Integer storeId, Integer statusId);
 
-	StoreStatus createNewStoreStatus(Integer storeId, StoreStatus storeStatus);
+	StoreStatus addOneStatusToStore(Integer storeId, StoreStatus storeStatus);
 
 	void deleteStoreStatus(Integer storeId, Integer statusId);
+
+	void deleteStoreVolume(Integer storeId, Integer volumeId);
 }

@@ -13,10 +13,12 @@ public class SimpleBannerView implements Serializable {
 
     private Integer id;
     private String bannerName;
+    private String logoFileName;
 
     public SimpleBannerView(Banner banner) {
         this.id = banner.getId();
         this.bannerName = banner.getBannerName();
+        this.logoFileName = banner.getLogoFileName();
     }
 
     public Integer getId() {
@@ -35,4 +37,11 @@ public class SimpleBannerView implements Serializable {
         this.bannerName = bannerName;
     }
 
+    public String getLogoFileName() {
+        return logoFileName;
+    }
+
+    public void setLogoFileName(String logoFileName) {
+        this.logoFileName = logoFileName;
+    }
 }

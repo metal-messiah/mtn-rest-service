@@ -21,6 +21,7 @@ public class BannerView extends AuditingEntityView implements Serializable {
     private Boolean isHistorical;
     private String defaultStoreFit;
     private Integer defaultSalesArea;
+    private String logoFileName;
 
     private CompanyView company;
 
@@ -34,6 +35,7 @@ public class BannerView extends AuditingEntityView implements Serializable {
         this.isHistorical = banner.getHistorical();
         this.defaultStoreFit = banner.getDefaultStoreFit();
         this.defaultSalesArea = banner.getDefaultSalesArea();
+        this.logoFileName = banner.getLogoFileName();
 
         if (banner.getCompany() != null) {
             this.company = new CompanyView(banner.getCompany());
@@ -96,5 +98,13 @@ public class BannerView extends AuditingEntityView implements Serializable {
 
     public void setCompany(CompanyView company) {
         this.company = company;
+    }
+
+    public String getLogoFileName() {
+        return logoFileName;
+    }
+
+    public void setLogoFileName(String logoFileName) {
+        this.logoFileName = logoFileName;
     }
 }

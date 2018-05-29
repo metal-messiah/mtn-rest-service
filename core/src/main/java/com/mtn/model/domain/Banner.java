@@ -17,6 +17,7 @@ public class Banner extends AuditingEntity implements Identifiable {
     private Boolean isHistorical;
     private String defaultStoreFit;
     private Integer defaultSalesArea;
+    private String logoFileName;
 
     private List<Store> stores = new ArrayList<>();
 
@@ -81,5 +82,13 @@ public class Banner extends AuditingEntity implements Identifiable {
 
     public void setStores(List<Store> stores) {
         this.stores = stores;
+    }
+
+    public String getLogoFileName() {
+        return logoFileName;
+    }
+
+    public void setLogoFileName(String logoFileName) {
+        this.logoFileName = logoFileName;
     }
 }

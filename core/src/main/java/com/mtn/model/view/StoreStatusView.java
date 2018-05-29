@@ -17,6 +17,7 @@ public class StoreStatusView extends AuditingEntityView {
 	private Integer legacyCasingId;
 
 	public StoreStatusView(StoreStatus storeStatus) {
+		super(storeStatus);
 		this.id = storeStatus.getId();
 		this.store = new SimpleStoreView(storeStatus.getStore());
 		this.status = storeStatus.getStatus();

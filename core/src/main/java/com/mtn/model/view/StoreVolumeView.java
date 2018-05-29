@@ -17,6 +17,8 @@ public class StoreVolumeView extends AuditingEntityView {
     private Integer legacyCasingId;
 
     public StoreVolumeView(StoreVolume volume) {
+        super(volume);
+
         this.id = volume.getId();
         this.volumeTotal = volume.getVolumeTotal();
         this.volumeDate = volume.getVolumeDate();

@@ -196,6 +196,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
         existing.setStoreType(request.getStoreType());
         existing.setDateOpened(request.getDateOpened());
         existing.setDateClosed(request.getDateClosed());
+        existing.setFloating((request.getFloating()));
 
         return existing;
     }

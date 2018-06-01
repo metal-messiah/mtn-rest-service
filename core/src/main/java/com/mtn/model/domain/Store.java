@@ -22,6 +22,8 @@ public class Store extends AuditingEntity implements Identifiable {
     private LocalDateTime dateOpened;
     private LocalDateTime dateClosed;
     private Integer legacyLocationId;
+    private Boolean floating;
+
     private Banner banner;
     private StoreStatus currentStatus;
     private StoreSurvey currentStoreSurvey;
@@ -178,5 +180,14 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setStatuses(List<StoreStatus> statuses) {
         this.statuses = statuses;
+    }
+
+    @Column(name = "is_float")
+    public Boolean getFloating() {
+        return floating;
+    }
+
+    public void setFloating(Boolean floating) {
+        this.floating = floating;
     }
 }

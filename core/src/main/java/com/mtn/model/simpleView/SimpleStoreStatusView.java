@@ -3,14 +3,14 @@ package com.mtn.model.simpleView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.StoreStatus;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStoreStatusView {
 
     private Integer id;
     private String status;
-    private LocalDateTime statusStartDate;
+    private LocalDate statusStartDate;
 
     public SimpleStoreStatusView(StoreStatus storeStatus) {
         this.id = storeStatus.getId();
@@ -34,11 +34,11 @@ public class SimpleStoreStatusView {
         this.status = status;
     }
 
-    public LocalDateTime getStatusStartDate() {
+    public LocalDate getStatusStartDate() {
         return statusStartDate;
     }
 
-    public void setStatusStartDate(LocalDateTime statusStartDate) {
+    public void setStatusStartDate(LocalDate statusStartDate) {
         this.statusStartDate = statusStartDate;
     }
 }

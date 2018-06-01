@@ -1,19 +1,17 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.ModelType;
 import com.mtn.constant.VolumeType;
-import com.mtn.model.domain.StoreModel;
 import com.mtn.model.domain.StoreVolume;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStoreVolumeView {
 
     private Integer id;
     private Integer volumeTotal;
-    private LocalDateTime volumeDate;
+    private LocalDate volumeDate;
     private VolumeType volumeType;
     private String source;
 
@@ -41,11 +39,11 @@ public class SimpleStoreVolumeView {
         this.volumeTotal = volumeTotal;
     }
 
-    public LocalDateTime getVolumeDate() {
+    public LocalDate getVolumeDate() {
         return volumeDate;
     }
 
-    public void setVolumeDate(LocalDateTime volumeDate) {
+    public void setVolumeDate(LocalDate volumeDate) {
         this.volumeDate = volumeDate;
     }
 

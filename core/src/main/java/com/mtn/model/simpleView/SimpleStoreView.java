@@ -17,6 +17,8 @@ public class SimpleStoreView {
     private SimpleSiteView site;
     private String storeName;
     private String storeNumber;
+    private Boolean floating;
+
     private SimpleBannerView banner;
     private SimpleStoreStatusView currentStoreStatus;
 
@@ -25,6 +27,8 @@ public class SimpleStoreView {
         this.site = new SimpleSiteView(store.getSite());
         this.storeName = store.getStoreName();
         this.storeNumber = store.getStoreNumber();
+        this.floating = store.getFloating();
+
         Banner banner = store.getBanner();
         if (banner != null) {
             this.banner = new SimpleBannerView(banner);
@@ -81,5 +85,13 @@ public class SimpleStoreView {
 
     public void setCurrentStoreStatus(SimpleStoreStatusView currentStoreStatus) {
         this.currentStoreStatus = currentStoreStatus;
+    }
+
+    public Boolean getFloating() {
+        return floating;
+    }
+
+    public void setFloating(Boolean floating) {
+        this.floating = floating;
     }
 }

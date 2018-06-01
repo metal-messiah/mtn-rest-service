@@ -22,6 +22,8 @@ public class StoreView extends AuditingEntityView {
     private LocalDateTime dateClosed;
     private String storeNumber;
     private Integer legacyLocationId;
+    private Boolean floating;
+
     private SimpleStoreStatusView currentStoreStatus;
     private SimpleStoreSurveyView currentStoreSurvey;
 
@@ -43,6 +45,7 @@ public class StoreView extends AuditingEntityView {
         this.dateClosed = store.getDateClosed();
         this.legacyLocationId = store.getLegacyLocationId();
         this.storeNumber = store.getStoreNumber();
+        this.floating = store.getFloating();
 
         this.site = new SimpleSiteView(store.getSite());
 
@@ -200,5 +203,13 @@ public class StoreView extends AuditingEntityView {
 
     public void setStoreStatuses(List<SimpleStoreStatusView> storeStatuses) {
         this.storeStatuses = storeStatuses;
+    }
+
+    public Boolean getFloating() {
+        return floating;
+    }
+
+    public void setFloating(Boolean floating) {
+        this.floating = floating;
     }
 }

@@ -3,7 +3,7 @@ package com.mtn.model.domain;
 import com.mtn.constant.VolumeType;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table
@@ -12,7 +12,7 @@ public class StoreVolume extends AuditingEntity implements Identifiable {
     private Integer id;
     private Store store;
     private Integer volumeTotal;
-    private LocalDateTime volumeDate;
+    private LocalDate volumeDate;
     private VolumeType volumeType;
     private String source;
     private Integer legacyCasingId;
@@ -46,11 +46,11 @@ public class StoreVolume extends AuditingEntity implements Identifiable {
         this.volumeTotal = volumeTotal;
     }
 
-    public LocalDateTime getVolumeDate() {
+    public LocalDate getVolumeDate() {
         return volumeDate;
     }
 
-    public void setVolumeDate(LocalDateTime volumeDate) {
+    public void setVolumeDate(LocalDate volumeDate) {
         this.volumeDate = volumeDate;
     }
 

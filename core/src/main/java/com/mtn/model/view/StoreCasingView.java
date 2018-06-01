@@ -7,7 +7,6 @@ import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.simpleView.SimpleStoreStatusView;
-import com.mtn.model.simpleView.SimpleStoreVolumeView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

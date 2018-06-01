@@ -1,7 +1,7 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table
@@ -10,7 +10,7 @@ public class StoreStatus extends AuditingEntity implements Identifiable {
     private Integer id;
     private Store store;
     private String status;
-    private LocalDateTime statusStartDate;
+    private LocalDate statusStartDate;
     private Integer legacyLocationId;
     private Integer legacyCasingId;
 
@@ -43,11 +43,11 @@ public class StoreStatus extends AuditingEntity implements Identifiable {
         this.status = status;
     }
 
-    public LocalDateTime getStatusStartDate() {
+    public LocalDate getStatusStartDate() {
         return statusStartDate;
     }
 
-    public void setStatusStartDate(LocalDateTime statusStartDate) {
+    public void setStatusStartDate(LocalDate statusStartDate) {
         this.statusStartDate = statusStartDate;
     }
 

@@ -14,14 +14,20 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
 
     @Autowired
     private StoreCasingService storeCasingService;
-//    @Autowired
-//    private ProjectService projectService;
 
-//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-//    public ResponseEntity findAllProjectsForStoreCasing(@PathVariable("id") Integer storeCasingId) {
-//        List<Project> domainModels = projectService.findAllByStoreCasingId(storeCasingId);
-//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-//    }
+    @RequestMapping(value = "/{storeCasingId}/projects/{projectId}", method = RequestMethod.PUT)
+    public ResponseEntity addProject(@PathVariable("storeCasingId") Integer storeCasingId,
+                                     @PathVariable("projectId") Integer projectId) {
+        StoreCasing domainModel = storeCasingService.addProject(storeCasingId, projectId);
+        return ResponseEntity.ok(new StoreCasingView(domainModel));
+    }
+
+    @RequestMapping(value = "/{storeCasingId}/projects/{projectId}", method = RequestMethod.DELETE)
+    public ResponseEntity removeProject(@PathVariable("storeCasingId") Integer storeCasingId,
+                                     @PathVariable("projectId") Integer projectId) {
+        StoreCasing domainModel = storeCasingService.removeProject(storeCasingId, projectId);
+        return ResponseEntity.ok(new StoreCasingView(domainModel));
+    }
 
     @RequestMapping(value = "/{storeCasingId}/store-volume", method = RequestMethod.DELETE)
     public ResponseEntity removeVolume(@PathVariable("storeCasingId") Integer storeCasingId) {
@@ -29,9 +35,9 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
-
     @RequestMapping(value = "/{storeCasingId}/store-volume/{storeVolumeId}", method = RequestMethod.PUT)
-    public ResponseEntity updateVolume(@PathVariable("storeCasingId") Integer storeCasingId, @PathVariable("storeVolumeId") Integer storeVolumeId) {
+    public ResponseEntity updateVolume(@PathVariable("storeCasingId") Integer storeCasingId,
+                                       @PathVariable("storeVolumeId") Integer storeVolumeId) {
         StoreCasing domainModel = storeCasingService.setStoreVolume(storeCasingId, storeVolumeId);
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }

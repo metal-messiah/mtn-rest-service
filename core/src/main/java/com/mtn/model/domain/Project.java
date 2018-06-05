@@ -134,12 +134,7 @@ public class Project extends AuditingEntity implements Identifiable {
         this.models = models;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "store_casing_project",
-            joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "store_casing_id", referencedColumnName = "store_casing_id")
-    )
+    @ManyToMany(mappedBy = "projects")
     public List<StoreCasing> getStoreCasings() {
         return storeCasings;
     }
@@ -148,12 +143,7 @@ public class Project extends AuditingEntity implements Identifiable {
         this.storeCasings = storeCasings;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "shopping_center_casing_project",
-            joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "shopping_center_casing_id", referencedColumnName = "shopping_center_casing_id")
-    )
+    @ManyToMany(mappedBy = "projects")
     public List<ShoppingCenterCasing> getShoppingCenterCasings() {
         return shoppingCenterCasings;
     }

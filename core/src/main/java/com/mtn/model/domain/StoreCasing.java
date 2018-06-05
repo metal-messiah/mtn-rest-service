@@ -194,7 +194,12 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
         this.storeSurvey = storeSurvey;
     }
 
-    @ManyToMany(mappedBy = "storeCasings")
+    @ManyToMany
+    @JoinTable(
+            name = "store_casing_project",
+            joinColumns = @JoinColumn(name = "store_casing_id", referencedColumnName = "store_casing_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id")
+    )
     public List<Project> getProjects() {
         return projects;
     }

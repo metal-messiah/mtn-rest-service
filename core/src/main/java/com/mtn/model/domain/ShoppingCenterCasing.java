@@ -117,7 +117,12 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
         this.shoppingCenterSurvey = shoppingCenterSurvey;
     }
 
-    @ManyToMany(mappedBy = "shoppingCenterCasings")
+    @ManyToMany
+    @JoinTable(
+            name = "shopping_center_casing_project",
+            joinColumns = @JoinColumn(name = "shopping_center_casing_id", referencedColumnName = "shopping_center_casing_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id")
+    )
     public List<Project> getProjects() {
         return projects;
     }

@@ -14,4 +14,8 @@ public interface StoreCasingService extends EntityService<StoreCasing> {
 	StoreCasing setStoreVolume(Integer storeCasingId, Integer storeVolumeId);
 
 	StoreCasing removeStoreVolume(Integer storeCasingId);
+
+	StoreCasing addProject(Integer storeCasingId, Integer projectId);
+
+	StoreCasing removeProject(Integer storeCasingId, Integer projeectId);
 }

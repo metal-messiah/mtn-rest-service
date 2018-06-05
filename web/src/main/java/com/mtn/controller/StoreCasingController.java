@@ -42,6 +42,13 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
+    @RequestMapping(value = "/{storeCasingId}/store-status/{storeStatusId}", method = RequestMethod.PUT)
+    public ResponseEntity setStoreStatus(@PathVariable("storeCasingId") Integer storeCasingId,
+                                       @PathVariable("storeStatusId") Integer storeStatusId) {
+        StoreCasing domainModel = storeCasingService.setStoreStatus(storeCasingId, storeStatusId);
+        return ResponseEntity.ok(new StoreCasingView(domainModel));
+    }
+
     @Override
     public StoreCasingService getEntityService() {
         return storeCasingService;

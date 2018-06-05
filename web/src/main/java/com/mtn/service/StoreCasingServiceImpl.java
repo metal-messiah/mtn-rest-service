@@ -2,6 +2,7 @@ package com.mtn.service;
 
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.domain.StoreStatus;
 import com.mtn.model.domain.StoreVolume;
 import com.mtn.repository.StoreCasingRepository;
 import com.mtn.validators.StoreCasingValidator;
@@ -27,6 +28,8 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 	private StoreCasingRepository storeCasingRepository;
 	@Autowired
 	private StoreVolumeService storeVolumeService;
+	@Autowired
+	private StoreStatusService storeStatusService;
 	@Autowired
 	private StoreCasingValidator storeCasingValidator;
 	@Autowired
@@ -67,14 +70,19 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 	@Transactional
 	public StoreCasing setStoreVolume(Integer storeCasingId, Integer storeVolumeId) {
 		StoreCasing casing = this.findOne(storeCasingId);
-		if (casing == null) {
-			throw new EntityNotFoundException("No StoreCasing found with id: " + storeCasingId);
-		}
 		StoreVolume volume = this.storeVolumeService.findOne(storeVolumeId);
-		if (volume == null) {
-			throw new EntityNotFoundException("No StoreVolume found with id: " + storeVolumeId);
-		}
 		casing.setStoreVolume(volume);
+
+		return casing;
+	}
+
+
+	@Override
+	@Transactional
+	public StoreCasing setStoreStatus(Integer storeCasingId, Integer storeStatusId) {
+		StoreCasing casing = this.findOne(storeCasingId);
+		StoreStatus status = this.storeStatusService.findOne(storeStatusId);
+		casing.setStoreStatus(status);
 
 		return casing;
 	}
@@ -83,13 +91,7 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 	@Transactional
 	public StoreCasing addProject(Integer storeCasingId, Integer projectId) {
 		StoreCasing casing = this.findOne(storeCasingId);
-		if (casing == null) {
-			throw new EntityNotFoundException("No StoreCasing found with id: " + storeCasingId);
-		}
 		Project project = this.projectService.findOne(projectId);
-		if (project == null) {
-			throw new EntityNotFoundException("No Project found with id: " + projectId);
-		}
 		casing.getProjects().add(project);
 
 		return casing;
@@ -99,9 +101,6 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 	@Transactional
 	public StoreCasing removeProject(Integer storeCasingId, Integer projectId) {
 		StoreCasing casing = this.findOne(storeCasingId);
-		if (casing == null) {
-			throw new EntityNotFoundException("No StoreCasing found with id: " + storeCasingId);
-		}
 		casing.getProjects().removeIf(p -> p.getId().equals(projectId));
 
 		return casing;
@@ -111,9 +110,6 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 	@Transactional
 	public StoreCasing removeStoreVolume(Integer storeCasingId) {
 		StoreCasing casing = this.findOne(storeCasingId);
-		if (casing == null) {
-			throw new EntityNotFoundException("No StoreCasing found with id: " + storeCasingId);
-		}
 		casing.setStoreVolume(null);
 
 		return casing;

@@ -16,53 +16,6 @@
 CREATE DATABASE IF NOT EXISTS `mtn_dev` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `mtn_dev`;
 
--- Dumping structure for view mtn_dev.active_and_future_stores
-DROP VIEW IF EXISTS `active_and_future_stores`;
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `active_and_future_stores` (
-	`store_id` INT(11) NOT NULL,
-	`latitude` DOUBLE NOT NULL,
-	`longitude` DOUBLE NOT NULL,
-	`address_1` VARCHAR(255) NULL COLLATE 'utf8_unicode_ci',
-	`address_2` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`city` VARCHAR(255) NULL COLLATE 'utf8_unicode_ci',
-	`county` VARCHAR(255) NULL COLLATE 'utf8_unicode_ci',
-	`state` VARCHAR(255) NULL COLLATE 'utf8_unicode_ci',
-	`postal_code` VARCHAR(255) NULL COLLATE 'utf8_unicode_ci',
-	`quad` VARCHAR(255) NULL COLLATE 'utf8_unicode_ci',
-	`intersection_street_primary` VARCHAR(255) NULL COLLATE 'utf8_unicode_ci',
-	`intersection_street_secondary` VARCHAR(255) NULL COLLATE 'utf8_unicode_ci',
-	`store_type` ENUM('HISTORICAL','ACTIVE','FUTURE','HYPOTHETICAL') NULL COLLATE 'utf8_general_ci',
-	`store_name` VARCHAR(256) NULL COLLATE 'utf8_unicode_ci',
-	`store_number` VARCHAR(48) NULL COLLATE 'utf8_general_ci',
-	`store_status` VARCHAR(50) NULL COLLATE 'utf8_unicode_ci',
-	`store_strength` DECIMAL(26,3) NULL,
-	`store_fit` VARCHAR(255) NULL COLLATE 'utf8_bin',
-	`using_default_fit` VARCHAR(4) NULL COLLATE 'utf8mb4_general_ci',
-	`banner_id` INT(11) NULL,
-	`banner_name` VARCHAR(128) NULL COLLATE 'utf8_unicode_ci',
-	`company_id` INT(11) NULL,
-	`company_name` VARCHAR(128) NULL COLLATE 'utf8_unicode_ci',
-	`parent_company_id` INT(11) NULL,
-	`parent_company_name` VARCHAR(128) NULL COLLATE 'utf8_unicode_ci',
-	`area_sales` BIGINT(11) NULL,
-	`area_total` INT(11) NULL,
-	`volume_choice` VARCHAR(11) NULL COLLATE 'utf8mb4_general_ci',
-	`volume_total` BIGINT(11) NULL,
-	`volume_date` DATE NULL,
-	`shopping_center_feature_score` BINARY(0) NULL,
-	`rating_synergy` ENUM('POOR','FAIR','AVERAGE','GOOD','EXCELLENT') NULL COLLATE 'utf8_general_ci',
-	`tenant_vacant_count` INT(11) NULL,
-	`tenant_occupied_count` INT(11) NULL,
-	`parking_space_count` INT(11) NULL,
-	`legacy_location_id` INT(11) NULL,
-	`cbsa_id` INT(11) NULL,
-	`sc_condition_score` DECIMAL(16,2) NULL,
-	`volume_confidence` ENUM('LOW','MEDIUM','HIGH','VERY_HIGH') NULL COLLATE 'utf8_general_ci',
-	`power` FLOAT NULL,
-	`power_date` DATE NULL
-) ENGINE=MyISAM;
-
 -- Dumping structure for view mtn_dev.active_stores_with_strengths
 DROP VIEW IF EXISTS `active_stores_with_strengths`;
 -- Creating temporary table to overcome VIEW dependency errors
@@ -192,7 +145,8 @@ CREATE TABLE `most_recent_shopping_center_casing` (
 	`deleted_date` TIMESTAMP NULL,
 	`deleted_by` INT(11) NULL,
 	`version` INT(11) NOT NULL,
-	`legacy_casing_id` INT(11) NULL
+	`legacy_casing_id` INT(11) NULL,
+	`shopping_center_survey_id` INT(11) NOT NULL
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view mtn_dev.most_recent_shopping_center_survey
@@ -245,20 +199,7 @@ CREATE TABLE `most_recent_store_casing` (
 	`pharmacy_avg_dollars_per_script` FLOAT NULL,
 	`pharmacy_pharmacist_count` INT(11) NULL,
 	`pharmacy_technician_count` INT(11) NULL,
-	`volume_grocery` INT(11) NULL,
-	`volume_percent_grocery` FLOAT NULL,
-	`volume_meat` INT(11) NULL,
-	`volume_percent_meat` FLOAT NULL,
-	`volume_non_food` INT(11) NULL,
-	`volume_percent_non_food` FLOAT NULL,
-	`volume_other` INT(11) NULL,
-	`volume_percent_other` FLOAT NULL,
-	`volume_produce` INT(11) NULL,
-	`volume_percent_produce` FLOAT NULL,
-	`volume_plus_minus` INT(11) NULL,
-	`volume_note` TEXT NULL COLLATE 'utf8_general_ci',
 	`store_volume_id` INT(11) NULL,
-	`volume_confidence` ENUM('LOW','MEDIUM','HIGH','VERY_HIGH') NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
 	`updated_date` TIMESTAMP NOT NULL,
@@ -266,7 +207,8 @@ CREATE TABLE `most_recent_store_casing` (
 	`deleted_date` TIMESTAMP NULL,
 	`deleted_by` INT(11) NULL,
 	`version` INT(11) NOT NULL,
-	`legacy_casing_id` INT(11) NULL
+	`legacy_casing_id` INT(11) NULL,
+	`store_survey_id` INT(11) NOT NULL
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view mtn_dev.most_recent_store_model
@@ -407,8 +349,21 @@ CREATE TABLE `most_recent_store_volume` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
+	`volume_grocery` INT(11) NULL,
+	`volume_percent_grocery` FLOAT NULL,
+	`volume_meat` INT(11) NULL,
+	`volume_percent_meat` FLOAT NULL,
+	`volume_non_food` INT(11) NULL,
+	`volume_percent_non_food` FLOAT NULL,
+	`volume_other` INT(11) NULL,
+	`volume_percent_other` FLOAT NULL,
+	`volume_produce` INT(11) NULL,
+	`volume_percent_produce` FLOAT NULL,
+	`volume_plus_minus` INT(11) NULL,
+	`volume_note` TEXT NULL COLLATE 'utf8_general_ci',
+	`volume_confidence` ENUM('LOW','MEDIUM','HIGH','VERY_HIGH') NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
 	`updated_date` TIMESTAMP NOT NULL,
@@ -427,7 +382,7 @@ CREATE TABLE `most_recent_store_volume_actual` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -447,7 +402,7 @@ CREATE TABLE `most_recent_store_volume_estimate` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -467,7 +422,7 @@ CREATE TABLE `most_recent_store_volume_projection` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -487,7 +442,7 @@ CREATE TABLE `most_recent_store_volume_reported` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -507,7 +462,7 @@ CREATE TABLE `most_recent_store_volume_third_party` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -675,7 +630,7 @@ CREATE TABLE `store_volume_actual` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -695,7 +650,7 @@ CREATE TABLE `store_volume_estimate` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -715,7 +670,7 @@ CREATE TABLE `store_volume_projection` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -735,7 +690,7 @@ CREATE TABLE `store_volume_reported` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -755,7 +710,7 @@ CREATE TABLE `store_volume_third_party` (
 	`store_id` INT(11) NOT NULL,
 	`volume_total` INT(11) NOT NULL,
 	`volume_date` DATE NOT NULL,
-	`volume_type` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
+	`volume_type` ENUM('ACTUAL','ESTIMATE','PROJECTION','PLACEHOLDER','THIRD_PARTY') NOT NULL COLLATE 'utf8_general_ci',
 	`source` VARCHAR(164) NULL COLLATE 'utf8_general_ci',
 	`created_date` TIMESTAMP NOT NULL,
 	`created_by` INT(11) NOT NULL,
@@ -803,12 +758,6 @@ CREATE TABLE `volume_decision_params` (
 	`volume_third_party_date` DATE NULL
 ) ENGINE=MyISAM;
 
--- Dumping structure for view mtn_dev.active_and_future_stores
-DROP VIEW IF EXISTS `active_and_future_stores`;
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `active_and_future_stores`;
-CREATE VIEW `active_and_future_stores` AS select `st`.`store_id` AS `store_id`,`si`.`latitude` AS `latitude`,`si`.`longitude` AS `longitude`,`si`.`address_1` AS `address_1`,`si`.`address_2` AS `address_2`,`si`.`city` AS `city`,`si`.`county` AS `county`,`si`.`state` AS `state`,`si`.`postal_code` AS `postal_code`,`si`.`quad` AS `quad`,`si`.`intersection_street_primary` AS `intersection_street_primary`,`si`.`intersection_street_secondary` AS `intersection_street_secondary`,`st`.`store_type` AS `store_type`,`st`.`store_name` AS `store_name`,`st`.`store_number` AS `store_number`,`stat`.`status` AS `store_status`,(case when (`strength`.`strength` > 1) then 1 when (`strength`.`strength` < 0) then 0 else `strength`.`strength` end) AS `store_strength`,coalesce(`mrss`.`store_fit`,`b`.`default_store_fit`,'Conventional') AS `store_fit`,(case when (isnull(`mrss`.`store_fit`) and isnull(`b`.`default_store_fit`)) then 'TRUE' else NULL end) AS `using_default_fit`,`b`.`banner_id` AS `banner_id`,`b`.`banner_name` AS `banner_name`,`c1`.`company_id` AS `company_id`,`c1`.`company_name` AS `company_name`,`c2`.`company_id` AS `parent_company_id`,`c2`.`company_name` AS `parent_company_name`,coalesce(`mrss`.`area_sales`,`b`.`default_sales_area`) AS `area_sales`,`mrss`.`area_total` AS `area_total`,`sbv`.`decision` AS `volume_choice`,`sbv`.`volume_total` AS `volume_total`,`sbv`.`volume_date` AS `volume_date`,NULL AS `shopping_center_feature_score`,`mrscc`.`rating_synergy` AS `rating_synergy`,`mrscs`.`tenant_vacant_count` AS `tenant_vacant_count`,`mrscs`.`tenant_occupied_count` AS `tenant_occupied_count`,`mrscs`.`parking_space_count` AS `parking_space_count`,`st`.`legacy_location_id` AS `legacy_location_id`,`si`.`cbsa_id` AS `cbsa_id`,round(coalesce(`sci`.`score`,`ascs`.`score`),2) AS `sc_condition_score`,`mrsc`.`volume_confidence` AS `volume_confidence`,`mrsm`.`fit_adjusted_power` AS `power`,`mrsm`.`model_date` AS `power_date` from ((((((((((((((`site` `si` join `store` `st` on((`si`.`site_id` = `st`.`site_id`))) left join `banner` `b` on((`b`.`banner_id` = `st`.`banner_id`))) left join `company` `c1` on((`c1`.`company_id` = `b`.`company_id`))) left join `company` `c2` on((`c2`.`company_id` = `c1`.`parent_company_id`))) left join `store_strength` `strength` on((`strength`.`store_id` = `st`.`store_id`))) left join `most_recent_store_survey` `mrss` on((`mrss`.`store_id` = `st`.`store_id`))) left join `most_recent_store_casing` `mrsc` on((`mrsc`.`store_id` = `st`.`store_id`))) left join `most_recent_store_model` `mrsm` on((`mrsm`.`store_id` = `st`.`store_id`))) left join `most_recent_store_status` `stat` on((`stat`.`store_id` = `st`.`store_id`))) left join `store_best_volume` `sbv` on((`sbv`.`store_id` = `st`.`store_id`))) left join `most_recent_shopping_center_survey` `mrscs` on((`mrscs`.`shopping_center_id` = `si`.`shopping_center_id`))) left join `most_recent_shopping_center_casing` `mrscc` on((`mrscc`.`shopping_center_id` = `si`.`shopping_center_id`))) left join `sc_condition_score` `sci` on((`sci`.`shopping_center_casing_id` = `mrscc`.`shopping_center_casing_id`))) left join `average_sc_score` `ascs` on((`ascs`.`shopping_center_id` = `si`.`shopping_center_id`))) where (`st`.`store_type` <> 'HISTORICAL');
-
 -- Dumping structure for view mtn_dev.active_stores_with_strengths
 DROP VIEW IF EXISTS `active_stores_with_strengths`;
 -- Removing temporary table and create final VIEW structure
@@ -855,7 +804,7 @@ CREATE VIEW `avg_by_fit_in_county` AS select (`ss`.`store_fit` collate utf8_unic
 DROP VIEW IF EXISTS `most_recent_shopping_center_casing`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `most_recent_shopping_center_casing`;
-CREATE VIEW `most_recent_shopping_center_casing` AS select `s1`.`shopping_center_casing_id` AS `shopping_center_casing_id`,`s1`.`shopping_center_id` AS `shopping_center_id`,`s1`.`shopping_center_casing_date` AS `shopping_center_casing_date`,`s1`.`shopping_center_casing_note` AS `shopping_center_casing_note`,`s1`.`rating_parking_lot` AS `rating_parking_lot`,`s1`.`rating_buildings` AS `rating_buildings`,`s1`.`rating_lighting` AS `rating_lighting`,`s1`.`rating_synergy` AS `rating_synergy`,`s1`.`created_date` AS `created_date`,`s1`.`created_by` AS `created_by`,`s1`.`updated_date` AS `updated_date`,`s1`.`updated_by` AS `updated_by`,`s1`.`deleted_date` AS `deleted_date`,`s1`.`deleted_by` AS `deleted_by`,`s1`.`version` AS `version`,`s1`.`legacy_casing_id` AS `legacy_casing_id` from (`shopping_center_casing` `s1` left join `shopping_center_casing` `s2` on(((`s1`.`shopping_center_id` = `s2`.`shopping_center_id`) and ((`s1`.`shopping_center_casing_date` < `s2`.`shopping_center_casing_date`) or ((`s1`.`shopping_center_casing_date` = `s2`.`shopping_center_casing_date`) and (`s1`.`shopping_center_casing_id` < `s2`.`shopping_center_casing_id`)))))) where isnull(`s2`.`shopping_center_id`);
+CREATE VIEW `most_recent_shopping_center_casing` AS select `s1`.`shopping_center_casing_id` AS `shopping_center_casing_id`,`s1`.`shopping_center_id` AS `shopping_center_id`,`s1`.`shopping_center_casing_date` AS `shopping_center_casing_date`,`s1`.`shopping_center_casing_note` AS `shopping_center_casing_note`,`s1`.`rating_parking_lot` AS `rating_parking_lot`,`s1`.`rating_buildings` AS `rating_buildings`,`s1`.`rating_lighting` AS `rating_lighting`,`s1`.`rating_synergy` AS `rating_synergy`,`s1`.`created_date` AS `created_date`,`s1`.`created_by` AS `created_by`,`s1`.`updated_date` AS `updated_date`,`s1`.`updated_by` AS `updated_by`,`s1`.`deleted_date` AS `deleted_date`,`s1`.`deleted_by` AS `deleted_by`,`s1`.`version` AS `version`,`s1`.`legacy_casing_id` AS `legacy_casing_id`,`s1`.`shopping_center_survey_id` AS `shopping_center_survey_id` from (`shopping_center_casing` `s1` left join `shopping_center_casing` `s2` on(((`s1`.`shopping_center_id` = `s2`.`shopping_center_id`) and ((`s1`.`shopping_center_casing_date` < `s2`.`shopping_center_casing_date`) or ((`s1`.`shopping_center_casing_date` = `s2`.`shopping_center_casing_date`) and (`s1`.`shopping_center_casing_id` < `s2`.`shopping_center_casing_id`)))))) where isnull(`s2`.`shopping_center_id`);
 
 -- Dumping structure for view mtn_dev.most_recent_shopping_center_survey
 DROP VIEW IF EXISTS `most_recent_shopping_center_survey`;
@@ -867,7 +816,7 @@ CREATE VIEW `most_recent_shopping_center_survey` AS select `s1`.`shopping_center
 DROP VIEW IF EXISTS `most_recent_store_casing`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `most_recent_store_casing`;
-CREATE VIEW `most_recent_store_casing` AS select `s1`.`store_casing_id` AS `store_casing_id`,`s1`.`store_id` AS `store_id`,`s1`.`store_casing_date` AS `store_casing_date`,`s1`.`store_casing_note` AS `store_casing_note`,`s1`.`store_status_id` AS `store_status_id`,`s1`.`condition_ceiling` AS `condition_ceiling`,`s1`.`condition_checkstands` AS `condition_checkstands`,`s1`.`condition_floors` AS `condition_floors`,`s1`.`condition_frozen_refrigerated` AS `condition_frozen_refrigerated`,`s1`.`condition_shelving_gondolas` AS `condition_shelving_gondolas`,`s1`.`condition_walls` AS `condition_walls`,`s1`.`fuel_gallons_weekly` AS `fuel_gallons_weekly`,`s1`.`pharmacy_scripts_weekly` AS `pharmacy_scripts_weekly`,`s1`.`pharmacy_avg_dollars_per_script` AS `pharmacy_avg_dollars_per_script`,`s1`.`pharmacy_pharmacist_count` AS `pharmacy_pharmacist_count`,`s1`.`pharmacy_technician_count` AS `pharmacy_technician_count`,`s1`.`volume_grocery` AS `volume_grocery`,`s1`.`volume_percent_grocery` AS `volume_percent_grocery`,`s1`.`volume_meat` AS `volume_meat`,`s1`.`volume_percent_meat` AS `volume_percent_meat`,`s1`.`volume_non_food` AS `volume_non_food`,`s1`.`volume_percent_non_food` AS `volume_percent_non_food`,`s1`.`volume_other` AS `volume_other`,`s1`.`volume_percent_other` AS `volume_percent_other`,`s1`.`volume_produce` AS `volume_produce`,`s1`.`volume_percent_produce` AS `volume_percent_produce`,`s1`.`volume_plus_minus` AS `volume_plus_minus`,`s1`.`volume_note` AS `volume_note`,`s1`.`store_volume_id` AS `store_volume_id`,`s1`.`volume_confidence` AS `volume_confidence`,`s1`.`created_date` AS `created_date`,`s1`.`created_by` AS `created_by`,`s1`.`updated_date` AS `updated_date`,`s1`.`updated_by` AS `updated_by`,`s1`.`deleted_date` AS `deleted_date`,`s1`.`deleted_by` AS `deleted_by`,`s1`.`version` AS `version`,`s1`.`legacy_casing_id` AS `legacy_casing_id` from (`store_casing` `s1` left join `store_casing` `s2` on(((`s1`.`store_id` = `s2`.`store_id`) and ((`s1`.`store_casing_date` < `s2`.`store_casing_date`) or ((`s1`.`store_casing_date` = `s2`.`store_casing_date`) and (`s1`.`store_casing_id` < `s2`.`store_casing_id`)))))) where isnull(`s2`.`store_id`);
+CREATE VIEW `most_recent_store_casing` AS select `s1`.`store_casing_id` AS `store_casing_id`,`s1`.`store_id` AS `store_id`,`s1`.`store_casing_date` AS `store_casing_date`,`s1`.`store_casing_note` AS `store_casing_note`,`s1`.`store_status_id` AS `store_status_id`,`s1`.`condition_ceiling` AS `condition_ceiling`,`s1`.`condition_checkstands` AS `condition_checkstands`,`s1`.`condition_floors` AS `condition_floors`,`s1`.`condition_frozen_refrigerated` AS `condition_frozen_refrigerated`,`s1`.`condition_shelving_gondolas` AS `condition_shelving_gondolas`,`s1`.`condition_walls` AS `condition_walls`,`s1`.`fuel_gallons_weekly` AS `fuel_gallons_weekly`,`s1`.`pharmacy_scripts_weekly` AS `pharmacy_scripts_weekly`,`s1`.`pharmacy_avg_dollars_per_script` AS `pharmacy_avg_dollars_per_script`,`s1`.`pharmacy_pharmacist_count` AS `pharmacy_pharmacist_count`,`s1`.`pharmacy_technician_count` AS `pharmacy_technician_count`,`s1`.`store_volume_id` AS `store_volume_id`,`s1`.`created_date` AS `created_date`,`s1`.`created_by` AS `created_by`,`s1`.`updated_date` AS `updated_date`,`s1`.`updated_by` AS `updated_by`,`s1`.`deleted_date` AS `deleted_date`,`s1`.`deleted_by` AS `deleted_by`,`s1`.`version` AS `version`,`s1`.`legacy_casing_id` AS `legacy_casing_id`,`s1`.`store_survey_id` AS `store_survey_id` from (`store_casing` `s1` left join `store_casing` `s2` on(((`s1`.`store_id` = `s2`.`store_id`) and ((`s1`.`store_casing_date` < `s2`.`store_casing_date`) or ((`s1`.`store_casing_date` = `s2`.`store_casing_date`) and (`s1`.`store_casing_id` < `s2`.`store_casing_id`)))))) where isnull(`s2`.`store_id`);
 
 -- Dumping structure for view mtn_dev.most_recent_store_model
 DROP VIEW IF EXISTS `most_recent_store_model`;
@@ -891,7 +840,7 @@ CREATE VIEW `most_recent_store_survey` AS select `s1`.`store_survey_id` AS `stor
 DROP VIEW IF EXISTS `most_recent_store_volume`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `most_recent_store_volume`;
-CREATE VIEW `most_recent_store_volume` AS select `s1`.`store_volume_id` AS `store_volume_id`,`s1`.`store_id` AS `store_id`,`s1`.`volume_total` AS `volume_total`,`s1`.`volume_date` AS `volume_date`,`s1`.`volume_type` AS `volume_type`,`s1`.`source` AS `source`,`s1`.`created_date` AS `created_date`,`s1`.`created_by` AS `created_by`,`s1`.`updated_date` AS `updated_date`,`s1`.`updated_by` AS `updated_by`,`s1`.`deleted_date` AS `deleted_date`,`s1`.`deleted_by` AS `deleted_by`,`s1`.`version` AS `version`,`s1`.`legacy_casing_id` AS `legacy_casing_id` from (`store_volume` `s1` left join `store_volume` `s2` on(((`s1`.`store_id` = `s2`.`store_id`) and ((`s1`.`volume_date` < `s2`.`volume_date`) or ((`s1`.`volume_date` = `s2`.`volume_date`) and (`s1`.`store_volume_id` < `s2`.`store_volume_id`)))))) where isnull(`s2`.`store_id`);
+CREATE VIEW `most_recent_store_volume` AS select `s1`.`store_volume_id` AS `store_volume_id`,`s1`.`store_id` AS `store_id`,`s1`.`volume_total` AS `volume_total`,`s1`.`volume_date` AS `volume_date`,`s1`.`volume_type` AS `volume_type`,`s1`.`source` AS `source`,`s1`.`volume_grocery` AS `volume_grocery`,`s1`.`volume_percent_grocery` AS `volume_percent_grocery`,`s1`.`volume_meat` AS `volume_meat`,`s1`.`volume_percent_meat` AS `volume_percent_meat`,`s1`.`volume_non_food` AS `volume_non_food`,`s1`.`volume_percent_non_food` AS `volume_percent_non_food`,`s1`.`volume_other` AS `volume_other`,`s1`.`volume_percent_other` AS `volume_percent_other`,`s1`.`volume_produce` AS `volume_produce`,`s1`.`volume_percent_produce` AS `volume_percent_produce`,`s1`.`volume_plus_minus` AS `volume_plus_minus`,`s1`.`volume_note` AS `volume_note`,`s1`.`volume_confidence` AS `volume_confidence`,`s1`.`created_date` AS `created_date`,`s1`.`created_by` AS `created_by`,`s1`.`updated_date` AS `updated_date`,`s1`.`updated_by` AS `updated_by`,`s1`.`deleted_date` AS `deleted_date`,`s1`.`deleted_by` AS `deleted_by`,`s1`.`version` AS `version`,`s1`.`legacy_casing_id` AS `legacy_casing_id` from (`store_volume` `s1` left join `store_volume` `s2` on(((`s1`.`store_id` = `s2`.`store_id`) and ((`s1`.`volume_date` < `s2`.`volume_date`) or ((`s1`.`volume_date` = `s2`.`volume_date`) and (`s1`.`store_volume_id` < `s2`.`store_volume_id`)))))) where isnull(`s2`.`store_id`);
 
 -- Dumping structure for view mtn_dev.most_recent_store_volume_actual
 DROP VIEW IF EXISTS `most_recent_store_volume_actual`;

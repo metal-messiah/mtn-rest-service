@@ -1,6 +1,5 @@
 package com.mtn.model.domain;
 
-import com.mtn.constant.ConfidenceType;
 import com.mtn.constant.RatingType;
 
 import javax.persistence.*;
@@ -28,20 +27,7 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private Double pharmacyAvgDollarsPerScript;
     private Integer pharmacyPharmacistCount;
     private Integer pharmacyTechnicianCount;
-    private Integer volumeGrocery;
-    private Double volumePercentGrocery;
-    private Integer volumeMeat;
-    private Double volumePercentMeat;
-    private Integer volumeNonFood;
-    private Double volumePercentNonFood;
-    private Integer volumeOther;
-    private Double volumePercentOther;
-    private Integer volumeProduce;
-    private Double volumePercentProduce;
-    private Integer volumePlusMinus;
     private StoreVolume storeVolume;
-    private String volumeNote;
-    private ConfidenceType volumeConfidence;
     private Integer legacyCasingId;
 
     private StoreSurvey storeSurvey;
@@ -190,121 +176,6 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
         this.pharmacyTechnicianCount = pharmacyTechnicianCount;
     }
 
-    public Integer getVolumeGrocery() {
-        return volumeGrocery;
-    }
-
-    public void setVolumeGrocery(Integer volumeGrocery) {
-        this.volumeGrocery = volumeGrocery;
-    }
-
-    public Double getVolumePercentGrocery() {
-        return volumePercentGrocery;
-    }
-
-    public void setVolumePercentGrocery(Double volumePercentGrocery) {
-        this.volumePercentGrocery = volumePercentGrocery;
-    }
-
-    public Integer getVolumeMeat() {
-        return volumeMeat;
-    }
-
-    public void setVolumeMeat(Integer volumeMeat) {
-        this.volumeMeat = volumeMeat;
-    }
-
-    public Double getVolumePercentMeat() {
-        return volumePercentMeat;
-    }
-
-    public void setVolumePercentMeat(Double volumePercentMeat) {
-        this.volumePercentMeat = volumePercentMeat;
-    }
-
-    public Integer getVolumeNonFood() {
-        return volumeNonFood;
-    }
-
-    public void setVolumeNonFood(Integer volumeNonFood) {
-        this.volumeNonFood = volumeNonFood;
-    }
-
-    public Double getVolumePercentNonFood() {
-        return volumePercentNonFood;
-    }
-
-    public void setVolumePercentNonFood(Double volumePercentNonFood) {
-        this.volumePercentNonFood = volumePercentNonFood;
-    }
-
-    public Integer getVolumeOther() {
-        return volumeOther;
-    }
-
-    public void setVolumeOther(Integer volumeOther) {
-        this.volumeOther = volumeOther;
-    }
-
-    public Double getVolumePercentOther() {
-        return volumePercentOther;
-    }
-
-    public void setVolumePercentOther(Double volumePercentOther) {
-        this.volumePercentOther = volumePercentOther;
-    }
-
-    public Integer getVolumeProduce() {
-        return volumeProduce;
-    }
-
-    public void setVolumeProduce(Integer volumeProduce) {
-        this.volumeProduce = volumeProduce;
-    }
-
-    public Double getVolumePercentProduce() {
-        return volumePercentProduce;
-    }
-
-    public void setVolumePercentProduce(Double volumePercentProduce) {
-        this.volumePercentProduce = volumePercentProduce;
-    }
-
-    public Integer getVolumePlusMinus() {
-        return volumePlusMinus;
-    }
-
-    public void setVolumePlusMinus(Integer volumePlusMinus) {
-        this.volumePlusMinus = volumePlusMinus;
-    }
-
-    @OneToOne
-    @JoinColumn(name = "store_volume_id")
-    public StoreVolume getStoreVolume() {
-        return storeVolume;
-    }
-
-    public void setStoreVolume(StoreVolume storeVolume) {
-        this.storeVolume = storeVolume;
-    }
-
-    public String getVolumeNote() {
-        return volumeNote;
-    }
-
-    public void setVolumeNote(String volumeNote) {
-        this.volumeNote = volumeNote;
-    }
-
-    @Enumerated(EnumType.STRING)
-    public ConfidenceType getVolumeConfidence() {
-        return volumeConfidence;
-    }
-
-    public void setVolumeConfidence(ConfidenceType volumeConfidence) {
-        this.volumeConfidence = volumeConfidence;
-    }
-
     public Integer getLegacyCasingId() {
         return legacyCasingId;
     }
@@ -331,4 +202,16 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     public void setProjects(List<Project> projects) {
         this.projects = projects;
     }
+
+    @OneToOne
+    @JoinColumn(name = "store_volume_id")
+    public StoreVolume getStoreVolume() {
+        return storeVolume;
+    }
+
+    public void setStoreVolume(StoreVolume storeVolume) {
+        this.storeVolume = storeVolume;
+    }
+
+
 }

@@ -13,14 +13,12 @@ public class SimpleStoreVolumeView {
     private Integer volumeTotal;
     private LocalDate volumeDate;
     private VolumeType volumeType;
-    private String source;
 
     public SimpleStoreVolumeView(StoreVolume storeVolume) {
         this.id = storeVolume.getId();
         this.volumeTotal = storeVolume.getVolumeTotal();
         this.volumeDate = storeVolume.getVolumeDate();
         this.volumeType = storeVolume.getVolumeType();
-        this.source = storeVolume.getSource();
     }
 
     public Integer getId() {
@@ -55,11 +53,4 @@ public class SimpleStoreVolumeView {
         this.volumeType = volumeType;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
 }

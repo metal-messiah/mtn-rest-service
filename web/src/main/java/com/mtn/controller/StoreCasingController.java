@@ -5,6 +5,7 @@ import com.mtn.model.simpleView.SimpleStoreCasingView;
 import com.mtn.model.view.StoreCasingView;
 import com.mtn.service.StoreCasingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,19 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
 //        List<Project> domainModels = projectService.findAllByStoreCasingId(storeCasingId);
 //        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
 //    }
+
+    @RequestMapping(value = "/{storeCasingId}/store-volume", method = RequestMethod.DELETE)
+    public ResponseEntity removeVolume(@PathVariable("storeCasingId") Integer storeCasingId) {
+        StoreCasing domainModel = storeCasingService.removeStoreVolume(storeCasingId);
+        return ResponseEntity.ok(new StoreCasingView(domainModel));
+    }
+
+
+    @RequestMapping(value = "/{storeCasingId}/store-volume/{storeVolumeId}", method = RequestMethod.PUT)
+    public ResponseEntity updateVolume(@PathVariable("storeCasingId") Integer storeCasingId, @PathVariable("storeVolumeId") Integer storeVolumeId) {
+        StoreCasing domainModel = storeCasingService.setStoreVolume(storeCasingId, storeVolumeId);
+        return ResponseEntity.ok(new StoreCasingView(domainModel));
+    }
 
     @Override
     public StoreCasingService getEntityService() {

@@ -1,7 +1,6 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.ConfidenceType;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreVolume;
@@ -30,25 +29,11 @@ public class StoreCasingView extends AuditingEntityView {
     private Double pharmacyAvgDollarsPerScript;
     private Integer pharmacyPharmacistCount;
     private Integer pharmacyTechnicianCount;
-    private Integer volumeGrocery;
-    private Double volumePercentGrocery;
-    private Integer volumeMeat;
-    private Double volumePercentMeat;
-    private Integer volumeNonFood;
-    private Double volumePercentNonFood;
-    private Integer volumeOther;
-    private Double volumePercentOther;
-    private Integer volumeProduce;
-    private Double volumePercentProduce;
-    private Integer volumePlusMinus;
-    private String volumeNote;
-    private ConfidenceType volumeConfidence;
     private Integer legacyCasingId;
 
     private SimpleStoreStatusView storeStatus;
     private StoreVolumeView storeVolume;
-    private StoreSurveyView surveyView;
-
+    private StoreSurveyView storeSurvey;
     private List<SimpleProjectView> projects = new ArrayList<>();
 
     public StoreCasingView(StoreCasing storeCasing) {
@@ -67,19 +52,6 @@ public class StoreCasingView extends AuditingEntityView {
         this.pharmacyAvgDollarsPerScript = storeCasing.getPharmacyAvgDollarsPerScript();
         this.pharmacyPharmacistCount = storeCasing.getPharmacyPharmacistCount();
         this.pharmacyTechnicianCount = storeCasing.getPharmacyTechnicianCount();
-        this.volumeGrocery = storeCasing.getVolumeGrocery();
-        this.volumePercentGrocery = storeCasing.getVolumePercentGrocery();
-        this.volumeMeat = storeCasing.getVolumeMeat();
-        this.volumePercentMeat = storeCasing.getVolumePercentMeat();
-        this.volumeNonFood = storeCasing.getVolumeNonFood();
-        this.volumePercentNonFood = storeCasing.getVolumePercentNonFood();
-        this.volumeOther = storeCasing.getVolumeOther();
-        this.volumePercentOther = storeCasing.getVolumePercentOther();
-        this.volumeProduce = storeCasing.getVolumeProduce();
-        this.volumePercentProduce = storeCasing.getVolumePercentProduce();
-        this.volumePlusMinus = storeCasing.getVolumePlusMinus();
-        this.volumeNote = storeCasing.getVolumeNote();
-        this.volumeConfidence = storeCasing.getVolumeConfidence();
         this.legacyCasingId = storeCasing.getLegacyCasingId();
 
 
@@ -90,7 +62,7 @@ public class StoreCasingView extends AuditingEntityView {
             this.storeVolume = new StoreVolumeView(storeCasing.getStoreVolume());
         }
         if (storeCasing.getStoreSurvey() != null) {
-            this.surveyView = new StoreSurveyView(storeCasing.getStoreSurvey());
+            this.storeSurvey = new StoreSurveyView(storeCasing.getStoreSurvey());
         }
         if (storeCasing.getProjects() != null)  {
             this.projects = storeCasing.getProjects().stream()
@@ -220,102 +192,6 @@ public class StoreCasingView extends AuditingEntityView {
         this.pharmacyTechnicianCount = pharmacyTechnicianCount;
     }
 
-    public Integer getVolumeGrocery() {
-        return volumeGrocery;
-    }
-
-    public void setVolumeGrocery(Integer volumeGrocery) {
-        this.volumeGrocery = volumeGrocery;
-    }
-
-    public Double getVolumePercentGrocery() {
-        return volumePercentGrocery;
-    }
-
-    public void setVolumePercentGrocery(Double volumePercentGrocery) {
-        this.volumePercentGrocery = volumePercentGrocery;
-    }
-
-    public Integer getVolumeMeat() {
-        return volumeMeat;
-    }
-
-    public void setVolumeMeat(Integer volumeMeat) {
-        this.volumeMeat = volumeMeat;
-    }
-
-    public Double getVolumePercentMeat() {
-        return volumePercentMeat;
-    }
-
-    public void setVolumePercentMeat(Double volumePercentMeat) {
-        this.volumePercentMeat = volumePercentMeat;
-    }
-
-    public Integer getVolumeNonFood() {
-        return volumeNonFood;
-    }
-
-    public void setVolumeNonFood(Integer volumeNonFood) {
-        this.volumeNonFood = volumeNonFood;
-    }
-
-    public Double getVolumePercentNonFood() {
-        return volumePercentNonFood;
-    }
-
-    public void setVolumePercentNonFood(Double volumePercentNonFood) {
-        this.volumePercentNonFood = volumePercentNonFood;
-    }
-
-    public Integer getVolumeOther() {
-        return volumeOther;
-    }
-
-    public void setVolumeOther(Integer volumeOther) {
-        this.volumeOther = volumeOther;
-    }
-
-    public Double getVolumePercentOther() {
-        return volumePercentOther;
-    }
-
-    public void setVolumePercentOther(Double volumePercentOther) {
-        this.volumePercentOther = volumePercentOther;
-    }
-
-    public Integer getVolumeProduce() {
-        return volumeProduce;
-    }
-
-    public void setVolumeProduce(Integer volumeProduce) {
-        this.volumeProduce = volumeProduce;
-    }
-
-    public Double getVolumePercentProduce() {
-        return volumePercentProduce;
-    }
-
-    public void setVolumePercentProduce(Double volumePercentProduce) {
-        this.volumePercentProduce = volumePercentProduce;
-    }
-
-    public Integer getVolumePlusMinus() {
-        return volumePlusMinus;
-    }
-
-    public void setVolumePlusMinus(Integer volumePlusMinus) {
-        this.volumePlusMinus = volumePlusMinus;
-    }
-
-    public String getVolumeNote() {
-        return volumeNote;
-    }
-
-    public void setVolumeNote(String volumeNote) {
-        this.volumeNote = volumeNote;
-    }
-
     public StoreVolumeView getStoreVolume() {
         return storeVolume;
     }
@@ -324,15 +200,7 @@ public class StoreCasingView extends AuditingEntityView {
         this.storeVolume = storeVolume;
     }
 
-    public ConfidenceType getVolumeConfidence() {
-        return volumeConfidence;
-    }
-
-    public void setVolumeConfidence(ConfidenceType volumeConfidence) {
-        this.volumeConfidence = volumeConfidence;
-    }
-
-    public Integer getLegacyCasingId() {
+   public Integer getLegacyCasingId() {
         return legacyCasingId;
     }
 
@@ -348,12 +216,12 @@ public class StoreCasingView extends AuditingEntityView {
         this.projects = projects;
     }
 
-    public StoreSurveyView getSurveyView() {
-        return surveyView;
+    public StoreSurveyView getStoreSurvey() {
+        return storeSurvey;
     }
 
-    public void setSurveyView(StoreSurveyView surveyView) {
-        this.surveyView = surveyView;
+    public void setStoreSurvey(StoreSurveyView storeSurvey) {
+        this.storeSurvey = storeSurvey;
     }
 
 }

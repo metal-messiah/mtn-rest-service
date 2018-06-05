@@ -15,20 +15,16 @@ public class SimpleStoreCasingView {
     private Integer id;
     private LocalDateTime casingDate;
     private String note;
-    private SimpleStoreStatusView storeStatus;
-    private String volumeNote;
-    private ConfidenceType volumeConfidence;
-    private SimpleStoreVolumeView storeVolume;
 
-    private List<SimpleProjectView> projects = new ArrayList<>();
+    private SimpleStoreVolumeView storeVolume;
+    private SimpleStoreStatusView storeStatus;
     private SimpleStoreSurveyView storeSurvey;
+    private List<SimpleProjectView> projects = new ArrayList<>();
 
     public SimpleStoreCasingView(StoreCasing casing) {
         this.id = casing.getId();
         this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
-        this.volumeNote = casing.getVolumeNote();
-        this.volumeConfidence = casing.getVolumeConfidence();
         if (casing.getStoreStatus() != null) {
             this.storeStatus = new SimpleStoreStatusView(casing.getStoreStatus());
         }
@@ -78,14 +74,6 @@ public class SimpleStoreCasingView {
         this.storeStatus = storeStatus;
     }
 
-    public String getVolumeNote() {
-        return volumeNote;
-    }
-
-    public void setVolumeNote(String volumeNote) {
-        this.volumeNote = volumeNote;
-    }
-
     public SimpleStoreVolumeView getStoreVolume() {
         return storeVolume;
     }
@@ -94,15 +82,7 @@ public class SimpleStoreCasingView {
         this.storeVolume = storeVolume;
     }
 
-    public ConfidenceType getVolumeConfidence() {
-        return volumeConfidence;
-    }
-
-    public void setVolumeConfidence(ConfidenceType volumeConfidence) {
-        this.volumeConfidence = volumeConfidence;
-    }
-
-    public List<SimpleProjectView> getProjects() {
+   public List<SimpleProjectView> getProjects() {
         return projects;
     }
 

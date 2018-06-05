@@ -32,8 +32,6 @@ public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter>
     private ShoppingCenterSurveyService surveyService;
     @Autowired
     private ShoppingCenterCasingService casingService;
-//    @Autowired
-//    private ProjectService projectService;
 
     @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.POST)
     public ResponseEntity addOneShoppingCenterCasingToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterCasing request) {
@@ -67,12 +65,6 @@ public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter>
 
         return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
-
-//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-//    public ResponseEntity findAllProjectsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
-//        List<Project> domainModels = projectService.findAllByShoppingCenterId(shoppingCenterId);
-//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-//    }
 
     @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.GET)
     public ResponseEntity findAllShoppingCenterCasingsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {

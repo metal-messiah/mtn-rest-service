@@ -55,6 +55,19 @@ public class StoreVolumeServiceImpl extends EntityServiceImpl<StoreVolume> imple
         existing.setVolumeTotal(request.getVolumeTotal());
         existing.setVolumeDate(request.getVolumeDate());
         existing.setVolumeType(request.getVolumeType());
+        existing.setVolumeGrocery(request.getVolumeGrocery());
+        existing.setVolumePercentGrocery(request.getVolumePercentGrocery());
+        existing.setVolumeMeat(request.getVolumeMeat());
+        existing.setVolumePercentMeat(request.getVolumePercentMeat());
+        existing.setVolumeNonFood(request.getVolumeNonFood());
+        existing.setVolumePercentNonFood(request.getVolumePercentNonFood());
+        existing.setVolumeOther(request.getVolumeOther());
+        existing.setVolumePercentOther(request.getVolumePercentOther());
+        existing.setVolumePercentProduce(request.getVolumePercentProduce());
+        existing.setVolumeProduce(request.getVolumeProduce());
+        existing.setVolumePlusMinus(request.getVolumePlusMinus());
+        existing.setVolumeNote(request.getVolumeNote());
+        existing.setVolumeConfidence(request.getVolumeConfidence());
         existing.setSource(request.getSource());
         existing.setLegacyCasingId(request.getLegacyCasingId());
 

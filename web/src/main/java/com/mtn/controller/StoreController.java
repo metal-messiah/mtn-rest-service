@@ -74,12 +74,6 @@ public class StoreController extends CrudControllerImpl<Store> {
         return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{id}/store-volume", method = RequestMethod.GET)
-    public ResponseEntity findAllVolumesForStore(@PathVariable("id") Integer storeId) {
-        List<StoreVolume> domainModels = volumeService.findAllByStoreIdUsingSpecs(storeId);
-        return ResponseEntity.ok(domainModels.stream().map(StoreVolumeView::new).collect(Collectors.toList()));
-    }
-
     @RequestMapping(value = "/{storeId}/banner/{bannerId}", method = RequestMethod.PUT)
     public ResponseEntity updateOneBanner(@PathVariable("storeId") Integer storeId, @PathVariable("bannerId") Integer bannerId) {
         Store domainModel = storeService.updateOneBanner(storeId, bannerId);
@@ -104,6 +98,12 @@ public class StoreController extends CrudControllerImpl<Store> {
         storeService.deleteStoreStatus(storeId, statusId);
         Store domainModel = storeService.findOne(storeId);
         return ResponseEntity.ok(new StoreView(domainModel));
+    }
+
+    @RequestMapping(value = "/{id}/store-volumes", method = RequestMethod.GET)
+    public ResponseEntity findAllVolumesForStore(@PathVariable("id") Integer storeId) {
+        List<StoreVolume> domainModels = volumeService.findAllByStoreIdUsingSpecs(storeId);
+        return ResponseEntity.ok(domainModels.stream().map(SimpleStoreVolumeView::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}/store-volumes", method = RequestMethod.POST)

@@ -74,7 +74,7 @@
             <id>openshift</id>
             <build>
                 <finalName>boot</finalName>
-                <directory>target</directory>
+                <directory>../target</directory>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

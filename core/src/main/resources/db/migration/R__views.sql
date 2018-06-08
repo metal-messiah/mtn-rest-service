@@ -12,10 +12,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
--- Dumping database structure for mtn_dev
-CREATE DATABASE IF NOT EXISTS `mtn_dev` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `mtn_dev`;
-
 -- Dumping structure for view active_stores_with_strengths
 DROP VIEW IF EXISTS `active_stores_with_strengths`;
 -- Creating temporary table to overcome VIEW dependency errors

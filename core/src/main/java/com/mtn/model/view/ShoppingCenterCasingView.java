@@ -28,7 +28,7 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
     public ShoppingCenterCasingView(ShoppingCenterCasing casing) {
         super(casing);
         this.id = casing.getId();
-        this.casingDate = getCasingDate();
+        this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
         this.ratingBuildings = casing.getRatingBuildings();
         this.ratingParkingLot = casing.getRatingParkingLot();

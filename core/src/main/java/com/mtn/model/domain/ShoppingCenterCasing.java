@@ -23,6 +23,7 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
 
     private ShoppingCenterSurvey shoppingCenterSurvey;
     private List<Project> projects = new ArrayList<>();
+    private List<StoreCasing> storeCasings = new ArrayList();
 
     @Id
     @GeneratedValue
@@ -129,5 +130,14 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
 
     public void setProjects(List<Project> projects) {
         this.projects = projects;
+    }
+
+    @OneToMany(mappedBy = "shoppingCenterCasing")
+    public List<StoreCasing> getStoreCasings() {
+        return storeCasings;
+    }
+
+    public void setStoreCasings(List<StoreCasing> storeCasings) {
+        this.storeCasings = storeCasings;
     }
 }

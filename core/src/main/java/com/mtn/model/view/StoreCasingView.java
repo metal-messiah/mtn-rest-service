@@ -34,6 +34,7 @@ public class StoreCasingView extends AuditingEntityView {
     private SimpleStoreStatusView storeStatus;
     private StoreVolumeView storeVolume;
     private StoreSurveyView storeSurvey;
+    private ShoppingCenterCasingView shoppingCenterCasing;
     private List<SimpleProjectView> projects = new ArrayList<>();
 
     public StoreCasingView(StoreCasing storeCasing) {
@@ -54,7 +55,6 @@ public class StoreCasingView extends AuditingEntityView {
         this.pharmacyTechnicianCount = storeCasing.getPharmacyTechnicianCount();
         this.legacyCasingId = storeCasing.getLegacyCasingId();
 
-
         if (storeCasing.getStoreStatus() != null) {
             this.storeStatus = new SimpleStoreStatusView(storeCasing.getStoreStatus());
         }
@@ -69,6 +69,9 @@ public class StoreCasingView extends AuditingEntityView {
                     .filter(project -> project.getDeletedDate() == null)
                     .map(SimpleProjectView::new)
                     .collect(Collectors.toList());
+        }
+        if (storeCasing.getShoppingCenterCasing() != null) {
+            this.shoppingCenterCasing = new ShoppingCenterCasingView(storeCasing.getShoppingCenterCasing());
         }
     }
 
@@ -196,7 +199,7 @@ public class StoreCasingView extends AuditingEntityView {
         return storeVolume;
     }
 
-    public void setStoreVolume(StoreVolume storeVolumeView) {
+    public void setStoreVolume(StoreVolumeView storeVolume) {
         this.storeVolume = storeVolume;
     }
 
@@ -224,4 +227,11 @@ public class StoreCasingView extends AuditingEntityView {
         this.storeSurvey = storeSurvey;
     }
 
+    public ShoppingCenterCasingView getShoppingCenterCasing() {
+        return shoppingCenterCasing;
+    }
+
+    public void setShoppingCenterCasing(ShoppingCenterCasingView shoppingCenterCasing) {
+        this.shoppingCenterCasing = shoppingCenterCasing;
+    }
 }

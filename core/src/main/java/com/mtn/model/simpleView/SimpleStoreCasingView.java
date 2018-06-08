@@ -19,6 +19,7 @@ public class SimpleStoreCasingView {
     private SimpleStoreVolumeView storeVolume;
     private SimpleStoreStatusView storeStatus;
     private SimpleStoreSurveyView storeSurvey;
+    private SimpleShoppingCenterCasingView shoppingCenterCasing;
     private List<SimpleProjectView> projects = new ArrayList<>();
 
     public SimpleStoreCasingView(StoreCasing casing) {
@@ -39,6 +40,9 @@ public class SimpleStoreCasingView {
                     .filter(project -> project.getDeletedDate() == null)
                     .map(SimpleProjectView::new)
                     .collect(Collectors.toList());
+        }
+        if (casing.getShoppingCenterCasing() != null) {
+            this.shoppingCenterCasing = new SimpleShoppingCenterCasingView(casing.getShoppingCenterCasing());
         }
     }
 
@@ -96,5 +100,13 @@ public class SimpleStoreCasingView {
 
     public void setStoreSurvey(SimpleStoreSurveyView storeSurvey) {
         this.storeSurvey = storeSurvey;
+    }
+
+    public SimpleShoppingCenterCasingView getShoppingCenterCasing() {
+        return shoppingCenterCasing;
+    }
+
+    public void setShoppingCenterCasing(SimpleShoppingCenterCasingView shoppingCenterCasing) {
+        this.shoppingCenterCasing = shoppingCenterCasing;
     }
 }

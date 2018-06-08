@@ -9,7 +9,7 @@ public class ShoppingCenterTenantView extends AuditingEntityView {
 	private Integer id;
 	private String name;
 	private Boolean isAnchor;
-	private Boolean isOutparcel;
+	private Boolean outparcel;
 	private Integer tenantSqft;
 	private Integer legacyCasingId;
 
@@ -18,7 +18,7 @@ public class ShoppingCenterTenantView extends AuditingEntityView {
 		this.id = tenant.getId();
 		this.name = tenant.getName();
 		this.isAnchor = tenant.getIsAnchor();
-		this.isOutparcel = tenant.getIsOutparcel();
+		this.outparcel = tenant.getOutparcel();
 		this.tenantSqft = tenant.getTenantSqft();
 		this.legacyCasingId = tenant.getLegacyCasingId();
 	}
@@ -48,11 +48,11 @@ public class ShoppingCenterTenantView extends AuditingEntityView {
 	}
 
 	public Boolean getOutparcel() {
-		return isOutparcel;
+		return outparcel;
 	}
 
 	public void setOutparcel(Boolean outparcel) {
-		isOutparcel = outparcel;
+		this.outparcel = outparcel;
 	}
 
 	public Integer getTenantSqft() {

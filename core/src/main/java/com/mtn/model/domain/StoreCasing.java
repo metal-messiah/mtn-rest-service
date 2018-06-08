@@ -31,6 +31,7 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private Integer legacyCasingId;
 
     private StoreSurvey storeSurvey;
+    private ShoppingCenterCasing shoppingCenterCasing;
     private List<Project> projects = new ArrayList<>();
 
     @Id
@@ -218,5 +219,13 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
         this.storeVolume = storeVolume;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "shopping_center_casing_id")
+    public ShoppingCenterCasing getShoppingCenterCasing() {
+        return shoppingCenterCasing;
+    }
 
+    public void setShoppingCenterCasing(ShoppingCenterCasing shoppingCenterCasing) {
+        this.shoppingCenterCasing = shoppingCenterCasing;
+    }
 }

@@ -11,12 +11,12 @@ public class SimpleShoppingCenterTenantView {
 
 	private Integer id;
 	private String name;
-	private Boolean isOutparcel;
+	private Boolean outparcel;
 
 	public SimpleShoppingCenterTenantView(ShoppingCenterTenant tenant) {
 		this.id = tenant.getId();
 		this.name = tenant.getName();
-		this.isOutparcel = tenant.getIsOutparcel();
+		this.outparcel = tenant.getOutparcel();
 	}
 
 	public Integer getId() {
@@ -36,10 +36,10 @@ public class SimpleShoppingCenterTenantView {
 	}
 
 	public Boolean getOutparcel() {
-		return isOutparcel;
+		return outparcel;
 	}
 
 	public void setOutparcel(Boolean outparcel) {
-		isOutparcel = outparcel;
+		this.outparcel = outparcel;
 	}
 }

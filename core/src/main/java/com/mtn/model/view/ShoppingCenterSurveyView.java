@@ -2,7 +2,6 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterSurvey;
-import com.mtn.model.simpleView.SimpleShoppingCenterAccessView;
 import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
 
 import java.time.LocalDateTime;
@@ -34,7 +33,7 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
     private Integer legacyCasingId;
 
     private List<ShoppingCenterAccessView> accesses = new ArrayList<>();
-    private List<ShoppingCenterTenantView> tenants = new ArrayList<>();
+    private List<SimpleShoppingCenterTenantView> tenants = new ArrayList<>();
 
     public ShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
         super(survey);
@@ -65,7 +64,7 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
         if (survey.getTenants() != null) {
             this.tenants = survey.getTenants().stream()
                     .filter(tenant -> tenant.getDeletedDate() == null)
-                    .map(ShoppingCenterTenantView::new)
+                    .map(SimpleShoppingCenterTenantView::new)
                     .collect(Collectors.toList());
         }
     }
@@ -198,11 +197,11 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
         this.accesses = accesses;
     }
 
-    public List<ShoppingCenterTenantView> getTenants() {
+    public List<SimpleShoppingCenterTenantView> getTenants() {
         return tenants;
     }
 
-    public void setTenants(List<ShoppingCenterTenantView> tenants) {
+    public void setTenants(List<SimpleShoppingCenterTenantView> tenants) {
         this.tenants = tenants;
     }
 

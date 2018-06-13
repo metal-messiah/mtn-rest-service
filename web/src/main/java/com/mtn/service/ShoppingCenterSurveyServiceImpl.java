@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.mtn.repository.specification.ShoppingCenterSurveySpecifications.*;
@@ -26,6 +27,8 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
     private ShoppingCenterAccessService accessService;
     @Autowired
     private ShoppingCenterTenantService tenantService;
+    @Autowired
+    private ShoppingCenterTenantService shoppingCenterTenantService;
     @Autowired
     private ShoppingCenterSurveyRepository shoppingCenterSurveyRepository;
     @Autowired
@@ -56,6 +59,12 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
     }
 
     @Override
+    @Transactional
+    public void deleteTenant(Integer surveyId, Integer tenantId) {
+        shoppingCenterTenantService.deleteOne(tenantId);
+    }
+
+    @Override
 	public List<ShoppingCenterSurvey> findAllByShoppingCenterId(Integer shoppingCenterId) {
         return getEntityRepository().findAllByShoppingCenterId(shoppingCenterId);
     }
@@ -66,6 +75,16 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
                 where(shoppingCenterIdEquals(shoppingCenterId))
                         .and(isNotDeleted())
         );
+    }
+
+    @Override
+    public ShoppingCenterSurvey findLatestStoreSurveyForStore(Integer storeId) {
+        List<ShoppingCenterSurvey> surveys = this.findAllByShoppingCenterIdUsingSpecs(storeId);
+        if (surveys.size() > 0) {
+            return surveys.stream().max(Comparator.comparing(ShoppingCenterSurvey::getSurveyDate)).get();
+        } else {
+            return null;
+        }
     }
 
     @Override

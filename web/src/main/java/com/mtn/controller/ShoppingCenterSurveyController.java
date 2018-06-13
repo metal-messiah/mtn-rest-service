@@ -30,8 +30,6 @@ public class ShoppingCenterSurveyController extends CrudControllerImpl<ShoppingC
     private ShoppingCenterSurveyService shoppingCenterSurveyService;
     @Autowired
     private ShoppingCenterTenantService tenantService;
-//    @Autowired
-//    private ProjectService projectService;
 
     @RequestMapping(path = "/{id}/shopping-center-access", method = RequestMethod.POST)
     public ResponseEntity addOneAccessToSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterAccess request) {
@@ -45,17 +43,18 @@ public class ShoppingCenterSurveyController extends CrudControllerImpl<ShoppingC
         return ResponseEntity.ok(new SimpleShoppingCenterTenantView(domainModel));
     }
 
+    @RequestMapping(value = "/{id}/tenants/{tenantId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteTenant(@PathVariable("id") Integer surveyId, @PathVariable Integer tenantId) {
+        getEntityService().deleteTenant(surveyId, tenantId);
+        ShoppingCenterSurvey domainModel = getEntityService().findOne(surveyId);
+        return ResponseEntity.ok(this.getViewFromModel(domainModel));
+    }
+
     @RequestMapping(path = "/{id}/shopping-center-access", method = RequestMethod.GET)
     public ResponseEntity findAllAccessesForSurvey(@PathVariable("id") Integer surveyId) {
         List<ShoppingCenterAccess> domainModels = accessService.findAllBySurveyIdUsingSpecs(surveyId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterAccessView::new).collect(Collectors.toList()));
     }
-
-//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-//    public ResponseEntity findAllProjectsForShoppingCenterSurvey(@PathVariable("id") Integer shoppingCenterSurveyId) {
-//        List<Project> domainModels = projectService.findAllByShoppingCenterSurveyId(shoppingCenterSurveyId);
-//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-//    }
 
     @RequestMapping(path = "/{id}/shopping-center-tenant", method = RequestMethod.GET)
     public ResponseEntity findAllTenantsForSurvey(@PathVariable("id") Integer surveyId) {

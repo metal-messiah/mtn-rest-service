@@ -8,4 +8,6 @@ public interface StoreSurveyService extends EntityService<StoreSurvey> {
 	List<StoreSurvey> findAllByStoreId(Integer storeId);
 
 	List<StoreSurvey> findAllByStoreIdUsingSpecs(Integer storeId);
+
+	StoreSurvey findLatestStoreSurveyForStore(Integer storeId);
 }

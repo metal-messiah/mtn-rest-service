@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class StoreSurveyController extends CrudControllerImpl<StoreSurvey> {
 
     @Autowired
-    private StoreSurveyService surveyService;
+    private StoreSurveyService storeSurveyService;
 
     @Override
     public StoreSurveyService getEntityService() {
-        return surveyService;
+        return storeSurveyService;
     }
 
     @Override
@@ -31,14 +31,5 @@ public class StoreSurveyController extends CrudControllerImpl<StoreSurvey> {
     public Object getSimpleViewFromModel(StoreSurvey model) {
         return new SimpleStoreSurveyView(model);
     }
-
-//    @Autowired
-//    private ProjectService projectService;
-//
-//    @RequestMapping(value = "/{id}/project", method = RequestMethod.GET)
-//    public ResponseEntity findAllProjectsForStoreSurvey(@PathVariable("id") Integer storeSurveyId) {
-//        List<Project> domainModels = projectService.findAllByStoreSurveyId(storeSurveyId);
-//        return ResponseEntity.ok(domainModels.stream().map(SimpleProjectView::new).collect(Collectors.toList()));
-//    }
 
 }

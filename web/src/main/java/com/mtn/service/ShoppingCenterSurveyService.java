@@ -12,7 +12,11 @@ public interface ShoppingCenterSurveyService extends EntityService<ShoppingCente
 
 	ShoppingCenterTenant addOneTenantToSurvey(Integer surveyId, ShoppingCenterTenant request);
 
+	void deleteTenant(Integer surveyId, Integer tenantId);
+
 	List<ShoppingCenterSurvey> findAllByShoppingCenterId(Integer shoppingCenterId);
+
+	ShoppingCenterSurvey findLatestStoreSurveyForStore(Integer storeId);
 
 	List<ShoppingCenterSurvey> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId);
 }

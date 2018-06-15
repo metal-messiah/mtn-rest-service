@@ -72,7 +72,7 @@ public class BannerServiceImpl extends EntityServiceImpl<Banner> implements Bann
 	}
 
 	@Override
-	public Banner getUpdatedEntity(Banner existing, Banner request) {
+	public Banner updateEntityAttributes(Banner existing, Banner request) {
 		existing.setBannerName(request.getBannerName());
 		existing.setHistorical(request.getHistorical());
 		existing.setDefaultStoreFit(request.getDefaultStoreFit());

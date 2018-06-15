@@ -105,7 +105,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     }
 
     @Override
-    public Site getUpdatedEntity(Site existing, Site request) {
+    public Site updateEntityAttributes(Site existing, Site request) {
         existing.setLatitude(request.getLatitude());
         existing.setLongitude(request.getLongitude());
         existing.setType(request.getType());

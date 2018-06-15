@@ -1,6 +1,7 @@
 package com.mtn.service;
 
 import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.domain.StoreVolume;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface StoreCasingService extends EntityService<StoreCasing> {
 	StoreCasing addProject(Integer storeCasingId, Integer projectId);
 
 	StoreCasing removeProject(Integer storeCasingId, Integer projeectId);
+
+	StoreVolume createStoreVolume(Integer storeCasingId, StoreVolume volumeRequest);
 }

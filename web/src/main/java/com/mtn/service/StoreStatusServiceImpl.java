@@ -51,11 +51,9 @@ public class StoreStatusServiceImpl extends EntityServiceImpl<StoreStatus> imple
     }
 
     @Override
-    public StoreStatus getUpdatedEntity(StoreStatus existing, StoreStatus request) {
+    public StoreStatus updateEntityAttributes(StoreStatus existing, StoreStatus request) {
         existing.setStatus(request.getStatus());
         existing.setStatusStartDate(request.getStatusStartDate());
-        existing.setLegacyCasingId(request.getLegacyCasingId());
-        existing.setLegacyLocationId(request.getLegacyLocationId());
 
         return existing;
     }

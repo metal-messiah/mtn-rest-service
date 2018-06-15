@@ -49,7 +49,8 @@ public class ShoppingCenterAccessServiceImpl extends EntityServiceImpl<ShoppingC
 	}
 
 	@Override
-	public ShoppingCenterAccess getUpdatedEntity(ShoppingCenterAccess existing, ShoppingCenterAccess request) {
+	public ShoppingCenterAccess updateEntityAttributes(ShoppingCenterAccess existing, ShoppingCenterAccess request) {
+		existing.setAccessType(request.getAccessType());
 		existing.setHasLeftIn(request.getHasLeftIn());
 		existing.setHasLeftOut(request.getHasLeftOut());
 		existing.setHasTrafficLight(request.getHasTrafficLight());

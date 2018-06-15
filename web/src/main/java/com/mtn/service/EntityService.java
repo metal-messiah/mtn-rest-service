@@ -24,7 +24,7 @@ public interface EntityService<T extends AuditingEntity & Identifiable> {
 
 	T updateOne(Integer id, T request);
 
-	T getUpdatedEntity(T existing, T request);
+	T updateEntityAttributes(T existing, T request);
 
 	String getEntityName();
 

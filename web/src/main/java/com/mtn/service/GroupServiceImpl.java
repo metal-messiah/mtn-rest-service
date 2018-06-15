@@ -45,7 +45,7 @@ public class GroupServiceImpl extends EntityServiceImpl<Group> implements GroupS
     }
 
     @Override
-    public Group getUpdatedEntity(Group existing, Group request) {
+    public Group updateEntityAttributes(Group existing, Group request) {
         existing.setDisplayName(request.getDisplayName());
         existing.setDescription(request.getDescription());
 

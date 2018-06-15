@@ -62,7 +62,7 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 	}
 
 	@Override
-	public StoreSurvey getUpdatedEntity(StoreSurvey existing, StoreSurvey request) {
+	public StoreSurvey updateEntityAttributes(StoreSurvey existing, StoreSurvey request) {
 		existing.setAreaIsEstimate(request.getAreaIsEstimate());
 		existing.setAreaSales(request.getAreaSales());
 		existing.setAreaSalesPercentOfTotal(request.getAreaSalesPercentOfTotal());
@@ -96,6 +96,7 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 		existing.setDepartmentMeat(request.getDepartmentMeat());
 		existing.setDepartmentNatural(request.getDepartmentNatural());
 		existing.setDepartmentOliveBar(request.getDepartmentOliveBar());
+		existing.setDepartmentOnlinePickup(request.getDepartmentOnlinePickup());
 		existing.setDepartmentPharmacy(request.getDepartmentPharmacy());
 		existing.setDepartmentPreparedFoods(request.getDepartmentPreparedFoods());
 		existing.setDepartmentSaladBar(request.getDepartmentSaladBar());
@@ -115,6 +116,7 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 		existing.setParkingHasTSpaces(request.getParkingHasTSpaces());
 		existing.setParkingRating(request.getParkingRating());
 		existing.setVisibilityHillDepressionBlocksView(request.getVisibilityHillDepressionBlocksView());
+		existing.setVisibilityTreesBlockView(request.getVisibilityTreesBlockView());
 		existing.setVisibilityOutparcelsBlockView(request.getVisibilityOutparcelsBlockView());
 		existing.setVisibilitySignOnMain(request.getVisibilitySignOnMain());
 		existing.setVisibilityStoreFacesMainRoad(request.getVisibilityStoreFacesMainRoad());
@@ -131,7 +133,6 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 		existing.setSeasonalityOct(request.getSeasonalityOct());
 		existing.setSeasonalityNov(request.getSeasonalityNov());
 		existing.setSeasonalityDec(request.getSeasonalityDec());
-		existing.setLegacyCasingId(request.getLegacyCasingId());
 
 		return existing;
 	}

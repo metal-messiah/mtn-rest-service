@@ -53,7 +53,7 @@ public class ShoppingCenterTenantServiceImpl extends EntityServiceImpl<ShoppingC
 	}
 
 	@Override
-	public ShoppingCenterTenant getUpdatedEntity(ShoppingCenterTenant existing, ShoppingCenterTenant request) {
+	public ShoppingCenterTenant updateEntityAttributes(ShoppingCenterTenant existing, ShoppingCenterTenant request) {
 		existing.setName(request.getName());
 		existing.setIsAnchor(request.getIsAnchor());
 		existing.setOutparcel(request.getOutparcel());

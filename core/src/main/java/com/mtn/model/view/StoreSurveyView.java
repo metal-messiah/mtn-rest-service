@@ -143,6 +143,7 @@ public class StoreSurveyView extends AuditingEntityView {
         this.setParkingHasTSpaces(storeSurvey.getParkingHasTSpaces());
         this.setParkingRating(storeSurvey.getParkingRating());
         this.setVisibilityHillDepressionBlocksView(storeSurvey.getVisibilityHillDepressionBlocksView());
+        this.setVisibilityTreesBlockView(storeSurvey.getVisibilityTreesBlockView());
         this.setVisibilityOutparcelsBlockView(storeSurvey.getVisibilityOutparcelsBlockView());
         this.setVisibilitySignOnMain(storeSurvey.getVisibilitySignOnMain());
         this.setVisibilityStoreFacesMainRoad(storeSurvey.getVisibilityStoreFacesMainRoad());

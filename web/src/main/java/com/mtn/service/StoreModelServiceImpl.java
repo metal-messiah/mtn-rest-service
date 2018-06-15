@@ -64,7 +64,7 @@ public class StoreModelServiceImpl extends EntityServiceImpl<StoreModel> impleme
     }
 
     @Override
-    public StoreModel getUpdatedEntity(StoreModel existing, StoreModel request) {
+    public StoreModel updateEntityAttributes(StoreModel existing, StoreModel request) {
         existing.setMapkey(request.getMapkey());
         existing.setCurve(request.getCurve());
         existing.setPwta(request.getPwta());
@@ -72,8 +72,6 @@ public class StoreModelServiceImpl extends EntityServiceImpl<StoreModel> impleme
         existing.setFitAdjustedPower(request.getFitAdjustedPower());
         existing.setModelType(request.getModelType());
         existing.setModelDate(request.getModelDate());
-        existing.setLegacyCasingId(request.getLegacyCasingId());
-        existing.setUpdatedBy(securityService.getCurrentUser());
 
         return existing;
     }

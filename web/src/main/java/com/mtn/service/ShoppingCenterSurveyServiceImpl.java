@@ -3,6 +3,7 @@ package com.mtn.service;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.ShoppingCenterTenant;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.repository.ShoppingCenterSurveyRepository;
 import com.mtn.validators.ShoppingCenterSurveyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.mtn.repository.specification.ShoppingCenterSurveySpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -48,14 +50,21 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
 
     @Override
 	@Transactional
-    public ShoppingCenterTenant addOneTenantToSurvey(Integer surveyId, ShoppingCenterTenant request) {
+    public List<ShoppingCenterTenant> createNewTenantsForSurvey(Integer surveyId, List<ShoppingCenterTenant> requestTenants) {
         ShoppingCenterSurvey existing = findOneUsingSpecs(surveyId);
         getValidator().validateNotNull(existing);
 
-        request.setSurvey(existing);
+        UserProfile currentUser = securityService.getCurrentUser();
+        for (ShoppingCenterTenant tenant : requestTenants) {
+            tenant.setCreatedBy(currentUser);
+            tenant.setUpdatedBy(currentUser);
+            tenant.setSurvey(existing);
+            this.shoppingCenterTenantService.getValidator().validateForInsert(tenant);
+        }
+        existing.getTenants().addAll(requestTenants);
         existing.setUpdatedBy(securityService.getCurrentUser());
 
-        return tenantService.addOne(request);
+        return requestTenants;
     }
 
     @Override
@@ -78,7 +87,7 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
     }
 
     @Override
-    public ShoppingCenterSurvey findLatestStoreSurveyForStore(Integer storeId) {
+    public ShoppingCenterSurvey findLatestShoppingCenterSurveyForStore(Integer storeId) {
         List<ShoppingCenterSurvey> surveys = this.findAllByShoppingCenterIdUsingSpecs(storeId);
         if (surveys.size() > 0) {
             return surveys.stream().max(Comparator.comparing(ShoppingCenterSurvey::getSurveyDate)).get();
@@ -103,7 +112,7 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
     }
 
     @Override
-    public ShoppingCenterSurvey getUpdatedEntity(ShoppingCenterSurvey existing, ShoppingCenterSurvey request) {
+    public ShoppingCenterSurvey updateEntityAttributes(ShoppingCenterSurvey existing, ShoppingCenterSurvey request) {
         existing.setCenterType(request.getCenterType());
         existing.setNote(request.getNote());
         existing.setFlowHasLandscaping(request.getFlowHasLandscaping());

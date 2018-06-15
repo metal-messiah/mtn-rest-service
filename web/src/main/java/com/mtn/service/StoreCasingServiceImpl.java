@@ -1,9 +1,6 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.Project;
-import com.mtn.model.domain.StoreCasing;
-import com.mtn.model.domain.StoreStatus;
-import com.mtn.model.domain.StoreVolume;
+import com.mtn.model.domain.*;
 import com.mtn.repository.StoreCasingRepository;
 import com.mtn.validators.StoreCasingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static com.mtn.repository.specification.StoreCasingSpecifications.*;
@@ -76,6 +72,19 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 		return casing;
 	}
 
+	@Override
+	@Transactional
+	public StoreVolume createStoreVolume(Integer storeCasingId, StoreVolume volumeRequest) {
+		StoreCasing casing = this.findOne(storeCasingId);
+		UserProfile currentUser = securityService.getCurrentUser();
+		volumeRequest.setStore(casing.getStore());
+		StoreVolume savedVolume = this.storeVolumeService.addOne(volumeRequest);
+
+		casing.setStoreVolume(savedVolume);
+		casing.setUpdatedBy(currentUser);
+
+		return savedVolume;
+	}
 
 	@Override
 	@Transactional
@@ -116,9 +125,9 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 	}
 
 	@Override
-	public StoreCasing getUpdatedEntity(StoreCasing existing, StoreCasing request) {
+	public StoreCasing updateEntityAttributes(StoreCasing existing, StoreCasing request) {
+		existing.setCasingDate(request.getCasingDate());
 		existing.setNote(request.getNote());
-		existing.setStoreStatus(request.getStoreStatus());
 		existing.setConditionCeiling(request.getConditionCeiling());
 		existing.setConditionCheckstands(request.getConditionCheckstands());
 		existing.setConditionFloors(request.getConditionFloors());
@@ -130,9 +139,6 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 		existing.setPharmacyAvgDollarsPerScript(request.getPharmacyAvgDollarsPerScript());
 		existing.setPharmacyPharmacistCount(request.getPharmacyPharmacistCount());
 		existing.setPharmacyTechnicianCount(request.getPharmacyTechnicianCount());
-		existing.setLegacyCasingId(request.getLegacyCasingId());
-
-		// TODO Save storeVolume
 
 		return existing;
 	}

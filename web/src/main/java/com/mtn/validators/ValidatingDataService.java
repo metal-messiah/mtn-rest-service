@@ -5,6 +5,7 @@ import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Identifiable;
 import com.mtn.service.EntityService;
+import org.springframework.boot.context.config.ResourceNotFoundException;
 
 import javax.validation.Validation;
 import javax.validation.Validator;

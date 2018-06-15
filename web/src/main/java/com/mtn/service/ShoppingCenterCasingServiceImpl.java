@@ -59,8 +59,13 @@ public class ShoppingCenterCasingServiceImpl extends EntityServiceImpl<ShoppingC
     }
 
     @Override
-    public ShoppingCenterCasing getUpdatedEntity(ShoppingCenterCasing existing, ShoppingCenterCasing request) {
-        // TODO update existing from request
+    public ShoppingCenterCasing updateEntityAttributes(ShoppingCenterCasing existing, ShoppingCenterCasing request) {
+        existing.setCasingDate(request.getCasingDate());
+        existing.setNote(request.getNote());
+        existing.setRatingParkingLot(request.getRatingParkingLot());
+        existing.setRatingBuildings(request.getRatingBuildings());
+        existing.setRatingLighting(request.getRatingLighting());
+        existing.setRatingSynergy(request.getRatingSynergy());
 
         return existing;
     }

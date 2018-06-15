@@ -1,8 +1,10 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.simpleView.SimpleStoreCasingView;
 import com.mtn.model.view.StoreCasingView;
+import com.mtn.model.view.StoreVolumeView;
 import com.mtn.service.StoreCasingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,13 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
     public ResponseEntity removeVolume(@PathVariable("storeCasingId") Integer storeCasingId) {
         StoreCasing domainModel = storeCasingService.removeStoreVolume(storeCasingId);
         return ResponseEntity.ok(new StoreCasingView(domainModel));
+    }
+
+    @RequestMapping(value = "/{storeCasingId}/store-volume", method = RequestMethod.POST)
+    public ResponseEntity createNewVolume(@PathVariable("storeCasingId") Integer storeCasingId,
+                                       @RequestBody StoreVolume volumeRequest) {
+        StoreVolume domainModel = storeCasingService.createStoreVolume(storeCasingId, volumeRequest);
+        return ResponseEntity.ok(new StoreVolumeView(domainModel));
     }
 
     @RequestMapping(value = "/{storeCasingId}/store-volume/{storeVolumeId}", method = RequestMethod.PUT)

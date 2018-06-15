@@ -51,7 +51,7 @@ public class StoreVolumeServiceImpl extends EntityServiceImpl<StoreVolume> imple
     }
 
     @Override
-    public StoreVolume getUpdatedEntity(StoreVolume existing, StoreVolume request) {
+    public StoreVolume updateEntityAttributes(StoreVolume existing, StoreVolume request) {
         existing.setVolumeTotal(request.getVolumeTotal());
         existing.setVolumeDate(request.getVolumeDate());
         existing.setVolumeType(request.getVolumeType());
@@ -69,7 +69,6 @@ public class StoreVolumeServiceImpl extends EntityServiceImpl<StoreVolume> imple
         existing.setVolumeNote(request.getVolumeNote());
         existing.setVolumeConfidence(request.getVolumeConfidence());
         existing.setSource(request.getSource());
-        existing.setLegacyCasingId(request.getLegacyCasingId());
 
         return existing;
     }

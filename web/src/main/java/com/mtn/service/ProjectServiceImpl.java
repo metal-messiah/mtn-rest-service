@@ -77,8 +77,17 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 	}
 
 	@Override
-	public Project getUpdatedEntity(Project existing, Project request) {
-		existing.setLegacyProjectId(request.getLegacyProjectId());
+	public Project updateEntityAttributes(Project existing, Project request) {
+		existing.setProjectName(request.getProjectName());
+		existing.setMetroArea(request.getMetroArea());
+		existing.setClientName(request.getClientName());
+		existing.setProjectYear(request.getProjectYear());
+		existing.setProjectMonth(request.getProjectMonth());
+		existing.setIsActive(request.getIsActive());
+		existing.setIsPrimaryData(request.getIsPrimaryData());
+		existing.setDateStarted(request.getDateStarted());
+		existing.setDateCompleted(request.getDateCompleted());
+		existing.setSource(request.getSource());
 
 		return existing;
 	}

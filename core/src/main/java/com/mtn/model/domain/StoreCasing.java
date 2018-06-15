@@ -11,11 +11,10 @@ import java.util.List;
 @Table
 public class StoreCasing extends AuditingEntity implements Identifiable {
 
+    // Attributes
     private Integer id;
-    private Store store;
     private LocalDateTime casingDate;
     private String note;
-    private StoreStatus storeStatus;
     private RatingType conditionCeiling;
     private RatingType conditionCheckstands;
     private RatingType conditionFloors;
@@ -27,9 +26,12 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private Double pharmacyAvgDollarsPerScript;
     private Integer pharmacyPharmacistCount;
     private Integer pharmacyTechnicianCount;
-    private StoreVolume storeVolume;
     private Integer legacyCasingId;
 
+    // Associations
+    private StoreStatus storeStatus;
+    private Store store;
+    private StoreVolume storeVolume;
     private StoreSurvey storeSurvey;
     private ShoppingCenterCasing shoppingCenterCasing;
     private List<Project> projects = new ArrayList<>();

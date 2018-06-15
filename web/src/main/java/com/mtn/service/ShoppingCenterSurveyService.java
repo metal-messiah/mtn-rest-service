@@ -10,13 +10,13 @@ import java.util.List;
 public interface ShoppingCenterSurveyService extends EntityService<ShoppingCenterSurvey> {
 	ShoppingCenterAccess addOneAccessToSurvey(Integer surveyId, ShoppingCenterAccess request);
 
-	ShoppingCenterTenant addOneTenantToSurvey(Integer surveyId, ShoppingCenterTenant request);
+	List<ShoppingCenterTenant> createNewTenantsForSurvey(Integer surveyId, List<ShoppingCenterTenant> request);
 
 	void deleteTenant(Integer surveyId, Integer tenantId);
 
 	List<ShoppingCenterSurvey> findAllByShoppingCenterId(Integer shoppingCenterId);
 
-	ShoppingCenterSurvey findLatestStoreSurveyForStore(Integer storeId);
+	ShoppingCenterSurvey findLatestShoppingCenterSurveyForStore(Integer storeId);
 
 	List<ShoppingCenterSurvey> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId);
 }

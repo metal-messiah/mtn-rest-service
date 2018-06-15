@@ -118,7 +118,7 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
     }
 
     @Override
-    public ShoppingCenter getUpdatedEntity(ShoppingCenter existing, ShoppingCenter request) {
+    public ShoppingCenter updateEntityAttributes(ShoppingCenter existing, ShoppingCenter request) {
         existing.setName(request.getName());
         existing.setOwner(request.getOwner());
 

@@ -118,7 +118,7 @@ public class UserProfileServiceImpl extends EntityServiceImpl<UserProfile> imple
     }
 
     @Override
-    public UserProfile getUpdatedEntity(UserProfile existing, UserProfile request) {
+    public UserProfile updateEntityAttributes(UserProfile existing, UserProfile request) {
         existing.setEmail(request.getEmail().toLowerCase());
         existing.setFirstName(request.getFirstName());
         existing.setLastName(request.getLastName());

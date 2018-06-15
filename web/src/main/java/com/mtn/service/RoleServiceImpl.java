@@ -145,7 +145,7 @@ public class RoleServiceImpl extends EntityServiceImpl<Role> implements RoleServ
 	}
 
 	@Override
-	public Role getUpdatedEntity(Role existing, Role request) {
+	public Role updateEntityAttributes(Role existing, Role request) {
 		existing.setDisplayName(request.getDisplayName());
 		existing.setDescription(request.getDescription());
 

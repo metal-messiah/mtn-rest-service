@@ -59,7 +59,7 @@ public abstract class EntityServiceImpl<T extends AuditingEntity & Identifiable>
 		existingEntity.setDeletedBy(null);
 		existingEntity.setDeletedDate(null);
 
-		return getUpdatedEntity(existingEntity, request);
+		return updateEntityAttributes(existingEntity, request);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public abstract class EntityServiceImpl<T extends AuditingEntity & Identifiable>
 	public T updateOne(Integer id, T request) {
 		T existing = findOneUsingSpecs(id);
 		getValidator().validateForUpdate(request, existing);
-		T updated = getUpdatedEntity(existing, request);
+		T updated = updateEntityAttributes(existing, request);
 		updated.setVersion(existing.getVersion() + 1);
 		updated.setUpdatedBy(securityService.getCurrentUser());
 		return updated;

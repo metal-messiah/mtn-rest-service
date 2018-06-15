@@ -86,7 +86,7 @@ public class CompanyServiceImpl extends EntityServiceImpl<Company> implements Co
 	}
 
 	@Override
-	public Company getUpdatedEntity(Company existing, Company request) {
+	public Company updateEntityAttributes(Company existing, Company request) {
 		existing.setCompanyName(request.getCompanyName());
 		existing.setWebsiteUrl(request.getWebsiteUrl());
 

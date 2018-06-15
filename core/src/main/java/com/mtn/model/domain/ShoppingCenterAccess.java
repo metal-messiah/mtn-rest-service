@@ -11,7 +11,6 @@ import com.mtn.constant.AccessType;
 public class ShoppingCenterAccess extends AuditingEntity implements Identifiable {
 
     private Integer id;
-    private ShoppingCenterSurvey survey;
     private AccessType accessType;
     private Boolean hasLeftIn = false;
     private Boolean oneWayRoad = false;
@@ -20,6 +19,8 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
     private Boolean hasRightIn = false;
     private Boolean hasRightOut = false;
     private Integer legacyCasingId;
+
+    private ShoppingCenterSurvey survey;
 
     @Id
     @GeneratedValue

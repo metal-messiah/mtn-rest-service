@@ -12,7 +12,6 @@ import java.util.List;
 public class ShoppingCenterCasing extends AuditingEntity implements Identifiable {
 
     private Integer id;
-    private ShoppingCenter shoppingCenter;
     private LocalDateTime casingDate;
     private String note;
     private RatingType ratingParkingLot;
@@ -21,6 +20,7 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
     private RatingType ratingSynergy;
     private Integer legacyCasingId;
 
+    private ShoppingCenter shoppingCenter;
     private ShoppingCenterSurvey shoppingCenterSurvey;
     private List<Project> projects = new ArrayList<>();
     private List<StoreCasing> storeCasings = new ArrayList();

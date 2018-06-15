@@ -46,7 +46,7 @@ public class PermissionServiceImpl extends EntityServiceImpl<Permission> impleme
     }
 
     @Override
-    public Permission getUpdatedEntity(Permission existing, Permission request) {
+    public Permission updateEntityAttributes(Permission existing, Permission request) {
         existing.setDisplayName(request.getDisplayName());
         existing.setDescription(request.getDescription());
 

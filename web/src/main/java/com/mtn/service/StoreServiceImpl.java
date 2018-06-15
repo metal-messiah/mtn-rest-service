@@ -95,7 +95,6 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     @Transactional
     public StoreSurvey addOneSurveyToStore(Integer storeId, StoreSurvey request) {
         Store existing = findOneUsingSpecs(storeId);
-        getValidator().validateNotNull(existing);
 
         request.setStore(existing);
         existing.setUpdatedBy(securityService.getCurrentUser());
@@ -107,7 +106,6 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     @Transactional
     public StoreVolume addOneVolumeToStore(Integer storeId, StoreVolume volume) {
         Store existing = findOneUsingSpecs(storeId);
-        getValidator().validateNotNull(existing);
 
         volume.setStore(existing);
         existing.setUpdatedBy(securityService.getCurrentUser());
@@ -178,7 +176,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
     }
 
     @Override
-    public Store getUpdatedEntity(Store existing, Store request) {
+    public Store updateEntityAttributes(Store existing, Store request) {
 
         //If the store is changing type to active, we have some special handling to do
         if (request.getStoreType() == StoreType.ACTIVE && request.getStoreType() != existing.getStoreType()) {

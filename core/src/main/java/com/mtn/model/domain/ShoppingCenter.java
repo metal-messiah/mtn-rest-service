@@ -20,9 +20,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private List<Site> sites = new ArrayList<>();
     private List<ShoppingCenterSurvey> surveys = new ArrayList<>();
 
-    public ShoppingCenter() {
-    }
-
     @Id
     @GeneratedValue
     @Column(name = "shopping_center_id")
@@ -30,6 +27,7 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

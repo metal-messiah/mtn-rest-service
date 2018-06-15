@@ -35,4 +35,5 @@ public interface EntityService<T extends AuditingEntity & Identifiable> {
 	JpaRepository<T, Integer> getEntityRepository();
 
 	ValidatingDataService<T> getValidator();
+
 }

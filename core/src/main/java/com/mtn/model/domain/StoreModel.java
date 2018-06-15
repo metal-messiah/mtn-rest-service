@@ -28,6 +28,7 @@ public class StoreModel extends AuditingEntity implements Identifiable {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

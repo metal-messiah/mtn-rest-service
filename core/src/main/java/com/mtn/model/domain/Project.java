@@ -33,6 +33,7 @@ public class Project extends AuditingEntity implements Identifiable {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

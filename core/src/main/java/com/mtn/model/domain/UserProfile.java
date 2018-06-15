@@ -30,6 +30,7 @@ public class UserProfile extends AuditingEntity implements Identifiable {
         return id;
     }
 
+    @Override
     public void setId(final Integer id) {
         this.id = id;
     }

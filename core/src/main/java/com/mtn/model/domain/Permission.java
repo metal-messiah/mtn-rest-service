@@ -30,6 +30,7 @@ public class Permission extends AuditingEntity implements Identifiable, GrantedA
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

@@ -22,6 +22,19 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
 
     private ShoppingCenterSurvey survey;
 
+    public ShoppingCenterAccess() {
+    }
+
+    public ShoppingCenterAccess(ShoppingCenterAccess shoppingCenterAccess) {
+        this.accessType = shoppingCenterAccess.accessType;
+        this.hasLeftIn = shoppingCenterAccess.hasLeftIn;
+        this.oneWayRoad = shoppingCenterAccess.oneWayRoad;
+        this.hasLeftOut = shoppingCenterAccess.hasLeftOut;
+        this.hasTrafficLight = shoppingCenterAccess.hasTrafficLight;
+        this.hasRightIn = shoppingCenterAccess.hasRightIn;
+        this.hasRightOut = shoppingCenterAccess.hasRightOut;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "shopping_center_access_id")
@@ -29,6 +42,7 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

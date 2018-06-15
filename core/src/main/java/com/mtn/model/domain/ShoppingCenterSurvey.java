@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 5/4/2017.
@@ -13,7 +14,6 @@ import java.util.List;
 public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable {
 
     private Integer id;
-    private ShoppingCenter shoppingCenter;
     private LocalDateTime surveyDate;
     private String centerType;
     private String note;
@@ -30,10 +30,38 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
     private Double sqFtPercentOccupied;
     private Integer legacyCasingId;
 
+    private ShoppingCenter shoppingCenter;
     private List<ShoppingCenterCasing> shoppingCenterCasings = new ArrayList<>();
 
     private List<ShoppingCenterAccess> accesses = new ArrayList<>();
     private List<ShoppingCenterTenant> tenants = new ArrayList<>();
+
+    public ShoppingCenterSurvey() {
+    }
+
+    public ShoppingCenterSurvey(ShoppingCenterSurvey shoppingCenterSurvey) {
+        this.surveyDate = shoppingCenterSurvey.surveyDate;
+        this.centerType = shoppingCenterSurvey.centerType;
+        this.note = shoppingCenterSurvey.note;
+        this.flowHasLandscaping = shoppingCenterSurvey.flowHasLandscaping;
+        this.flowHasSpeedBumps = shoppingCenterSurvey.flowHasSpeedBumps;
+        this.flowHasStopSigns = shoppingCenterSurvey.flowHasStopSigns;
+        this.flowHasOneWayAisles = shoppingCenterSurvey.flowHasOneWayAisles;
+        this.parkingHasAngledSpaces = shoppingCenterSurvey.parkingHasAngledSpaces;
+        this.parkingHasParkingHog = shoppingCenterSurvey.parkingHasParkingHog;
+        this.parkingIsPoorlyLit = shoppingCenterSurvey.parkingIsPoorlyLit;
+        this.parkingSpaceCount = shoppingCenterSurvey.parkingSpaceCount;
+        this.tenantOccupiedCount = shoppingCenterSurvey.tenantOccupiedCount;
+        this.tenantVacantCount = shoppingCenterSurvey.tenantVacantCount;
+        this.sqFtPercentOccupied = shoppingCenterSurvey.sqFtPercentOccupied;
+
+        this.accesses = shoppingCenterSurvey.getAccesses().stream()
+                .map(ShoppingCenterAccess::new).collect(Collectors.toList());
+        this.accesses.forEach(access -> access.setSurvey(this));
+        this.tenants = shoppingCenterSurvey.getTenants().stream()
+                .map(ShoppingCenterTenant::new).collect(Collectors.toList());
+        this.tenants.forEach(tenant -> tenant.setSurvey(this));
+    }
 
     @Id
     @GeneratedValue
@@ -42,6 +70,7 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

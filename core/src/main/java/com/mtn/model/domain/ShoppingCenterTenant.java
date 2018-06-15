@@ -10,12 +10,23 @@ import javax.persistence.*;
 public class ShoppingCenterTenant extends AuditingEntity implements Identifiable {
 
     private Integer id;
-    private ShoppingCenterSurvey survey;
     private String name;
     private Boolean isAnchor = false;
     private Boolean outparcel = false;
     private Integer tenantSqft;
     private Integer legacyCasingId;
+
+    private ShoppingCenterSurvey survey;
+
+    public ShoppingCenterTenant() {
+    }
+
+    public ShoppingCenterTenant(ShoppingCenterTenant shoppingCenterTenant) {
+        this.name = shoppingCenterTenant.name;
+        this.isAnchor = shoppingCenterTenant.isAnchor;
+        this.outparcel = shoppingCenterTenant.outparcel;
+        this.tenantSqft = shoppingCenterTenant.tenantSqft;
+    }
 
     @Id
     @GeneratedValue
@@ -24,6 +35,7 @@ public class ShoppingCenterTenant extends AuditingEntity implements Identifiable
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

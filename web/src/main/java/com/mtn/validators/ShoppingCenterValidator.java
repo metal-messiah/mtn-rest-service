@@ -20,9 +20,6 @@ public class ShoppingCenterValidator extends ValidatingDataService<ShoppingCente
 
 	@Override
 	public void validateBusinessRules(ShoppingCenter object) {
-		if (StringUtils.isBlank(object.getName())) {
-			throw new IllegalArgumentException("ShoppingCenter name must be provided");
-		}
 	}
 
 }

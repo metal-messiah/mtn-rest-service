@@ -32,9 +32,8 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Override
+    public void setId(Integer id) { this.id = id; }
 
     @ManyToOne
     @JoinColumn(name = "shopping_center_id")

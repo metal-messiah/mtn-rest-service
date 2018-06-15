@@ -3,7 +3,6 @@ package com.mtn.service;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.ShoppingCenterTenant;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,8 +10,6 @@ public interface ShoppingCenterSurveyService extends EntityService<ShoppingCente
 	ShoppingCenterAccess addOneAccessToSurvey(Integer surveyId, ShoppingCenterAccess request);
 
 	List<ShoppingCenterTenant> createNewTenantsForSurvey(Integer surveyId, List<ShoppingCenterTenant> request);
-
-	void deleteTenant(Integer surveyId, Integer tenantId);
 
 	List<ShoppingCenterSurvey> findAllByShoppingCenterId(Integer shoppingCenterId);
 

@@ -10,7 +10,7 @@ public interface StoreService extends EntityService<Store> {
 
 	Page<Store> findAllOfTypeInBounds(Float north, Float south, Float east, Float west, String storeType, Pageable page);
 
-	StoreCasing addOneCasingToStore(Integer storeId, StoreCasing request);
+	StoreCasing addOneCasingToStore(Integer storeId, StoreCasing request, boolean storeRemodeled, boolean shoppingCenterRedeveloped);
 
 	StoreModel addOneModelToStore(Integer storeId, StoreModel request);
 

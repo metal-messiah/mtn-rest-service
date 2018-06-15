@@ -38,9 +38,6 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     private List<Store> stores = new ArrayList<>();
     private UserProfile assignee;
 
-    public Site() {
-    }
-
     @Id
     @GeneratedValue
     @Column(name = "site_id")
@@ -48,6 +45,7 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

@@ -5,7 +5,9 @@ import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.ShoppingCenterTenant;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.repository.ShoppingCenterSurveyRepository;
+import com.mtn.validators.ShoppingCenterAccessValidator;
 import com.mtn.validators.ShoppingCenterSurveyValidator;
+import com.mtn.validators.ShoppingCenterTenantValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.mtn.repository.specification.ShoppingCenterSurveySpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -35,6 +36,10 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
     private ShoppingCenterSurveyRepository shoppingCenterSurveyRepository;
     @Autowired
     private ShoppingCenterSurveyValidator shoppingCenterSurveyValidator;
+    @Autowired
+    private ShoppingCenterAccessValidator shoppingCenterAccessValidator;
+    @Autowired
+    private ShoppingCenterTenantValidator shoppingCenterTenantValidator;
 
     @Override
 	@Transactional
@@ -65,12 +70,6 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
         existing.setUpdatedBy(securityService.getCurrentUser());
 
         return requestTenants;
-    }
-
-    @Override
-    @Transactional
-    public void deleteTenant(Integer surveyId, Integer tenantId) {
-        shoppingCenterTenantService.deleteOne(tenantId);
     }
 
     @Override
@@ -142,7 +141,17 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
 
     @Override
     public void handleAssociationsOnCreation(ShoppingCenterSurvey request) {
-        // TODO - Handle Accesses, Tenants, Casings
+        UserProfile currentUser = securityService.getCurrentUser();
+        request.getAccesses().forEach(access -> {
+            shoppingCenterAccessValidator.validateForInsert(access);
+            access.setCreatedBy(currentUser);
+            access.setUpdatedBy(currentUser);
+        });
+        request.getTenants().forEach(tenant -> {
+            shoppingCenterTenantValidator.validateForInsert(tenant);
+            tenant.setCreatedBy(currentUser);
+            tenant.setUpdatedBy(currentUser);
+        });
     }
 
     @Override

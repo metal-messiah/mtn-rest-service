@@ -6,4 +6,6 @@ package com.mtn.model.domain;
 public interface Identifiable {
 
     Integer getId();
+
+    void setId(Integer id);
 }

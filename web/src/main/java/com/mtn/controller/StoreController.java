@@ -35,23 +35,28 @@ public class StoreController extends CrudControllerImpl<Store> {
 	StoreStatusService storeStatusService;
 
 	@RequestMapping(method = RequestMethod.GET, params = {"north", "south", "east", "west"})
-	public ResponseEntity findAllInBounds(@RequestParam("north") Float north,
-										  @RequestParam("south") Float south,
-										  @RequestParam("east") Float east,
-										  @RequestParam("west") Float west,
-										  @RequestParam("store_type") String storeType,
-										  Pageable page) {
+	public ResponseEntity findAllInBounds(
+			@RequestParam("north") Float north,
+			@RequestParam("south") Float south,
+			@RequestParam("east") Float east,
+			@RequestParam("west") Float west,
+			@RequestParam("store_type") String storeType,
+			Pageable page) {
 		Page<Store> domainModels = storeService.findAllOfTypeInBounds(north, south, east, west, storeType, page);
 		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
 	}
 
-	@RequestMapping(value = "/{id}/store-casing", method = RequestMethod.POST)
-	public ResponseEntity addOneStoreCasingToStore(@PathVariable("id") Integer storeId, @RequestBody StoreCasing request) {
-		StoreCasing domainModel = storeService.addOneCasingToStore(storeId, request);
+	@RequestMapping(value = "/{id}/store-casings", method = RequestMethod.POST)
+	public ResponseEntity createOneStoreCasingForStore(
+			@PathVariable("id") Integer storeId,
+			@RequestBody StoreCasing request,
+			@RequestParam(value = "store_remodeled", required = false) boolean storeRemodeled,
+			@RequestParam(value = "shopping_center_redeveloped", required = false) boolean shoppingCenterRedeveloped) {
+		StoreCasing domainModel = storeService.addOneCasingToStore(storeId, request, storeRemodeled, shoppingCenterRedeveloped);
 		return ResponseEntity.ok(new StoreCasingView(domainModel));
 	}
 
-	@RequestMapping(value = "/{id}/store-casing", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/store-casings", method = RequestMethod.GET)
 	public ResponseEntity findAllCasingsForStore(@PathVariable("id") Integer storeId) {
 		List<StoreCasing> domainModels = casingService.findAllByStoreIdUsingSpecs(storeId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
@@ -73,26 +78,6 @@ public class StoreController extends CrudControllerImpl<Store> {
 	public ResponseEntity findAllSurveysForStore(@PathVariable("id") Integer storeId) {
 		List<StoreSurvey> domainModels = surveyService.findAllByStoreIdUsingSpecs(storeId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
-	}
-
-	@RequestMapping(value = "/{id}/store-surveys/latest", method = RequestMethod.GET)
-	public ResponseEntity findLatestSurveyForStore(@PathVariable("id") Integer storeId) {
-		StoreSurvey domainModel = surveyService.findLatestStoreSurveyForStore(storeId);
-		return ResponseEntity.ok(domainModel != null ? new StoreSurveyView(domainModel) : null);
-	}
-
-	@RequestMapping(value = "/{storeId}/shopping-center-surveys/latest", method = RequestMethod.GET)
-	public ResponseEntity findLatestShoppingCenterSurveyForStore(@PathVariable("storeId") Integer storeId) {
-		Store store = storeService.findOne(storeId);
-		// TODO create real endpoint logic for this with error checking
-		List<ShoppingCenterSurvey> surveys = store.getSite().getShoppingCenter().getSurveys();
-		if (surveys != null && surveys.size() > 0) {
-			ShoppingCenterSurvey survey = surveys.stream()
-					.max(Comparator.comparing(ShoppingCenterSurvey::getSurveyDate))
-					.get();
-			return ResponseEntity.ok(new ShoppingCenterSurveyView(survey));
-		}
-		return ResponseEntity.ok(null);
 	}
 
 	@RequestMapping(value = "/{storeId}/banner/{bannerId}", method = RequestMethod.PUT)

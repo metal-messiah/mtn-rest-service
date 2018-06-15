@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Comparator;
 import java.util.List;
 
@@ -36,16 +39,6 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 				where(storeIdEquals(storeId))
 						.and(isNotDeleted())
 		);
-	}
-
-	@Override
-	public StoreSurvey findLatestStoreSurveyForStore(Integer storeId) {
-		List<StoreSurvey> surveys = this.findAllByStoreIdUsingSpecs(storeId);
-		if (surveys.size() > 0) {
-			return surveys.stream().max(Comparator.comparing(StoreSurvey::getSurveyDate)).get();
-		} else {
-			return null;
-		}
 	}
 
 	@Override

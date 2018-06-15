@@ -34,9 +34,6 @@ public class Store extends AuditingEntity implements Identifiable {
     private List<StoreVolume> volumes = new ArrayList<>();
     private List<StoreStatus> statuses = new ArrayList<>();
 
-    public Store() {
-    }
-
     @Id
     @GeneratedValue
     @Column(name = "store_id")
@@ -44,6 +41,7 @@ public class Store extends AuditingEntity implements Identifiable {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

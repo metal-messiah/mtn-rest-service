@@ -15,7 +15,6 @@ import java.util.List;
 public class StoreSurvey extends AuditingEntity implements Identifiable {
 
     private Integer id;
-    private Store store;
     private LocalDateTime surveyDate;
     private String note;
     private String fit;
@@ -89,7 +88,85 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     private Integer seasonalityDec;
     private Integer legacyCasingId;
 
+    private Store store;
     private List<StoreCasing> storeCasings = new ArrayList<>();
+
+    public StoreSurvey() {
+    }
+
+    public StoreSurvey(StoreSurvey storeSurvey) {
+        this.surveyDate = storeSurvey.surveyDate;
+        this.note = storeSurvey.note;
+        this.fit = storeSurvey.fit;
+        this.format = storeSurvey.format;
+        this.areaSales = storeSurvey.areaSales;
+        this.areaSalesPercentOfTotal = storeSurvey.areaSalesPercentOfTotal;
+        this.areaTotal = storeSurvey.areaTotal;
+        this.areaIsEstimate = storeSurvey.areaIsEstimate;
+        this.storeIsOpen24 = storeSurvey.storeIsOpen24;
+        this.naturalFoodsAreIntegrated = storeSurvey.naturalFoodsAreIntegrated;
+        this.registerCountNormal = storeSurvey.registerCountNormal;
+        this.registerCountExpress = storeSurvey.registerCountExpress;
+        this.registerCountSelfCheckout = storeSurvey.registerCountSelfCheckout;
+        this.fuelDispenserCount = storeSurvey.fuelDispenserCount;
+        this.fuelIsOpen24 = storeSurvey.fuelIsOpen24;
+        this.pharmacyIsOpen24 = storeSurvey.pharmacyIsOpen24;
+        this.pharmacyHasDriveThrough = storeSurvey.pharmacyHasDriveThrough;
+        this.departmentBakery = storeSurvey.departmentBakery;
+        this.departmentBank = storeSurvey.departmentBank;
+        this.departmentBeer = storeSurvey.departmentBeer;
+        this.departmentBulk = storeSurvey.departmentBulk;
+        this.departmentCheese = storeSurvey.departmentCheese;
+        this.departmentCoffee = storeSurvey.departmentCoffee;
+        this.departmentDeli = storeSurvey.departmentDeli;
+        this.departmentExpandedGm = storeSurvey.departmentExpandedGm;
+        this.departmentExtensivePreparedFoods = storeSurvey.departmentExtensivePreparedFoods;
+        this.departmentFloral = storeSurvey.departmentFloral;
+        this.departmentFuel = storeSurvey.departmentFuel;
+        this.departmentHotBar = storeSurvey.departmentHotBar;
+        this.departmentInStoreRestaurant = storeSurvey.departmentInStoreRestaurant;
+        this.departmentLiquor = storeSurvey.departmentLiquor;
+        this.departmentMeat = storeSurvey.departmentMeat;
+        this.departmentNatural = storeSurvey.departmentNatural;
+        this.departmentOliveBar = storeSurvey.departmentOliveBar;
+        this.departmentOnlinePickup = storeSurvey.departmentOnlinePickup;
+        this.departmentPharmacy = storeSurvey.departmentPharmacy;
+        this.departmentPreparedFoods = storeSurvey.departmentPreparedFoods;
+        this.departmentSaladBar = storeSurvey.departmentSaladBar;
+        this.departmentSeafood = storeSurvey.departmentSeafood;
+        this.departmentSeating = storeSurvey.departmentSeating;
+        this.departmentSushi = storeSurvey.departmentSushi;
+        this.departmentWine = storeSurvey.departmentWine;
+        this.accessibilityFarthestFromEntrance = storeSurvey.accessibilityFarthestFromEntrance;
+        this.accessibilityMainIntersectionHasTrafficLight = storeSurvey.accessibilityMainIntersectionHasTrafficLight;
+        this.accessibilityMainIntersectionNeedsTrafficLight = storeSurvey.accessibilityMainIntersectionNeedsTrafficLight;
+        this.accessibilityMultipleRetailersBeforeSite = storeSurvey.accessibilityMultipleRetailersBeforeSite;
+        this.accessibilitySetBackTwiceParkingLength = storeSurvey.accessibilitySetBackTwiceParkingLength;
+        this.accessibilityRating = storeSurvey.accessibilityRating;
+        this.parkingOutparcelsInterfereWithParking = storeSurvey.parkingOutparcelsInterfereWithParking;
+        this.parkingDirectAccessToParking = storeSurvey.parkingDirectAccessToParking;
+        this.parkingSmallParkingField = storeSurvey.parkingSmallParkingField;
+        this.parkingHasTSpaces = storeSurvey.parkingHasTSpaces;
+        this.parkingRating = storeSurvey.parkingRating;
+        this.visibilityHillDepressionBlocksView = storeSurvey.visibilityHillDepressionBlocksView;
+        this.visibilityOutparcelsBlockView = storeSurvey.visibilityOutparcelsBlockView;
+        this.visibilitySignOnMain = storeSurvey.visibilitySignOnMain;
+        this.visibilityStoreFacesMainRoad = storeSurvey.visibilityStoreFacesMainRoad;
+        this.visibilityTreesBlockView = storeSurvey.visibilityTreesBlockView;
+        this.visibilityRating = storeSurvey.visibilityRating;
+        this.seasonalityJan = storeSurvey.seasonalityJan;
+        this.seasonalityFeb = storeSurvey.seasonalityFeb;
+        this.seasonalityMar = storeSurvey.seasonalityMar;
+        this.seasonalityApr = storeSurvey.seasonalityApr;
+        this.seasonalityMay = storeSurvey.seasonalityMay;
+        this.seasonalityJun = storeSurvey.seasonalityJun;
+        this.seasonalityJul = storeSurvey.seasonalityJul;
+        this.seasonalityAug = storeSurvey.seasonalityAug;
+        this.seasonalitySep = storeSurvey.seasonalitySep;
+        this.seasonalityOct = storeSurvey.seasonalityOct;
+        this.seasonalityNov = storeSurvey.seasonalityNov;
+        this.seasonalityDec = storeSurvey.seasonalityDec;
+    }
 
     @Id
     @GeneratedValue
@@ -98,6 +175,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

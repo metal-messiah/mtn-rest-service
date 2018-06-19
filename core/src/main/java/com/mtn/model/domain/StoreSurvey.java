@@ -87,6 +87,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     private Integer seasonalityNov;
     private Integer seasonalityDec;
     private Integer legacyCasingId;
+    private String seasonalityNotes;
 
     private Store store;
     private List<StoreCasing> storeCasings = new ArrayList<>();
@@ -166,6 +167,7 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.seasonalityOct = storeSurvey.seasonalityOct;
         this.seasonalityNov = storeSurvey.seasonalityNov;
         this.seasonalityDec = storeSurvey.seasonalityDec;
+        this.seasonalityNotes = storeSurvey.seasonalityNotes;
     }
 
     @Id
@@ -784,5 +786,13 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
 
     public void setStoreCasings(List<StoreCasing> storeCasings) {
         this.storeCasings = storeCasings;
+    }
+
+    public String getSeasonalityNotes() {
+        return seasonalityNotes;
+    }
+
+    public void setSeasonalityNotes(String seasonalityNotes) {
+        this.seasonalityNotes = seasonalityNotes;
     }
 }

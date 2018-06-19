@@ -126,6 +126,7 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 		existing.setSeasonalityOct(request.getSeasonalityOct());
 		existing.setSeasonalityNov(request.getSeasonalityNov());
 		existing.setSeasonalityDec(request.getSeasonalityDec());
+		existing.setSeasonalityNotes(request.getSeasonalityNotes());
 
 		return existing;
 	}

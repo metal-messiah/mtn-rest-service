@@ -83,6 +83,7 @@ public class StoreSurveyView extends AuditingEntityView {
     private Integer seasonalityNov;
     private Integer seasonalityDec;
     private Integer legacyCasingId;
+    private String seasonalityNotes;
 
     public StoreSurveyView(StoreSurvey storeSurvey) {
         super(storeSurvey);
@@ -161,6 +162,7 @@ public class StoreSurveyView extends AuditingEntityView {
         this.setSeasonalityNov(storeSurvey.getSeasonalityNov());
         this.setSeasonalityDec(storeSurvey.getSeasonalityDec());
         this.setLegacyCasingId(storeSurvey.getLegacyCasingId());
+        this.setSeasonalityNotes(storeSurvey.getSeasonalityNotes());
     }
 
     public Integer getId() {
@@ -747,4 +749,11 @@ public class StoreSurveyView extends AuditingEntityView {
         this.legacyCasingId = legacyCasingId;
     }
 
+    public String getSeasonalityNotes() {
+        return seasonalityNotes;
+    }
+
+    public void setSeasonalityNotes(String seasonalityNotes) {
+        this.seasonalityNotes = seasonalityNotes;
+    }
 }

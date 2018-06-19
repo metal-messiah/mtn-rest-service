@@ -56,10 +56,14 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
         this.sqFtPercentOccupied = shoppingCenterSurvey.sqFtPercentOccupied;
 
         this.accesses = shoppingCenterSurvey.getAccesses().stream()
-                .map(ShoppingCenterAccess::new).collect(Collectors.toList());
+                .filter(access -> access.getDeletedDate() == null) // exclude deleted ones from copy
+                .map(ShoppingCenterAccess::new) // Create new object
+                .collect(Collectors.toList());
         this.accesses.forEach(access -> access.setSurvey(this));
         this.tenants = shoppingCenterSurvey.getTenants().stream()
-                .map(ShoppingCenterTenant::new).collect(Collectors.toList());
+                .filter(tenant -> tenant.getDeletedDate() == null)
+                .map(ShoppingCenterTenant::new)
+                .collect(Collectors.toList());
         this.tenants.forEach(tenant -> tenant.setSurvey(this));
     }
 

@@ -1,15 +1,11 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.Project;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.ShoppingCenterTenant;
 import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
 import com.mtn.model.view.ShoppingCenterAccessView;
 import com.mtn.model.view.ShoppingCenterSurveyView;
-import com.mtn.model.simpleView.SimpleProjectView;
-import com.mtn.model.simpleView.SimpleShoppingCenterAccessView;
-import com.mtn.model.simpleView.SimpleShoppingCenterTenantView;
 import com.mtn.model.view.ShoppingCenterTenantView;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +32,7 @@ public class ShoppingCenterSurveyController extends CrudControllerImpl<ShoppingC
     @RequestMapping(path = "/{id}/accesses", method = RequestMethod.POST)
     public ResponseEntity addOneAccessToSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterAccess request) {
         ShoppingCenterAccess domainModel = getEntityService().addOneAccessToSurvey(surveyId, request);
-        return ResponseEntity.ok(new SimpleShoppingCenterAccessView(domainModel));
+        return ResponseEntity.ok(new ShoppingCenterAccessView(domainModel));
     }
 
     @RequestMapping(path = "/{id}/accesses", method = RequestMethod.GET)

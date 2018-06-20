@@ -46,7 +46,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
             storeService.getValidator().validateForInsert(request);
 
             //Then, check for another existing ACTIVE store
-            Store existingActiveStore = existing.findActiveStore();
+            Store existingActiveStore = SiteService.findActiveStore(existing);
 
             //If one exists, and no override is provided, throw an error
             if (existingActiveStore != null && !overrideActiveStore) {

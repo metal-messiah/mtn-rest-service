@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BannerService extends EntityService<Banner> {
 
-	Page<Banner> findAllWhereBannerNameLike(String name, Pageable page);
+	Page<Banner> findAllUsingSpecs(Pageable page, String query);
 
 	Banner findOneByBannerName(String name);
 }

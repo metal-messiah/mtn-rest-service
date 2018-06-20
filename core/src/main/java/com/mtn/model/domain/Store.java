@@ -15,15 +15,15 @@ import java.util.List;
 public class Store extends AuditingEntity implements Identifiable {
 
     private Integer id;
-    private Site site;
     private String storeName;
     private String storeNumber;
     private StoreType storeType;
     private LocalDateTime dateOpened;
     private LocalDateTime dateClosed;
-    private Integer legacyLocationId;
     private Boolean floating;
+    private Integer legacyLocationId;
 
+    private Site site;
     private Banner banner;
     private StoreStatus currentStatus;
     private StoreSurvey currentStoreSurvey;

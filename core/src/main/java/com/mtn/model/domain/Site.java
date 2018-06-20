@@ -210,11 +210,6 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
         this.duplicate = duplicate;
     }
 
-    @Transient
-    public Store findActiveStore() {
-        return this.stores.stream().filter(store -> store.getStoreType() == StoreType.ACTIVE).findFirst().orElse(null);
-    }
-
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     public UserProfile getAssignee() {

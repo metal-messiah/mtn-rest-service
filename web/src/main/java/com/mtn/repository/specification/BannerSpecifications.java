@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
  */
 public class BannerSpecifications {
 
+    private static final String BANNER_NAME = "bannerName";
     private static final String DELETED_DATE = "deletedDate";
     private static final String ID = "id";
 
@@ -30,6 +31,16 @@ public class BannerSpecifications {
             @Override
             public Predicate toPredicate(Root<Banner> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.isNull(root.get(DELETED_DATE));
+            }
+        };
+    }
+
+    public static Specification<Banner> bannerNameIsLike(String nameQuery) {
+        return new Specification<Banner>() {
+            @Override
+            public Predicate toPredicate(Root<Banner> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(BANNER_NAME)));
+                return criteriaBuilder.like(root.get(BANNER_NAME), nameQuery);
             }
         };
     }

@@ -13,11 +13,12 @@ public class Banner extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private String bannerName;
-    private Company company;
     private Boolean isHistorical;
     private String defaultStoreFit;
     private Integer defaultSalesArea;
     private String logoFileName;
+
+    private Company company;
 
     private List<Store> stores = new ArrayList<>();
 

@@ -291,7 +291,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 		if (request.getStoreType() == StoreType.ACTIVE && request.getStoreType() != existing.getStoreType()) {
 			//Find any existing ACTIVE store for the site
 			Site site = existing.getSite();
-			Store existingActiveStore = site.findActiveStore();
+			Store existingActiveStore = SiteService.findActiveStore(site);
 
 			if (existingActiveStore != null) {
 				existingActiveStore.setStoreType(StoreType.HISTORICAL);
@@ -300,6 +300,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 		}
 
 		existing.setStoreName(request.getStoreName());
+		existing.setStoreNumber(request.getStoreNumber());
 		existing.setStoreType(request.getStoreType());
 		existing.setDateOpened(request.getDateOpened());
 		existing.setDateClosed(request.getDateClosed());

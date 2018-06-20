@@ -7,8 +7,11 @@ import com.mtn.validators.BannerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
+import static com.mtn.repository.specification.BannerSpecifications.bannerNameIsLike;
 import static com.mtn.repository.specification.BannerSpecifications.idEquals;
 import static com.mtn.repository.specification.BannerSpecifications.isNotDeleted;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -45,15 +48,15 @@ public class BannerServiceImpl extends EntityServiceImpl<Banner> implements Bann
 	}
 
 	@Override
-	public Page<Banner> findAllWhereBannerNameLike(String name, Pageable page) {
-		name = String.format("%%%s%%", name.toLowerCase());
-		return getEntityRepository().findAllByBannerNameLikeAndDeletedDateIsNull(name, page);
+	public Page<Banner> findAllUsingSpecs(Pageable page, String query) {
+		Specifications<Banner> spec = where(isNotDeleted());
+
+		if (query != null) {
+			spec = spec.and(bannerNameIsLike("%" + query + "%"));
+		}
+		return getEntityRepository().findAll(spec, page);
 	}
 
-	@Override
-	public Banner findOneByBannerName(String bannerName) {
-		return getEntityRepository().findOneByBannerName(bannerName);
-	}
 
 	@Override
 	public Page<Banner> findAllUsingSpecs(Pageable page) {
@@ -61,6 +64,11 @@ public class BannerServiceImpl extends EntityServiceImpl<Banner> implements Bann
 				where(isNotDeleted()),
 				page
 		);
+	}
+
+	@Override
+	public Banner findOneByBannerName(String bannerName) {
+		return getEntityRepository().findOneByBannerName(bannerName);
 	}
 
 	@Override
@@ -77,6 +85,7 @@ public class BannerServiceImpl extends EntityServiceImpl<Banner> implements Bann
 		existing.setHistorical(request.getHistorical());
 		existing.setDefaultStoreFit(request.getDefaultStoreFit());
 		existing.setDefaultSalesArea(request.getDefaultSalesArea());
+		existing.setLogoFileName(request.getLogoFileName());
 
 		return existing;
 	}

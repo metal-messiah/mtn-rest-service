@@ -11,7 +11,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface BannerRepository extends JpaRepository<Banner, Integer>, JpaSpecificationExecutor<Banner> {
 
-    Page<Banner> findAllByBannerNameLikeAndDeletedDateIsNull(String name, Pageable page);
-
     Banner findOneByBannerName(String name);
 }

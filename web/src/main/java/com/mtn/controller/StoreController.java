@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
 import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,9 +40,9 @@ public class StoreController extends CrudControllerImpl<Store> {
 			@RequestParam("south") Float south,
 			@RequestParam("east") Float east,
 			@RequestParam("west") Float west,
-			@RequestParam("store_type") String storeType,
+			@RequestParam("store_types") List<StoreType> storeTypes,
 			Pageable page) {
-		Page<Store> domainModels = storeService.findAllOfTypeInBounds(north, south, east, west, storeType, page);
+		Page<Store> domainModels = storeService.findAllOfTypesInBounds(north, south, east, west, storeTypes, page);
 		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
 	}
 

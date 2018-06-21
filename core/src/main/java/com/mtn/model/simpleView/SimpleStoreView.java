@@ -1,11 +1,10 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreStatus;
-
-import java.time.LocalDateTime;
 
 /**
  * Created by Allen on 4/26/2017.
@@ -18,6 +17,7 @@ public class SimpleStoreView {
     private String storeName;
     private String storeNumber;
     private Boolean floating;
+    private StoreType storeType;
 
     private SimpleBannerView banner;
     private SimpleStoreStatusView currentStoreStatus;
@@ -28,6 +28,7 @@ public class SimpleStoreView {
         this.storeName = store.getStoreName();
         this.storeNumber = store.getStoreNumber();
         this.floating = store.getFloating();
+        this.storeType = store.getStoreType();
 
         Banner banner = store.getBanner();
         if (banner != null) {
@@ -93,5 +94,13 @@ public class SimpleStoreView {
 
     public void setFloating(Boolean floating) {
         this.floating = floating;
+    }
+
+    public StoreType getStoreType() {
+        return storeType;
+    }
+
+    public void setStoreType(StoreType storeType) {
+        this.storeType = storeType;
     }
 }

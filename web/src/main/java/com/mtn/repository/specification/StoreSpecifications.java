@@ -6,6 +6,7 @@ import com.mtn.model.domain.Store;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
+import java.util.List;
 
 /**
  * Created by Allen on 4/26/2017.
@@ -47,12 +48,13 @@ public class StoreSpecifications {
         };
     }
 
-    public static Specification<Store> ofType(String storeType) {
+    public static Specification<Store> ofTypes(List<StoreType> storeTypes) {
         return new Specification<Store>() {
             @Override
             public Predicate toPredicate(Root<Store> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                StoreType requestedStoreType = StoreType.valueOf(storeType);
-                return criteriaBuilder.equal(root.get(STORE_TYPE), requestedStoreType);
+                return root.get(STORE_TYPE).in(storeTypes);
+//                StoreType requestedStoreType = StoreType.valueOf(storeType);
+//                return criteriaBuilder.in(, storeTypes);
             }
         };
     }

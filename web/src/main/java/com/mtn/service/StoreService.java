@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface StoreService extends EntityService<Store> {
 
-	Page<Store> findAllOfTypeInBounds(Float north, Float south, Float east, Float west, String storeType, Pageable page);
+	Page<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west, List<StoreType> storeTypes, Pageable page);
 
 	StoreCasing addOneCasingToStore(Integer storeId, StoreCasing request, boolean storeRemodeled, boolean shoppingCenterRedeveloped);
 

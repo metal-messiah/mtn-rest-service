@@ -70,7 +70,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 		Specifications<Store> spec = where(isNotDeleted()).and(withinBoundingBox(north, south, east, west));
 
 //		StoreType requestedStoreType = StoreType.valueOf(storeType);
-		if (storeTypes != null) {
+		if (storeTypes != null && storeTypes.size() > 0) {
 			spec = spec.and(ofTypes(storeTypes));
 		}
 

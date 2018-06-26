@@ -62,6 +62,15 @@ public class SiteSpecifications {
         };
     }
 
+    public static Specification<Site> hasNoStore() {
+        return new Specification<Site>() {
+            @Override
+            public Predicate toPredicate(Root<Site> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.isEmpty(root.get("stores"));
+            }
+        };
+    }
+
     public static Specification<Site> isNotDeleted() {
         return new Specification<Site>() {
             @Override

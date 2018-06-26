@@ -16,6 +16,8 @@ public interface SiteService extends EntityService<Site> {
 
 	Page<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west, String storeType, Pageable page);
 
+	Page<Site> findAllInBoundsWithoutStoresUsingSpecs(Float north, Float south, Float east, Float west, boolean noStores, Pageable page);
+
 	List<Site> assignSitesToUser(Integer[] siteIds, Integer userId);
 
 	static Store findActiveStore(Site site) {

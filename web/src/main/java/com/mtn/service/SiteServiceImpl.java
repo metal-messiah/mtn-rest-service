@@ -1,6 +1,7 @@
 package com.mtn.service;
 
 import com.mtn.constant.StoreType;
+import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.UserProfile;
@@ -30,6 +31,8 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     private SiteRepository siteRepository;
     @Autowired
     private StoreService storeService;
+    @Autowired
+    private ShoppingCenterService shoppingCenterService;
     @Autowired
     private SiteValidator siteValidator;
 
@@ -100,6 +103,17 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     }
 
     @Override
+    public Page<Site> findAllInBoundsWithoutStoresUsingSpecs(Float north, Float south, Float east, Float west, boolean noStores, Pageable page) {
+        Specification<Site> spec = where(isNotDeleted()).and(withinBoundingBox(north, south, east, west));
+
+        if (noStores) {
+            spec = ((Specifications<Site>) spec).and(hasNoStore());
+        }
+
+        return getEntityRepository().findAll(spec, page);
+    }
+
+    @Override
     public Site findOneUsingSpecs(Integer id) {
         return getEntityRepository().findByIdAndDeletedDateIsNull(id);
     }
@@ -145,7 +159,8 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
     @Override
     public void handleAssociationsOnCreation(Site request) {
-        // TODO - Handle Stores
+        ShoppingCenter newSC = this.shoppingCenterService.addOne(new ShoppingCenter());
+        request.setShoppingCenter(newSC);
     }
 
     @Override

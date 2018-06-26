@@ -46,13 +46,13 @@ public class SiteController extends CrudControllerImpl<Site> {
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"north", "south", "east", "west"})
-    public ResponseEntity findAllInBounds(@RequestParam("north") Float north,
+    public ResponseEntity findAllWithoutStores(@RequestParam("north") Float north,
                                           @RequestParam("south") Float south,
                                           @RequestParam("east") Float east,
                                           @RequestParam("west") Float west,
-                                          @RequestParam("store_type") String storeType,
+                                          @RequestParam("no_stores") boolean noStores,
                                           Pageable page) {
-        Page<Site> domainModels = siteService.findAllInBoundsUsingSpecs(north, south, east, west, storeType, page);
+        Page<Site> domainModels = siteService.findAllInBoundsWithoutStoresUsingSpecs(north, south, east, west, noStores, page);
         return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
     }
 

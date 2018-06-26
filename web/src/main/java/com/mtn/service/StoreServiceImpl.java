@@ -115,6 +115,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 				storeStatus = new StoreStatus();
 				storeStatus.setStatusStartDate(requestCasing.getCasingDate().toLocalDate());
 				storeStatus.setStatus("Open");
+				storeStatus.setStore(store);
 				storeStatus = storeStatusService.addOne(storeStatus);
 			}
 			requestCasing.setStoreStatus(storeStatus);

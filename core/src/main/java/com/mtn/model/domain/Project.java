@@ -15,12 +15,14 @@ public class Project extends AuditingEntity implements Identifiable {
     private String clientName;
     private Integer projectYear;
     private Integer projectMonth;
-    private Boolean isActive = false;
-    private Boolean isPrimaryData = false;
+    private Boolean active = false;
+    private Boolean primaryData = false;
     private LocalDateTime dateStarted;
     private LocalDateTime dateCompleted;
     private String source;
     private Integer legacyProjectId;
+
+    private Boundary boundary;
 
     private List<StoreModel> models = new ArrayList<>();
     private List<StoreCasing> storeCasings = new ArrayList<>();
@@ -78,20 +80,22 @@ public class Project extends AuditingEntity implements Identifiable {
         this.projectMonth = projectMonth;
     }
 
-    public Boolean getIsActive() {
-        return isActive;
+    @Column(name = "is_active")
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setIsActive(Boolean active) {
-        isActive = active;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
-    public Boolean getIsPrimaryData() {
-        return isPrimaryData;
+    @Column(name = "is_primary_data")
+    public Boolean getPrimaryData() {
+        return primaryData;
     }
 
-    public void setIsPrimaryData(Boolean primaryData) {
-        isPrimaryData = primaryData;
+    public void setPrimaryData(Boolean primaryData) {
+        this.primaryData = primaryData;
     }
 
     public LocalDateTime getDateStarted() {
@@ -151,5 +155,15 @@ public class Project extends AuditingEntity implements Identifiable {
 
     public void setShoppingCenterCasings(List<ShoppingCenterCasing> shoppingCenterCasings) {
         this.shoppingCenterCasings = shoppingCenterCasings;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "boundary_id")
+    public Boundary getBoundary() {
+        return boundary;
+    }
+
+    public void setBoundary(Boundary boundary) {
+        this.boundary = boundary;
     }
 }

@@ -2,23 +2,20 @@ package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Project;
-import com.vividsolutions.jts.geom.Polygon;
-
-import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleProjectView {
 
     private Integer id;
     private String projectName;
-    private boolean isActive;
-    private boolean isPrimary;
+    private boolean active;
+    private boolean primaryData;
 
     public SimpleProjectView(Project project) {
         this.id = project.getId();
         this.projectName = project.getProjectName();
-        this.isActive = project.getIsActive();
-        this.isPrimary = project.getIsPrimaryData();
+        this.active = project.getActive();
+        this.primaryData = project.getPrimaryData();
     }
 
     public Integer getId() {
@@ -38,18 +35,18 @@ public class SimpleProjectView {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
-    public boolean isPrimary() {
-        return isPrimary;
+    public boolean isPrimaryData() {
+        return primaryData;
     }
 
-    public void setPrimary(boolean primary) {
-        isPrimary = primary;
+    public void setPrimaryData(boolean primaryData) {
+        this.primaryData = primaryData;
     }
 }

@@ -15,8 +15,8 @@ public class ProjectSpecifications {
 
     private static final String DELETED_DATE = "deletedDate";
     private static final String ID = "id";
-    private static final String ACTIVE = "isActive";
-    private static final String PRIMARY_DATA = "isPrimaryData";
+    private static final String ACTIVE = "active";
+    private static final String PRIMARY_DATA = "primaryData";
     private static final String PROJECT_NAME = "projectName";
 
     public static Specification<Project> idEquals(Integer id) {
@@ -39,7 +39,7 @@ public class ProjectSpecifications {
         };
     }
 
-    public static Specification<Project> isActive() {
+    public static Specification<Project> active() {
         return new Specification<Project>() {
             @Override
             public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -49,7 +49,7 @@ public class ProjectSpecifications {
         };
     }
 
-    public static Specification<Project> isPrimaryData() {
+    public static Specification<Project> primaryData() {
         return new Specification<Project>() {
             @Override
             public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {

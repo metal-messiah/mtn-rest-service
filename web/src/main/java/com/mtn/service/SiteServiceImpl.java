@@ -81,7 +81,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     }
 
     @Override
-    public Page<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west, String storeType, Pageable page) {
+    public List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west) {
 //        GeometryFactory geometryFactory = new GeometryFactory();
 //        Coordinate[] coords = new Coordinate[5];
 //        coords[0] = new Coordinate(east, north);
@@ -93,11 +93,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
         Specification<Site> spec = where(isNotDeleted()).and(withinBoundingBox(north, south, east, west));
 
-        if (storeType != null) {
-            spec = ((Specifications<Site>) spec).and(hasActiveStore());
-        }
-
-        return getEntityRepository().findAll(spec, page);
+        return getEntityRepository().findAll(spec);
 
 //        return getEntityRepository().findLocationWithin(boundary, page);
     }

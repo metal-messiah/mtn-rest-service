@@ -4,6 +4,7 @@ import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.simpleView.SimpleStoreView;
+import com.mtn.model.simpleView.SitePoint;
 import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
 import com.mtn.service.SiteService;
@@ -47,13 +48,22 @@ public class SiteController extends CrudControllerImpl<Site> {
 
     @RequestMapping(method = RequestMethod.GET, params = {"north", "south", "east", "west"})
     public ResponseEntity findAllWithoutStores(@RequestParam("north") Float north,
-                                          @RequestParam("south") Float south,
-                                          @RequestParam("east") Float east,
-                                          @RequestParam("west") Float west,
-                                          @RequestParam("no_stores") boolean noStores,
-                                          Pageable page) {
+                                               @RequestParam("south") Float south,
+                                               @RequestParam("east") Float east,
+                                               @RequestParam("west") Float west,
+                                               @RequestParam("no_stores") boolean noStores,
+                                               Pageable page) {
         Page<Site> domainModels = siteService.findAllInBoundsWithoutStoresUsingSpecs(north, south, east, west, noStores, page);
         return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+    }
+
+    @RequestMapping(value= "/points", method = RequestMethod.GET, params = {"north", "south", "east", "west"})
+    public ResponseEntity findAllSitePointsWithinBounds(@RequestParam("north") Float north,
+                                               @RequestParam("south") Float south,
+                                               @RequestParam("east") Float east,
+                                               @RequestParam("west") Float west) {
+        List<Site> domainModels = siteService.findAllInBoundsUsingSpecs(north, south, east, west);
+        return ResponseEntity.ok(domainModels.stream().map(SitePoint::new).collect(Collectors.toList()));
     }
 
     @RequestMapping(method = RequestMethod.GET)

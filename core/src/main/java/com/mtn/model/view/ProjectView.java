@@ -17,8 +17,8 @@ public class ProjectView extends AuditingEntityView {
     private String clientName;
     private Integer projectYear;
     private Integer projectMonth;
-    private Boolean isActive;
-    private Boolean isPrimaryData;
+    private Boolean active;
+    private Boolean primaryData;
     private LocalDateTime dateStarted;
     private LocalDateTime dateCompleted;
     private String source;
@@ -34,8 +34,8 @@ public class ProjectView extends AuditingEntityView {
         this.clientName = project.getClientName();
         this.projectYear = project.getProjectYear();
         this.projectMonth = project.getProjectMonth();
-        this.isActive = project.getIsActive();
-        this.isPrimaryData = project.getIsPrimaryData();
+        this.active = project.getActive();
+        this.primaryData = project.getPrimaryData();
         this.dateStarted = project.getDateStarted();
         this.dateCompleted = project.getDateCompleted();
         this.source = project.getSource();
@@ -93,19 +93,19 @@ public class ProjectView extends AuditingEntityView {
     }
 
     public Boolean getActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(Boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     public Boolean getPrimaryData() {
-        return isPrimaryData;
+        return primaryData;
     }
 
     public void setPrimaryData(Boolean primaryData) {
-        isPrimaryData = primaryData;
+        this.primaryData = primaryData;
     }
 
     public LocalDateTime getDateStarted() {

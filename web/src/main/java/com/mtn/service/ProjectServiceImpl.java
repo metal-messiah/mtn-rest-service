@@ -11,8 +11,6 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManagerFactory;
-
 import static com.mtn.repository.specification.ProjectSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -54,10 +52,10 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 			spec = spec.and(projectNameIsLike("%" + query + "%"));
 		}
 		if (active != null && active) {
-			spec = spec.and(isActive());
+			spec = spec.and(active());
 		}
 		if (primaryData != null && primaryData) {
-			spec = spec.and(isPrimaryData());
+			spec = spec.and(primaryData());
 		}
 
 		return getEntityRepository().findAll(spec, page);
@@ -83,8 +81,8 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 		existing.setClientName(request.getClientName());
 		existing.setProjectYear(request.getProjectYear());
 		existing.setProjectMonth(request.getProjectMonth());
-		existing.setIsActive(request.getIsActive());
-		existing.setIsPrimaryData(request.getIsPrimaryData());
+		existing.setActive(request.getActive());
+		existing.setPrimaryData(request.getPrimaryData());
 		existing.setDateStarted(request.getDateStarted());
 		existing.setDateCompleted(request.getDateCompleted());
 		existing.setSource(request.getSource());

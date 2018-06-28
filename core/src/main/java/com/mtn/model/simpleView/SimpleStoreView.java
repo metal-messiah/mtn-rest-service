@@ -18,6 +18,7 @@ public class SimpleStoreView {
     private String storeNumber;
     private Boolean floating;
     private StoreType storeType;
+    private SimpleStoreVolumeView latestStoreVolume;
 
     private SimpleBannerView banner;
     private SimpleStoreStatusView currentStoreStatus;
@@ -37,6 +38,12 @@ public class SimpleStoreView {
         StoreStatus status = store.getCurrentStatus();
         if (status != null) {
             this.currentStoreStatus = new SimpleStoreStatusView(store.getCurrentStatus());
+        }
+
+        if (store.getVolumes() != null) {
+            store.getVolumes().stream()
+                    .max((a, b) -> b.getVolumeDate().compareTo(a.getVolumeDate()))
+                    .ifPresent(latest -> this.latestStoreVolume = new SimpleStoreVolumeView(latest));
         }
     }
 
@@ -102,5 +109,13 @@ public class SimpleStoreView {
 
     public void setStoreType(StoreType storeType) {
         this.storeType = storeType;
+    }
+
+    public SimpleStoreVolumeView getLatestStoreVolume() {
+        return latestStoreVolume;
+    }
+
+    public void setLatestStoreVolume(SimpleStoreVolumeView latestStoreVolume) {
+        this.latestStoreVolume = latestStoreVolume;
     }
 }

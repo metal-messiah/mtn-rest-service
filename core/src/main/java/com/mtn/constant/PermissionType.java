@@ -60,4 +60,8 @@ public class PermissionType {
     public static final String USERS_READ = "USERS_READ";
     public static final String USERS_UPDATE = "USERS_UPDATE";
     public static final String USERS_DELETE = "USERS_DELETE";
+    public static final String STORE_SOURCE_CREATE = "STORE_SOURCE_CREATE";
+    public static final String STORE_SOURCE_READ = "STORE_SOURCE_READ";
+    public static final String STORE_SOURCE_UPDATE = "STORE_SOURCE_UPDATE";
+    public static final String STORE_SOURCE_DELETE = "STORE_SOURCE_DELETE";
 }

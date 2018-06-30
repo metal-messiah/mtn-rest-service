@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.StoreStatus;
 import com.mtn.model.simpleView.SimpleStoreView;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoreStatusView extends AuditingEntityView {
@@ -12,7 +12,7 @@ public class StoreStatusView extends AuditingEntityView {
 	private Integer id;
 	private SimpleStoreView store;
 	private String status;
-	private LocalDate statusStartDate;
+	private LocalDateTime statusStartDate;
 	private Integer legacyLocationId;
 	private Integer legacyCasingId;
 
@@ -50,11 +50,11 @@ public class StoreStatusView extends AuditingEntityView {
 		this.status = status;
 	}
 
-	public LocalDate getStatusStartDate() {
+	public LocalDateTime getStatusStartDate() {
 		return statusStartDate;
 	}
 
-	public void setStatusStartDate(LocalDate statusStartDate) {
+	public void setStatusStartDate(LocalDateTime statusStartDate) {
 		this.statusStartDate = statusStartDate;
 	}
 

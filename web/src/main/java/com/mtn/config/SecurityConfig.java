@@ -143,6 +143,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/project/**").hasAuthority(PermissionType.PROJECTS_READ)
                 .antMatchers(HttpMethod.PUT, "/api/project/**").hasAuthority(PermissionType.PROJECTS_UPDATE)
                 .antMatchers(HttpMethod.DELETE, "/api/project/**").hasAuthority(PermissionType.PROJECTS_DELETE)
+                .antMatchers(HttpMethod.POST, "/api/store-source/**").hasAuthority(PermissionType.STORE_SOURCE_CREATE)
+                .antMatchers(HttpMethod.GET, "/api/store-source/**").hasAuthority(PermissionType.STORE_SOURCE_READ)
+                .antMatchers(HttpMethod.PUT, "/api/store-source/**").hasAuthority(PermissionType.STORE_SOURCE_UPDATE)
+                .antMatchers(HttpMethod.DELETE, "/api/store-source/**").hasAuthority(PermissionType.STORE_SOURCE_DELETE)
                 .anyRequest().denyAll();
     }
 

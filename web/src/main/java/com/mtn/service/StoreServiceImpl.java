@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -107,13 +108,13 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 		} else {
 			StoreStatus storeStatus;
 			final List<StoreStatus> storeStatuses = store.getStatuses().stream()
-					.filter(status -> status.getDeletedDate() == null && status.getStatusStartDate().isBefore(LocalDate.now()))
+					.filter(status -> status.getDeletedDate() == null && status.getStatusStartDate().isBefore(LocalDateTime.now()))
 					.collect(Collectors.toList());
 			if (storeStatuses != null && storeStatuses.size() > 0) {
 				storeStatus = storeStatuses.stream().max(Comparator.comparing(StoreStatus::getStatusStartDate)).get();
 			} else {
 				storeStatus = new StoreStatus();
-				storeStatus.setStatusStartDate(requestCasing.getCasingDate().toLocalDate());
+				storeStatus.setStatusStartDate(requestCasing.getCasingDate());
 				storeStatus.setStatus("Open");
 				storeStatus.setStore(store);
 				storeStatus = storeStatusService.addOne(storeStatus);

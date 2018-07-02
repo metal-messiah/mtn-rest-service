@@ -7,13 +7,13 @@ import com.mtn.repository.StoreSourceRepository;
 import com.mtn.util.MtnLogger;
 import com.mtn.validators.StoreSourceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -30,7 +30,6 @@ public class StoreSourceServiceImpl extends EntityServiceImpl<StoreSource> imple
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-
 	@Autowired
 	private StoreSourceRepository storeSourceRepository;
 	@Autowired
@@ -45,25 +44,37 @@ public class StoreSourceServiceImpl extends EntityServiceImpl<StoreSource> imple
 	private SiteService siteService;
 	@Autowired
 	private StoreStatusService storeStatusService;
+	@Autowired
+	private PlannedGroceryService plannedGroceryService;
+
+	@Value("${planned-grocery.client_id}")
+	private String pgClientId;
+
+	@Value("${planned-grocery.client_secret}")
+	private String pgClientSecret;
 
 	private Map<Integer, String> statusMap;
 
 	@Override
 	public List<StoreSource> findAllByStoreId(Integer storeId) {
 		return getEntityRepository().findAll(where(storeIdEquals(storeId)));
+	}
 
+	@Override
+	final public Page<StoreSource> findAllNotValidated(Pageable page) {
+		return getEntityRepository().findAll(where(isNotDeleted()).and(isNotValidated()), page);
 	}
 
 	@Override
 	public void addAndUpdateSourcesFromPlannedGrocery(UserProfile validator) {
 		MtnLogger.info("Running Planned Grocery update");
+		Date start = new Date();
 
 		RestTemplate restTemplate = new RestTemplate();
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
-			String accessToken = getAccessToken(restTemplate, mapper);
-			JsonNode featureNodes = getFeatures(restTemplate, mapper, accessToken);
+			JsonNode featureNodes = this.plannedGroceryService.getFeaturesEditedSince(this.getMaxSourceEditedDate());
 			if (featureNodes.isArray()) {
 				featureNodes.forEach(f -> processFeatureNode(f, validator));
 			} else {
@@ -72,43 +83,9 @@ public class StoreSourceServiceImpl extends EntityServiceImpl<StoreSource> imple
 		} catch (IOException e) {
 			MtnLogger.warn("Failed to retrieve parse response from Planned Grocery", e);
 		}
-		MtnLogger.info("Finished running Planned Grocery update {}", dateFormat.format(new Date()));
-	}
 
-	private String getAccessToken(RestTemplate restTemplate, ObjectMapper mapper) throws IOException {
-		UriComponents keyUri = UriComponentsBuilder.newInstance()
-				.scheme("https")
-				.host("www.arcgis.com")
-				.path("/sharing/rest/oauth2/token/")
-				.queryParam("client_id", "LT6WmxqA9lqbrGOR")
-				.queryParam("client_secret", "ca783148e98d45f29798a9d1ec1f75e1")
-				.queryParam("grant_type", "client_credentials")
-				.queryParam("expiration", "20160")
-				.build();
-
-		ResponseEntity<String> keyResponse = restTemplate.getForEntity(keyUri.toUriString(), String.class);
-		JsonNode keyRoot = mapper.readTree(keyResponse.getBody());
-		JsonNode accessTokenField = keyRoot.path("access_token");
-		return accessTokenField.textValue();
-	}
-
-	private JsonNode getFeatures(RestTemplate restTemplate, ObjectMapper mapper, String accessToken) throws IOException {
-		String maxSourceEditedDateString = this.getMaxSourceEditedDate().toString().replace('T', ' ');
-
-		UriComponents featureQueryUri = UriComponentsBuilder.newInstance()
-				.scheme("https")
-				.host("services1.arcgis.com")
-				.path("/aUqH6d4IMis39TBB/arcgis/rest/services/BD_FUTURE_RETAIL/FeatureServer/0/query")
-				.queryParam("where", String.format("EditDate>='%s'", maxSourceEditedDateString))
-				.queryParam("outFields", "*")
-				.queryParam("f", "json")
-				.queryParam("token", accessToken)
-				.queryParam("outSR", "4326")
-				.build();
-
-		ResponseEntity<String> response = restTemplate.getForEntity(featureQueryUri.toUriString(), String.class);
-		JsonNode root = mapper.readTree(response.getBody());
-		return root.get("features");
+		long duration = (new Date().getTime() - start.getTime());
+		MtnLogger.info(String.format("Finished running Planned Grocery update in %d ms by %s", duration, validator.getEmail()));
 	}
 
 	private void processFeatureNode(JsonNode featureNode, UserProfile validator) {

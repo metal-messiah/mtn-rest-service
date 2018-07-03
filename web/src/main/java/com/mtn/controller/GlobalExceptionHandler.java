@@ -3,6 +3,7 @@ package com.mtn.controller;
 import com.mtn.correlation.CorrelationIdFilter;
 import com.mtn.correlation.CustomHeadersEnabledServletRequest;
 import com.mtn.model.simpleView.SimpleErrorResponseView;
+import netscape.security.ForbiddenTargetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.config.ResourceNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -24,7 +26,13 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({ResourceNotFoundException.class})
-    public ResponseEntity notFound(ResourceNotFoundException e) {
+    public ResponseEntity resourceNotFound(ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({EntityNotFoundException.class})
+    public ResponseEntity entityNotFound(EntityNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
@@ -32,6 +40,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity badRequest(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({ForbiddenTargetException.class})
+    public ResponseEntity badRequest(ForbiddenTargetException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new SimpleErrorResponseView(HttpStatus.FORBIDDEN, e.getMessage()));
     }
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -20,6 +20,8 @@ public interface SiteService extends EntityService<Site> {
 
 	List<Site> assignSitesToUser(Integer[] siteIds, Integer userId);
 
+	Page<Site> findAllDuplicatesUsingSpecs(Pageable page);
+
 	static Store findActiveStore(Site site) {
 		return site.getStores().stream()
 				.filter(store -> store.getStoreType() == StoreType.ACTIVE).findFirst().orElse(null);

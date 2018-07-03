@@ -19,12 +19,22 @@ public class SiteSpecifications {
     private static final String SHOPPING_CENTER = "shoppingCenter";
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
+    private static final String DUPLICATE = "duplicate";
 
     public static Specification<Site> idEquals(Integer id) {
         return new Specification<Site>() {
             @Override
             public Predicate toPredicate(Root<Site> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.equal(root.get(ID), id);
+            }
+        };
+    }
+
+    public static Specification<Site> isDuplicate() {
+        return new Specification<Site>() {
+            @Override
+            public Predicate toPredicate(Root<Site> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.isTrue(root.get(DUPLICATE));
             }
         };
     }

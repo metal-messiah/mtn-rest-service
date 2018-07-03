@@ -81,6 +81,11 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     }
 
     @Override
+    public Page<Site> findAllDuplicatesUsingSpecs(Pageable page) {
+        return getEntityRepository().findAll(where(isNotDeleted()).and(isDuplicate()), page);
+    }
+
+    @Override
     public List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west) {
 //        GeometryFactory geometryFactory = new GeometryFactory();
 //        Coordinate[] coords = new Coordinate[5];

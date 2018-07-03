@@ -3,7 +3,6 @@ package com.mtn.controller;
 import com.mtn.correlation.CorrelationIdFilter;
 import com.mtn.correlation.CustomHeadersEnabledServletRequest;
 import com.mtn.model.simpleView.SimpleErrorResponseView;
-import netscape.security.ForbiddenTargetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.config.ResourceNotFoundException;
@@ -40,12 +39,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity badRequest(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, e.getMessage()));
-    }
-
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler({ForbiddenTargetException.class})
-    public ResponseEntity badRequest(ForbiddenTargetException e) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new SimpleErrorResponseView(HttpStatus.FORBIDDEN, e.getMessage()));
     }
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)

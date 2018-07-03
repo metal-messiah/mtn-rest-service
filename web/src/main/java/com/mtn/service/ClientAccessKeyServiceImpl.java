@@ -3,7 +3,6 @@ package com.mtn.service;
 import com.mtn.model.domain.ClientAccessKey;
 import com.mtn.repository.ClientAccessKeyRepository;
 import com.mtn.validators.ClientAccessKeyValidator;
-import netscape.security.ForbiddenTargetException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -88,7 +87,7 @@ public class ClientAccessKeyServiceImpl extends EntityServiceImpl<ClientAccessKe
 			throw new EntityNotFoundException(String.format("Access key '%s' does not exist", accessKey));
 		}
 		if (!key.getActive()) {
-			throw new ForbiddenTargetException("Key is no longer active");
+			throw new IllegalArgumentException("Key is no longer active");
 		}
 		if (key.getClientUniqueIdentifier() != null) {
 			if (key.getClientUniqueIdentifier().equals(clientUniqueIdentifier)) {
@@ -97,7 +96,7 @@ public class ClientAccessKeyServiceImpl extends EntityServiceImpl<ClientAccessKe
 				key.setUpdatedBy(securityService.getCurrentUser());
 				return key;
 			} else {
-				throw new ForbiddenTargetException("Key is registered to a different device");
+				throw new IllegalArgumentException("Key is registered to a different device");
 			}
 		} else {
 			key.setClientUniqueIdentifier(clientUniqueIdentifier);

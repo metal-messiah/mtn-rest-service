@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class ClientAccessKeyView extends AuditingEntityView implements Serializable {
 
 	private Integer id;
+	private String clientName;
 	private String accessKey;
 	private String clientUniqueIdentifier;
 	private Boolean active;
@@ -22,6 +23,7 @@ public class ClientAccessKeyView extends AuditingEntityView implements Serializa
 		super(clientAccessKey);
 
 		this.id = clientAccessKey.getId();
+		this.clientName = clientAccessKey.getClientName();
 		this.accessKey = clientAccessKey.getAccessKey();
 		this.clientUniqueIdentifier = clientAccessKey.getClientUniqueIdentifier();
 		this.active = clientAccessKey.getActive();
@@ -34,6 +36,14 @@ public class ClientAccessKeyView extends AuditingEntityView implements Serializa
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
 	}
 
 	public String getAccessKey() {

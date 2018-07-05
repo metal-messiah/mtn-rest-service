@@ -5,6 +5,9 @@ import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreStatus;
+import com.mtn.model.domain.StoreVolume;
+
+import java.util.Comparator;
 
 /**
  * Created by Allen on 4/26/2017.
@@ -42,7 +45,7 @@ public class SimpleStoreView {
 
         if (store.getVolumes() != null) {
             store.getVolumes().stream()
-                    .max((a, b) -> b.getVolumeDate().compareTo(a.getVolumeDate()))
+                    .max(Comparator.comparing(StoreVolume::getVolumeDate))
                     .ifPresent(latest -> this.latestStoreVolume = new SimpleStoreVolumeView(latest));
         }
     }

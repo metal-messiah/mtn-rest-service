@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class ClientAccessKey extends AuditingEntity implements Identifiable {
 
     private Integer id;
+    private String clientName;
     private String accessKey;
     private String clientUniqueIdentifier;
     private Boolean active;
@@ -26,6 +27,14 @@ public class ClientAccessKey extends AuditingEntity implements Identifiable {
     @Override
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     public String getAccessKey() {

@@ -44,6 +44,11 @@
             <artifactId>core</artifactId>
             <version>${mtn-core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.sf.supercsv</groupId>
+            <artifactId>super-csv-dozer</artifactId>
+            <version>2.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>

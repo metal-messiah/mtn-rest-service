@@ -78,10 +78,16 @@ public class UserProfileServiceImpl extends EntityServiceImpl<UserProfile> imple
         );
     }
 
+    @Override
     public Page<UserProfile> findAllUsingSpecs(Pageable page) {
         Specification<UserProfile> spec = where(isNotSystemAdministrator()).and(isNotDeleted());
-
         return getEntityRepository().findAll(spec, page);
+    }
+
+    @Override
+    public List<UserProfile> findAllUsingSpecs() {
+        Specification<UserProfile> spec = where(isNotSystemAdministrator()).and(isNotDeleted());
+        return getEntityRepository().findAll(spec);
     }
 
     @Override

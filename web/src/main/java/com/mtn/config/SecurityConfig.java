@@ -38,6 +38,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by Allen on 5/10/2017.
@@ -148,6 +149,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/store-source/**").hasAuthority(PermissionType.STORE_SOURCE_UPDATE)
                 .antMatchers(HttpMethod.DELETE, "/api/store-source/**").hasAuthority(PermissionType.STORE_SOURCE_DELETE)
                 .antMatchers(HttpMethod.GET, "/api/planned-grocery/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/extraction/**").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/client-access-key/**").permitAll()
                 .anyRequest().denyAll();
     }
@@ -230,7 +232,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:3000", "https://mtn-app-suite.firebaseapp.com", "https://app.mtnra.com"));
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET","PUT","POST","DELETE","OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

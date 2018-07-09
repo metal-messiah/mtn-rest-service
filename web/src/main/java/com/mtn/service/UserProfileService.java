@@ -11,6 +11,8 @@ public interface UserProfileService extends EntityService<UserProfile> {
 
 	List<UserProfile> findAllByRoleIdUsingSpecs(Integer roleId);
 
+	List<UserProfile> findAllUsingSpecs();
+
 	UserProfile findOneByEmailUsingSpecs(String email);
 
 	UserProfile findOneByEmail(String email);

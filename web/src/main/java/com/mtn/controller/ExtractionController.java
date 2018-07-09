@@ -4,9 +4,7 @@ import com.mtn.model.domain.ExtractionField;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.service.ExtractionFieldService;
 import com.mtn.service.StoreCasingService;
-import com.mtn.util.csv.FmtBlank;
-import com.mtn.util.csv.FmtIntersection;
-import com.mtn.util.csv.FmtLocalDateTime;
+import com.mtn.util.csv.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,12 +48,34 @@ public class ExtractionController {
 		final CellProcessor[] processors = extractionFields.stream()
 				.map(ef -> {
 					if (ef.getExtractionDataType() != null) {
-						if (ef.getExtractionDataType().equals("DATE")) {
+						if (ef.getExtractionDataType().equals("DATE_TIME")) {
 							return new FmtLocalDateTime();
+						} else if (ef.getExtractionDataType().equals("DATE")) {
+							return new FmtLocalDate();
 						} else if (ef.getExtractionDataType().equals("INTERSECTION")) {
 							return new FmtIntersection();
 						} else if (ef.getExtractionDataType().equals("BLANK")) {
 							return new FmtBlank();
+						} else if (ef.getExtractionDataType().equals("ACCESS_COUNT")) {
+							return new FmtAccessCount();
+						} else if (ef.getExtractionDataType().equals("ACCESS_FRONT_MAIN_COUNT")) {
+							return new FmtAccessFrontMainCount();
+						} else if (ef.getExtractionDataType().equals("ACCESS_SIDE_MAIN_COUNT")) {
+							return new FmtAccessSideMainCount();
+						} else if (ef.getExtractionDataType().equals("ACCESS_NON_MAIN_COUNT")) {
+							return new FmtAccessNonMainCount();
+						} else if (ef.getExtractionDataType().equals("PROJECT_LIST")) {
+							return new FmtProjectList();
+						} else if (ef.getExtractionDataType().equals("TENANT_COUNT")) {
+							return new FmtTenantCount();
+						} else if (ef.getExtractionDataType().equals("TENANT_INLINE_COUNT")) {
+							return new FmtTenantInlineCount();
+						} else if (ef.getExtractionDataType().equals("TENANT_INLINE_LIST")) {
+							return new FmtTenantInlineList();
+						} else if (ef.getExtractionDataType().equals("TENANT_OUTPARCEL_COUNT")) {
+							return new FmtTenantOutparcelCount();
+						} else if (ef.getExtractionDataType().equals("TENANT_OUTPARCEL_LIST")) {
+							return new FmtTenantOutparcelList();
 						}
 					}
 					return null;

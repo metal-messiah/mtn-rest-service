@@ -22,10 +22,10 @@ public class FmtIntersection extends CellProcessorAdaptor {
 		Site site = (Site) o;
 		String intersection = "";
 		if (site.getQuad() != null) {
-			intersection = site.getQuad();
+			intersection = site.getQuad() + " of ";
 		}
 		if (site.getIntersectionStreetPrimary() != null) {
-			intersection += " of " + site.getIntersectionStreetPrimary();
+			intersection += site.getIntersectionStreetPrimary();
 		}
 		if (site.getIntersectionStreetSecondary() != null) {
 			intersection += " & " + site.getIntersectionStreetSecondary();

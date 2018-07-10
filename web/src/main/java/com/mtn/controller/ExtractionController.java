@@ -1,8 +1,9 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.ExtractionField;
+import com.mtn.model.domain.ExtractionFieldSet;
 import com.mtn.model.domain.StoreCasing;
-import com.mtn.service.ExtractionFieldService;
+import com.mtn.service.ExtractionFieldSetService;
 import com.mtn.service.StoreCasingService;
 import com.mtn.util.csv.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,12 @@ public class ExtractionController {
 	private StoreCasingService storeCasingService;
 
 	@Autowired
-	private ExtractionFieldService extractionFieldService;
+	private ExtractionFieldSetService extractionFieldSetService;
 
-	@RequestMapping(method = RequestMethod.GET, params = {"project-id"})
-	public void findAll(HttpServletResponse response, @RequestParam("project-id") Integer projectId) {
+	@RequestMapping(method = RequestMethod.GET, params = {"project-id", "field-set-id"})
+	public void findAll(HttpServletResponse response,
+						@RequestParam("project-id") Integer projectId,
+						@RequestParam("field-set-id") Integer fieldSetId) {
 
 		String csvFileName = "extraction.csv";
 
@@ -43,7 +46,8 @@ public class ExtractionController {
 
 		List<StoreCasing> casings = storeCasingService.findAllByProjectId(projectId);
 
-		List<ExtractionField> extractionFields = this.extractionFieldService.findAll();
+		ExtractionFieldSet fieldSet = this.extractionFieldSetService.findOne(fieldSetId);
+		List<ExtractionField> extractionFields = fieldSet.getFields();
 
 		final CellProcessor[] processors = extractionFields.stream()
 				.map(ef -> {

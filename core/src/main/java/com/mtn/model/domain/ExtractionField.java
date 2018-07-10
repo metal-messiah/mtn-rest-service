@@ -1,6 +1,7 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Tyler on 7/5/2018.
@@ -14,6 +15,8 @@ public class ExtractionField extends AuditingEntity implements Identifiable {
     private String fieldMapping;
     private String header;
     private String extractionDataType;
+
+    private List<ExtractionFieldSet> fieldSets;
 
     @Id
     @GeneratedValue
@@ -57,5 +60,14 @@ public class ExtractionField extends AuditingEntity implements Identifiable {
 
     public void setExtractionDataType(String extractionDataType) {
         this.extractionDataType = extractionDataType;
+    }
+
+    @ManyToMany(mappedBy = "fields")
+    public List<ExtractionFieldSet> getFieldSets() {
+        return fieldSets;
+    }
+
+    public void setFieldSets(List<ExtractionFieldSet> fieldSets) {
+        this.fieldSets = fieldSets;
     }
 }

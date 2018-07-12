@@ -15,23 +15,10 @@ public class SimpleShoppingCenterCasingView {
 	private LocalDateTime casingDate;
 	private String note;
 
-	private SimpleShoppingCenterSurveyView shoppingCenterSurvey;
-	private List<SimpleProjectView> projects = new ArrayList<>();
-
 	public SimpleShoppingCenterCasingView(ShoppingCenterCasing casing) {
 		this.id = casing.getId();
 		this.casingDate = casing.getCasingDate();
 		this.note = casing.getNote();
-		if (casing.getShoppingCenterSurvey() != null) {
-			this.shoppingCenterSurvey = new SimpleShoppingCenterSurveyView(casing.getShoppingCenterSurvey());
-		}
-		if (casing.getProjects() != null) {
-			this.projects = casing.getProjects().stream()
-					.filter(project -> project.getDeletedDate() == null)
-					.map(SimpleProjectView::new)
-					.collect(Collectors.toList());
-		}
-
 	}
 
 	public Integer getId() {
@@ -58,19 +45,4 @@ public class SimpleShoppingCenterCasingView {
 		this.note = note;
 	}
 
-	public SimpleShoppingCenterSurveyView getShoppingCenterSurvey() {
-		return shoppingCenterSurvey;
-	}
-
-	public void setShoppingCenterSurvey(SimpleShoppingCenterSurveyView shoppingCenterSurvey) {
-		this.shoppingCenterSurvey = shoppingCenterSurvey;
-	}
-
-	public List<SimpleProjectView> getProjects() {
-		return projects;
-	}
-
-	public void setProjects(List<SimpleProjectView> projects) {
-		this.projects = projects;
-	}
 }

@@ -1,7 +1,6 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.ConfidenceType;
 import com.mtn.model.domain.StoreCasing;
 
 import java.time.LocalDateTime;

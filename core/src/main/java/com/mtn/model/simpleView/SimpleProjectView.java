@@ -8,8 +8,8 @@ public class SimpleProjectView {
 
     private Integer id;
     private String projectName;
-    private boolean active;
-    private boolean primaryData;
+    private Boolean active;
+    private Boolean primaryData;
 
     public SimpleProjectView(Project project) {
         this.id = project.getId();
@@ -34,19 +34,19 @@ public class SimpleProjectView {
         this.projectName = projectName;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    public boolean isPrimaryData() {
+    public Boolean isPrimaryData() {
         return primaryData;
     }
 
-    public void setPrimaryData(boolean primaryData) {
+    public void setPrimaryData(Boolean primaryData) {
         this.primaryData = primaryData;
     }
 }

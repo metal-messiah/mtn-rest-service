@@ -68,9 +68,21 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 
 	@Override
 	public Page<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west, List<StoreType> storeTypes, Pageable page) {
-		Specifications<Store> spec = where(isNotDeleted()).and(withinBoundingBox(north, south, east, west));
+		Integer assigneeId = securityService.getCurrentUser().getId();
+		Specifications<Store> spec = where(isNotDeleted()).and(withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId));
 
 //		StoreType requestedStoreType = StoreType.valueOf(storeType);
+		if (storeTypes != null && storeTypes.size() > 0) {
+			spec = spec.and(ofTypes(storeTypes));
+		}
+
+		return getEntityRepository().findAll(spec, page);
+	}
+
+	@Override
+	public Page<Store> findAllAssignedTo(Integer assigneeId, List<StoreType> storeTypes, Pageable page) {
+		Specifications<Store> spec = where(isNotDeleted()).and(assignedTo(assigneeId));
+
 		if (storeTypes != null && storeTypes.size() > 0) {
 			spec = spec.and(ofTypes(storeTypes));
 		}

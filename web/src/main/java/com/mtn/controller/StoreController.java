@@ -46,6 +46,15 @@ public class StoreController extends CrudControllerImpl<Store> {
 		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
 	}
 
+//	@RequestMapping(method = RequestMethod.GET, params = {"assignee_id"})
+//	public ResponseEntity findAllAssignedTo(
+//			@RequestParam("assignee_id") Integer assigneeId,
+//			@RequestParam("store_types") List<StoreType> storeTypes,
+//			Pageable page) {
+//		Page<Store> domainModels = storeService.findAllAssignedTo(assigneeId, storeTypes, page);
+//		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+//	}
+
 	@RequestMapping(value = "/{id}/store-casings", method = RequestMethod.POST)
 	public ResponseEntity createOneStoreCasingForStore(
 			@PathVariable("id") Integer storeId,

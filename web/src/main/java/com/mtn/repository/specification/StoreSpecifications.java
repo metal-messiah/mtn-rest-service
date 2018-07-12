@@ -3,6 +3,7 @@ package com.mtn.repository.specification;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
+import com.mtn.model.domain.UserProfile;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -19,6 +20,7 @@ public class StoreSpecifications {
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
     private static final String STORE_TYPE = "storeType";
+    private static final String ASSIGNEE = "assignee";
 
     public static Specification<Store> idEquals(Integer id) {
         return new Specification<Store>() {
@@ -59,6 +61,17 @@ public class StoreSpecifications {
         };
     }
 
+    public static Specification<Store> assignedTo(Integer assigneeId) {
+        return new Specification<Store>() {
+            @Override
+            public Predicate toPredicate(Root<Store> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Join<Store, Site> storeSite = root.join(SITE);
+                Join<Site, UserProfile> siteAssignee = storeSite.join(ASSIGNEE);
+                return criteriaBuilder.equal(siteAssignee.get(ID), assigneeId);
+            }
+        };
+    }
+
     public static Specification<Store> withinBoundingBox(Float north, Float south, Float east, Float west) {
         return new Specification<Store>() {
             @Override
@@ -69,6 +82,23 @@ public class StoreSpecifications {
                 Predicate westBound = criteriaBuilder.greaterThanOrEqualTo(storeSiteJoin.get(LONGITUDE), west);
                 Predicate eastBound = criteriaBuilder.lessThanOrEqualTo(storeSiteJoin.get(LONGITUDE), east);
                 return criteriaBuilder.and(northBound, southBound, westBound, eastBound);
+            }
+        };
+    }
+
+    public static Specification<Store> withinBoundingBoxOrAssignedTo(Float north, Float south, Float east, Float west, Integer assigneeId) {
+        return new Specification<Store>() {
+            @Override
+            public Predicate toPredicate(Root<Store> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
+                Join<Store, Site> storeSiteJoin = root.join(SITE);
+                Join<Site, UserProfile> siteAssignee = storeSiteJoin.join(ASSIGNEE, JoinType.LEFT);
+                Predicate northBound = cb.lessThanOrEqualTo(storeSiteJoin.get(LATITUDE), north);
+                Predicate southBound = cb.greaterThanOrEqualTo(storeSiteJoin.get(LATITUDE), south);
+                Predicate westBound = cb.greaterThanOrEqualTo(storeSiteJoin.get(LONGITUDE), west);
+                Predicate eastBound = cb.lessThanOrEqualTo(storeSiteJoin.get(LONGITUDE), east);
+                Predicate inBounds = cb.and(northBound, southBound, westBound, eastBound);
+                Predicate assignedTo = cb.equal(siteAssignee.get(ID), assigneeId);
+                return cb.or(assignedTo, inBounds);
             }
         };
     }

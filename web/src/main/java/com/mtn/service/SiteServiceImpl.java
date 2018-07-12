@@ -96,7 +96,8 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 //        coords[4] = new Coordinate(east, north);
 //        Polygon boundary = geometryFactory.createPolygon(coords);
 
-        Specification<Site> spec = where(isNotDeleted()).and(withinBoundingBox(north, south, east, west));
+        Integer assigneeId = securityService.getCurrentUser().getId();
+        Specification<Site> spec = where(isNotDeleted()).and(withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId));
 
         return getEntityRepository().findAll(spec);
 

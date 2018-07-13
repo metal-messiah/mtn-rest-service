@@ -58,10 +58,8 @@ public class StoreController extends CrudControllerImpl<Store> {
 	@RequestMapping(value = "/{id}/store-casings", method = RequestMethod.POST)
 	public ResponseEntity createOneStoreCasingForStore(
 			@PathVariable("id") Integer storeId,
-			@RequestBody StoreCasing request,
-			@RequestParam(value = "store_remodeled", required = false) boolean storeRemodeled,
-			@RequestParam(value = "shopping_center_redeveloped", required = false) boolean shoppingCenterRedeveloped) {
-		StoreCasing domainModel = storeService.addOneCasingToStore(storeId, request, storeRemodeled, shoppingCenterRedeveloped);
+			@RequestBody StoreCasing request) {
+		StoreCasing domainModel = storeService.addOneCasingToStore(storeId, request);
 		return ResponseEntity.ok(new StoreCasingView(domainModel));
 	}
 

@@ -11,7 +11,6 @@ import java.time.LocalDate;
 public class StoreVolume extends AuditingEntity implements Identifiable {
 
     private Integer id;
-    private Store store;
     private Integer volumeTotal;
     private LocalDate volumeDate;
     private VolumeType volumeType;
@@ -30,6 +29,8 @@ public class StoreVolume extends AuditingEntity implements Identifiable {
     private String volumeNote;
     private ConfidenceType volumeConfidence;
     private Integer legacyCasingId;
+
+    private Store store;
 
     @Id
     @GeneratedValue

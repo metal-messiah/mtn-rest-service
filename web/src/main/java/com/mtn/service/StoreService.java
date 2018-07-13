@@ -13,7 +13,7 @@ public interface StoreService extends EntityService<Store> {
 
 	Page<Store> findAllAssignedTo(Integer assigneeId, List<StoreType> storeTypes, Pageable page);
 
-	StoreCasing addOneCasingToStore(Integer storeId, StoreCasing request, boolean storeRemodeled, boolean shoppingCenterRedeveloped);
+	StoreCasing addOneCasingToStore(Integer storeId, StoreCasing request);
 
 	StoreModel addOneModelToStore(Integer storeId, StoreModel request);
 

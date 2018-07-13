@@ -1,6 +1,7 @@
 package com.mtn.service;
 
 import com.mtn.constant.StoreType;
+import com.mtn.constant.VolumeType;
 import com.mtn.model.domain.*;
 import com.mtn.repository.StoreRepository;
 import com.mtn.validators.StoreValidator;
@@ -12,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,9 +20,6 @@ import java.util.stream.Collectors;
 import static com.mtn.repository.specification.StoreSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
-/**
- * Created by Allen on 4/26/2017.
- */
 @Service
 public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreService {
 
@@ -92,8 +89,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 
 	@Override
 	@Transactional
-	public StoreCasing addOneCasingToStore(Integer storeId, StoreCasing requestCasing,
-										   boolean storeRemodeled, boolean shoppingCenterRedeveloped) {
+	public StoreCasing addOneCasingToStore(Integer storeId, StoreCasing requestCasing) {
 		Store store = findOne(storeId);
 
 		if (store.getSite() == null) {
@@ -144,13 +140,11 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 					.collect(Collectors.toList());
 			if (storeSurveys != null && storeSurveys.size() > 0) {
 				storeSurvey = storeSurveys.stream().max(Comparator.comparing(StoreSurvey::getSurveyDate)).get();
-				// If store was remodeled clone the survey
-				if (storeRemodeled) {
-					storeSurvey = new StoreSurvey(storeSurvey);
-					storeSurvey.setSurveyDate(requestCasing.getCasingDate());
-					storeSurvey.setStore(store);
-					storeSurvey = storeSurveyService.addOne(storeSurvey);
-				}
+				// Clone the store Survey
+				storeSurvey = new StoreSurvey(storeSurvey);
+				storeSurvey.setSurveyDate(requestCasing.getCasingDate());
+				storeSurvey.setStore(store);
+				storeSurvey = storeSurveyService.addOne(storeSurvey);
 			} else {
 				// If store has not surveys create a new one
 				storeSurvey = new StoreSurvey();
@@ -176,12 +170,11 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 			if (shoppingCenterSurveys != null && shoppingCenterSurveys.size() > 0) {
 				shoppingCenterSurvey = shoppingCenterSurveys.stream()
 						.max(Comparator.comparing(ShoppingCenterSurvey::getSurveyDate)).get();
-				if (shoppingCenterRedeveloped) {
-					shoppingCenterSurvey = new ShoppingCenterSurvey(shoppingCenterSurvey);
-					shoppingCenterSurvey.setSurveyDate(requestCasing.getCasingDate());
-					shoppingCenterSurvey.setShoppingCenter(shoppingCenter);
-					shoppingCenterSurvey = shoppingCenterSurveyService.addOne(shoppingCenterSurvey);
-				}
+				// Clone the shopping Center Survey
+				shoppingCenterSurvey = new ShoppingCenterSurvey(shoppingCenterSurvey);
+				shoppingCenterSurvey.setSurveyDate(requestCasing.getCasingDate());
+				shoppingCenterSurvey.setShoppingCenter(shoppingCenter);
+				shoppingCenterSurvey = shoppingCenterSurveyService.addOne(shoppingCenterSurvey);
 			} else {
 				shoppingCenterSurvey = new ShoppingCenterSurvey();
 				shoppingCenterSurvey.setSurveyDate(requestCasing.getCasingDate());

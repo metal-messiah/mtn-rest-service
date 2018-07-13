@@ -116,7 +116,7 @@ public class StoreController extends CrudControllerImpl<Store> {
 	@RequestMapping(value = "/{id}/store-volumes", method = RequestMethod.GET)
 	public ResponseEntity findAllVolumesForStore(@PathVariable("id") Integer storeId) {
 		List<StoreVolume> domainModels = volumeService.findAllByStoreIdUsingSpecs(storeId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreVolumeView::new).collect(Collectors.toList()));
+		return ResponseEntity.ok(domainModels.stream().map(StoreVolumeView::new).collect(Collectors.toList()));
 	}
 
 	@RequestMapping(value = "/{id}/store-volumes", method = RequestMethod.POST)

@@ -41,19 +41,15 @@ public class StoreController extends CrudControllerImpl<Store> {
 			@RequestParam("east") Float east,
 			@RequestParam("west") Float west,
 			@RequestParam("store_types") List<StoreType> storeTypes,
+			@RequestParam(value = "include_project_ids", required = false) boolean includeProjectIds,
 			Pageable page) {
 		Page<Store> domainModels = storeService.findAllOfTypesInBounds(north, south, east, west, storeTypes, page);
-		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+		if (includeProjectIds) {
+			return ResponseEntity.ok(domainModels.map(SimpleStoreViewWithProjects::new));
+		} else {
+			return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+		}
 	}
-
-//	@RequestMapping(method = RequestMethod.GET, params = {"assignee_id"})
-//	public ResponseEntity findAllAssignedTo(
-//			@RequestParam("assignee_id") Integer assigneeId,
-//			@RequestParam("store_types") List<StoreType> storeTypes,
-//			Pageable page) {
-//		Page<Store> domainModels = storeService.findAllAssignedTo(assigneeId, storeTypes, page);
-//		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
-//	}
 
 	@RequestMapping(value = "/{id}/store-casings", method = RequestMethod.POST)
 	public ResponseEntity createOneStoreCasingForStore(

@@ -15,34 +15,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @RestController
 @RequestMapping("/api/store-source")
 public class StoreSourceController extends CrudControllerImpl<StoreSource> {
 
 	@Autowired
 	private StoreSourceService storeSourceService;
-	@Autowired
-	private SecurityService securityService;
 
-	@RequestMapping(value = "/planned-grocery", method = RequestMethod.GET)
-	public ResponseEntity getPlannedGrocerySources() {
-		storeSourceService.addAndUpdateSourcesFromPlannedGrocery(securityService.getCurrentUser());
-		return ResponseEntity.noContent().build();
-	}
-
-	@RequestMapping(method = RequestMethod.GET, params = {"validated"})
-	public ResponseEntity findAll(Pageable page, @RequestParam("validated") Boolean validated) {
-		Page<StoreSource> domainModels;
-		if (validated != null && !validated) {
-			domainModels = storeSourceService.findAllNotValidated(page);
-		} else {
-			domainModels = storeSourceService.findAllUsingSpecs(page);
-		}
-		return ResponseEntity.ok( domainModels.map(this::getSimpleViewFromModel));
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity findAll(Pageable page, @RequestParam Map<String, String> queryMap) {
+		Page<StoreSource> domainModels = storeSourceService.findAllByQuery(queryMap, page);
+		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
 	}
 
 	@Override

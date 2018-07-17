@@ -69,4 +69,13 @@ public class StoreSourceSpecifications {
             }
         };
     }
+
+    public static Specification<StoreSource> isValidated() {
+        return new Specification<StoreSource>() {
+            @Override
+            public Predicate toPredicate(Root<StoreSource> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.isNotNull(root.get(VALIDATED_DATE));
+            }
+        };
+    }
 }

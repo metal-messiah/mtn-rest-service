@@ -27,9 +27,9 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
     private Integer pharmacyPharmacistCount;
     private Integer pharmacyTechnicianCount;
     private Integer legacyCasingId;
+    private String storeStatus;
 
     // Associations
-    private StoreStatus storeStatus;
     private Store store;
     private StoreVolume storeVolume;
     private StoreSurvey storeSurvey;
@@ -76,13 +76,11 @@ public class StoreCasing extends AuditingEntity implements Identifiable {
         this.note = note;
     }
 
-    @OneToOne
-    @JoinColumn(name = "store_status_id")
-    public StoreStatus getStoreStatus() {
+    public String getStoreStatus() {
         return storeStatus;
     }
 
-    public void setStoreStatus(StoreStatus storeStatus) {
+    public void setStoreStatus(String storeStatus) {
         this.storeStatus = storeStatus;
     }
 

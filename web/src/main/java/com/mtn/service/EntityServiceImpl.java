@@ -72,7 +72,6 @@ public abstract class EntityServiceImpl<T extends AuditingEntity & Identifiable>
 		T existing = findOneUsingSpecs(id);
 		getValidator().validateForUpdate(request, existing);
 		updateEntityAttributes(existing, request);
-		existing.setVersion(existing.getVersion() + 1);
 		existing.setUpdatedBy(securityService.getCurrentUser());
 		return existing;
 	}

@@ -3,9 +3,7 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreCasing;
-import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.simpleView.SimpleProjectView;
-import com.mtn.model.simpleView.SimpleStoreStatusView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,8 +28,8 @@ public class StoreCasingView extends AuditingEntityView {
     private Integer pharmacyPharmacistCount;
     private Integer pharmacyTechnicianCount;
     private Integer legacyCasingId;
+    private String storeStatus;
 
-    private SimpleStoreStatusView storeStatus;
     private StoreVolumeView storeVolume;
     private StoreSurveyView storeSurvey;
     private ShoppingCenterCasingView shoppingCenterCasing;
@@ -54,10 +52,8 @@ public class StoreCasingView extends AuditingEntityView {
         this.pharmacyPharmacistCount = storeCasing.getPharmacyPharmacistCount();
         this.pharmacyTechnicianCount = storeCasing.getPharmacyTechnicianCount();
         this.legacyCasingId = storeCasing.getLegacyCasingId();
+        this.storeStatus = storeCasing.getStoreStatus();
 
-        if (storeCasing.getStoreStatus() != null) {
-            this.storeStatus = new SimpleStoreStatusView(storeCasing.getStoreStatus());
-        }
         if (storeCasing.getStoreVolume() != null) {
             this.storeVolume = new StoreVolumeView(storeCasing.getStoreVolume());
         }
@@ -99,11 +95,11 @@ public class StoreCasingView extends AuditingEntityView {
         this.note = note;
     }
 
-    public SimpleStoreStatusView getStoreStatus() {
+    public String getStoreStatus() {
         return storeStatus;
     }
 
-    public void setStoreStatus(SimpleStoreStatusView storeStatus) {
+    public void setStoreStatus(String storeStatus) {
         this.storeStatus = storeStatus;
     }
 

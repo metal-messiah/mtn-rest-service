@@ -92,7 +92,6 @@ public class ClientAccessKeyServiceImpl extends EntityServiceImpl<ClientAccessKe
 		if (key.getClientUniqueIdentifier() != null) {
 			if (key.getClientUniqueIdentifier().equals(clientUniqueIdentifier)) {
 				key.setLastVerified(LocalDateTime.now());
-				key.setVersion(key.getVersion() + 1);
 				key.setUpdatedBy(securityService.getCurrentUser());
 				return key;
 			} else {
@@ -101,7 +100,6 @@ public class ClientAccessKeyServiceImpl extends EntityServiceImpl<ClientAccessKe
 		} else {
 			key.setClientUniqueIdentifier(clientUniqueIdentifier);
 			key.setLastVerified(LocalDateTime.now());
-			key.setVersion(key.getVersion() + 1);
 			key.setUpdatedBy(securityService.getCurrentUser());
 			return key;
 		}

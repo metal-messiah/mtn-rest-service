@@ -4,7 +4,6 @@ import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.simpleView.SimpleStoreCasingView;
 import com.mtn.model.view.StoreCasingView;
-import com.mtn.model.view.StoreVolumeView;
 import com.mtn.service.StoreCasingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,21 +39,14 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
     @RequestMapping(value = "/{storeCasingId}/store-volume", method = RequestMethod.POST)
     public ResponseEntity createNewVolume(@PathVariable("storeCasingId") Integer storeCasingId,
                                        @RequestBody StoreVolume volumeRequest) {
-        StoreVolume domainModel = storeCasingService.createStoreVolume(storeCasingId, volumeRequest);
-        return ResponseEntity.ok(new StoreVolumeView(domainModel));
+        StoreCasing domainModel = storeCasingService.createStoreVolume(storeCasingId, volumeRequest);
+        return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
     @RequestMapping(value = "/{storeCasingId}/store-volume/{storeVolumeId}", method = RequestMethod.PUT)
     public ResponseEntity updateVolume(@PathVariable("storeCasingId") Integer storeCasingId,
                                        @PathVariable("storeVolumeId") Integer storeVolumeId) {
         StoreCasing domainModel = storeCasingService.setStoreVolume(storeCasingId, storeVolumeId);
-        return ResponseEntity.ok(new StoreCasingView(domainModel));
-    }
-
-    @RequestMapping(value = "/{storeCasingId}/store-status/{storeStatusId}", method = RequestMethod.PUT)
-    public ResponseEntity setStoreStatus(@PathVariable("storeCasingId") Integer storeCasingId,
-                                       @PathVariable("storeStatusId") Integer storeStatusId) {
-        StoreCasing domainModel = storeCasingService.setStoreStatus(storeCasingId, storeStatusId);
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 

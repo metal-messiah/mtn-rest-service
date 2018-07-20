@@ -5,5 +5,5 @@ public enum VolumeType {
     ACTUAL,
     ESTIMATE,
     THIRD_PARTY,
-    PLACE_HOLDER
+    PLACEHOLDER
 }

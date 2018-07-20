@@ -1,7 +1,6 @@
 package com.mtn.service;
 
 import com.mtn.constant.StoreType;
-import com.mtn.constant.VolumeType;
 import com.mtn.model.domain.*;
 import com.mtn.repository.StoreRepository;
 import com.mtn.validators.StoreValidator;
@@ -114,20 +113,22 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 		if (requestCasing.getStoreStatus() != null) {
 			throw new IllegalArgumentException("Do not include store status. Will be provided by web service");
 		} else {
-			StoreStatus storeStatus;
-			final List<StoreStatus> storeStatuses = store.getStatuses().stream()
-					.filter(status -> status.getDeletedDate() == null && status.getStatusStartDate().isBefore(LocalDateTime.now()))
+			// Use the latest
+			LocalDateTime aboutNow = LocalDateTime.now().plusDays(1);
+			List<StoreStatus> storeStatuses = store.getStatuses().stream()
+					.filter(status -> status.getDeletedDate() == null) // Is not deleted
+					.filter(status -> status.getStatusStartDate().isBefore(aboutNow)) // Before today ish
 					.collect(Collectors.toList());
-			if (storeStatuses != null && storeStatuses.size() > 0) {
-				storeStatus = storeStatuses.stream().max(Comparator.comparing(StoreStatus::getStatusStartDate)).get();
-			} else {
-				storeStatus = new StoreStatus();
-				storeStatus.setStatusStartDate(requestCasing.getCasingDate());
-				storeStatus.setStatus("Open");
-				storeStatus.setStore(store);
-				storeStatus = storeStatusService.addOne(storeStatus);
-			}
-			requestCasing.setStoreStatus(storeStatus);
+			StoreStatus storeStatus = storeStatuses.stream()
+					.max(Comparator.comparing(StoreStatus::getStatusStartDate))
+					.orElseGet(() -> {
+						StoreStatus newStatus = new StoreStatus();
+						newStatus.setStatusStartDate(requestCasing.getCasingDate());
+						newStatus.setStatus("Open");
+						newStatus.setStore(store);
+						return storeStatusService.addOne(newStatus);
+					});
+			requestCasing.setStoreStatus(storeStatus.getStatus());
 		}
 
 		if (requestCasing.getStoreSurvey() != null) {

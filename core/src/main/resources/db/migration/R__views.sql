@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               5.7.21-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
--- HeidiSQL Version:             9.5.0.5196
+-- HeidiSQL Version:             9.5.0.5278
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -229,7 +229,7 @@ CREATE TABLE `most_recent_store_casing` (
 	`store_id` INT(11) NOT NULL,
 	`store_casing_date` DATE NULL,
 	`store_casing_note` TEXT NULL COLLATE 'utf8_general_ci',
-	`store_status_id` INT(11) NULL,
+	`store_status` VARCHAR(50) NULL COLLATE 'utf8_general_ci',
 	`condition_ceiling` ENUM('POOR','FAIR','AVERAGE','GOOD','EXCELLENT') NULL COLLATE 'utf8_general_ci',
 	`condition_checkstands` ENUM('POOR','FAIR','AVERAGE','GOOD','EXCELLENT') NULL COLLATE 'utf8_general_ci',
 	`condition_floors` ENUM('POOR','FAIR','AVERAGE','GOOD','EXCELLENT') NULL COLLATE 'utf8_general_ci',
@@ -250,7 +250,8 @@ CREATE TABLE `most_recent_store_casing` (
 	`deleted_by` INT(11) NULL,
 	`version` INT(11) NOT NULL,
 	`legacy_casing_id` INT(11) NULL,
-	`store_survey_id` INT(11) NOT NULL
+	`store_survey_id` INT(11) NOT NULL,
+	`shopping_center_casing_id` INT(11) NULL
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view mtn_dev.most_recent_store_model
@@ -864,7 +865,7 @@ CREATE VIEW `most_recent_shopping_center_survey` AS select `s1`.`shopping_center
 DROP VIEW IF EXISTS `most_recent_store_casing`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `most_recent_store_casing`;
-CREATE VIEW `most_recent_store_casing` AS select `s1`.`store_casing_id` AS `store_casing_id`,`s1`.`store_id` AS `store_id`,`s1`.`store_casing_date` AS `store_casing_date`,`s1`.`store_casing_note` AS `store_casing_note`,`s1`.`store_status_id` AS `store_status_id`,`s1`.`condition_ceiling` AS `condition_ceiling`,`s1`.`condition_checkstands` AS `condition_checkstands`,`s1`.`condition_floors` AS `condition_floors`,`s1`.`condition_frozen_refrigerated` AS `condition_frozen_refrigerated`,`s1`.`condition_shelving_gondolas` AS `condition_shelving_gondolas`,`s1`.`condition_walls` AS `condition_walls`,`s1`.`fuel_gallons_weekly` AS `fuel_gallons_weekly`,`s1`.`pharmacy_scripts_weekly` AS `pharmacy_scripts_weekly`,`s1`.`pharmacy_avg_dollars_per_script` AS `pharmacy_avg_dollars_per_script`,`s1`.`pharmacy_pharmacist_count` AS `pharmacy_pharmacist_count`,`s1`.`pharmacy_technician_count` AS `pharmacy_technician_count`,`s1`.`store_volume_id` AS `store_volume_id`,`s1`.`created_date` AS `created_date`,`s1`.`created_by` AS `created_by`,`s1`.`updated_date` AS `updated_date`,`s1`.`updated_by` AS `updated_by`,`s1`.`deleted_date` AS `deleted_date`,`s1`.`deleted_by` AS `deleted_by`,`s1`.`version` AS `version`,`s1`.`legacy_casing_id` AS `legacy_casing_id`,`s1`.`store_survey_id` AS `store_survey_id` from (`store_casing` `s1` left join `store_casing` `s2` on(((`s1`.`store_id` = `s2`.`store_id`) and ((`s1`.`store_casing_date` < `s2`.`store_casing_date`) or ((`s1`.`store_casing_date` = `s2`.`store_casing_date`) and (`s1`.`store_casing_id` < `s2`.`store_casing_id`)))))) where isnull(`s2`.`store_id`);
+CREATE VIEW `most_recent_store_casing` AS select `s1`.`store_casing_id` AS `store_casing_id`,`s1`.`store_id` AS `store_id`,`s1`.`store_casing_date` AS `store_casing_date`,`s1`.`store_casing_note` AS `store_casing_note`,`s1`.`store_status` AS `store_status`,`s1`.`condition_ceiling` AS `condition_ceiling`,`s1`.`condition_checkstands` AS `condition_checkstands`,`s1`.`condition_floors` AS `condition_floors`,`s1`.`condition_frozen_refrigerated` AS `condition_frozen_refrigerated`,`s1`.`condition_shelving_gondolas` AS `condition_shelving_gondolas`,`s1`.`condition_walls` AS `condition_walls`,`s1`.`fuel_gallons_weekly` AS `fuel_gallons_weekly`,`s1`.`pharmacy_scripts_weekly` AS `pharmacy_scripts_weekly`,`s1`.`pharmacy_avg_dollars_per_script` AS `pharmacy_avg_dollars_per_script`,`s1`.`pharmacy_pharmacist_count` AS `pharmacy_pharmacist_count`,`s1`.`pharmacy_technician_count` AS `pharmacy_technician_count`,`s1`.`store_volume_id` AS `store_volume_id`,`s1`.`created_date` AS `created_date`,`s1`.`created_by` AS `created_by`,`s1`.`updated_date` AS `updated_date`,`s1`.`updated_by` AS `updated_by`,`s1`.`deleted_date` AS `deleted_date`,`s1`.`deleted_by` AS `deleted_by`,`s1`.`version` AS `version`,`s1`.`legacy_casing_id` AS `legacy_casing_id`,`s1`.`store_survey_id` AS `store_survey_id`,`s1`.`shopping_center_casing_id` AS `shopping_center_casing_id` from (`store_casing` `s1` left join `store_casing` `s2` on(((`s1`.`store_id` = `s2`.`store_id`) and ((`s1`.`store_casing_date` < `s2`.`store_casing_date`) or ((`s1`.`store_casing_date` = `s2`.`store_casing_date`) and (`s1`.`store_casing_id` < `s2`.`store_casing_id`)))))) where isnull(`s2`.`store_id`);
 
 -- Dumping structure for view mtn_dev.most_recent_store_model
 DROP VIEW IF EXISTS `most_recent_store_model`;

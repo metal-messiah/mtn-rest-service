@@ -74,7 +74,7 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 
 	@Override
 	@Transactional
-	public StoreVolume createStoreVolume(Integer storeCasingId, StoreVolume volumeRequest) {
+	public StoreCasing createStoreVolume(Integer storeCasingId, StoreVolume volumeRequest) {
 		StoreCasing casing = this.findOne(storeCasingId);
 		UserProfile currentUser = securityService.getCurrentUser();
 		volumeRequest.setStore(casing.getStore());
@@ -82,16 +82,6 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 
 		casing.setStoreVolume(savedVolume);
 		casing.setUpdatedBy(currentUser);
-
-		return savedVolume;
-	}
-
-	@Override
-	@Transactional
-	public StoreCasing setStoreStatus(Integer storeCasingId, Integer storeStatusId) {
-		StoreCasing casing = this.findOne(storeCasingId);
-		StoreStatus status = this.storeStatusService.findOne(storeStatusId);
-		casing.setStoreStatus(status);
 
 		return casing;
 	}
@@ -139,6 +129,17 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 		existing.setPharmacyAvgDollarsPerScript(request.getPharmacyAvgDollarsPerScript());
 		existing.setPharmacyPharmacistCount(request.getPharmacyPharmacistCount());
 		existing.setPharmacyTechnicianCount(request.getPharmacyTechnicianCount());
+		existing.setStoreStatus(request.getStoreStatus());
+
+		// If most recent since casing date
+		List<StoreStatus> statuses = existing.getStore().getStatuses();
+		if (statuses.stream().noneMatch(storeStatus -> storeStatus.getStatus().equals(request.getStoreStatus()))) {
+			StoreStatus storeStatus = new StoreStatus();
+			storeStatus.setStatusStartDate(request.getCasingDate());
+			storeStatus.setStatus(request.getStoreStatus());
+			storeStatus.setStore(existing.getStore());
+			storeStatusService.addOne(storeStatus);
+		}
 
 		return existing;
 	}

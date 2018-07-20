@@ -14,9 +14,9 @@ public class SimpleStoreCasingView {
     private Integer id;
     private LocalDateTime casingDate;
     private String note;
+    private String storeStatus;
 
     private SimpleStoreVolumeView storeVolume;
-    private SimpleStoreStatusView storeStatus;
     private SimpleStoreSurveyView storeSurvey;
     private SimpleShoppingCenterCasingView shoppingCenterCasing;
     private List<SimpleProjectView> projects = new ArrayList<>();
@@ -25,9 +25,7 @@ public class SimpleStoreCasingView {
         this.id = casing.getId();
         this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
-        if (casing.getStoreStatus() != null) {
-            this.storeStatus = new SimpleStoreStatusView(casing.getStoreStatus());
-        }
+        this.storeStatus = casing.getStoreStatus();
         if (casing.getStoreVolume() != null) {
             this.storeVolume = new SimpleStoreVolumeView(casing.getStoreVolume());
         }
@@ -69,11 +67,11 @@ public class SimpleStoreCasingView {
         this.note = note;
     }
 
-    public SimpleStoreStatusView getStoreStatus() {
+    public String getStoreStatus() {
         return storeStatus;
     }
 
-    public void setStoreStatus(SimpleStoreStatusView storeStatus) {
+    public void setStoreStatus(String storeStatus) {
         this.storeStatus = storeStatus;
     }
 

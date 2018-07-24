@@ -139,12 +139,6 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
         existing.setQuad(request.getQuad());
         existing.setPositionInCenter(request.getPositionInCenter());
         existing.setDuplicate(request.getDuplicate());
-        if (request.getAssignee() != null) {
-            UserProfile assignee = userProfileService.findOne(request.getAssignee().getId());
-            existing.setAssignee(assignee);
-        } else {
-            existing.setAssignee(null);
-        }
 
         return existing;
     }

@@ -12,11 +12,13 @@ public class SimpleShoppingCenterView {
 	private Integer id;
 	private String name;
 	private String owner;
+	private String centerType;
 
 	public SimpleShoppingCenterView(ShoppingCenter shoppingCenter) {
 		this.id = shoppingCenter.getId();
 		this.name = shoppingCenter.getName();
 		this.owner = shoppingCenter.getOwner();
+		this.centerType = shoppingCenter.getCenterType();
 	}
 
 	public Integer getId() {
@@ -43,4 +45,11 @@ public class SimpleShoppingCenterView {
 		this.owner = owner;
 	}
 
+	public String getCenterType() {
+		return centerType;
+	}
+
+	public void setCenterType(String centerType) {
+		this.centerType = centerType;
+	}
 }

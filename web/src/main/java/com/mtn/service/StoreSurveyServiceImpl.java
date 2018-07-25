@@ -107,7 +107,11 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 		existing.setParkingDirectAccessToParking(request.getParkingDirectAccessToParking());
 		existing.setParkingSmallParkingField(request.getParkingSmallParkingField());
 		existing.setParkingHasTSpaces(request.getParkingHasTSpaces());
+		existing.setParkingHasAngledSpaces(request.getParkingHasAngledSpaces());
+		existing.setParkingHasParkingHog(request.getParkingHasParkingHog());
+		existing.setParkingIsPoorlyLit(request.getParkingIsPoorlyLit());
 		existing.setParkingRating(request.getParkingRating());
+		existing.setParkingSpaceCount(request.getParkingSpaceCount());
 		existing.setVisibilityHillDepressionBlocksView(request.getVisibilityHillDepressionBlocksView());
 		existing.setVisibilityTreesBlockView(request.getVisibilityTreesBlockView());
 		existing.setVisibilityOutparcelsBlockView(request.getVisibilityOutparcelsBlockView());

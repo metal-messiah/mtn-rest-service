@@ -5,7 +5,6 @@ import com.mtn.constant.RatingType;
 import com.mtn.model.domain.StoreSurvey;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoreSurveyView extends AuditingEntityView {
@@ -63,7 +62,11 @@ public class StoreSurveyView extends AuditingEntityView {
     private Boolean parkingDirectAccessToParking = false;
     private Boolean parkingSmallParkingField = false;
     private Boolean parkingHasTSpaces = false;
+    private Boolean parkingHasAngledSpaces;
+    private Boolean parkingHasParkingHog;
+    private Boolean parkingIsPoorlyLit;
     private RatingType parkingRating;
+    private Integer parkingSpaceCount;
     private Boolean visibilityHillDepressionBlocksView = false;
     private Boolean visibilityOutparcelsBlockView = false;
     private Boolean visibilitySignOnMain = false;
@@ -85,6 +88,9 @@ public class StoreSurveyView extends AuditingEntityView {
     private Integer legacyCasingId;
     private String seasonalityNotes;
 
+    public StoreSurveyView() {
+    }
+
     public StoreSurveyView(StoreSurvey storeSurvey) {
         super(storeSurvey);
 
@@ -96,73 +102,76 @@ public class StoreSurveyView extends AuditingEntityView {
         this.areaSalesPercentOfTotal = storeSurvey.getAreaSalesPercentOfTotal();
         this.areaTotal = storeSurvey.getAreaTotal();
         this.areaIsEstimate = storeSurvey.getAreaIsEstimate();
-
-        this.setNote(storeSurvey.getNote());
-        this.setStoreIsOpen24(storeSurvey.getStoreIsOpen24());
-        this.setNaturalFoodsAreIntegrated(storeSurvey.getNaturalFoodsAreIntegrated());
-        this.setRegisterCountNormal(storeSurvey.getRegisterCountNormal());
-        this.setRegisterCountExpress(storeSurvey.getRegisterCountExpress());
-        this.setRegisterCountSelfCheckout(storeSurvey.getRegisterCountSelfCheckout());
-        this.setFuelDispenserCount(storeSurvey.getFuelDispenserCount());
-        this.setFuelIsOpen24(storeSurvey.getFuelIsOpen24());
-        this.setPharmacyIsOpen24(storeSurvey.getPharmacyIsOpen24());
-        this.setPharmacyHasDriveThrough(storeSurvey.getPharmacyHasDriveThrough());
-        this.setDepartmentBakery(storeSurvey.getDepartmentBakery());
-        this.setDepartmentBank(storeSurvey.getDepartmentBank());
-        this.setDepartmentBeer(storeSurvey.getDepartmentBeer());
-        this.setDepartmentBulk(storeSurvey.getDepartmentBulk());
-        this.setDepartmentCheese(storeSurvey.getDepartmentCheese());
-        this.setDepartmentCoffee(storeSurvey.getDepartmentCoffee());
-        this.setDepartmentDeli(storeSurvey.getDepartmentDeli());
-        this.setDepartmentExpandedGm(storeSurvey.getDepartmentExpandedGm());
-        this.setDepartmentExtensivePreparedFoods(storeSurvey.getDepartmentExtensivePreparedFoods());
-        this.setDepartmentFloral(storeSurvey.getDepartmentFloral());
-        this.setDepartmentFuel(storeSurvey.getDepartmentFuel());
-        this.setDepartmentHotBar(storeSurvey.getDepartmentHotBar());
-        this.setDepartmentInStoreRestaurant(storeSurvey.getDepartmentInStoreRestaurant());
-        this.setDepartmentLiquor(storeSurvey.getDepartmentLiquor());
-        this.setDepartmentMeat(storeSurvey.getDepartmentMeat());
-        this.setDepartmentNatural(storeSurvey.getDepartmentNatural());
-        this.setDepartmentOliveBar(storeSurvey.getDepartmentOliveBar());
-        this.setDepartmentOnlinePickup(storeSurvey.getDepartmentOnlinePickup());
-        this.setDepartmentPharmacy(storeSurvey.getDepartmentPharmacy());
-        this.setDepartmentPreparedFoods(storeSurvey.getDepartmentPreparedFoods());
-        this.setDepartmentSaladBar(storeSurvey.getDepartmentSaladBar());
-        this.setDepartmentSeafood(storeSurvey.getDepartmentSeafood());
-        this.setDepartmentSeating(storeSurvey.getDepartmentSeating());
-        this.setDepartmentSushi(storeSurvey.getDepartmentSushi());
-        this.setDepartmentWine(storeSurvey.getDepartmentWine());
-        this.setAccessibilityFarthestFromEntrance(storeSurvey.getAccessibilityFarthestFromEntrance());
-        this.setAccessibilityMainIntersectionHasTrafficLight(storeSurvey.getAccessibilityMainIntersectionHasTrafficLight());
-        this.setAccessibilityMainIntersectionNeedsTrafficLight(storeSurvey.getAccessibilityMainIntersectionNeedsTrafficLight());
-        this.setAccessibilityMultipleRetailersBeforeSite(storeSurvey.getAccessibilityMultipleRetailersBeforeSite());
-        this.setAccessibilitySetBackTwiceParkingLength(storeSurvey.getAccessibilitySetBackTwiceParkingLength());
-        this.setAccessibilityRating(storeSurvey.getAccessibilityRating());
-        this.setParkingOutparcelsInterfereWithParking(storeSurvey.getParkingOutparcelsInterfereWithParking());
-        this.setParkingDirectAccessToParking(storeSurvey.getParkingDirectAccessToParking());
-        this.setParkingSmallParkingField(storeSurvey.getParkingSmallParkingField());
-        this.setParkingHasTSpaces(storeSurvey.getParkingHasTSpaces());
-        this.setParkingRating(storeSurvey.getParkingRating());
-        this.setVisibilityHillDepressionBlocksView(storeSurvey.getVisibilityHillDepressionBlocksView());
-        this.setVisibilityTreesBlockView(storeSurvey.getVisibilityTreesBlockView());
-        this.setVisibilityOutparcelsBlockView(storeSurvey.getVisibilityOutparcelsBlockView());
-        this.setVisibilitySignOnMain(storeSurvey.getVisibilitySignOnMain());
-        this.setVisibilityStoreFacesMainRoad(storeSurvey.getVisibilityStoreFacesMainRoad());
-        this.setVisibilityRating(storeSurvey.getVisibilityRating());
-        this.setSeasonalityJan(storeSurvey.getSeasonalityJan());
-        this.setSeasonalityFeb(storeSurvey.getSeasonalityFeb());
-        this.setSeasonalityMar(storeSurvey.getSeasonalityMar());
-        this.setSeasonalityApr(storeSurvey.getSeasonalityApr());
-        this.setSeasonalityMay(storeSurvey.getSeasonalityMay());
-        this.setSeasonalityJun(storeSurvey.getSeasonalityJun());
-        this.setSeasonalityJul(storeSurvey.getSeasonalityJul());
-        this.setSeasonalityAug(storeSurvey.getSeasonalityAug());
-        this.setSeasonalitySep(storeSurvey.getSeasonalitySep());
-        this.setSeasonalityOct(storeSurvey.getSeasonalityOct());
-        this.setSeasonalityNov(storeSurvey.getSeasonalityNov());
-        this.setSeasonalityDec(storeSurvey.getSeasonalityDec());
-        this.setLegacyCasingId(storeSurvey.getLegacyCasingId());
-        this.setSeasonalityNotes(storeSurvey.getSeasonalityNotes());
+        this.note = storeSurvey.getNote();
+        this.storeIsOpen24 = storeSurvey.getStoreIsOpen24();
+        this.naturalFoodsAreIntegrated = storeSurvey.getNaturalFoodsAreIntegrated();
+        this.registerCountNormal = storeSurvey.getRegisterCountNormal();
+        this.registerCountExpress = storeSurvey.getRegisterCountExpress();
+        this.registerCountSelfCheckout = storeSurvey.getRegisterCountSelfCheckout();
+        this.fuelDispenserCount = storeSurvey.getFuelDispenserCount();
+        this.fuelIsOpen24 = storeSurvey.getFuelIsOpen24();
+        this.pharmacyIsOpen24 = storeSurvey.getPharmacyIsOpen24();
+        this.pharmacyHasDriveThrough = storeSurvey.getPharmacyHasDriveThrough();
+        this.departmentBakery = storeSurvey.getDepartmentBakery();
+        this.departmentBank = storeSurvey.getDepartmentBank();
+        this.departmentBeer = storeSurvey.getDepartmentBeer();
+        this.departmentBulk = storeSurvey.getDepartmentBulk();
+        this.departmentCheese = storeSurvey.getDepartmentCheese();
+        this.departmentCoffee = storeSurvey.getDepartmentCoffee();
+        this.departmentDeli = storeSurvey.getDepartmentDeli();
+        this.departmentExpandedGm = storeSurvey.getDepartmentExpandedGm();
+        this.departmentExtensivePreparedFoods = storeSurvey.getDepartmentExtensivePreparedFoods();
+        this.departmentFloral = storeSurvey.getDepartmentFloral();
+        this.departmentFuel = storeSurvey.getDepartmentFuel();
+        this.departmentHotBar = storeSurvey.getDepartmentHotBar();
+        this.departmentInStoreRestaurant = storeSurvey.getDepartmentInStoreRestaurant();
+        this.departmentLiquor = storeSurvey.getDepartmentLiquor();
+        this.departmentMeat = storeSurvey.getDepartmentMeat();
+        this.departmentNatural = storeSurvey.getDepartmentNatural();
+        this.departmentOliveBar = storeSurvey.getDepartmentOliveBar();
+        this.departmentOnlinePickup = storeSurvey.getDepartmentOnlinePickup();
+        this.departmentPharmacy = storeSurvey.getDepartmentPharmacy();
+        this.departmentPreparedFoods = storeSurvey.getDepartmentPreparedFoods();
+        this.departmentSaladBar = storeSurvey.getDepartmentSaladBar();
+        this.departmentSeafood = storeSurvey.getDepartmentSeafood();
+        this.departmentSeating = storeSurvey.getDepartmentSeating();
+        this.departmentSushi = storeSurvey.getDepartmentSushi();
+        this.departmentWine = storeSurvey.getDepartmentWine();
+        this.accessibilityFarthestFromEntrance = storeSurvey.getAccessibilityFarthestFromEntrance();
+        this.accessibilityMainIntersectionHasTrafficLight = storeSurvey.getAccessibilityMainIntersectionHasTrafficLight();
+        this.accessibilityMainIntersectionNeedsTrafficLight = storeSurvey.getAccessibilityMainIntersectionNeedsTrafficLight();
+        this.accessibilityMultipleRetailersBeforeSite = storeSurvey.getAccessibilityMultipleRetailersBeforeSite();
+        this.accessibilitySetBackTwiceParkingLength = storeSurvey.getAccessibilitySetBackTwiceParkingLength();
+        this.accessibilityRating = storeSurvey.getAccessibilityRating();
+        this.parkingOutparcelsInterfereWithParking = storeSurvey.getParkingOutparcelsInterfereWithParking();
+        this.parkingDirectAccessToParking = storeSurvey.getParkingDirectAccessToParking();
+        this.parkingSmallParkingField = storeSurvey.getParkingSmallParkingField();
+        this.parkingHasTSpaces = storeSurvey.getParkingHasTSpaces();
+        this.parkingHasAngledSpaces = storeSurvey.getParkingHasAngledSpaces();
+        this.parkingHasParkingHog = storeSurvey.getParkingHasParkingHog();
+        this.parkingIsPoorlyLit = storeSurvey.getParkingIsPoorlyLit();
+        this.parkingRating = storeSurvey.getParkingRating();
+        this.parkingSpaceCount = storeSurvey.getParkingSpaceCount();
+        this.visibilityHillDepressionBlocksView = storeSurvey.getVisibilityHillDepressionBlocksView();
+        this.visibilityOutparcelsBlockView = storeSurvey.getVisibilityOutparcelsBlockView();
+        this.visibilitySignOnMain = storeSurvey.getVisibilitySignOnMain();
+        this.visibilityStoreFacesMainRoad = storeSurvey.getVisibilityStoreFacesMainRoad();
+        this.visibilityTreesBlockView = storeSurvey.getVisibilityTreesBlockView();
+        this.visibilityRating = storeSurvey.getVisibilityRating();
+        this.seasonalityJan = storeSurvey.getSeasonalityJan();
+        this.seasonalityFeb = storeSurvey.getSeasonalityFeb();
+        this.seasonalityMar = storeSurvey.getSeasonalityMar();
+        this.seasonalityApr = storeSurvey.getSeasonalityApr();
+        this.seasonalityMay = storeSurvey.getSeasonalityMay();
+        this.seasonalityJun = storeSurvey.getSeasonalityJun();
+        this.seasonalityJul = storeSurvey.getSeasonalityJul();
+        this.seasonalityAug = storeSurvey.getSeasonalityAug();
+        this.seasonalitySep = storeSurvey.getSeasonalitySep();
+        this.seasonalityOct = storeSurvey.getSeasonalityOct();
+        this.seasonalityNov = storeSurvey.getSeasonalityNov();
+        this.seasonalityDec = storeSurvey.getSeasonalityDec();
+        this.legacyCasingId = storeSurvey.getLegacyCasingId();
+        this.seasonalityNotes = storeSurvey.getSeasonalityNotes();
     }
 
     public Integer getId() {
@@ -589,12 +598,44 @@ public class StoreSurveyView extends AuditingEntityView {
         this.parkingHasTSpaces = parkingHasTSpaces;
     }
 
+    public Boolean getParkingHasAngledSpaces() {
+        return parkingHasAngledSpaces;
+    }
+
+    public void setParkingHasAngledSpaces(Boolean parkingHasAngledSpaces) {
+        this.parkingHasAngledSpaces = parkingHasAngledSpaces;
+    }
+
+    public Boolean getParkingHasParkingHog() {
+        return parkingHasParkingHog;
+    }
+
+    public void setParkingHasParkingHog(Boolean parkingHasParkingHog) {
+        this.parkingHasParkingHog = parkingHasParkingHog;
+    }
+
+    public Boolean getParkingIsPoorlyLit() {
+        return parkingIsPoorlyLit;
+    }
+
+    public void setParkingIsPoorlyLit(Boolean parkingIsPoorlyLit) {
+        this.parkingIsPoorlyLit = parkingIsPoorlyLit;
+    }
+
     public RatingType getParkingRating() {
         return parkingRating;
     }
 
     public void setParkingRating(RatingType parkingRating) {
         this.parkingRating = parkingRating;
+    }
+
+    public Integer getParkingSpaceCount() {
+        return parkingSpaceCount;
+    }
+
+    public void setParkingSpaceCount(Integer parkingSpaceCount) {
+        this.parkingSpaceCount = parkingSpaceCount;
     }
 
     public Boolean getVisibilityHillDepressionBlocksView() {

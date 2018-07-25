@@ -16,6 +16,7 @@ public class ShoppingCenterView extends AuditingEntityView {
     private Integer id;
     private String name;
     private String owner;
+    private String centerType;
     private Integer legacyLocationId;
     private List<SimpleShoppingCenterCasingView> shoppingCenterCasings;
     private List<SimpleSiteView> sites;
@@ -25,6 +26,7 @@ public class ShoppingCenterView extends AuditingEntityView {
         this.id = shoppingCenter.getId();
         this.name = shoppingCenter.getName();
         this.owner = shoppingCenter.getOwner();
+        this.centerType = shoppingCenter.getCenterType();
         this.legacyLocationId = shoppingCenter.getLegacyLocationId();
         if (shoppingCenter.getCasings() != null) {
             this.shoppingCenterCasings = shoppingCenter.getCasings().stream().filter(casing -> casing.getDeletedDate() == null).map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList());
@@ -56,6 +58,14 @@ public class ShoppingCenterView extends AuditingEntityView {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getCenterType() {
+        return centerType;
+    }
+
+    public void setCenterType(String centerType) {
+        this.centerType = centerType;
     }
 
     public Integer getLegacyLocationId() {

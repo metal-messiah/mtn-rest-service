@@ -112,16 +112,9 @@ public class ShoppingCenterSurveyServiceImpl extends EntityServiceImpl<ShoppingC
 
     @Override
     public ShoppingCenterSurvey updateEntityAttributes(ShoppingCenterSurvey existing, ShoppingCenterSurvey request) {
-        existing.setCenterType(request.getCenterType());
         existing.setNote(request.getNote());
-        existing.setFlowHasLandscaping(request.getFlowHasLandscaping());
-        existing.setFlowHasSpeedBumps(request.getFlowHasSpeedBumps());
-        existing.setFlowHasStopSigns(request.getFlowHasStopSigns());
         existing.setFlowHasOneWayAisles(request.getFlowHasOneWayAisles());
-        existing.setParkingHasAngledSpaces(request.getParkingHasAngledSpaces());
-        existing.setParkingHasParkingHog(request.getParkingHasParkingHog());
-        existing.setParkingIsPoorlyLit(request.getParkingIsPoorlyLit());
-        existing.setParkingSpaceCount(request.getParkingSpaceCount());
+        existing.setFlowRating(request.getFlowRating());
         existing.setTenantOccupiedCount(request.getTenantOccupiedCount());
         existing.setTenantVacantCount(request.getTenantVacantCount());
         existing.setSqFtPercentOccupied(request.getSqFtPercentOccupied());

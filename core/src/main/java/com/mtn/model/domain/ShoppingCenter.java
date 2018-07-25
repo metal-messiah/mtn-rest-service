@@ -14,6 +14,7 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private Integer id;
     private String name;
     private String owner;
+    private String centerType;
     private Integer legacyLocationId;
 
     private List<ShoppingCenterCasing> casings = new ArrayList<>();
@@ -47,6 +48,14 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getCenterType() {
+        return centerType;
+    }
+
+    public void setCenterType(String centerType) {
+        this.centerType = centerType;
     }
 
     @OneToMany(mappedBy = "shoppingCenter")

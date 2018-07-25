@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -119,8 +120,9 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
 
     @Override
     public ShoppingCenter updateEntityAttributes(ShoppingCenter existing, ShoppingCenter request) {
-        existing.setName(request.getName());
-        existing.setOwner(request.getOwner());
+        existing.setName(StringUtils.isEmpty(request.getName()) ? null : request.getName());
+        existing.setOwner(StringUtils.isEmpty(request.getOwner()) ? null : request.getOwner());
+        existing.setCenterType(request.getCenterType());
 
         return existing;
     }

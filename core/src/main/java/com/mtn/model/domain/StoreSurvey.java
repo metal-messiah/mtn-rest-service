@@ -67,7 +67,11 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
     private Boolean parkingDirectAccessToParking = false;
     private Boolean parkingSmallParkingField = false;
     private Boolean parkingHasTSpaces = false;
+    private Boolean parkingHasAngledSpaces = false;
+    private Boolean parkingHasParkingHog = false;
+    private Boolean parkingIsPoorlyLit = false;
     private RatingType parkingRating;
+    private Integer parkingSpaceCount;
     private Boolean visibilityHillDepressionBlocksView = false;
     private Boolean visibilityOutparcelsBlockView = false;
     private Boolean visibilitySignOnMain = false;
@@ -148,7 +152,11 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.parkingDirectAccessToParking = storeSurvey.parkingDirectAccessToParking;
         this.parkingSmallParkingField = storeSurvey.parkingSmallParkingField;
         this.parkingHasTSpaces = storeSurvey.parkingHasTSpaces;
+        this.parkingHasAngledSpaces = storeSurvey.parkingHasAngledSpaces;
+        this.parkingHasParkingHog = storeSurvey.parkingHasParkingHog;
+        this.parkingIsPoorlyLit = storeSurvey.parkingIsPoorlyLit;
         this.parkingRating = storeSurvey.parkingRating;
+        this.parkingSpaceCount = storeSurvey.parkingSpaceCount;
         this.visibilityHillDepressionBlocksView = storeSurvey.visibilityHillDepressionBlocksView;
         this.visibilityOutparcelsBlockView = storeSurvey.visibilityOutparcelsBlockView;
         this.visibilitySignOnMain = storeSurvey.visibilitySignOnMain;
@@ -608,6 +616,30 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.parkingHasTSpaces = parkingHasTSpaces;
     }
 
+    public Boolean getParkingHasAngledSpaces() {
+        return parkingHasAngledSpaces;
+    }
+
+    public void setParkingHasAngledSpaces(Boolean parkingHasAngledSpaces) {
+        this.parkingHasAngledSpaces = parkingHasAngledSpaces;
+    }
+
+    public Boolean getParkingHasParkingHog() {
+        return parkingHasParkingHog;
+    }
+
+    public void setParkingHasParkingHog(Boolean parkingHasParkingHog) {
+        this.parkingHasParkingHog = parkingHasParkingHog;
+    }
+
+    public Boolean getParkingIsPoorlyLit() {
+        return parkingIsPoorlyLit;
+    }
+
+    public void setParkingIsPoorlyLit(Boolean parkingIsPoorlyLit) {
+        this.parkingIsPoorlyLit = parkingIsPoorlyLit;
+    }
+
     @Enumerated(EnumType.STRING)
     public RatingType getParkingRating() {
         return parkingRating;
@@ -615,6 +647,14 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
 
     public void setParkingRating(RatingType parkingRating) {
         this.parkingRating = parkingRating;
+    }
+
+    public Integer getParkingSpaceCount() {
+        return parkingSpaceCount;
+    }
+
+    public void setParkingSpaceCount(Integer parkingSpaceCount) {
+        this.parkingSpaceCount = parkingSpaceCount;
     }
 
     public Boolean getVisibilityHillDepressionBlocksView() {

@@ -15,16 +15,9 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
 
     private Integer id;
     private LocalDateTime surveyDate;
-    private String centerType;
     private String note;
-    private Boolean flowHasLandscaping = false;
-    private Boolean flowHasSpeedBumps = false;
-    private Boolean flowHasStopSigns = false;
     private Boolean flowHasOneWayAisles = false;
-    private Boolean parkingHasAngledSpaces = false;
-    private Boolean parkingHasParkingHog = false;
-    private Boolean parkingIsPoorlyLit = false;
-    private Integer parkingSpaceCount;
+    private String flowRating;
     private Integer tenantOccupiedCount;
     private Integer tenantVacantCount;
     private Double sqFtPercentOccupied;
@@ -41,16 +34,9 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
 
     public ShoppingCenterSurvey(ShoppingCenterSurvey shoppingCenterSurvey) {
         this.surveyDate = shoppingCenterSurvey.surveyDate;
-        this.centerType = shoppingCenterSurvey.centerType;
         this.note = shoppingCenterSurvey.note;
-        this.flowHasLandscaping = shoppingCenterSurvey.flowHasLandscaping;
-        this.flowHasSpeedBumps = shoppingCenterSurvey.flowHasSpeedBumps;
-        this.flowHasStopSigns = shoppingCenterSurvey.flowHasStopSigns;
         this.flowHasOneWayAisles = shoppingCenterSurvey.flowHasOneWayAisles;
-        this.parkingHasAngledSpaces = shoppingCenterSurvey.parkingHasAngledSpaces;
-        this.parkingHasParkingHog = shoppingCenterSurvey.parkingHasParkingHog;
-        this.parkingIsPoorlyLit = shoppingCenterSurvey.parkingIsPoorlyLit;
-        this.parkingSpaceCount = shoppingCenterSurvey.parkingSpaceCount;
+        this.flowRating = shoppingCenterSurvey.flowRating;
         this.tenantOccupiedCount = shoppingCenterSurvey.tenantOccupiedCount;
         this.tenantVacantCount = shoppingCenterSurvey.tenantVacantCount;
         this.sqFtPercentOccupied = shoppingCenterSurvey.sqFtPercentOccupied;
@@ -89,30 +75,6 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
         this.shoppingCenter = shoppingCenter;
     }
 
-    public Boolean getParkingHasAngledSpaces() {
-        return parkingHasAngledSpaces;
-    }
-
-    public void setParkingHasAngledSpaces(Boolean parkingHasAngledSpaces) {
-        this.parkingHasAngledSpaces = parkingHasAngledSpaces;
-    }
-
-    public Boolean getParkingHasParkingHog() {
-        return parkingHasParkingHog;
-    }
-
-    public void setParkingHasParkingHog(Boolean parkingHasParkingHog) {
-        this.parkingHasParkingHog = parkingHasParkingHog;
-    }
-
-    public Boolean getFlowHasSpeedBumps() {
-        return flowHasSpeedBumps;
-    }
-
-    public void setFlowHasSpeedBumps(Boolean flowHasSpeedBumps) {
-        this.flowHasSpeedBumps = flowHasSpeedBumps;
-    }
-
     @OneToMany(mappedBy = "survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     public List<ShoppingCenterAccess> getAccesses() {
         return accesses;
@@ -131,22 +93,6 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
         this.tenants = tenants;
     }
 
-    public Boolean getFlowHasLandscaping() {
-        return flowHasLandscaping;
-    }
-
-    public void setFlowHasLandscaping(Boolean flowHasLandscaping) {
-        this.flowHasLandscaping = flowHasLandscaping;
-    }
-
-    public Boolean getFlowHasStopSigns() {
-        return flowHasStopSigns;
-    }
-
-    public void setFlowHasStopSigns(Boolean flowHasStopSigns) {
-        this.flowHasStopSigns = flowHasStopSigns;
-    }
-
     public Boolean getFlowHasOneWayAisles() {
         return flowHasOneWayAisles;
     }
@@ -155,20 +101,12 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
         this.flowHasOneWayAisles = flowHasOneWayAisles;
     }
 
-    public Boolean getParkingIsPoorlyLit() {
-        return parkingIsPoorlyLit;
+    public String getFlowRating() {
+        return flowRating;
     }
 
-    public void setParkingIsPoorlyLit(Boolean parkingIsPoorlyLit) {
-        this.parkingIsPoorlyLit = parkingIsPoorlyLit;
-    }
-
-    public Integer getParkingSpaceCount() {
-        return parkingSpaceCount;
-    }
-
-    public void setParkingSpaceCount(Integer parkingSpaceCount) {
-        this.parkingSpaceCount = parkingSpaceCount;
+    public void setFlowRating(String flowRating) {
+        this.flowRating = flowRating;
     }
 
     public Integer getTenantOccupiedCount() {
@@ -193,14 +131,6 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
 
     public void setSqFtPercentOccupied(Double sqFtPercentOccupied) {
         this.sqFtPercentOccupied = sqFtPercentOccupied;
-    }
-
-    public String getCenterType() {
-        return centerType;
-    }
-
-    public void setCenterType(String centerType) {
-        this.centerType = centerType;
     }
 
     @Column(name = "shopping_center_survey_note")

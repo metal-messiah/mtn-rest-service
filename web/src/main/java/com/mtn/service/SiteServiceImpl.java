@@ -1,13 +1,9 @@
 package com.mtn.service;
 
 import com.mtn.constant.StoreType;
-import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.model.domain.Site;
-import com.mtn.model.domain.Store;
-import com.mtn.model.domain.UserProfile;
+import com.mtn.model.domain.*;
 import com.mtn.repository.SiteRepository;
 import com.mtn.validators.SiteValidator;
-import com.vividsolutions.jts.geom.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +12,7 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static com.mtn.repository.specification.SiteSpecifications.*;
@@ -35,6 +32,8 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     private ShoppingCenterService shoppingCenterService;
     @Autowired
     private SiteValidator siteValidator;
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     @Transactional
@@ -87,21 +86,20 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
     @Override
     public List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west) {
-//        GeometryFactory geometryFactory = new GeometryFactory();
-//        Coordinate[] coords = new Coordinate[5];
-//        coords[0] = new Coordinate(east, north);
-//        coords[1] = new Coordinate(west, north);
-//        coords[2] = new Coordinate(west, south);
-//        coords[3] = new Coordinate(east, south);
-//        coords[4] = new Coordinate(east, north);
-//        Polygon boundary = geometryFactory.createPolygon(coords);
-
         Integer assigneeId = securityService.getCurrentUser().getId();
         Specification<Site> spec = where(isNotDeleted()).and(withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId));
 
         return getEntityRepository().findAll(spec);
+    }
 
-//        return getEntityRepository().findLocationWithin(boundary, page);
+    @Override
+    public List<Site> findAllInProjectBoundary(Integer projectId) {
+        Project project = this.projectService.findOne(projectId);
+        if (project != null && project.getBoundary() != null) {
+            return this.siteRepository.findWithinGeometry(project.getBoundary().getBoundary());
+        } else {
+            throw new EntityNotFoundException(String.format("Project does not have a boundary", projectId));
+        }
     }
 
     @Override

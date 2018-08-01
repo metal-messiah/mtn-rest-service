@@ -132,14 +132,6 @@ public class ProjectView extends AuditingEntityView {
         this.source = source;
     }
 
-//    public Polygon getBoundary() {
-//        return boundary;
-//    }
-//
-//    public void setBoundary(Polygon boundary) {
-//        this.boundary = boundary;
-//    }
-
     public Integer getLegacyProjectId() {
         return legacyProjectId;
     }

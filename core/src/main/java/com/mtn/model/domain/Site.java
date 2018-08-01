@@ -1,7 +1,7 @@
 package com.mtn.model.domain;
 
 import com.mtn.constant.SiteType;
-import com.mtn.constant.StoreType;
+import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,6 +33,7 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
     private Boolean duplicate;
+    private Point location;
 
     private ShoppingCenter shoppingCenter;
     private List<Store> stores = new ArrayList<>();
@@ -218,5 +219,13 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
 
     public void setAssignee(UserProfile assignee) {
         this.assignee = assignee;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
     }
 }

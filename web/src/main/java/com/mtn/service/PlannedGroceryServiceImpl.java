@@ -16,10 +16,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PlannedGroceryServiceImpl implements PlannedGroceryService {
@@ -218,30 +215,25 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 		if (attributesNode.hasNonNull("STATUS")) {
 			String sourceStatus = getStatusMap().get(attributesNode.get("STATUS").intValue());
 			if (store.getStatuses() != null && store.getStatuses().size() > 0) {
-				StoreStatus mostRelevantStatus = store.getStatuses().stream()
-						.filter(s -> s.getDeletedDate() == null && s.getStatusStartDate().isBefore(sourceEditedDate))
-						.max(Comparator.comparing(StoreStatus::getStatusStartDate))
-						.get();
-
-				// Ignore outdated statuses
-				// Planned Grocery doesn't do closures, so if we already have it as open, leave it open.
-				if (getStatusRank(sourceStatus) >= getStatusRank(mostRelevantStatus.getStatus())) {
-					// Only create new if changed
-					if (!sourceStatus.equals(mostRelevantStatus.getStatus())) {
-						StoreStatus newStatus = this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
-						if (store.getCurrentStatus().getStatusStartDate().isBefore(newStatus.getStatusStartDate())) {
-							store.setCurrentStatus(newStatus);
-							storeEdited = true;
+				// Ignore outdated statuses (latest before sourceEditedDate)
+				Optional<StoreStatus> mostRelevantStatus = StoreService.getLatestStatusAsOfDateTime(store, sourceEditedDate);
+				if (mostRelevantStatus.isPresent()) {
+					String status = mostRelevantStatus.get().getStatus();
+					// Planned Grocery doesn't do closings, so if we already have it as open, leave it open.
+					if (getStatusRank(sourceStatus) >= getStatusRank(status)) {
+						// Only create new if changed (progressively)
+						if (!sourceStatus.equals(status)) {
+							this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
 						}
+					} else {
+						// Store status must be validated manually
+						throw new Exception("Status Out of Order");
 					}
 				} else {
-					// Store status must be validated manually
-					throw new Exception("Status Out of Order");
+					this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
 				}
 			} else {
-				StoreStatus newStatus = this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
-				store.setCurrentStatus(newStatus);
-				storeEdited = true;
+				this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
 			}
 		}
 		if (storeEdited) {
@@ -293,7 +285,6 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 		}
 		return shoppingCenter;
 	}
-
 
 
 	private LocalDateTime epochMillisecondsToLocalDateTime(Long epochMilliseconds) {

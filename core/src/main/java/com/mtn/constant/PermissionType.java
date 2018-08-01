@@ -19,7 +19,6 @@ public class PermissionType {
     public static final String ROLES_READ = "ROLES_READ";
     public static final String ROLES_UPDATE = "ROLES_UPDATE";
     public static final String ROLES_DELETE = "ROLES_DELETE";
-    public static final String SEARCH_READ = "SEARCH_READ";
     public static final String SHOPPING_CENTER_SURVEYS_CREATE = "SHOPPING_CENTER_SURVEYS_CREATE";
     public static final String SHOPPING_CENTER_SURVEYS_READ = "SHOPPING_CENTER_SURVEYS_READ";
     public static final String SHOPPING_CENTER_SURVEYS_UPDATE = "SHOPPING_CENTER_SURVEYS_UPDATE";

@@ -16,6 +16,8 @@ public interface SiteService extends EntityService<Site> {
 
 	List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west);
 
+	List<Site> findAllInProjectBoundary(Integer projectId);
+
 	Page<Site> findAllInBoundsWithoutStoresUsingSpecs(Float north, Float south, Float east, Float west, boolean noStores, Pageable page);
 
 	List<Site> assignSitesToUser(Integer[] siteIds, Integer userId);

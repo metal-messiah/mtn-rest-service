@@ -89,12 +89,6 @@ public class StoreController extends CrudControllerImpl<Store> {
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
-	@RequestMapping(value = "/{id}/current-store-status/{statusId}", method = RequestMethod.PUT)
-	public ResponseEntity setCurrentStoreStatus(@PathVariable("id") Integer storeId, @PathVariable("statusId") Integer statusId) {
-		Store domainModel = storeService.setCurrentStoreStatus(storeId, statusId);
-		return ResponseEntity.ok(new StoreView(domainModel));
-	}
-
 	@RequestMapping(value = "/{id}/store-statuses", method = RequestMethod.POST)
 	public ResponseEntity addOneStoreStatusToStore(@PathVariable("id") Integer storeId, @RequestBody StoreStatus storeStatus) {
 		StoreStatus createdStatus = storeService.addOneStatusToStore(storeId, storeStatus);

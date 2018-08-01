@@ -7,6 +7,7 @@ import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreStatus;
 import com.mtn.model.domain.StoreVolume;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 
 /**
@@ -38,9 +39,11 @@ public class SimpleStoreView {
         if (banner != null) {
             this.banner = new SimpleBannerView(banner);
         }
-        StoreStatus status = store.getCurrentStatus();
-        if (status != null) {
-            this.currentStoreStatus = new SimpleStoreStatusView(store.getCurrentStatus());
+        if (store.getStatuses() != null) {
+            store.getStatuses().stream()
+                    .filter(s -> s.getDeletedDate() == null && s.getStatusStartDate().isBefore(LocalDateTime.now().plusDays(1)))
+                    .max(Comparator.comparing(StoreStatus::getStatusStartDate))
+                    .ifPresent(status -> this.currentStoreStatus = new SimpleStoreStatusView(status));
         }
 
         if (store.getVolumes() != null) {

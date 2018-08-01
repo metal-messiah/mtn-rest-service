@@ -25,7 +25,6 @@ public class Store extends AuditingEntity implements Identifiable {
 
     private Site site;
     private Banner banner;
-    private StoreStatus currentStatus;
     private StoreSurvey currentStoreSurvey;
 
     private List<StoreCasing> casings = new ArrayList<>();
@@ -106,16 +105,6 @@ public class Store extends AuditingEntity implements Identifiable {
 
     public void setBanner(Banner banner) {
         this.banner = banner;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "current_store_status_id")
-    public StoreStatus getCurrentStatus() {
-        return currentStatus;
-    }
-
-    public void setCurrentStatus(StoreStatus currentStatus) {
-        this.currentStatus = currentStatus;
     }
 
     @ManyToOne

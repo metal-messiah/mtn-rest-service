@@ -73,6 +73,12 @@ public class SiteController extends CrudControllerImpl<Site> {
 		return ResponseEntity.ok(domainModels.stream().map(SitePoint::new).collect(Collectors.toList()));
 	}
 
+	@RequestMapping(value = "/points", method = RequestMethod.GET, params = {"projectId"})
+	public ResponseEntity findAllSitesPointsWithinProjectBoundary(@RequestParam Integer projectId) {
+		List<Site> domainModels = siteService.findAllInProjectBoundary(projectId);
+		return ResponseEntity.ok(domainModels.stream().map(SitePoint::new).collect(Collectors.toList()));
+	}
+
 	@Override
 	public SiteService getEntityService() {
 		return siteService;

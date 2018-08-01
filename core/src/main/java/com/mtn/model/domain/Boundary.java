@@ -1,5 +1,8 @@
 package com.mtn.model.domain;
 
+
+import com.vividsolutions.jts.geom.Geometry;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ public class Boundary extends AuditingEntity implements Identifiable {
 
     private Integer id;
     private String geojson;
+    private Geometry boundary;
     private Integer legacyProjectId;
 
     private List<Project> projects = new ArrayList<>();
@@ -49,5 +53,13 @@ public class Boundary extends AuditingEntity implements Identifiable {
 
     public void setProjects(List<Project> projects) {
         this.projects = projects;
+    }
+
+    public Geometry getBoundary() {
+        return boundary;
+    }
+
+    public void setBoundary(Geometry boundary) {
+        this.boundary = boundary;
     }
 }

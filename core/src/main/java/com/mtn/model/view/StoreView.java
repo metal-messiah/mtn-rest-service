@@ -3,10 +3,13 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreStatus;
 import com.mtn.model.simpleView.*;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -49,9 +52,13 @@ public class StoreView extends AuditingEntityView {
 
         this.site = new SimpleSiteView(store.getSite());
 
-        if (store.getCurrentStatus() != null && store.getCurrentStatus().getDeletedDate() == null) {
-            this.currentStoreStatus = new SimpleStoreStatusView(store.getCurrentStatus());
+        if (store.getStatuses() != null) {
+            store.getStatuses().stream()
+                    .filter(s -> s.getDeletedDate() == null && s.getStatusStartDate().isBefore(LocalDateTime.now().plusDays(1)))
+                    .max(Comparator.comparing(StoreStatus::getStatusStartDate))
+                    .ifPresent(status -> this.currentStoreStatus = new SimpleStoreStatusView(status));
         }
+
         if (store.getCurrentStoreSurvey() != null) {
             this.currentStoreSurvey = new SimpleStoreSurveyView((store.getCurrentStoreSurvey()));
         }

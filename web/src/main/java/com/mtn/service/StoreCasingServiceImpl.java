@@ -9,7 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.mtn.repository.specification.StoreCasingSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -131,9 +133,9 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 		existing.setPharmacyTechnicianCount(request.getPharmacyTechnicianCount());
 		existing.setStoreStatus(request.getStoreStatus());
 
-		// If most recent since casing date
-		List<StoreStatus> statuses = existing.getStore().getStatuses();
-		if (statuses.stream().noneMatch(storeStatus -> storeStatus.getStatus().equals(request.getStoreStatus()))) {
+		// If store has no status or status is outdated, create a new store status to to match casing status
+		Optional<StoreStatus> current = StoreService.getLatestStatusAsOfDateTime(existing.getStore(), request.getCasingDate());
+		if (!current.isPresent() || !current.get().getStatus().equals(request.getStoreStatus())) {
 			StoreStatus storeStatus = new StoreStatus();
 			storeStatus.setStatusStartDate(request.getCasingDate());
 			storeStatus.setStatus(request.getStoreStatus());

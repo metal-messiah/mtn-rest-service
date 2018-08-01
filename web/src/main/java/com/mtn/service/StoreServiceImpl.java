@@ -2,6 +2,7 @@ package com.mtn.service;
 
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
+import com.mtn.model.simpleView.SimpleStoreStatusView;
 import com.mtn.repository.StoreRepository;
 import com.mtn.validators.StoreValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -338,24 +339,6 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 
 	@Override
 	@Transactional
-	public Store setCurrentStoreStatus(Integer storeId, Integer storeStatusId) {
-		Store store = findOne(storeId);
-		if (store == null) {
-			throw new IllegalArgumentException("No store found with this id");
-		}
-
-		StoreStatus status = storeStatusService.findOne(storeStatusId);
-		if (status == null) {
-			throw new IllegalArgumentException("No store status with this id");
-		}
-
-		store.setCurrentStatus(status);
-
-		return store;
-	}
-
-	@Override
-	@Transactional
 	public StoreStatus addOneStatusToStore(Integer storeId, StoreStatus storeStatus) {
 		Store store = findOne(storeId);
 		getValidator().validateNotNull(store);
@@ -402,6 +385,5 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 	public StoreValidator getValidator() {
 		return storeValidator;
 	}
-
 
 }

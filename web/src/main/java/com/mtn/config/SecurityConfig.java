@@ -1,10 +1,8 @@
 package com.mtn.config;
 
 import com.mtn.constant.PermissionType;
-import com.mtn.model.domain.Role;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.security.CustomJwtAuthenticationProvider;
-import com.mtn.service.RoleService;
 import com.mtn.service.UserProfileService;
 import com.mtn.service.AuthCacheService;
 import com.mtn.security.MtnAuthentication;

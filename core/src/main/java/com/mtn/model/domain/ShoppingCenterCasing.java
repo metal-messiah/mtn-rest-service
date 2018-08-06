@@ -9,9 +9,9 @@ import java.util.List;
 
 @Entity
 @Table
-public class ShoppingCenterCasing extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="shopping_center_casing_id"))
+public class ShoppingCenterCasing extends AuditingEntity {
 
-    private Integer id;
     private LocalDateTime casingDate;
     private String note;
     private RatingType ratingParkingLot;
@@ -24,16 +24,6 @@ public class ShoppingCenterCasing extends AuditingEntity implements Identifiable
     private ShoppingCenterSurvey shoppingCenterSurvey;
     private List<Project> projects = new ArrayList<>();
     private List<StoreCasing> storeCasings = new ArrayList();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "shopping_center_casing_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) { this.id = id; }
 
     @ManyToOne
     @JoinColumn(name = "shopping_center_id")

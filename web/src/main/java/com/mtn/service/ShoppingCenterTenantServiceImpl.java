@@ -2,16 +2,14 @@ package com.mtn.service;
 
 import com.mtn.model.domain.ShoppingCenterTenant;
 import com.mtn.repository.ShoppingCenterTenantRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
+import com.mtn.repository.specification.ShoppingCenterTenantSpecifications;
 import com.mtn.validators.ShoppingCenterTenantValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.mtn.repository.specification.ShoppingCenterTenantSpecifications.*;
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Allen on 5/6/2017.
@@ -25,30 +23,16 @@ public class ShoppingCenterTenantServiceImpl extends EntityServiceImpl<ShoppingC
 	private ShoppingCenterTenantValidator shoppingCenterTenantValidator;
 
 	@Override
-	public List<ShoppingCenterTenant> findAllBySurveyId(Integer id) {
-		return getEntityRepository().findAllBySurveyId(id);
+	public List<ShoppingCenterTenant> findAllBySurveyId(Integer shoppingCenterSurveyId) {
+		return shoppingCenterTenantRepository.findAll(
+				Specifications.where(ShoppingCenterTenantSpecifications.shoppingCenterSurveyIdEquals(shoppingCenterSurveyId)));
 	}
 
 	@Override
 	public List<ShoppingCenterTenant> findAllBySurveyIdUsingSpecs(Integer id) {
-		return getEntityRepository().findAll(
-				where(shoppingCenterSurveyIdEquals(id))
-						.and(isNotDeleted())
-		);
-	}
-
-	@Override
-	public Page<ShoppingCenterTenant> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(
-				where(isNotDeleted()), page
-		);
-	}
-
-	@Override
-	public ShoppingCenterTenant findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
+		return shoppingCenterTenantRepository.findAll(
+				Specifications.where(ShoppingCenterTenantSpecifications.shoppingCenterSurveyIdEquals(id))
+						.and(AuditingEntitySpecifications.isNotDeleted())
 		);
 	}
 
@@ -65,21 +49,6 @@ public class ShoppingCenterTenantServiceImpl extends EntityServiceImpl<ShoppingC
 	@Override
 	public String getEntityName() {
 		return "ShoppingCenterTenant";
-	}
-
-	@Override
-	public void handleAssociationsOnDeletion(ShoppingCenterTenant existing) {
-		// TODO - handle associations
-	}
-
-	@Override
-	public void handleAssociationsOnCreation(ShoppingCenterTenant request) {
-		// TODO - handle associations
-	}
-
-	@Override
-	public ShoppingCenterTenantRepository getEntityRepository() {
-		return shoppingCenterTenantRepository;
 	}
 
 	@Override

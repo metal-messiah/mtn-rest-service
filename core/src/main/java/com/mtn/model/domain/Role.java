@@ -10,26 +10,14 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "auth_role")
-public class Role extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="auth_role_id"))
+public class Role extends AuditingEntity {
 
-    private Integer id;
     private String displayName;
     private String description;
 
     private Set<Permission> permissions = new HashSet<>();
     private Set<UserProfile> members = new HashSet<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "auth_role_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @NotNull
     @Column(unique = true)

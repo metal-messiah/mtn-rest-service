@@ -4,7 +4,6 @@ import com.mtn.model.domain.*;
 import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +22,6 @@ public class ProjectController extends CrudControllerImpl<Project> {
 	@Autowired
 	private StoreModelService modelService;
 	@Autowired
-	private ShoppingCenterService shoppingCenterService;
-	@Autowired
-	private ShoppingCenterCasingService shoppingCenterCasingService;
-	@Autowired
 	private StoreService storeService;
 	@Autowired
 	private StoreCasingService storeCasingService;
@@ -44,7 +39,7 @@ public class ProjectController extends CrudControllerImpl<Project> {
 								  @RequestParam(value = "primaryData", required = false) Boolean primaryData) {
 		Page<Project> domainModels;
 		if (query != null || active != null || primaryData != null) {
-			domainModels = getEntityService().findAllUsingSpecs(page, query, active, primaryData);
+			domainModels = getEntityService().findAllByQueryUsingSpecs(page, query, active, primaryData);
 		} else {
 			domainModels = getEntityService().findAllUsingSpecs(page);
 		}
@@ -67,16 +62,14 @@ public class ProjectController extends CrudControllerImpl<Project> {
 		}
 	}
 
-	@RequestMapping(path = "/{id}/shopping-center", method = RequestMethod.GET)
-	public ResponseEntity findAllShoppingCentersForProject(@PathVariable("id") Integer projectId) {
-		List<ShoppingCenter> domainModels = shoppingCenterService.findAllByProjectId(projectId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterView::new).collect(Collectors.toList()));
-	}
-
-	@RequestMapping(path = "/{id}/shopping-center-casing", method = RequestMethod.GET)
-	public ResponseEntity findAllShoppingCenterCasingsForProject(@PathVariable("id") Integer projectId) {
-		List<ShoppingCenterCasing> domainModels = shoppingCenterCasingService.findAllByProjectId(projectId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList()));
+	@RequestMapping(path = "/{id}/boundary", method = RequestMethod.POST)
+	public ResponseEntity saveBoundaryForProject(@PathVariable("id") Integer projectId, @RequestBody String geoJsonBoundary) {
+		Project project = projectService.saveBoundary(projectId, geoJsonBoundary);
+		if (project.getBoundary() != null) {
+			return ResponseEntity.ok(new BoundaryView(project.getBoundary()));
+		} else {
+			return ResponseEntity.noContent().build();
+		}
 	}
 
 	@RequestMapping(path = "/{id}/store", method = RequestMethod.GET)

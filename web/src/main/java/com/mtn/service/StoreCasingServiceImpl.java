@@ -1,26 +1,24 @@
 package com.mtn.service;
 
 import com.mtn.model.domain.*;
+import com.mtn.model.utils.StoreUtil;
 import com.mtn.repository.StoreCasingRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
+import com.mtn.repository.specification.StoreCasingSpecifications;
 import com.mtn.validators.StoreCasingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-import static com.mtn.repository.specification.StoreCasingSpecifications.*;
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Allen on 5/6/2017.
  */
 @Service
-public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> implements StoreCasingService {
+public class StoreCasingServiceImpl extends StoreChildServiceImpl<StoreCasing> implements StoreCasingService {
 
 	@Autowired
 	private StoreCasingRepository storeCasingRepository;
@@ -35,33 +33,8 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 
 	@Override
 	public List<StoreCasing> findAllByProjectId(Integer projectId) {
-		return getEntityRepository().findAllByProjectsIdAndDeletedDateIsNull(projectId);
-	}
-
-	@Override
-	public List<StoreCasing> findAllByStoreId(Integer storeId) {
-		return getEntityRepository().findAllByStoreId(storeId);
-	}
-
-	@Override
-	public List<StoreCasing> findAllByStoreIdUsingSpecs(Integer storeId) {
-		return getEntityRepository().findAll(
-				where(storeIdEquals(storeId))
-						.and(isNotDeleted())
-		);
-	}
-
-	@Override
-	public Page<StoreCasing> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(isNotDeleted(), page);
-	}
-
-	@Override
-	public StoreCasing findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
-		);
+		return storeCasingRepository.findAll(Specifications.where(StoreCasingSpecifications.projectIdEquals(projectId))
+				.and(AuditingEntitySpecifications.isNotDeleted()));
 	}
 
 	@Override
@@ -134,7 +107,7 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 		existing.setStoreStatus(request.getStoreStatus());
 
 		// If store has no status or status is outdated, create a new store status to to match casing status
-		Optional<StoreStatus> current = StoreService.getLatestStatusAsOfDateTime(existing.getStore(), request.getCasingDate());
+		Optional<StoreStatus> current = StoreUtil.getLatestStatusAsOfDateTime(existing.getStore(), request.getCasingDate());
 		if (!current.isPresent() || !current.get().getStatus().equals(request.getStoreStatus())) {
 			StoreStatus storeStatus = new StoreStatus();
 			storeStatus.setStatusStartDate(request.getCasingDate());
@@ -149,21 +122,6 @@ public class StoreCasingServiceImpl extends EntityServiceImpl<StoreCasing> imple
 	@Override
 	public String getEntityName() {
 		return "StoreCasing";
-	}
-
-	@Override
-	public void handleAssociationsOnDeletion(StoreCasing existing) {
-		// TODO - Handle Store and Survey
-	}
-
-	@Override
-	public void handleAssociationsOnCreation(StoreCasing request) {
-		// TODO - Handle Store and Survey
-	}
-
-	@Override
-	public StoreCasingRepository getEntityRepository() {
-		return storeCasingRepository;
 	}
 
 	@Override

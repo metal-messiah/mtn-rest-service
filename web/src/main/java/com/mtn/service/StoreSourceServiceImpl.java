@@ -18,13 +18,12 @@ import static java.lang.Boolean.parseBoolean;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class StoreSourceServiceImpl extends EntityServiceImpl<StoreSource> implements StoreSourceService {
+public class StoreSourceServiceImpl extends StoreChildServiceImpl<StoreSource> implements StoreSourceService {
 
 	@Autowired
 	private StoreSourceRepository storeSourceRepository;
 	@Autowired
 	private StoreSourceValidator storeSourceValidator;
-
 
 	@Value("${planned-grocery.client_id}")
 	private String pgClientId;
@@ -32,45 +31,18 @@ public class StoreSourceServiceImpl extends EntityServiceImpl<StoreSource> imple
 	@Value("${planned-grocery.client_secret}")
 	private String pgClientSecret;
 
-
 	@Override
-	public List<StoreSource> findAllByStoreId(Integer storeId) {
-		return getEntityRepository().findAll(where(storeIdEquals(storeId)));
+	public LocalDateTime getMaxSourceEditedDate(String sourceName) {
+		return storeSourceRepository.getMaxSourceEditedDate(sourceName);
 	}
 
 	@Override
-	public List<StoreSource> findAllByStoreIdUsingSpecs(Integer storeId) {
-		return getEntityRepository().findAll(
-				where(storeIdEquals(storeId))
-						.and(isNotDeleted())
-		);
-	}
-
-	@Override
-	public LocalDateTime getMaxSourceEditedDate() {
-		return getEntityRepository().getMaxSourceEditedDate();
-	}
-
-	@Override
-	public Page<StoreSource> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(where(isNotDeleted()), page);
-	}
-
-	@Override
-	public StoreSource findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
-		);
-	}
-
-	@Override
-	public StoreSource findOneBySourceNativeIdUsingSpecs(String sourceName, String id) {
-		return getEntityRepository().findOne(
+	public Optional<StoreSource> findOneBySourceNativeIdUsingSpecs(String sourceName, String id) {
+		return Optional.ofNullable(storeSourceRepository.findOne(
 				where(sourceNativeIdEquals(id))
 						.and(sourceNameEquals(sourceName))
 						.and(isNotDeleted())
-		);
+		));
 	}
 
 	@Override
@@ -88,12 +60,19 @@ public class StoreSourceServiceImpl extends EntityServiceImpl<StoreSource> imple
 			}
 		}
 
-		return getEntityRepository().findAll(specs, page);
+		return storeSourceRepository.findAll(specs, page);
 	}
 
 	@Override
 	public StoreSource updateEntityAttributes(StoreSource existing, StoreSource request) {
-		// TODO
+		existing.setSourceCreatedDate(request.getSourceCreatedDate());
+		existing.setSourceEditedDate(request.getSourceEditedDate());
+		existing.setSourceName(request.getSourceName());
+		existing.setSourceNativeId(request.getSourceNativeId());
+		existing.setSourceStoreName(request.getSourceStoreName());
+		existing.setSourceUrl(request.getSourceUrl());
+		existing.setValidatedBy(request.getValidatedBy());
+		existing.setValidatedDate(request.getValidatedDate());
 
 		return existing;
 	}
@@ -101,21 +80,6 @@ public class StoreSourceServiceImpl extends EntityServiceImpl<StoreSource> imple
 	@Override
 	public String getEntityName() {
 		return "StoreSource";
-	}
-
-	@Override
-	public void handleAssociationsOnDeletion(StoreSource existing) {
-		// TODO - Handle Store
-	}
-
-	@Override
-	public void handleAssociationsOnCreation(StoreSource request) {
-		// TODO - Handle Store
-	}
-
-	@Override
-	public StoreSourceRepository getEntityRepository() {
-		return storeSourceRepository;
 	}
 
 	@Override

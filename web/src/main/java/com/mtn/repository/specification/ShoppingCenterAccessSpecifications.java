@@ -9,20 +9,10 @@ import javax.persistence.criteria.*;
 /**
  * Created by Allen on 4/23/2017.
  */
-public class ShoppingCenterAccessSpecifications {
+public class ShoppingCenterAccessSpecifications extends AuditingEntitySpecifications{
 
-    private static final String DELETED_DATE = "deletedDate";
     private static final String ID = "id";
     private static final String SHOPPING_CENTER_SURVEY = "survey";
-
-    public static Specification<ShoppingCenterAccess> idEquals(Integer id) {
-        return new Specification<ShoppingCenterAccess>() {
-            @Override
-            public Predicate toPredicate(Root<ShoppingCenterAccess> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
 
     public static Specification<ShoppingCenterAccess> shoppingCenterSurveyIdEquals(Integer id) {
         return new Specification<ShoppingCenterAccess>() {
@@ -30,15 +20,6 @@ public class ShoppingCenterAccessSpecifications {
             public Predicate toPredicate(Root<ShoppingCenterAccess> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 Join<ShoppingCenterAccess, ShoppingCenterSurvey> shoppingCenterAccessShoppingCenterSurveyJoin = root.join(SHOPPING_CENTER_SURVEY);
                 return criteriaBuilder.equal(shoppingCenterAccessShoppingCenterSurveyJoin.get(ID), id);
-            }
-        };
-    }
-
-    public static Specification<ShoppingCenterAccess> isNotDeleted() {
-        return new Specification<ShoppingCenterAccess>() {
-            @Override
-            public Predicate toPredicate(Root<ShoppingCenterAccess> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
             }
         };
     }

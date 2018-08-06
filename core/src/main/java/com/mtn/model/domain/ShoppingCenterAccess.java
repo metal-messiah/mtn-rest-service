@@ -8,9 +8,9 @@ import com.mtn.constant.AccessType;
  */
 @Entity
 @Table
-public class ShoppingCenterAccess extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="shopping_center_access_id"))
+public class ShoppingCenterAccess extends AuditingEntity {
 
-    private Integer id;
     private AccessType accessType;
     private Boolean hasLeftIn = false;
     private Boolean oneWayRoad = false;
@@ -33,18 +33,6 @@ public class ShoppingCenterAccess extends AuditingEntity implements Identifiable
         this.hasTrafficLight = shoppingCenterAccess.hasTrafficLight;
         this.hasRightIn = shoppingCenterAccess.hasRightIn;
         this.hasRightOut = shoppingCenterAccess.hasRightOut;
-    }
-
-    @Id
-    @GeneratedValue
-    @Column(name = "shopping_center_access_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     @ManyToOne

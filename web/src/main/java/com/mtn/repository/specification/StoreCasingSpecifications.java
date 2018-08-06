@@ -1,5 +1,6 @@
 package com.mtn.repository.specification;
 
+import com.mtn.model.domain.Project;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreCasing;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,18 +12,9 @@ import javax.persistence.criteria.*;
  */
 public class StoreCasingSpecifications {
 
-    private static final String DELETED_DATE = "deletedDate";
     private static final String ID = "id";
     private static final String STORE = "store";
-
-    public static Specification<StoreCasing> idEquals(Integer id) {
-        return new Specification<StoreCasing>() {
-            @Override
-            public Predicate toPredicate(Root<StoreCasing> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
+    private static final String PROJECT = "project";
 
     public static Specification<StoreCasing> storeIdEquals(Integer id) {
         return new Specification<StoreCasing>() {
@@ -34,12 +26,14 @@ public class StoreCasingSpecifications {
         };
     }
 
-    public static Specification<StoreCasing> isNotDeleted() {
+    public static Specification<StoreCasing> projectIdEquals(Integer projectId) {
         return new Specification<StoreCasing>() {
             @Override
             public Predicate toPredicate(Root<StoreCasing> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
+                Join<StoreCasing, Project> storeCasingProjectJoin = root.join(PROJECT);
+                return criteriaBuilder.equal(storeCasingProjectJoin.get(ID), projectId);
             }
         };
     }
+
 }

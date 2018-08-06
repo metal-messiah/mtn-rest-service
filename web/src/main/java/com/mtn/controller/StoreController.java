@@ -96,6 +96,13 @@ public class StoreController extends CrudControllerImpl<Store> {
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
+	@PutMapping(value = "{storeId}", params = {"is-float"})
+	public ResponseEntity updateIsDuplicate(@PathVariable("storeId") Integer storeId, @RequestParam("is-float") Boolean isFloat) {
+		Store store = storeService.findOne(storeId);
+		store.setFloating(isFloat);
+		return ResponseEntity.ok(new SimpleStoreView(storeService.updateOne(store.getId(), store)));
+	}
+
 	@RequestMapping(value = "/{id}/store-statuses/{statusId}", method = RequestMethod.DELETE)
 	public ResponseEntity deleteStoreStatus(@PathVariable("id") Integer storeId, @PathVariable Integer statusId) {
 		storeService.deleteStoreStatus(storeId, statusId);

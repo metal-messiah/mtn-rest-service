@@ -1,16 +1,15 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 /**
  * Created by Allen on 4/21/2017.
  */
 @Entity
 @Table
-public class UserProfile extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="user_profile_id"))
+public class UserProfile extends AuditingEntity {
 
-    private Integer id;
     private String email;
     private String firstName;
     private Group group;
@@ -21,18 +20,6 @@ public class UserProfile extends AuditingEntity implements Identifiable {
     @PreUpdate
     public void prePersist() {
         email = email.toLowerCase();
-    }
-
-    @Id
-    @GeneratedValue
-    @Column(name = "user_profile_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(final Integer id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -77,12 +64,6 @@ public class UserProfile extends AuditingEntity implements Identifiable {
 
     public void setGroup(Group group) {
         this.group = group;
-    }
-
-    public static UserProfile build( String email ) {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setEmail( email );
-        return userProfile;
     }
 
 }

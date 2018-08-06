@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table
-public class StoreSource extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="source_id"))
+public class StoreSource extends AuditingEntity {
 
-    private Integer id;
     private String sourceName;
     private String sourceNativeId;
     private String sourceUrl;
@@ -22,18 +22,6 @@ public class StoreSource extends AuditingEntity implements Identifiable {
     private LocalDateTime sourceEditedDate;
 
     private Store store;
-
-    @Id
-    @GeneratedValue
-    @Column(name = "source_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @ManyToOne
     @JoinColumn(name = "store_id")

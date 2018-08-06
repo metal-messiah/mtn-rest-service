@@ -33,18 +33,6 @@ public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter>
     @Autowired
     private ShoppingCenterCasingService casingService;
 
-    @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.POST)
-    public ResponseEntity addOneShoppingCenterCasingToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterCasing request) {
-        ShoppingCenterCasing domainModel = shoppingCenterService.addOneCasingToShoppingCenter(shoppingCenterId, request);
-        return ResponseEntity.ok(new ShoppingCenterCasingView(domainModel));
-    }
-
-    @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.POST)
-    public ResponseEntity addOneShoppingCenterSurveyToShoppingCenter(@PathVariable("id") Integer shoppingCenterId, @RequestBody ShoppingCenterSurvey request) {
-        ShoppingCenterSurvey domainModel = shoppingCenterService.addOneSurveyToShoppingCenter(shoppingCenterId, request);
-        return ResponseEntity.ok(new ShoppingCenterSurveyView(domainModel));
-    }
-
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(
             @RequestParam(value = "q", required = false) String q,

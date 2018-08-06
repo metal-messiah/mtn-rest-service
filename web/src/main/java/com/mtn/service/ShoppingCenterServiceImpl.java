@@ -6,11 +6,10 @@ import com.mtn.validators.ShoppingCenterValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import java.util.List;
 
 import static com.mtn.repository.specification.ShoppingCenterSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -26,23 +25,7 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
     @Autowired
     private SiteService siteService;
     @Autowired
-    private ShoppingCenterSurveyService surveyService;
-    @Autowired
-    private ShoppingCenterCasingService casingService;
-    @Autowired
     private ShoppingCenterValidator shoppingCenterValidator;
-
-    @Override
-    @Transactional
-    public ShoppingCenterCasing addOneCasingToShoppingCenter(Integer shoppingCenterId, ShoppingCenterCasing request) {
-        ShoppingCenter existing = findOneUsingSpecs(shoppingCenterId);
-        getValidator().validateNotNull(existing);
-
-        request.setShoppingCenter(existing);
-        existing.setUpdatedBy(securityService.getCurrentUser());
-
-        return casingService.addOne(request);
-    }
 
     @Override
     @Transactional
@@ -57,34 +40,9 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
     }
 
     @Override
-    @Transactional
-    public ShoppingCenterSurvey addOneSurveyToShoppingCenter(Integer shoppingCenterId, ShoppingCenterSurvey request) {
-        ShoppingCenter existing = findOneUsingSpecs(shoppingCenterId);
-        getValidator().validateNotNull(existing);
-
-        request.setShoppingCenter(existing);
-        existing.setUpdatedBy(securityService.getCurrentUser());
-
-        return surveyService.addOne(request);
-    }
-
-    @Override
-    public Page<ShoppingCenter> findAllUsingSpecs(Pageable page) {
-        return getEntityRepository().findAll(
-                where(isNotDeleted())
-                , page
-        );
-    }
-
-    @Override
-    public List<ShoppingCenter> findAllByProjectId(Integer projectId) {
-        return getEntityRepository().findAllByCasingsProjectsIdAndDeletedDateIsNull(projectId);
-    }
-
-    @Override
     public Page<ShoppingCenter> findAllByNameUsingSpecs(String name, Pageable page) {
-        return getEntityRepository().findAll(
-                where(nameContains(name))
+        return shoppingCenterRepository.findAll(
+                Specifications.where(nameContains(name))
                         .and(isNotDeleted())
                 , page
         );
@@ -92,8 +50,8 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
 
     @Override
     public Page<ShoppingCenter> findAllByOwnerUsingSpecs(String owner, Pageable page) {
-        return getEntityRepository().findAll(
-                where(ownerContains(owner))
+        return shoppingCenterRepository.findAll(
+                Specifications.where(ownerContains(owner))
                         .and(isNotDeleted())
                 , page
         );
@@ -101,20 +59,12 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
 
     @Override
     public Page<ShoppingCenter> findAllByNameOrOwnerUsingSpecs(String q, Pageable page) {
-        return getEntityRepository().findAll(
-                where(
+        return shoppingCenterRepository.findAll(
+                Specifications.where(
                         where(nameContains(q))
                                 .or(ownerContains(q)))
                         .and(isNotDeleted())
                 , page
-        );
-    }
-
-    @Override
-    public ShoppingCenter findOneUsingSpecs(Integer id) {
-        return getEntityRepository().findOne(
-                where(idEquals(id))
-                        .and(isNotDeleted())
         );
     }
 
@@ -130,21 +80,6 @@ public class ShoppingCenterServiceImpl extends EntityServiceImpl<ShoppingCenter>
     @Override
     public String getEntityName() {
         return "ShoppingCenter";
-    }
-
-    @Override
-    public void handleAssociationsOnDeletion(ShoppingCenter existing) {
-        // TODO - handle casings, sites, surveys
-    }
-
-    @Override
-    public void handleAssociationsOnCreation(ShoppingCenter request) {
-        // TODO - handle casings, sites, surveys
-    }
-
-    @Override
-    public ShoppingCenterRepository getEntityRepository() {
-        return shoppingCenterRepository;
     }
 
     @Override

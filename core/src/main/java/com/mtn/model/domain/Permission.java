@@ -12,9 +12,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "auth_permission")
-public class Permission extends AuditingEntity implements Identifiable, GrantedAuthority {
+@AttributeOverride(name="id", column=@Column(name="auth_permission_id"))
+public class Permission extends AuditingEntity implements GrantedAuthority {
 
-    private Integer id;
     private String systemName;
     private String displayName;
     private String description;
@@ -22,18 +22,6 @@ public class Permission extends AuditingEntity implements Identifiable, GrantedA
     private CrudAction action;
 
     private List<Role> roles = new ArrayList<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "auth_permission_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getSystemName() {
         return systemName;

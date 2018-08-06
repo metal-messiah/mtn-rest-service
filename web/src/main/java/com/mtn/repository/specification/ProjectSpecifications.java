@@ -11,7 +11,7 @@ import javax.persistence.criteria.Root;
 /**
  * Created by Allen on 4/23/2017.
  */
-public class ProjectSpecifications {
+public class ProjectSpecifications extends AuditingEntitySpecifications {
 
     private static final String DELETED_DATE = "deletedDate";
     private static final String ID = "id";
@@ -19,27 +19,7 @@ public class ProjectSpecifications {
     private static final String PRIMARY_DATA = "primaryData";
     private static final String PROJECT_NAME = "projectName";
 
-    public static Specification<Project> idEquals(Integer id) {
-        return new Specification<Project>() {
-            @Override
-            public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(PROJECT_NAME)));
-                return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
-
-    public static Specification<Project> isNotDeleted() {
-        return new Specification<Project>() {
-            @Override
-            public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(PROJECT_NAME)));
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
-            }
-        };
-    }
-
-    public static Specification<Project> active() {
+       public static Specification<Project> active() {
         return new Specification<Project>() {
             @Override
             public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -65,6 +45,16 @@ public class ProjectSpecifications {
             public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 criteriaQuery.orderBy(criteriaBuilder.asc(root.get(PROJECT_NAME)));
                 return criteriaBuilder.like(root.get(PROJECT_NAME), nameQuery);
+            }
+        };
+    }
+
+    public static Specification<Project> projectNameEquals(String projectName) {
+        return new Specification<Project>() {
+            @Override
+            public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(PROJECT_NAME)));
+                return criteriaBuilder.equal(root.get(PROJECT_NAME), projectName);
             }
         };
     }

@@ -9,9 +9,9 @@ import java.util.List;
  */
 @Entity
 @Table
-public class ShoppingCenter extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="shopping_center_id"))
+public class ShoppingCenter extends AuditingEntity {
 
-    private Integer id;
     private String name;
     private String owner;
     private String centerType;
@@ -20,18 +20,6 @@ public class ShoppingCenter extends AuditingEntity implements Identifiable {
     private List<ShoppingCenterCasing> casings = new ArrayList<>();
     private List<Site> sites = new ArrayList<>();
     private List<ShoppingCenterSurvey> surveys = new ArrayList<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "shopping_center_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @Column(name = "shopping_center_name")
     public String getName() {

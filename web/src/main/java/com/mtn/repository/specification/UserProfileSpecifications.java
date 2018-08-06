@@ -1,5 +1,6 @@
 package com.mtn.repository.specification;
 
+import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.model.domain.Role;
@@ -15,7 +16,6 @@ public class UserProfileSpecifications {
     private static final String DELETED_DATE = "deletedDate";
     private static final String EMAIL = "email";
     private static final String ID = "id";
-    private static final String IDENTITIES = "identities";
     private static final String FIRST_NAME = "firstName";
     private static final String GROUP = "group";
     private static final String LAST_NAME = "lastName";
@@ -27,6 +27,15 @@ public class UserProfileSpecifications {
             @Override
             public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get(EMAIL)), String.format("%%%s%%", value.toLowerCase()));
+            }
+        };
+    }
+
+    public static Specification<UserProfile> emailEqualsIgnoreCase(String value) {
+        return new Specification<UserProfile>() {
+            @Override
+            public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.equal(criteriaBuilder.lower(root.get(EMAIL)), value.toLowerCase());
             }
         };
     }
@@ -45,24 +54,6 @@ public class UserProfileSpecifications {
             @Override
             public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get(LAST_NAME)), String.format("%%%s%%", value.toLowerCase()));
-            }
-        };
-    }
-
-    public static Specification<UserProfile> idEquals(Integer id) {
-        return new Specification<UserProfile>() {
-            @Override
-            public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
-
-    public static Specification<UserProfile> isNotDeleted() {
-        return new Specification<UserProfile>() {
-            @Override
-            public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
             }
         };
     }
@@ -92,6 +83,24 @@ public class UserProfileSpecifications {
             public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 Join<UserProfile, Role> roleJoin = root.join(ROLE);
                 return criteriaBuilder.equal(roleJoin.get(ID), roleId);
+            }
+        };
+    }
+
+    public static <T extends AuditingEntity> Specification<T> idEquals(Integer id) {
+        return new Specification<T>() {
+            @Override
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.equal(root.get(ID), id);
+            }
+        };
+    }
+
+    public static <T extends AuditingEntity> Specification<T> isNotDeleted() {
+        return new Specification<T>() {
+            @Override
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.isNull(root.get(DELETED_DATE));
             }
         };
     }

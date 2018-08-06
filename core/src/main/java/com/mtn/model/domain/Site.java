@@ -13,9 +13,9 @@ import java.util.List;
  */
 @Entity
 @Table
-public class Site extends AuditingEntity implements Identifiable, Serializable {
+@AttributeOverride(name="id", column=@Column(name="site_id"))
+public class Site extends AuditingEntity {
 
-    private Integer id;
     private Float latitude;
     private Float longitude;
     private SiteType type;
@@ -38,18 +38,6 @@ public class Site extends AuditingEntity implements Identifiable, Serializable {
     private ShoppingCenter shoppingCenter;
     private List<Store> stores = new ArrayList<>();
     private UserProfile assignee;
-
-    @Id
-    @GeneratedValue
-    @Column(name = "site_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @ManyToOne
     @JoinColumn(name = "shopping_center_id")

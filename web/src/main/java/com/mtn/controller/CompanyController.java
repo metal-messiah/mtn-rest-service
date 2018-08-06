@@ -41,18 +41,6 @@ public class CompanyController extends CrudControllerImpl<Company> {
 		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
 	}
 
-	@RequestMapping(value = "/{id}/store", method = RequestMethod.GET)
-	public ResponseEntity findAllStoresForCompany(@PathVariable("id") Integer id, @RequestParam(value = "recursive", defaultValue = "false") Boolean doRecursive) {
-		List<Store> domainModels;
-		if (doRecursive) {
-			domainModels = storeService.findAllByParentCompanyIdRecursive(id);
-		} else {
-			domainModels = storeService.findAllByBannerId(id);
-		}
-
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
-	}
-
 	@RequestMapping(value = "/{childId}/parent/{parentId}")
 	public ResponseEntity updateOneParentCompany(@PathVariable("childId") Integer childId, @PathVariable("parentId") Integer parentId) {
 		Company domainModel = getEntityService().updateOneParentCompany(childId, parentId);

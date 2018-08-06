@@ -8,14 +8,13 @@ import com.mtn.model.domain.UserProfile;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allen on 4/24/2017.
  */
-public class SiteSpecifications {
+public class SiteSpecifications extends AuditingEntitySpecifications{
 
-    private static final String DELETED_DATE = "deletedDate";
     private static final String ID = "id";
     private static final String SHOPPING_CENTER = "shoppingCenter";
     private static final String LATITUDE = "latitude";
@@ -23,11 +22,11 @@ public class SiteSpecifications {
     private static final String DUPLICATE = "duplicate";
     private static final String ASSIGNEE = "assignee";
 
-    public static Specification<Site> idEquals(Integer id) {
+    public static Specification<Site> idIn(List<Integer> ids) {
         return new Specification<Site>() {
             @Override
             public Predicate toPredicate(Root<Site> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
+                return root.get(ID).in(ids);
             }
         };
     }
@@ -109,12 +108,4 @@ public class SiteSpecifications {
         };
     }
 
-    public static Specification<Site> isNotDeleted() {
-        return new Specification<Site>() {
-            @Override
-            public Predicate toPredicate(Root<Site> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
-            }
-        };
-    }
 }

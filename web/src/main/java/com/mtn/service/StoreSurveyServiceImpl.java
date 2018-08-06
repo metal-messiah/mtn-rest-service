@@ -1,58 +1,18 @@
 package com.mtn.service;
 
 import com.mtn.model.domain.StoreSurvey;
-import com.mtn.repository.StoreSurveyRepository;
 import com.mtn.validators.StoreSurveyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Comparator;
-import java.util.List;
-
-import static com.mtn.repository.specification.StoreSurveySpecifications.*;
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Allen on 5/6/2017.
  */
 @Service
-public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> implements StoreSurveyService {
+public class StoreSurveyServiceImpl extends StoreChildServiceImpl<StoreSurvey> implements StoreSurveyService {
 
-	@Autowired
-	private StoreSurveyRepository surveyRepository;
 	@Autowired
 	private StoreSurveyValidator storeSurveyValidator;
-
-	@Override
-	public List<StoreSurvey> findAllByStoreId(Integer storeId) {
-		return getEntityRepository().findAllByStoreId(storeId);
-	}
-
-	@Override
-	public List<StoreSurvey> findAllByStoreIdUsingSpecs(Integer storeId) {
-		return getEntityRepository().findAll(
-				where(storeIdEquals(storeId))
-						.and(isNotDeleted())
-		);
-	}
-
-	@Override
-	public Page<StoreSurvey> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(isNotDeleted(), page);
-	}
-
-	@Override
-	public StoreSurvey findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
-		);
-	}
 
 	@Override
 	public StoreSurvey updateEntityAttributes(StoreSurvey existing, StoreSurvey request) {
@@ -138,21 +98,6 @@ public class StoreSurveyServiceImpl extends EntityServiceImpl<StoreSurvey> imple
 	@Override
 	public String getEntityName() {
 		return "StoreSurvey";
-	}
-
-	@Override
-	public void handleAssociationsOnDeletion(StoreSurvey existing) {
-		// TODO
-	}
-
-	@Override
-	public void handleAssociationsOnCreation(StoreSurvey request) {
-		// TODO
-	}
-
-	@Override
-	public StoreSurveyRepository getEntityRepository() {
-		return surveyRepository;
 	}
 
 	@Override

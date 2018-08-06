@@ -7,9 +7,9 @@ import javax.persistence.*;
  */
 @Entity
 @Table
-public class ShoppingCenterTenant extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="shopping_center_tenant_id"))
+public class ShoppingCenterTenant extends AuditingEntity {
 
-    private Integer id;
     private String name;
     private Boolean isAnchor = false;
     private Boolean outparcel = false;
@@ -26,18 +26,6 @@ public class ShoppingCenterTenant extends AuditingEntity implements Identifiable
         this.isAnchor = shoppingCenterTenant.isAnchor;
         this.outparcel = shoppingCenterTenant.outparcel;
         this.tenantSqft = shoppingCenterTenant.tenantSqft;
-    }
-
-    @Id
-    @GeneratedValue
-    @Column(name = "shopping_center_tenant_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     @ManyToOne

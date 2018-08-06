@@ -1,12 +1,11 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.AuditingEntity;
-import com.mtn.model.domain.Identifiable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-public abstract class CrudControllerImpl<T extends AuditingEntity & Identifiable> implements CrudController<T> {
+public abstract class CrudControllerImpl<T extends AuditingEntity> implements CrudController<T> {
 
 	@RequestMapping(method = RequestMethod.POST)
 	final public ResponseEntity addOne(@RequestBody T request) {

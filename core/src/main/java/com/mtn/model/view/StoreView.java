@@ -5,6 +5,7 @@ import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreStatus;
 import com.mtn.model.simpleView.*;
+import com.mtn.model.utils.StoreUtil;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -53,9 +54,7 @@ public class StoreView extends AuditingEntityView {
         this.site = new SimpleSiteView(store.getSite());
 
         if (store.getStatuses() != null) {
-            store.getStatuses().stream()
-                    .filter(s -> s.getDeletedDate() == null && s.getStatusStartDate().isBefore(LocalDateTime.now().plusDays(1)))
-                    .max(Comparator.comparing(StoreStatus::getStatusStartDate))
+            StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now())
                     .ifPresent(status -> this.currentStoreStatus = new SimpleStoreStatusView(status));
         }
 

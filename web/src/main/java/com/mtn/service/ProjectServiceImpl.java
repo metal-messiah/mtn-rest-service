@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.model.domain.Boundary;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreModel;
 import com.mtn.repository.ProjectRepository;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 
 import static com.mtn.repository.specification.ProjectSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -26,6 +29,8 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 	private StoreModelService modelService;
 	@Autowired
 	private ProjectValidator projectValidator;
+	@Autowired
+	private BoundaryService boundaryService;
 
 	@Override
 	@Transactional
@@ -41,11 +46,11 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 
 	@Override
 	public Project findOneByProjectName(String projectName) {
-		return getEntityRepository().findOneByProjectName(projectName);
+		return projectRepository.findOne(where(projectNameEquals(projectName)));
 	}
 
 	@Override
-	public Page<Project> findAllUsingSpecs(Pageable page, String query, Boolean active, Boolean primaryData) {
+	public Page<Project> findAllByQueryUsingSpecs(Pageable page, String query, Boolean active, Boolean primaryData) {
 		Specifications<Project> spec = where(isNotDeleted());
 
 		if (query != null) {
@@ -58,20 +63,24 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 			spec = spec.and(primaryData());
 		}
 
-		return getEntityRepository().findAll(spec, page);
+		return projectRepository.findAll(spec, page);
 	}
 
 	@Override
-	public Page<Project> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(where(isNotDeleted()), page);
-	}
-
-	@Override
-	public Project findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
-		);
+	@Transactional
+	public Project saveBoundary(Integer projectId, String geoJsonBoundary) {
+		Project project = this.findOne(projectId);
+		Boundary boundary = project.getBoundary();
+		if (boundary != null) {
+			boundary.setGeojson(geoJsonBoundary);
+			boundaryService.updateOne(boundary.getId(), boundary);
+		} else {
+			boundary = new Boundary();
+			boundary.setGeojson(geoJsonBoundary);
+			boundary.setProjects(Collections.singletonList(project));
+			boundaryService.addOne(boundary);
+		}
+		return project;
 	}
 
 	@Override
@@ -93,21 +102,6 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 	@Override
 	public String getEntityName() {
 		return "Project";
-	}
-
-	@Override
-	public void handleAssociationsOnDeletion(Project existing) {
-		// TODO Determine what to do with children of project on deletion
-	}
-
-	@Override
-	public void handleAssociationsOnCreation(Project request) {
-		// TODO When project is saved, are children handled with it?
-	}
-
-	@Override
-	public ProjectRepository getEntityRepository() {
-		return projectRepository;
 	}
 
 	@Override

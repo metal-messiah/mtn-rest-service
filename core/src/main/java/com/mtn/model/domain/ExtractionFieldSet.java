@@ -8,24 +8,13 @@ import java.util.List;
  */
 @Entity
 @Table
-public class ExtractionFieldSet extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="field_set_id"))
+public class ExtractionFieldSet extends AuditingEntity {
 
     private Integer id;
     private String fieldSetName;
 
     private List<ExtractionField> fields;
-
-    @Id
-    @GeneratedValue
-    @Column(name = "field_set_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getFieldSetName() {
         return fieldSetName;

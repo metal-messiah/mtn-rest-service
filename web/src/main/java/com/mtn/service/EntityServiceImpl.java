@@ -1,35 +1,56 @@
 package com.mtn.service;
 
 import com.mtn.model.domain.AuditingEntity;
-import com.mtn.model.domain.Identifiable;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.repository.EntityRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 
-public abstract class EntityServiceImpl<T extends AuditingEntity & Identifiable> implements EntityService<T> {
+import static org.springframework.data.jpa.domain.Specifications.where;
+
+public abstract class EntityServiceImpl<T extends AuditingEntity> implements EntityService<T> {
 
 	@Autowired
 	protected UserProfileService userProfileService;
 	@Autowired
 	protected SecurityService securityService;
-	@PersistenceContext
-	protected EntityManager entityManager;
+	@Autowired
+	private EntityRepository<T> entityRepository;
 
 	@Override
 	final public T findOne(Integer id) {
-		return getEntityRepository().findOne(id);
+		return entityRepository.findOne(id);
 	}
 
 	@Override
 	final public Page<T> findAll(Pageable page) {
-		return getEntityRepository().findAll(page);
+		return entityRepository.findAll(page);
 	}
+
+	@Override
+	public Page<T> findAllUsingSpecs(Pageable page) {
+		JpaSpecificationExecutor<T> executor = this.entityRepository;
+		return executor.findAll(
+				where(AuditingEntitySpecifications.isNotDeleted()),
+				page
+		);
+	}
+
+	@Override
+	public T findOneUsingSpecs(Integer id) {
+		JpaSpecificationExecutor<T> executor = this.entityRepository;
+		return executor.findOne(
+				where(AuditingEntitySpecifications.<T>idEquals(id))
+						.and(AuditingEntitySpecifications.isNotDeleted())
+		);
+	}
+
 
 	@Override
 	@Transactional
@@ -42,7 +63,7 @@ public abstract class EntityServiceImpl<T extends AuditingEntity & Identifiable>
 
 		handleAssociationsOnCreation(request);
 
-		return getEntityRepository().save(request);
+		return entityRepository.save(request);
 	}
 
 	@Override
@@ -74,5 +95,15 @@ public abstract class EntityServiceImpl<T extends AuditingEntity & Identifiable>
 		updateEntityAttributes(existing, request);
 		existing.setUpdatedBy(securityService.getCurrentUser());
 		return existing;
+	}
+
+	@Override
+	public void handleAssociationsOnCreation(T request) {
+
+	}
+
+	@Override
+	public void handleAssociationsOnDeletion(T existing) {
+
 	}
 }

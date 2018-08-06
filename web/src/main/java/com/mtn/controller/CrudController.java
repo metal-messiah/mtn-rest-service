@@ -1,11 +1,10 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.AuditingEntity;
-import com.mtn.model.domain.Identifiable;
 import com.mtn.service.EntityService;
 import org.springframework.http.ResponseEntity;
 
-public interface CrudController<T extends AuditingEntity & Identifiable> {
+public interface CrudController<T extends AuditingEntity> {
 	ResponseEntity addOne(T request);
 
 	ResponseEntity deleteOne(Integer id);

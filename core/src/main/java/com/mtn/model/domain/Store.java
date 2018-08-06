@@ -12,9 +12,9 @@ import java.util.List;
  */
 @Entity
 @Table
-public class Store extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="store_id"))
+public class Store extends AuditingEntity {
 
-    private Integer id;
     private String storeName;
     private String storeNumber;
     private StoreType storeType;
@@ -32,18 +32,6 @@ public class Store extends AuditingEntity implements Identifiable {
     private List<StoreSurvey> surveys = new ArrayList<>();
     private List<StoreVolume> volumes = new ArrayList<>();
     private List<StoreStatus> statuses = new ArrayList<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "store_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @ManyToOne
     @JoinColumn(name = "site_id")

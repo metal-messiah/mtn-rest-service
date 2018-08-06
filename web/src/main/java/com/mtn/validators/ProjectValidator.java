@@ -1,6 +1,6 @@
 package com.mtn.validators;
 
-import com.mtn.model.domain.Identifiable;
+import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Project;
 import com.mtn.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class ProjectValidator extends ValidatingDataService<Project> {
 	}
 
 	@Override
-	public Identifiable getPotentialDuplicate(Project object) {
+	public AuditingEntity getPotentialDuplicate(Project object) {
 		return getEntityService().findOneByProjectName(object.getProjectName());
 	}
 

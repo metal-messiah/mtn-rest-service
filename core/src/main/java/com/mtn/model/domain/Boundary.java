@@ -9,26 +9,14 @@ import java.util.List;
 
 @Entity
 @Table
-public class Boundary extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="boundary_id"))
+public class Boundary extends AuditingEntity {
 
-    private Integer id;
     private String geojson;
     private Geometry boundary;
     private Integer legacyProjectId;
 
     private List<Project> projects = new ArrayList<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "boundary_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getGeojson() {
         return geojson;

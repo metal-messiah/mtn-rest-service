@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table
-public class StoreModel extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="store_model_id"))
+public class StoreModel extends AuditingEntity {
 
-    private Integer id;
     private Store store;
     private Project project;
     private String mapkey;
@@ -20,18 +20,6 @@ public class StoreModel extends AuditingEntity implements Identifiable {
     private ModelType modelType;
     private LocalDateTime modelDate;
     private Integer legacyCasingId;
-
-    @Id
-    @GeneratedValue
-    @Column(name = "store_model_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "store_id")

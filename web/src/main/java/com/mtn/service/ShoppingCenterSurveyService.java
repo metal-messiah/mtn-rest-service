@@ -11,9 +11,5 @@ public interface ShoppingCenterSurveyService extends EntityService<ShoppingCente
 
 	List<ShoppingCenterTenant> createNewTenantsForSurvey(Integer surveyId, List<ShoppingCenterTenant> request);
 
-	List<ShoppingCenterSurvey> findAllByShoppingCenterId(Integer shoppingCenterId);
-
-	ShoppingCenterSurvey findLatestShoppingCenterSurveyForStore(Integer storeId);
-
 	List<ShoppingCenterSurvey> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId);
 }

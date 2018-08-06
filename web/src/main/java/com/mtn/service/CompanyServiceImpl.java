@@ -2,18 +2,18 @@ package com.mtn.service;
 
 import com.mtn.model.domain.Company;
 import com.mtn.repository.CompanyRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
+import com.mtn.repository.specification.CompanySpecifications;
 import com.mtn.validators.CompanyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.mtn.repository.specification.CompanySpecifications.*;
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Allen on 6/10/2017.
@@ -60,30 +60,16 @@ public class CompanyServiceImpl extends EntityServiceImpl<Company> implements Co
 
 	@Override
 	public Page<Company> findAllByCompanyNameLike(String name, Pageable page) {
-		name = String.format("%%%s%%", name.toLowerCase());
-		return getEntityRepository().findAllByCompanyNameLikeAndDeletedDateIsNull(name, page);
+		return companyRepository.findAll(Specifications.where(
+				CompanySpecifications.companyNameLike(name))
+				.and(AuditingEntitySpecifications.isNotDeleted()), page);
 	}
 
 	@Override
 	public Company findOneByCompanyName(String name) {
-		return getEntityRepository().findOneByCompanyName(name);
+		return companyRepository.findOne(Specifications.where(CompanySpecifications.companyNameEquals(name)));
 	}
 
-	@Override
-	public Page<Company> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(
-				where(isNotDeleted()),
-				page
-		);
-	}
-
-	@Override
-	public Company findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
-		);
-	}
 
 	@Override
 	public Company updateEntityAttributes(Company existing, Company request) {
@@ -115,11 +101,6 @@ public class CompanyServiceImpl extends EntityServiceImpl<Company> implements Co
 	@Override
 	public String getEntityName() {
 		return "Company";
-	}
-
-	@Override
-	public CompanyRepository getEntityRepository() {
-		return companyRepository;
 	}
 
 	@Override

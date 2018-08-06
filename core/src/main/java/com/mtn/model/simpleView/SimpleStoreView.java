@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Store;
-import com.mtn.model.domain.StoreStatus;
 import com.mtn.model.domain.StoreVolume;
+import com.mtn.model.utils.StoreUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 
@@ -40,16 +41,13 @@ public class SimpleStoreView {
             this.banner = new SimpleBannerView(banner);
         }
         if (store.getStatuses() != null) {
-            store.getStatuses().stream()
-                    .filter(s -> s.getDeletedDate() == null && s.getStatusStartDate().isBefore(LocalDateTime.now().plusDays(1)))
-                    .max(Comparator.comparing(StoreStatus::getStatusStartDate))
+            StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now())
                     .ifPresent(status -> this.currentStoreStatus = new SimpleStoreStatusView(status));
         }
 
         if (store.getVolumes() != null) {
-            store.getVolumes().stream()
-                    .max(Comparator.comparing(StoreVolume::getVolumeDate))
-                    .ifPresent(latest -> this.latestStoreVolume = new SimpleStoreVolumeView(latest));
+            StoreUtil.getLatestVolumeAsOfDateTime(store, LocalDate.now())
+					.ifPresent(latest -> this.latestStoreVolume = new SimpleStoreVolumeView(latest));
         }
     }
 

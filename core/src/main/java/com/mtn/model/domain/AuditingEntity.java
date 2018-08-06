@@ -2,14 +2,16 @@ package com.mtn.model.domain;
 
 import javax.annotation.PreDestroy;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Created by Allen on 4/22/2017.
  */
 @MappedSuperclass
-public abstract class AuditingEntity {
+public abstract class AuditingEntity implements Serializable {
 
+    private Integer id;
     private UserProfile createdBy;
     private LocalDateTime createdDate;
     private UserProfile deletedBy;
@@ -36,6 +38,16 @@ public abstract class AuditingEntity {
         if (this.deletedBy != null && this.deletedDate == null) {
             this.deletedDate = LocalDateTime.now();
         }
+    }
+
+    @Id
+    @GeneratedValue
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @ManyToOne

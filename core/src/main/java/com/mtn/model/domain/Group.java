@@ -1,9 +1,5 @@
 package com.mtn.model.domain;
 
-import com.mtn.model.domain.AuditingEntity;
-import com.mtn.model.domain.Identifiable;
-import com.mtn.model.domain.UserProfile;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,25 +9,13 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "auth_group")
-public class Group extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="auth_group_id"))
+public class Group extends AuditingEntity {
 
-    private Integer id;
     private String displayName;
     private String description;
 
     private Set<UserProfile> members = new HashSet<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "auth_group_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getDisplayName() {
         return displayName;

@@ -12,6 +12,10 @@ public class SimpleStoreStatusView {
     private String status;
     private LocalDateTime statusStartDate;
 
+    public SimpleStoreStatusView() {
+
+    }
+
     public SimpleStoreStatusView(StoreStatus storeStatus) {
         this.id = storeStatus.getId();
         this.status = storeStatus.getStatus();

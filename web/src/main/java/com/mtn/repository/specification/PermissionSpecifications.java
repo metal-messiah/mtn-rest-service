@@ -1,20 +1,18 @@
 package com.mtn.repository.specification;
 
 import com.mtn.model.domain.Permission;
+import com.mtn.model.domain.Role;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 /**
  * Created by Allen on 4/23/2017.
  */
-public class PermissionSpecifications {
+public class PermissionSpecifications extends AuditingEntitySpecifications {
 
-    private static final String DELETED_DATE = "deletedDate";
     private static final String DISPLAY_NAME = "displayName";
+    private static final String ROLE = "role";
     private static final String ID = "id";
 
     public static Specification<Permission> displayNameContains(String value) {
@@ -26,20 +24,12 @@ public class PermissionSpecifications {
         };
     }
 
-    public static Specification<Permission> idEquals(Integer id) {
+    public static Specification<Permission> roleIdEquals(Integer id) {
         return new Specification<Permission>() {
             @Override
             public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
-
-    public static Specification<Permission> isNotDeleted() {
-        return new Specification<Permission>() {
-            @Override
-            public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
+                Join<Permission, Role> permissionRoleJoin = root.join(ROLE);
+                return criteriaBuilder.equal(permissionRoleJoin.get(ID), id);
             }
         };
     }

@@ -5,12 +5,8 @@ import com.mtn.model.domain.StoreVolume;
 
 import java.util.List;
 
-public interface StoreCasingService extends EntityService<StoreCasing> {
+public interface StoreCasingService extends EntityService<StoreCasing>, StoreChildService<StoreCasing> {
 	List<StoreCasing> findAllByProjectId(Integer id);
-
-	List<StoreCasing> findAllByStoreId(Integer storeId);
-
-	List<StoreCasing> findAllByStoreIdUsingSpecs(Integer storeId);
 
 	StoreCasing setStoreVolume(Integer storeCasingId, Integer storeVolumeId);
 

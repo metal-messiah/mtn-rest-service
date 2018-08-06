@@ -2,12 +2,16 @@ package com.mtn.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
+import com.mtn.model.utils.StoreUtil;
+import com.mtn.model.view.PlannedGroceryUpdatable;
 import com.mtn.util.MtnLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -27,6 +31,7 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 	private final StoreService storeService;
 	private final SiteService siteService;
 	private final StoreStatusService storeStatusService;
+	private final SecurityService securityService;
 
 	@Value("${planned-grocery.client_id}")
 	private String pgClientId;
@@ -37,13 +42,16 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 	private Map<Integer, String> statusMap;
 
 	@Autowired
-	public PlannedGroceryServiceImpl(StoreSourceService storeSourceService, StoreSurveyService storeSurveyService, ShoppingCenterService shoppingCenterService, StoreService storeService, SiteService siteService, StoreStatusService storeStatusService) {
+	public PlannedGroceryServiceImpl(StoreSourceService storeSourceService, StoreSurveyService storeSurveyService,
+									 ShoppingCenterService shoppingCenterService, StoreService storeService,
+									 SiteService siteService, StoreStatusService storeStatusService, SecurityService securityService) {
 		this.storeSourceService = storeSourceService;
 		this.storeSurveyService = storeSurveyService;
 		this.shoppingCenterService = shoppingCenterService;
 		this.storeService = storeService;
 		this.siteService = siteService;
 		this.storeStatusService = storeStatusService;
+		this.securityService = securityService;
 	}
 
 	private ResponseEntity<String> getAccessToken() {
@@ -113,7 +121,7 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 		Date start = new Date();
 
 		try {
-			JsonNode featureNodes = this.getFeaturesEditedSince(this.storeSourceService.getMaxSourceEditedDate());
+			JsonNode featureNodes = this.getFeaturesEditedSince(this.storeSourceService.getMaxSourceEditedDate("Planned Grocery"));
 			if (featureNodes.isArray()) {
 				featureNodes.forEach(f -> processFeatureNode(f, validator));
 			} else {
@@ -125,6 +133,115 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 
 		long duration = (new Date().getTime() - start.getTime());
 		MtnLogger.info(String.format("Finished running Planned Grocery update in %d ms by %s", duration, validator.getEmail()));
+	}
+
+	@Override
+	public PlannedGroceryUpdatable getUpdatableByStoreId(Integer storeId) {
+		Store store = storeService.findOne(storeId);
+		return new PlannedGroceryUpdatable(store);
+	}
+
+	@Override
+	public PlannedGroceryUpdatable getUpdatableBySiteId(Integer siteId) {
+		Site site = siteService.findOne(siteId);
+		return new PlannedGroceryUpdatable(site);
+	}
+
+	@Override
+	public PlannedGroceryUpdatable getUpdatableByShoppingCenterId(Integer shoppingCenterId) {
+		ShoppingCenter shoppingCenter = shoppingCenterService.findOne(shoppingCenterId);
+		return new PlannedGroceryUpdatable(shoppingCenter);
+	}
+
+	@Override
+	public Store updateFromUpdatable(PlannedGroceryUpdatable updatable) {
+		Store store;
+		if (updatable.getShoppingCenterId() == null) {
+			ShoppingCenter sc = createNewShoppingCenter();
+			Site site = this.createNewSiteInShoppingCenter(sc, updatable.getLatitude(), updatable.getLongitude());
+			store = this.createNewStoreForSite(site);
+		} else if (updatable.getSiteId() == null) {
+			ShoppingCenter sc = shoppingCenterService.findOne(updatable.getShoppingCenterId());
+			Site site = this.createNewSiteInShoppingCenter(sc, updatable.getLatitude(), updatable.getLongitude());
+			store = this.createNewStoreForSite(site);
+		} else if (updatable.getStoreId() == null) {
+			Site site = siteService.findOne(updatable.getSiteId());
+			store = this.createNewStoreForSite(site);
+		} else {
+			store = storeService.findOne(updatable.getStoreId());
+		}
+		this.updateStoreFromUpdatable(updatable, store);
+		this.updateSiteFromUpdatable(updatable, store.getSite());
+		this.updateShoppingCenterFromUpdatable(updatable, store.getSite().getShoppingCenter());
+		return store;
+	}
+
+	@Transactional
+	protected ShoppingCenter createNewShoppingCenter() {
+		ShoppingCenter sc = new ShoppingCenter();
+		return shoppingCenterService.addOne(sc);
+	}
+
+	@Transactional
+	protected Site createNewSiteInShoppingCenter(ShoppingCenter sc, Float latitude, Float longitude) {
+		Site site = new Site();
+		site.setShoppingCenter(sc);
+		site.setLatitude(latitude);
+		site.setLongitude(longitude);
+		return siteService.addOne(site);
+	}
+
+	@Transactional
+	protected Store createNewStoreForSite(Site site) {
+		Store store = new Store();
+		store.setSite(site);
+		store.setStoreType(StoreType.ACTIVE);
+		return storeService.addOne(store);
+	}
+
+	@Transactional
+	protected ShoppingCenter updateShoppingCenterFromUpdatable(PlannedGroceryUpdatable updatable, ShoppingCenter shoppingCenter) {
+		shoppingCenter.setName(updatable.getShoppingCenterName());
+		return shoppingCenterService.updateOne(shoppingCenter.getId(), shoppingCenter);
+	}
+
+	@Transactional
+	protected Site updateSiteFromUpdatable(PlannedGroceryUpdatable updatable, Site site) {
+		site.setAddress1(updatable.getAddress());
+		site.setQuad(updatable.getQuad());
+		site.setIntersectionStreetPrimary(updatable.getIntersectionStreetPrimary());
+		site.setIntersectionStreetSecondary(updatable.getIntersectionStreetSecondary());
+		site.setCity(updatable.getCity());
+		site.setCounty(updatable.getCounty());
+		site.setState(updatable.getState());
+		site.setPostalCode(updatable.getPostalCode());
+		site.setLatitude(updatable.getLatitude());
+		site.setLongitude(updatable.getLongitude());
+		return siteService.updateOne(site.getId(), site);
+	}
+
+	@Transactional
+	protected Store updateStoreFromUpdatable(PlannedGroceryUpdatable updatable, Store store) {
+		store.setStoreName(updatable.getStoreName());
+		store.setDateOpened(updatable.getDateOpened());
+		if (updatable.getStoreStatuses() != null) {
+			updatable.getStoreStatuses().stream().filter(status -> status.getId() == null).forEach(status -> {
+				StoreStatus newStoreStatus = new StoreStatus();
+				newStoreStatus.setStore(store);
+				newStoreStatus.setStatus(status.getStatus());
+				newStoreStatus.setStatusStartDate(status.getStatusStartDate());
+				storeStatusService.addOne(newStoreStatus);
+			});
+		}
+		StoreSurvey storeSurvey = StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now()).orElseGet(() -> {
+			StoreSurvey newSurvey = new StoreSurvey();
+			newSurvey.setStore(store);
+			newSurvey.setSurveyDate(LocalDateTime.now());
+			return storeSurveyService.addOne(newSurvey);
+		});
+		storeSurvey.setAreaTotal(updatable.getAreaTotal());
+		storeSurvey.setUpdatedBy(securityService.getCurrentUser());
+		return storeService.updateOne(store.getId(), store);
 	}
 
 	private void processFeatureNode(JsonNode featureNode, UserProfile validatingUser) {
@@ -141,14 +258,14 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 		LocalDateTime sourceEditDate = this.epochMillisecondsToLocalDateTime(attributesNode.get("EditDate").longValue());
 
 		// Check if source already exists
-		StoreSource source = this.storeSourceService.findOneBySourceNativeIdUsingSpecs("Planned Grocery", objectId);
-		if (source == null) {
-			// Create new source record
-			source = new StoreSource();
-			source.setSourceNativeId(objectId);
-			source.setSourceName("Planned Grocery");
-			source.setSourceCreatedDate(sourceCreateDate);
-		}
+		StoreSource source = this.storeSourceService.findOneBySourceNativeIdUsingSpecs("Planned Grocery", objectId).orElseGet(() -> {
+			StoreSource newSource = new StoreSource();
+			newSource.setSourceNativeId(objectId);
+			newSource.setSourceName("Planned Grocery");
+			newSource.setSourceCreatedDate(sourceCreateDate);
+			return newSource;
+		});
+
 		// Update relevant source data
 		source.setSourceStoreName(sourceStoreName);
 		source.setSourceUrl(sourceUrl);
@@ -186,7 +303,7 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 		// If the stores are mismatched, or if store status is messed up, it won't be marked as validated
 		if (source.getSourceStoreName().equals(store.getStoreName())) {
 			try {
-				this.updateStore(store, attributesNode, source.getSourceEditedDate());
+				this.updateStoreFromJson(store, attributesNode, source.getSourceEditedDate());
 				return true;
 			} catch (Exception e) {
 				return false;
@@ -196,7 +313,7 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 		}
 	}
 
-	private Store updateStore(Store store, JsonNode attributesNode, LocalDateTime sourceEditedDate) throws Exception {
+	private Store updateStoreFromJson(Store store, JsonNode attributesNode, LocalDateTime sourceEditedDate) throws Exception {
 		boolean storeEdited = false;
 		// TODO Get OPENDATEAPPROX and translate, use where OPENDATE is null
 		if (attributesNode.hasNonNull("OPENDATE") && store.getDateOpened() == null) {
@@ -216,7 +333,7 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 			String sourceStatus = getStatusMap().get(attributesNode.get("STATUS").intValue());
 			if (store.getStatuses() != null && store.getStatuses().size() > 0) {
 				// Ignore outdated statuses (latest before sourceEditedDate)
-				Optional<StoreStatus> mostRelevantStatus = StoreService.getLatestStatusAsOfDateTime(store, sourceEditedDate);
+				Optional<StoreStatus> mostRelevantStatus = StoreUtil.getLatestStatusAsOfDateTime(store, sourceEditedDate);
 				if (mostRelevantStatus.isPresent()) {
 					String status = mostRelevantStatus.get().getStatus();
 					// Planned Grocery doesn't do closings, so if we already have it as open, leave it open.

@@ -1,7 +1,7 @@
 package com.mtn.validators;
 
+import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Group;
-import com.mtn.model.domain.Identifiable;
 import com.mtn.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ public class GroupValidator extends ValidatingDataService<Group> {
 	private GroupService groupService;
 
 	@Override
-	public Identifiable getPotentialDuplicate(Group object) {
+	public AuditingEntity getPotentialDuplicate(Group object) {
 		return groupService.findOneByDisplayName(object.getDisplayName());
 	}
 

@@ -3,9 +3,7 @@ package com.mtn.validators;
 import com.mtn.exception.InvalidEntityException;
 import com.mtn.exception.VersionConflictException;
 import com.mtn.model.domain.AuditingEntity;
-import com.mtn.model.domain.Identifiable;
 import com.mtn.service.EntityService;
-import org.springframework.boot.context.config.ResourceNotFoundException;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -15,7 +13,7 @@ import java.util.Set;
 /**
  * Created by Allen on 4/22/2017.
  */
-public abstract class ValidatingDataService<T extends AuditingEntity & Identifiable> {
+public abstract class ValidatingDataService<T extends AuditingEntity> {
 
     public abstract EntityService<T> getEntityService();
 
@@ -25,7 +23,7 @@ public abstract class ValidatingDataService<T extends AuditingEntity & Identifia
 
     private void validateUnique(T object) {
         // No Unique value check
-        Identifiable existing = getPotentialDuplicate(object);
+        AuditingEntity existing = getPotentialDuplicate(object);
         if (existing != null && !existing.getId().equals(object.getId())) {
             throw new IllegalArgumentException("Duplicate resource exists");
         }
@@ -34,7 +32,7 @@ public abstract class ValidatingDataService<T extends AuditingEntity & Identifia
     /*
     Override this method to find duplicate by entity specific attribute (email, displayName, etc.)
      */
-    public Identifiable getPotentialDuplicate(T object) {
+    public AuditingEntity getPotentialDuplicate(T object) {
         return null;
     }
 

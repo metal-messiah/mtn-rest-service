@@ -2,16 +2,14 @@ package com.mtn.service;
 
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.repository.ShoppingCenterAccessRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
+import com.mtn.repository.specification.ShoppingCenterAccessSpecifications;
 import com.mtn.validators.ShoppingCenterAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.mtn.repository.specification.ShoppingCenterAccessSpecifications.*;
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * Created by Allen on 5/6/2017.
@@ -26,25 +24,9 @@ public class ShoppingCenterAccessServiceImpl extends EntityServiceImpl<ShoppingC
 
 	@Override
 	public List<ShoppingCenterAccess> findAllBySurveyIdUsingSpecs(Integer id) {
-		return getEntityRepository().findAll(
-				where(shoppingCenterSurveyIdEquals(id))
-						.and(isNotDeleted())
-		);
-	}
-
-	@Override
-	public Page<ShoppingCenterAccess> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(
-				where(isNotDeleted()),
-				page
-		);
-	}
-
-	@Override
-	public ShoppingCenterAccess findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
+		return accessRepository.findAll(
+				Specifications.where(ShoppingCenterAccessSpecifications.shoppingCenterSurveyIdEquals(id))
+						.and(AuditingEntitySpecifications.isNotDeleted())
 		);
 	}
 
@@ -64,21 +46,6 @@ public class ShoppingCenterAccessServiceImpl extends EntityServiceImpl<ShoppingC
 	@Override
 	public String getEntityName() {
 		return "ShoppingCenterAccess";
-	}
-
-	@Override
-	public void handleAssociationsOnDeletion(ShoppingCenterAccess existing) {
-		// No children to handle
-	}
-
-	@Override
-	public void handleAssociationsOnCreation(ShoppingCenterAccess request) {
-		// No children to handle
-	}
-
-	@Override
-	public ShoppingCenterAccessRepository getEntityRepository() {
-		return accessRepository;
 	}
 
 	@Override

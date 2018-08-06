@@ -1,6 +1,7 @@
 package com.mtn.repository.specification;
 
 import com.mtn.constant.StoreType;
+import com.mtn.model.domain.Project;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.UserProfile;
@@ -12,24 +13,15 @@ import java.util.List;
 /**
  * Created by Allen on 4/26/2017.
  */
-public class StoreSpecifications {
+public class StoreSpecifications extends AuditingEntitySpecifications {
 
-    private static final String DELETED_DATE = "deletedDate";
     private static final String ID = "id";
     private static final String SITE = "site";
+    private static final String PROJECT = "project";
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
     private static final String STORE_TYPE = "storeType";
     private static final String ASSIGNEE = "assignee";
-
-    public static Specification<Store> idEquals(Integer id) {
-        return new Specification<Store>() {
-            @Override
-            public Predicate toPredicate(Root<Store> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
 
     public static Specification<Store> siteIdEquals(Integer id) {
         return new Specification<Store>() {
@@ -41,11 +33,12 @@ public class StoreSpecifications {
         };
     }
 
-    public static Specification<Store> isNotDeleted() {
+    public static Specification<Store> projectIdEquals(Integer projectId) {
         return new Specification<Store>() {
             @Override
             public Predicate toPredicate(Root<Store> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
+                Join<Store, Project> storeProjectJoin = root.join(PROJECT);
+                return criteriaBuilder.equal(storeProjectJoin.get(ID), projectId);
             }
         };
     }

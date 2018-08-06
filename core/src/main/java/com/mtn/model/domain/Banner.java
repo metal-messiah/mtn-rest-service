@@ -9,9 +9,9 @@ import java.util.List;
  */
 @Entity
 @Table
-public class Banner extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="banner_id"))
+public class Banner extends AuditingEntity {
 
-    private Integer id;
     private String bannerName;
     private Boolean isHistorical;
     private String defaultStoreFit;
@@ -21,18 +21,6 @@ public class Banner extends AuditingEntity implements Identifiable {
     private Company company;
 
     private List<Store> stores = new ArrayList<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "banner_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @ManyToOne
     @JoinColumn(name = "company_id")

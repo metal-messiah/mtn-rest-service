@@ -2,14 +2,16 @@ package com.mtn.service;
 
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
-import com.mtn.model.simpleView.SimpleStoreStatusView;
+import com.mtn.model.utils.ShoppingCenterUtil;
+import com.mtn.model.utils.StoreUtil;
 import com.mtn.repository.StoreRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
+import com.mtn.repository.specification.StoreSpecifications;
 import com.mtn.validators.StoreValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +32,9 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 	@Autowired
 	private BannerService bannerService;
 	@Autowired
-	private CompanyService companyService;
-	@Autowired
 	private StoreCasingService casingService;
 	@Autowired
 	private StoreModelService modelService;
-	@Autowired
-	private NamedParameterJdbcTemplate jdbcTemplate;
 	@Autowired
 	private StoreVolumeService storeVolumeService;
 	@Autowired
@@ -51,40 +49,30 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 	private ShoppingCenterSurveyService shoppingCenterSurveyService;
 	@Autowired
 	private ShoppingCenterCasingService shoppingCenterCasingService;
-	@Autowired
-	private ShoppingCenterAccessService shoppingCenterAccessService;
-	@Autowired
-	private ShoppingCenterTenantService shoppingCenterTenantService;
-
-	private static final String QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST = "" +
-			"SELECT s.* " +
-			"FROM store s " +
-			"RIGHT JOIN banner c ON c.id = s.banner_id " +
-			"WHERE c.id IN :bannerIds " +
-			"AND s.deleted_date IS NULL";
 
 	@Override
 	public Page<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west, List<StoreType> storeTypes, Pageable page) {
 		Integer assigneeId = securityService.getCurrentUser().getId();
-		Specifications<Store> spec = where(isNotDeleted()).and(withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId));
+		Specifications<Store> spec = Specifications.where(StoreSpecifications.withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId));
 
-//		StoreType requestedStoreType = StoreType.valueOf(storeType);
 		if (storeTypes != null && storeTypes.size() > 0) {
 			spec = spec.and(ofTypes(storeTypes));
 		}
+		spec = spec.and(AuditingEntitySpecifications.isNotDeleted());
 
-		return getEntityRepository().findAll(spec, page);
+		return storeRepository.findAll(spec, page);
 	}
 
 	@Override
 	public Page<Store> findAllAssignedTo(Integer assigneeId, List<StoreType> storeTypes, Pageable page) {
-		Specifications<Store> spec = where(isNotDeleted()).and(assignedTo(assigneeId));
+		Specifications<Store> spec = Specifications.where(StoreSpecifications.assignedTo(assigneeId));
 
 		if (storeTypes != null && storeTypes.size() > 0) {
-			spec = spec.and(ofTypes(storeTypes));
+			spec = spec.and(StoreSpecifications.ofTypes(storeTypes));
 		}
+		spec = spec.and(AuditingEntitySpecifications.isNotDeleted());
 
-		return getEntityRepository().findAll(spec, page);
+		return storeRepository.findAll(spec, page);
 	}
 
 	@Override
@@ -115,13 +103,7 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 			throw new IllegalArgumentException("Do not include store status. Will be provided by web service");
 		} else {
 			// Use the latest
-			LocalDateTime aboutNow = LocalDateTime.now().plusDays(1);
-			List<StoreStatus> storeStatuses = store.getStatuses().stream()
-					.filter(status -> status.getDeletedDate() == null) // Is not deleted
-					.filter(status -> status.getStatusStartDate().isBefore(aboutNow)) // Before today ish
-					.collect(Collectors.toList());
-			StoreStatus storeStatus = storeStatuses.stream()
-					.max(Comparator.comparing(StoreStatus::getStatusStartDate))
+			StoreStatus storeStatus = StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now())
 					.orElseGet(() -> {
 						StoreStatus newStatus = new StoreStatus();
 						newStatus.setStatusStartDate(requestCasing.getCasingDate());
@@ -135,27 +117,15 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 		if (requestCasing.getStoreSurvey() != null) {
 			throw new IllegalArgumentException("Do not include store survey. Will be provided by web service");
 		} else {
-			// If the store has surveys use the most recent
-			StoreSurvey storeSurvey;
-			final List<StoreSurvey> storeSurveys = store.getSurveys().stream()
-					.filter(survey -> survey.getDeletedDate() == null)
-					.collect(Collectors.toList());
-			if (storeSurveys != null && storeSurveys.size() > 0) {
-				storeSurvey = storeSurveys.stream().max(Comparator.comparing(StoreSurvey::getSurveyDate)).get();
-				// Clone the store Survey
-				storeSurvey = new StoreSurvey(storeSurvey);
-				storeSurvey.setSurveyDate(requestCasing.getCasingDate());
-				storeSurvey.setStore(store);
-				storeSurvey = storeSurveyService.addOne(storeSurvey);
-			} else {
-				// If store has not surveys create a new one
-				storeSurvey = new StoreSurvey();
-				storeSurvey.setSurveyDate(requestCasing.getCasingDate());
-				storeSurvey.setStore(store);
-				storeSurvey = storeSurveyService.addOne(storeSurvey);
-			}
-			requestCasing.setStoreSurvey(storeSurvey);
-			store.setCurrentStoreSurvey(storeSurvey);
+			Optional<StoreSurvey> latestSurvey = StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now());
+			// If the store has a latest non-deleted survey, clone it, otherwise create a brand new one
+			StoreSurvey newSurvey = latestSurvey.map(StoreSurvey::new).orElseGet(StoreSurvey::new);
+			newSurvey.setSurveyDate(requestCasing.getCasingDate());
+			newSurvey.setStore(store);
+			storeSurveyService.addOne(newSurvey);
+
+			requestCasing.setStoreSurvey(newSurvey);
+			store.setCurrentStoreSurvey(newSurvey);
 		}
 
 		if (requestCasing.getShoppingCenterCasing() != null) {
@@ -164,30 +134,17 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 			// Create a new Shopping center Casing
 			final ShoppingCenter shoppingCenter = store.getSite().getShoppingCenter();
 
-			// if the shopping center has surveys use the most recent
-			ShoppingCenterSurvey shoppingCenterSurvey;
-			final List<ShoppingCenterSurvey> shoppingCenterSurveys = shoppingCenter.getSurveys().stream()
-					.filter(survey -> survey.getDeletedDate() == null)
-					.collect(Collectors.toList());
-			if (shoppingCenterSurveys != null && shoppingCenterSurveys.size() > 0) {
-				shoppingCenterSurvey = shoppingCenterSurveys.stream()
-						.max(Comparator.comparing(ShoppingCenterSurvey::getSurveyDate)).get();
-				// Clone the shopping Center Survey
-				shoppingCenterSurvey = new ShoppingCenterSurvey(shoppingCenterSurvey);
-				shoppingCenterSurvey.setSurveyDate(requestCasing.getCasingDate());
-				shoppingCenterSurvey.setShoppingCenter(shoppingCenter);
-				shoppingCenterSurvey = shoppingCenterSurveyService.addOne(shoppingCenterSurvey);
-			} else {
-				shoppingCenterSurvey = new ShoppingCenterSurvey();
-				shoppingCenterSurvey.setSurveyDate(requestCasing.getCasingDate());
-				shoppingCenterSurvey.setShoppingCenter(shoppingCenter);
-				shoppingCenterSurvey = shoppingCenterSurveyService.addOne(shoppingCenterSurvey);
-			}
+			Optional<ShoppingCenterSurvey> latestSurvey = ShoppingCenterUtil.getLatestSurveyAsOfDateTime(shoppingCenter, LocalDateTime.now());
+			// if the shopping center has latest non-deleted survey, clone it, otherwise create a brand new one
+			ShoppingCenterSurvey newShoppingCenterSurvey = latestSurvey.map(ShoppingCenterSurvey::new).orElseGet(ShoppingCenterSurvey::new);
+			newShoppingCenterSurvey.setSurveyDate(requestCasing.getCasingDate());
+			newShoppingCenterSurvey.setShoppingCenter(shoppingCenter);
+			shoppingCenterSurveyService.addOne(newShoppingCenterSurvey);
 
 			ShoppingCenterCasing shoppingCenterCasing = new ShoppingCenterCasing();
 			shoppingCenterCasing.setCasingDate(requestCasing.getCasingDate());
 			shoppingCenterCasing.setShoppingCenter(shoppingCenter);
-			shoppingCenterCasing.setShoppingCenterSurvey(shoppingCenterSurvey);
+			shoppingCenterCasing.setShoppingCenterSurvey(newShoppingCenterSurvey);
 			shoppingCenterCasing.setProjects(requestCasing.getProjects());
 
 			requestCasing.setShoppingCenterCasing(shoppingCenterCasingService.addOne(shoppingCenterCasing));
@@ -232,8 +189,8 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 	}
 
 	@Override
-	public List<Store> findAllByProjectId(Integer id) {
-		return getEntityRepository().findAllByCasingsProjectsIdAndDeletedDateIsNull(id);
+	public List<Store> findAllByProjectId(Integer projectId) {
+		return storeRepository.findAll(Specifications.where(StoreSpecifications.projectIdEquals(projectId)).and(AuditingEntitySpecifications.isNotDeleted()));
 	}
 
 	@Override
@@ -250,45 +207,9 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 	}
 
 	@Override
-	public List<Store> findAllByParentCompanyIdRecursive(Integer companyId) {
-		Company company = companyService.findOne(companyId);
-		if (company == null) {
-			throw new IllegalArgumentException("No Company found with this id");
-		}
-
-		Set<Company> companies = companyService.findAllChildCompaniesRecursive(company);
-
-		Set<Integer> bannerIds = new HashSet<>();
-		for (Company childCompany : companies) {
-			List<Banner> banners = childCompany.getBanners();
-			for (Banner banner : banners) {
-				bannerIds.add(banner.getId());
-			}
-		}
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("bannerIds", bannerIds);
-
-		return jdbcTemplate.queryForList(QUERY_STORES_WHERE_PARENT_COMPANY_ID_IN_LIST, params, Store.class);
-	}
-
-	@Override
 	public List<Store> findAllBySiteIdUsingSpecs(Integer siteId) {
-		return getEntityRepository().findAll(
+		return storeRepository.findAll(
 				where(siteIdEquals(siteId))
-						.and(isNotDeleted())
-		);
-	}
-
-	@Override
-	public Page<Store> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(where(isNotDeleted()), page);
-	}
-
-	@Override
-	public Store findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
 						.and(isNotDeleted())
 		);
 	}
@@ -364,21 +285,6 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 	@Override
 	public String getEntityName() {
 		return "Store";
-	}
-
-	@Override
-	public void handleAssociationsOnDeletion(Store existing) {
-		// TODO - casings, models, surveys, volumes, statuses
-	}
-
-	@Override
-	public void handleAssociationsOnCreation(Store request) {
-		// TODO - casings, models, surveys, volumes, statuses
-	}
-
-	@Override
-	public StoreRepository getEntityRepository() {
-		return storeRepository;
 	}
 
 	@Override

@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
  */
 @Entity
 @Table
-public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="shopping_center_survey_id"))
+public class ShoppingCenterSurvey extends AuditingEntity {
 
-    private Integer id;
     private LocalDateTime surveyDate;
     private String note;
     private Boolean flowHasOneWayAisles = false;
@@ -51,18 +51,6 @@ public class ShoppingCenterSurvey extends AuditingEntity implements Identifiable
                 .map(ShoppingCenterTenant::new)
                 .collect(Collectors.toList());
         this.tenants.forEach(tenant -> tenant.setSurvey(this));
-    }
-
-    @Id
-    @GeneratedValue
-    @Column(name = "shopping_center_survey_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     @ManyToOne

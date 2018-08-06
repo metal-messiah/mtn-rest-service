@@ -1,6 +1,6 @@
 package com.mtn.validators;
 
-import com.mtn.model.domain.Identifiable;
+import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Role;
 import com.mtn.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class RoleValidator extends ValidatingDataService<Role> {
 	}
 
 	@Override
-	public Identifiable getPotentialDuplicate(Role object) {
+	public AuditingEntity getPotentialDuplicate(Role object) {
 		return getEntityService().findOneByDisplayName(object.getDisplayName());
 	}
 

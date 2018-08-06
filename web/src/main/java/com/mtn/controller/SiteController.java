@@ -45,6 +45,13 @@ public class SiteController extends CrudControllerImpl<Site> {
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 	}
 
+	@PutMapping(value = "{siteId}", params = {"is-duplicate"})
+	public ResponseEntity updateIsDuplicate(@PathVariable("siteId") Integer siteId, @RequestParam("is-duplicate") Boolean isDuplicate) {
+		Site site = siteService.findOne(siteId);
+		site.setDuplicate(isDuplicate);
+		return ResponseEntity.ok(new SimpleSiteView(siteService.updateOne(site.getId(), site)));
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity findAll(@RequestParam(value = "north", required = false) Float north,
 								  @RequestParam(value = "south", required = false) Float south,
@@ -97,6 +104,6 @@ public class SiteController extends CrudControllerImpl<Site> {
 	@RequestMapping(value = "/assign-to-user", method = RequestMethod.POST)
 	public ResponseEntity assignToUser(@RequestBody Integer[] siteIds, @RequestParam(value = "user-id", required = false) Integer userId) {
 		List<Site> sites = siteService.assignSitesToUser(siteIds, userId);
-		return ResponseEntity.ok(sites.stream().map(SiteView::new).collect(Collectors.toList()));
+		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 }

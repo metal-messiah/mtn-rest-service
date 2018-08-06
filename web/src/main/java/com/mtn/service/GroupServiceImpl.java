@@ -3,15 +3,16 @@ package com.mtn.service;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.repository.GroupRepository;
+import com.mtn.repository.specification.GroupSpecifications;
 import com.mtn.validators.GroupValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -66,24 +67,8 @@ public class GroupServiceImpl extends EntityServiceImpl<Group> implements GroupS
     }
 
     @Override
-    public Group findOneUsingSpecs(Integer id) {
-        return getEntityRepository().findOne(
-                where(idEquals(id))
-                        .and(isNotDeleted())
-        );
-    }
-
-    @Override
-    public Page<Group> findAllUsingSpecs(Pageable page) {
-        return getEntityRepository().findAll(
-                where(isNotDeleted())
-                , page
-        );
-    }
-
-    @Override
     public Page<Group> findAllByNameUsingSpecs(String name, Pageable page) {
-        return getEntityRepository().findAll(
+        return groupRepository.findAll(
                 where(displayNameContains(name))
                         .and(isNotDeleted())
                 , page
@@ -92,7 +77,7 @@ public class GroupServiceImpl extends EntityServiceImpl<Group> implements GroupS
 
     @Override
     public Group findOneByDisplayName(String displayName) {
-        return getEntityRepository().findOneByDisplayNameIgnoreCase(displayName);
+        return groupRepository.findOne(Specifications.where(GroupSpecifications.displayNameEqualsIgnoreCase(displayName)));
     }
 
     @Override
@@ -133,11 +118,6 @@ public class GroupServiceImpl extends EntityServiceImpl<Group> implements GroupS
     @Override
     public String getEntityName() {
         return "Group";
-    }
-
-    @Override
-    public GroupRepository getEntityRepository() {
-        return groupRepository;
     }
 
     @Override

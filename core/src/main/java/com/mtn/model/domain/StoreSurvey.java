@@ -12,9 +12,9 @@ import java.util.List;
  */
 @Entity
 @Table
-public class StoreSurvey extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="store_survey_id"))
+public class StoreSurvey extends AuditingEntity {
 
-    private Integer id;
     private LocalDateTime surveyDate;
     private String note;
     private String fit;
@@ -176,18 +176,6 @@ public class StoreSurvey extends AuditingEntity implements Identifiable {
         this.seasonalityNov = storeSurvey.seasonalityNov;
         this.seasonalityDec = storeSurvey.seasonalityDec;
         this.seasonalityNotes = storeSurvey.seasonalityNotes;
-    }
-
-    @Id
-    @GeneratedValue
-    @Column(name = "store_survey_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     @ManyToOne

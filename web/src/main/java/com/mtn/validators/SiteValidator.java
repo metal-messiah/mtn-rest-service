@@ -19,14 +19,8 @@ public class SiteValidator extends ValidatingDataService<Site> {
 
 	@Override
 	public void validateBusinessRules(Site object) {
-//		if (object.getLocation() == null) {
-//			throw new IllegalArgumentException("Site location must be provided");
-//		} else
-//		if (object.getShoppingCenter() == null) {
-//			throw new IllegalStateException("Site ShoppingCenter should have been set by now");
-//		} else
-		if (object.getType() == null) {
-			throw new IllegalArgumentException("Site type must be provided");
+		if (object.getLatitude() == null || object.getLongitude() == null) {
+			throw new IllegalArgumentException("Site must have Latitude and Longitude");
 		}
 	}
 

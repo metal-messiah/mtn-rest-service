@@ -8,26 +8,14 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table
-public class ClientAccessKey extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="client_access_key_id"))
+public class ClientAccessKey extends AuditingEntity {
 
-    private Integer id;
     private String clientName;
     private String accessKey;
     private String clientUniqueIdentifier;
     private Boolean active;
     private LocalDateTime lastVerified;
-
-    @Id
-    @GeneratedValue
-    @Column(name = "client_access_key_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getClientName() {
         return clientName;

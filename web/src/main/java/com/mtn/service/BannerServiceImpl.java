@@ -3,16 +3,15 @@ package com.mtn.service;
 import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Company;
 import com.mtn.repository.BannerRepository;
+import com.mtn.repository.specification.BannerSpecifications;
 import com.mtn.validators.BannerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
-import static com.mtn.repository.specification.BannerSpecifications.bannerNameIsLike;
-import static com.mtn.repository.specification.BannerSpecifications.idEquals;
+import static com.mtn.repository.specification.BannerSpecifications.bannerNameLike;
 import static com.mtn.repository.specification.BannerSpecifications.isNotDeleted;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -43,40 +42,18 @@ public class BannerServiceImpl extends EntityServiceImpl<Banner> implements Bann
 	}
 
 	@Override
-	public void handleAssociationsOnDeletion(Banner existing) {
-
-	}
-
-	@Override
-	public Page<Banner> findAllUsingSpecs(Pageable page, String query) {
+	public Page<Banner> findAllByQueryUsingSpecs(Pageable page, String query) {
 		Specifications<Banner> spec = where(isNotDeleted());
 
 		if (query != null) {
-			spec = spec.and(bannerNameIsLike("%" + query + "%"));
+			spec = spec.and(bannerNameLike("%" + query + "%"));
 		}
-		return getEntityRepository().findAll(spec, page);
-	}
-
-
-	@Override
-	public Page<Banner> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(
-				where(isNotDeleted()),
-				page
-		);
+		return bannerRepository.findAll(spec, page);
 	}
 
 	@Override
 	public Banner findOneByBannerName(String bannerName) {
-		return getEntityRepository().findOneByBannerName(bannerName);
-	}
-
-	@Override
-	public Banner findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
-		);
+		return bannerRepository.findOne(Specifications.where(BannerSpecifications.bannerNameEquals(bannerName)));
 	}
 
 	@Override
@@ -93,11 +70,6 @@ public class BannerServiceImpl extends EntityServiceImpl<Banner> implements Bann
 	@Override
 	public String getEntityName() {
 		return "Banner";
-	}
-
-	@Override
-	public BannerRepository getEntityRepository() {
-		return bannerRepository;
 	}
 
 	@Override

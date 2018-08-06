@@ -3,6 +3,8 @@ package com.mtn.service;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
 import com.mtn.repository.SiteRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
+import com.mtn.repository.specification.SiteSpecifications;
 import com.mtn.validators.SiteValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mtn.repository.specification.SiteSpecifications.*;
@@ -68,28 +71,23 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
     @Override
     public List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
-        return getEntityRepository().findAll(
+        return siteRepository.findAll(
                 where(shoppingCenterIdEquals(shoppingCenterId))
                         .and(isNotDeleted())
         );
     }
 
     @Override
-    public Page<Site> findAllUsingSpecs(Pageable page) {
-        return getEntityRepository().findAllByDeletedDateIsNull(page);
-    }
-
-    @Override
     public Page<Site> findAllDuplicatesUsingSpecs(Pageable page) {
-        return getEntityRepository().findAll(where(isNotDeleted()).and(isDuplicate()), page);
+        return siteRepository.findAll(where(isDuplicate()).and(isNotDeleted()), page);
     }
 
     @Override
     public List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west) {
         Integer assigneeId = securityService.getCurrentUser().getId();
-        Specification<Site> spec = where(isNotDeleted()).and(withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId));
-
-        return getEntityRepository().findAll(spec);
+        return siteRepository.findAll(
+                where(SiteSpecifications.withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId))
+                .and(AuditingEntitySpecifications.isNotDeleted()));
     }
 
     @Override
@@ -104,18 +102,13 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
 
     @Override
     public Page<Site> findAllInBoundsWithoutStoresUsingSpecs(Float north, Float south, Float east, Float west, boolean noStores, Pageable page) {
-        Specification<Site> spec = where(isNotDeleted()).and(withinBoundingBox(north, south, east, west));
-
+        Specifications<Site> spec = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
         if (noStores) {
-            spec = ((Specifications<Site>) spec).and(hasNoStore());
+            spec = spec.and(SiteSpecifications.hasNoStore());
         }
+        spec = spec.and(AuditingEntitySpecifications.isNotDeleted());
 
-        return getEntityRepository().findAll(spec, page);
-    }
-
-    @Override
-    public Site findOneUsingSpecs(Integer id) {
-        return getEntityRepository().findByIdAndDeletedDateIsNull(id);
+        return siteRepository.findAll(spec, page);
     }
 
     @Override
@@ -147,19 +140,11 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     }
 
     @Override
-    public void handleAssociationsOnDeletion(Site existing) {
-        // TODO - Handle Stores
-    }
-
-    @Override
     public void handleAssociationsOnCreation(Site request) {
-        ShoppingCenter newSC = this.shoppingCenterService.addOne(new ShoppingCenter());
-        request.setShoppingCenter(newSC);
-    }
-
-    @Override
-    public SiteRepository getEntityRepository() {
-        return siteRepository;
+        if (request.getShoppingCenter() == null) {
+            ShoppingCenter newSC = this.shoppingCenterService.addOne(new ShoppingCenter());
+            request.setShoppingCenter(newSC);
+        }
     }
 
     @Override
@@ -171,7 +156,7 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     @Transactional
     public List<Site> assignSitesToUser(Integer[] siteIds, Integer userId) {
         final UserProfile selectedUser = (userId != null) ? userProfileService.findOne(userId) : null;
-        List<Site> sites = this.siteRepository.findAllByIdIn(siteIds);
+        List<Site> sites = this.siteRepository.findAll(Specifications.where(SiteSpecifications.idIn(Arrays.asList(siteIds))));
         sites.forEach(site -> {
             site.setAssignee(selectedUser);
         });

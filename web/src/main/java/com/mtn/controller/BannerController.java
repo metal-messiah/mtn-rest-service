@@ -21,7 +21,7 @@ public class BannerController extends CrudControllerImpl<Banner> {
     public ResponseEntity findAll(Pageable page, @RequestParam(value = "query", required = false) String query) {
         Page<Banner> domainModels;
         if (query != null) {
-            domainModels = getEntityService().findAllUsingSpecs(page, query);
+            domainModels = getEntityService().findAllByQueryUsingSpecs(page, query);
         } else {
             domainModels = getEntityService().findAllUsingSpecs(page);
         }

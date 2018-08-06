@@ -7,9 +7,9 @@ import java.util.List;
 
 @Entity
 @Table
-public class Project extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="project_id"))
+public class Project extends AuditingEntity {
 
-    private Integer id;
     private String projectName;
     private String metroArea;
     private String clientName;
@@ -27,18 +27,6 @@ public class Project extends AuditingEntity implements Identifiable {
     private List<StoreModel> models = new ArrayList<>();
     private List<StoreCasing> storeCasings = new ArrayList<>();
     private List<ShoppingCenterCasing> shoppingCenterCasings = new ArrayList<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "project_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getProjectName() {
         return projectName;

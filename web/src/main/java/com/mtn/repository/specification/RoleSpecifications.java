@@ -11,7 +11,7 @@ import javax.persistence.criteria.Root;
 /**
  * Created by Allen on 4/23/2017.
  */
-public class RoleSpecifications {
+public class RoleSpecifications extends AuditingEntitySpecifications{
 
     private static final String DELETED_DATE = "deletedDate";
     private static final String DISPLAY_NAME = "displayName";
@@ -26,11 +26,11 @@ public class RoleSpecifications {
         };
     }
 
-    public static Specification<Role> idEquals(Integer id) {
+    public static Specification<Role> displayNameEqualsIgnoreCase(String value) {
         return new Specification<Role>() {
             @Override
             public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
+                return criteriaBuilder.equal(criteriaBuilder.lower(root.get(DISPLAY_NAME)), value.toLowerCase());
             }
         };
     }
@@ -40,15 +40,6 @@ public class RoleSpecifications {
             @Override
             public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.notEqual(root.get(ID), 1);
-            }
-        };
-    }
-
-    public static Specification<Role> isNotDeleted() {
-        return new Specification<Role>() {
-            @Override
-            public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
             }
         };
     }

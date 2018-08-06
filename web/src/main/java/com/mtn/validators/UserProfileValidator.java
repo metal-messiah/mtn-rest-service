@@ -1,6 +1,6 @@
 package com.mtn.validators;
 
-import com.mtn.model.domain.Identifiable;
+import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.service.UserProfileService;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +26,7 @@ public class UserProfileValidator extends ValidatingDataService<UserProfile> {
 	}
 
 	@Override
-	public Identifiable getPotentialDuplicate(UserProfile object) {
+	public AuditingEntity getPotentialDuplicate(UserProfile object) {
 		return getEntityService().findOneByEmail(object.getEmail().toLowerCase());
 	}
 }

@@ -9,27 +9,15 @@ import java.util.List;
  */
 @Entity
 @Table
-public class Company extends AuditingEntity implements Identifiable {
+@AttributeOverride(name="id", column=@Column(name="company_id"))
+public class Company extends AuditingEntity {
 
-    private Integer id;
     private String companyName;
     private String websiteUrl;
     private Company parentCompany;
 
     private List<Company> childCompanies = new ArrayList<>();
     private List<Banner> banners = new ArrayList<>();
-
-    @Id
-    @GeneratedValue
-    @Column(name = "company_id")
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getCompanyName() {
         return companyName;

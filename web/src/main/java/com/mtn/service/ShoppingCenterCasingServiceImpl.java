@@ -2,10 +2,10 @@ package com.mtn.service;
 
 import com.mtn.model.domain.ShoppingCenterCasing;
 import com.mtn.repository.ShoppingCenterCasingRepository;
+import com.mtn.repository.specification.ShoppingCenterCasingSpecifications;
 import com.mtn.validators.ShoppingCenterCasingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,36 +24,16 @@ public class ShoppingCenterCasingServiceImpl extends EntityServiceImpl<ShoppingC
     @Autowired
     private ShoppingCenterCasingValidator shoppingCenterCasingValidator;
 
-
-    @Override
-    public List<ShoppingCenterCasing> findAllByProjectId(Integer id) {
-        return getEntityRepository().findAllByProjectsIdAndDeletedDateIsNull(id);
-    }
-
     @Override
     public List<ShoppingCenterCasing> findAllByShoppingCenterId(Integer shoppingCenterId) {
-        return getEntityRepository().findAllByShoppingCenterId(shoppingCenterId);
+        return shoppingCenterCasingRepository.findAll(
+                Specifications.where(ShoppingCenterCasingSpecifications.shoppingCenterIdEquals(shoppingCenterId)));
     }
 
     @Override
     public List<ShoppingCenterCasing> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
-        return getEntityRepository().findAll(
+        return shoppingCenterCasingRepository.findAll(
                 where(shoppingCenterIdEquals(shoppingCenterId))
-                        .and(isNotDeleted())
-        );
-    }
-
-    @Override
-    public Page<ShoppingCenterCasing> findAllUsingSpecs(Pageable page) {
-        return getEntityRepository().findAll(
-                where(isNotDeleted()), page
-        );
-    }
-
-    @Override
-    public ShoppingCenterCasing findOneUsingSpecs(Integer id) {
-        return getEntityRepository().findOne(
-                where(idEquals(id))
                         .and(isNotDeleted())
         );
     }
@@ -73,21 +53,6 @@ public class ShoppingCenterCasingServiceImpl extends EntityServiceImpl<ShoppingC
     @Override
     public String getEntityName() {
         return "ShoppingCenterCasing";
-    }
-
-    @Override
-    public void handleAssociationsOnDeletion(ShoppingCenterCasing existing) {
-        // TODO - manage survey
-    }
-
-    @Override
-    public void handleAssociationsOnCreation(ShoppingCenterCasing request) {
-        // TODO - manage survey
-    }
-
-    @Override
-    public ShoppingCenterCasingRepository getEntityRepository() {
-        return shoppingCenterCasingRepository;
     }
 
     @Override

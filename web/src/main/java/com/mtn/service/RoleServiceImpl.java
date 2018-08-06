@@ -4,10 +4,12 @@ import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Permission;
 import com.mtn.model.domain.Role;
 import com.mtn.repository.RoleRepository;
+import com.mtn.repository.specification.RoleSpecifications;
 import com.mtn.validators.RoleValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,27 +81,13 @@ public class RoleServiceImpl extends EntityServiceImpl<Role> implements RoleServ
 	}
 
 	@Override
-	public RoleRepository getEntityRepository() {
-		return roleRepository;
-	}
-
-	@Override
 	public RoleValidator getValidator() {
 		return roleValidator;
 	}
 
 	@Override
-	public Page<Role> findAllUsingSpecs(Pageable page) {
-		return getEntityRepository().findAll(
-				where(isNotDeleted())
-						.and(isNotAdmin())
-				, page
-		);
-	}
-
-	@Override
 	public Page<Role> findAllByNameUsingSpecs(String name, Pageable page) {
-		return getEntityRepository().findAll(
+		return roleRepository.findAll(
 				where(displayNameContains(name))
 						.and(isNotDeleted())
 						.and(isNotAdmin())
@@ -108,16 +96,8 @@ public class RoleServiceImpl extends EntityServiceImpl<Role> implements RoleServ
 	}
 
 	@Override
-	public Role findOneUsingSpecs(Integer id) {
-		return getEntityRepository().findOne(
-				where(idEquals(id))
-						.and(isNotDeleted())
-		);
-	}
-
-	@Override
 	public Role findOneByDisplayName(String displayName) {
-		return getEntityRepository().findOneByDisplayNameIgnoreCase(displayName);
+		return roleRepository.findOne(Specifications.where(RoleSpecifications.displayNameEqualsIgnoreCase(displayName)));
 	}
 
 	@Override

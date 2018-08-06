@@ -11,25 +11,24 @@ import javax.persistence.criteria.Root;
 /**
  * Created by Allen on 4/23/2017.
  */
-public class CompanySpecifications {
+public class CompanySpecifications extends AuditingEntitySpecifications {
 
-    private static final String DELETED_DATE = "deletedDate";
-    private static final String ID = "id";
+    private static final String NAME = "companyName";
 
-    public static Specification<Company> idEquals(Integer id) {
+    public static Specification<Company> companyNameLike(String value) {
         return new Specification<Company>() {
             @Override
             public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
+                return criteriaBuilder.like(criteriaBuilder.lower(root.get(NAME)), String.format("%%%s%%", value.toLowerCase()));
             }
         };
     }
 
-    public static Specification<Company> isNotDeleted() {
+    public static Specification<Company> companyNameEquals(String value) {
         return new Specification<Company>() {
             @Override
             public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
+                return criteriaBuilder.equal(criteriaBuilder.lower(root.get(NAME)), value.toLowerCase());
             }
         };
     }

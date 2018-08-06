@@ -11,9 +11,8 @@ import javax.persistence.criteria.Root;
 /**
  * Created by Allen on 4/23/2017.
  */
-public class GroupSpecifications {
+public class GroupSpecifications extends AuditingEntitySpecifications {
 
-    private static final String DELETED_DATE = "deletedDate";
     private static final String DISPLAY_NAME = "displayName";
     private static final String ID = "id";
 
@@ -26,20 +25,11 @@ public class GroupSpecifications {
         };
     }
 
-    public static Specification<Group> idEquals(Integer id) {
+    public static Specification<Group> displayNameEqualsIgnoreCase(String value) {
         return new Specification<Group>() {
             @Override
             public Predicate toPredicate(Root<Group> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
-
-    public static Specification<Group> isNotDeleted() {
-        return new Specification<Group>() {
-            @Override
-            public Predicate toPredicate(Root<Group> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
+                return criteriaBuilder.equal(criteriaBuilder.lower(root.get(DISPLAY_NAME)), value.toLowerCase());
             }
         };
     }

@@ -13,4 +13,5 @@ public interface ProjectService extends EntityService<Project> {
 	Page<Project> findAllByQueryUsingSpecs(Pageable page, String query, Boolean active, Boolean primaryData);
 
 	Project saveBoundary(Integer projectId, String geoJsonBoundary);
+	Project deleteBoundary(Integer projectId);
 }

@@ -77,9 +77,17 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 		} else {
 			boundary = new Boundary();
 			boundary.setGeojson(geoJsonBoundary);
-			boundary.setProjects(Collections.singletonList(project));
 			boundaryService.addOne(boundary);
+			project.setBoundary(boundary);
 		}
+		return project;
+	}
+
+	@Override
+	@Transactional
+	public Project deleteBoundary(Integer projectId) {
+		Project project = this.findOne(projectId);
+		project.setBoundary(null);
 		return project;
 	}
 

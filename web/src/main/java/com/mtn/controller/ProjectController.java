@@ -62,14 +62,16 @@ public class ProjectController extends CrudControllerImpl<Project> {
 		}
 	}
 
-	@RequestMapping(path = "/{id}/boundary", method = RequestMethod.POST)
+	@PostMapping(path = "/{id}/boundary")
 	public ResponseEntity saveBoundaryForProject(@PathVariable("id") Integer projectId, @RequestBody String geoJsonBoundary) {
 		Project project = projectService.saveBoundary(projectId, geoJsonBoundary);
-		if (project.getBoundary() != null) {
-			return ResponseEntity.ok(new BoundaryView(project.getBoundary()));
-		} else {
-			return ResponseEntity.noContent().build();
-		}
+		return ResponseEntity.ok(new SimpleProjectView(project));
+	}
+
+	@DeleteMapping(path = "/{id}/boundary")
+	public ResponseEntity saveBoundaryForProject(@PathVariable("id") Integer projectId) {
+		Project project = projectService.deleteBoundary(projectId);
+		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
 	@RequestMapping(path = "/{id}/store", method = RequestMethod.GET)

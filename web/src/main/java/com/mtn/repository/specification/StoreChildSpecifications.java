@@ -1,12 +1,11 @@
 package com.mtn.repository.specification;
 
 import com.mtn.model.domain.Store;
-import com.mtn.model.domain.StoreVolume;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
 
-public class StoreChildSpecifications {
+public class StoreChildSpecifications extends AuditingEntitySpecifications {
 
     private static final String STORE = "store";
     private static final String ID = "id";

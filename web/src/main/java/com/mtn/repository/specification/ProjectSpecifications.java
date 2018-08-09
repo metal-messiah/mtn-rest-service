@@ -13,8 +13,6 @@ import javax.persistence.criteria.Root;
  */
 public class ProjectSpecifications extends AuditingEntitySpecifications {
 
-    private static final String DELETED_DATE = "deletedDate";
-    private static final String ID = "id";
     private static final String ACTIVE = "active";
     private static final String PRIMARY_DATA = "primaryData";
     private static final String PROJECT_NAME = "projectName";

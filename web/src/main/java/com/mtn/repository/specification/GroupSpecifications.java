@@ -14,7 +14,6 @@ import javax.persistence.criteria.Root;
 public class GroupSpecifications extends AuditingEntitySpecifications {
 
     private static final String DISPLAY_NAME = "displayName";
-    private static final String ID = "id";
 
     public static Specification<Group> displayNameContains(String value) {
         return new Specification<Group>() {

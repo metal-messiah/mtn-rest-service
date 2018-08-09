@@ -13,23 +13,23 @@ import javax.persistence.criteria.Root;
  */
 public class CompanySpecifications extends AuditingEntitySpecifications {
 
-    private static final String NAME = "companyName";
+	private static final String NAME = "companyName";
 
-    public static Specification<Company> companyNameLike(String value) {
-        return new Specification<Company>() {
-            @Override
-            public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.like(criteriaBuilder.lower(root.get(NAME)), String.format("%%%s%%", value.toLowerCase()));
-            }
-        };
-    }
+	public static Specification<Company> companyNameLike(String value) {
+		return new Specification<Company>() {
+			@Override
+			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				return criteriaBuilder.like(criteriaBuilder.lower(root.get(NAME)), String.format("%%%s%%", value.toLowerCase()));
+			}
+		};
+	}
 
-    public static Specification<Company> companyNameEquals(String value) {
-        return new Specification<Company>() {
-            @Override
-            public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(criteriaBuilder.lower(root.get(NAME)), value.toLowerCase());
-            }
-        };
-    }
+	public static Specification<Company> companyNameEquals(String value) {
+		return new Specification<Company>() {
+			@Override
+			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				return criteriaBuilder.equal(criteriaBuilder.lower(root.get(NAME)), value.toLowerCase());
+			}
+		};
+	}
 }

@@ -1,6 +1,5 @@
 package com.mtn.repository.specification;
 
-import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.model.domain.Role;
@@ -11,9 +10,8 @@ import javax.persistence.criteria.*;
 /**
  * Created by Allen on 4/23/2017.
  */
-public class UserProfileSpecifications {
+public class UserProfileSpecifications extends AuditingEntitySpecifications {
 
-    private static final String DELETED_DATE = "deletedDate";
     private static final String EMAIL = "email";
     private static final String ID = "id";
     private static final String FIRST_NAME = "firstName";
@@ -83,24 +81,6 @@ public class UserProfileSpecifications {
             public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 Join<UserProfile, Role> roleJoin = root.join(ROLE);
                 return criteriaBuilder.equal(roleJoin.get(ID), roleId);
-            }
-        };
-    }
-
-    public static <T extends AuditingEntity> Specification<T> idEquals(Integer id) {
-        return new Specification<T>() {
-            @Override
-            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get(ID), id);
-            }
-        };
-    }
-
-    public static <T extends AuditingEntity> Specification<T> isNotDeleted() {
-        return new Specification<T>() {
-            @Override
-            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isNull(root.get(DELETED_DATE));
             }
         };
     }

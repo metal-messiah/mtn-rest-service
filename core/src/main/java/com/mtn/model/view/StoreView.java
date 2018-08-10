@@ -19,203 +19,138 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoreView extends AuditingEntityView {
 
-    private Integer id;
-    private String storeName;
-    private StoreType storeType;
-    private LocalDateTime dateOpened;
-    private LocalDateTime dateClosed;
-    private String storeNumber;
-    private Integer legacyLocationId;
-    private Boolean floating;
+	private Integer id;
+	private String storeName;
+	private StoreType storeType;
+	private LocalDateTime dateOpened;
+	private LocalDateTime dateClosed;
+	private String storeNumber;
+	private Integer legacyLocationId;
+	private Boolean floating;
 
-    private SimpleStoreStatusView currentStoreStatus;
-    private SimpleStoreSurveyView currentStoreSurvey;
+	private SimpleStoreStatusView currentStoreStatus;
+	private SimpleStoreSurveyView currentStoreSurvey;
 
-    private SimpleSiteView site;
-    private SimpleBannerView banner;
+	private SimpleSiteView site;
+	private SimpleBannerView banner;
 
-    private List<SimpleStoreCasingView> storeCasings;
-    private List<SimpleStoreModelView> storeModels;
-    private List<SimpleStoreVolumeView> storeVolumes;
-    private List<SimpleStoreStatusView> storeStatuses;
+	private List<SimpleStoreCasingView> storeCasings;
+	private List<SimpleStoreModelView> storeModels;
+	private List<SimpleStoreVolumeView> storeVolumes;
+	private List<SimpleStoreStatusView> storeStatuses;
 
-    public StoreView(Store store) {
-        super(store);
+	public StoreView(Store store) {
+		super(store);
 
-        this.id = store.getId();
-        this.storeName = store.getStoreName();
-        this.storeType = store.getStoreType();
-        this.dateOpened = store.getDateOpened();
-        this.dateClosed = store.getDateClosed();
-        this.legacyLocationId = store.getLegacyLocationId();
-        this.storeNumber = store.getStoreNumber();
-        this.floating = store.getFloating();
+		this.id = store.getId();
+		this.storeName = store.getStoreName();
+		this.storeType = store.getStoreType();
+		this.dateOpened = store.getDateOpened();
+		this.dateClosed = store.getDateClosed();
+		this.legacyLocationId = store.getLegacyLocationId();
+		this.storeNumber = store.getStoreNumber();
+		this.floating = store.getFloating();
 
-        this.site = new SimpleSiteView(store.getSite());
+		this.site = new SimpleSiteView(store.getSite());
 
-        if (store.getStatuses() != null) {
-            StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now())
-                    .ifPresent(status -> this.currentStoreStatus = new SimpleStoreStatusView(status));
-        }
+		StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now())
+				.ifPresent(status -> this.currentStoreStatus = new SimpleStoreStatusView(status));
 
-        if (store.getCurrentStoreSurvey() != null) {
-            this.currentStoreSurvey = new SimpleStoreSurveyView((store.getCurrentStoreSurvey()));
-        }
-        if (store.getBanner() != null) {
-            this.banner = new SimpleBannerView(store.getBanner());
-        }
+		if (store.getCurrentStoreSurvey() != null) {
+			this.currentStoreSurvey = new SimpleStoreSurveyView((store.getCurrentStoreSurvey()));
+		}
+		if (store.getBanner() != null) {
+			this.banner = new SimpleBannerView(store.getBanner());
+		}
 
-        if (store.getCasings() != null) {
-            this.storeCasings = store.getCasings().stream()
-                    .filter(casing -> casing.getDeletedDate() == null)
-                    .map(SimpleStoreCasingView::new)
-                    .collect(Collectors.toList());
-        }
-        if (store.getModels() != null) {
-            this.storeModels = store.getModels().stream()
-                    .filter(model -> model.getDeletedDate() == null)
-                    .map(SimpleStoreModelView::new)
-                    .collect(Collectors.toList());
-        }
-        if (store.getVolumes() != null) {
-            this.storeVolumes = store.getVolumes().stream()
-                    .filter(volume -> volume.getDeletedDate() == null)
-                    .map(SimpleStoreVolumeView::new)
-                    .collect(Collectors.toList());
-        }
-        if (store.getStatuses() != null) {
-            this.storeStatuses = store.getStatuses().stream()
-                    .filter(status -> status.getDeletedDate() == null)
-                    .map(SimpleStoreStatusView::new)
-                    .collect(Collectors.toList());
-        }
-    }
+		if (store.getCasings() != null) {
+			this.storeCasings = store.getCasings().stream()
+					.filter(casing -> casing.getDeletedDate() == null)
+					.map(SimpleStoreCasingView::new)
+					.collect(Collectors.toList());
+		}
+		if (store.getModels() != null) {
+			this.storeModels = store.getModels().stream()
+					.filter(model -> model.getDeletedDate() == null)
+					.map(SimpleStoreModelView::new)
+					.collect(Collectors.toList());
+		}
+		if (store.getVolumes() != null) {
+			this.storeVolumes = store.getVolumes().stream()
+					.filter(volume -> volume.getDeletedDate() == null)
+					.map(SimpleStoreVolumeView::new)
+					.collect(Collectors.toList());
+		}
+		if (store.getStatuses() != null) {
+			this.storeStatuses = store.getStatuses().stream()
+					.filter(status -> status.getDeletedDate() == null)
+					.map(SimpleStoreStatusView::new)
+					.collect(Collectors.toList());
+		}
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public String getStoreName() {
+		return storeName;
+	}
 
-    public String getStoreName() {
-        return storeName;
-    }
+	public StoreType getStoreType() {
+		return storeType;
+	}
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
+	public LocalDateTime getDateOpened() {
+		return dateOpened;
+	}
 
-    public StoreType getStoreType() {
-        return storeType;
-    }
+	public LocalDateTime getDateClosed() {
+		return dateClosed;
+	}
 
-    public void setStoreType(StoreType storeType) {
-        this.storeType = storeType;
-    }
+	public String getStoreNumber() {
+		return storeNumber;
+	}
 
-    public LocalDateTime getDateOpened() {
-        return dateOpened;
-    }
+	public Integer getLegacyLocationId() {
+		return legacyLocationId;
+	}
 
-    public void setDateOpened(LocalDateTime dateOpened) {
-        this.dateOpened = dateOpened;
-    }
+	public SimpleSiteView getSite() {
+		return site;
+	}
 
-    public LocalDateTime getDateClosed() {
-        return dateClosed;
-    }
+	public SimpleBannerView getBanner() {
+		return banner;
+	}
 
-    public void setDateClosed(LocalDateTime dateClosed) {
-        this.dateClosed = dateClosed;
-    }
+	public List<SimpleStoreCasingView> getStoreCasings() {
+		return storeCasings;
+	}
 
-    public String getStoreNumber() {
-        return storeNumber;
-    }
+	public List<SimpleStoreVolumeView> getStoreVolumes() {
+		return storeVolumes;
+	}
 
-    public void setStoreNumber(String storeNumber) {
-        this.storeNumber = storeNumber;
-    }
+	public List<SimpleStoreModelView> getStoreModels() {
+		return storeModels;
+	}
 
-    public Integer getLegacyLocationId() {
-        return legacyLocationId;
-    }
+	public SimpleStoreStatusView getCurrentStoreStatus() {
+		return currentStoreStatus;
+	}
 
-    public void setLegacyLocationId(Integer legacyLocationId) {
-        this.legacyLocationId = legacyLocationId;
-    }
+	public SimpleStoreSurveyView getCurrentStoreSurvey() {
+		return currentStoreSurvey;
+	}
 
-    public SimpleSiteView getSite() {
-        return site;
-    }
+	public List<SimpleStoreStatusView> getStoreStatuses() {
+		return storeStatuses;
+	}
 
-    public void setSite(SimpleSiteView site) {
-        this.site = site;
-    }
+	public Boolean getFloating() {
+		return floating;
+	}
 
-    public SimpleBannerView getBanner() {
-        return banner;
-    }
-
-    public void setBanner(SimpleBannerView banner) {
-        this.banner = banner;
-    }
-
-    public List<SimpleStoreCasingView> getStoreCasings() {
-        return storeCasings;
-    }
-
-    public void setStoreCasings(List<SimpleStoreCasingView> storeCasings) {
-        this.storeCasings = storeCasings;
-    }
-
-    public List<SimpleStoreVolumeView> getStoreVolumes() {
-        return storeVolumes;
-    }
-
-    public void setStoreVolumes(List<SimpleStoreVolumeView> storeVolumes) {
-        this.storeVolumes = storeVolumes;
-    }
-
-    public List<SimpleStoreModelView> getStoreModels() {
-        return storeModels;
-    }
-
-    public void setStoreModels(List<SimpleStoreModelView> storeModels) {
-        this.storeModels = storeModels;
-    }
-
-    public SimpleStoreStatusView getCurrentStoreStatus() {
-        return currentStoreStatus;
-    }
-
-    public void setCurrentStoreStatus(SimpleStoreStatusView currentStoreStatus) {
-        this.currentStoreStatus = currentStoreStatus;
-    }
-
-    public SimpleStoreSurveyView getCurrentStoreSurvey() {
-        return currentStoreSurvey;
-    }
-
-    public void setCurrentStoreSurvey(SimpleStoreSurveyView currentStoreSurvey) {
-        this.currentStoreSurvey = currentStoreSurvey;
-    }
-
-    public List<SimpleStoreStatusView> getStoreStatuses() {
-        return storeStatuses;
-    }
-
-    public void setStoreStatuses(List<SimpleStoreStatusView> storeStatuses) {
-        this.storeStatuses = storeStatuses;
-    }
-
-    public Boolean getFloating() {
-        return floating;
-    }
-
-    public void setFloating(Boolean floating) {
-        this.floating = floating;
-    }
 }

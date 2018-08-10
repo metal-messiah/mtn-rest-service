@@ -13,20 +13,29 @@ import java.util.Optional;
 public interface StoreUtil {
 
 	static Optional<StoreStatus> getLatestStatusAsOfDateTime(Store store, LocalDateTime localDateTime) {
+		if (store == null || store.getStatuses() == null) {
+			return Optional.empty();
+		}
 		return store.getStatuses().stream()
 				.filter(s -> s.getDeletedDate() == null && s.getStatusStartDate().isBefore(localDateTime))
 				.max(Comparator.comparing(StoreStatus::getStatusStartDate));
 	}
 
 	static Optional<StoreSurvey> getLatestSurveyAsOfDateTime(Store store, LocalDateTime localDateTime) {
+		if (store == null || store.getSurveys() == null) {
+			return Optional.empty();
+		}
 		return store.getSurveys().stream()
 				.filter(s -> s.getDeletedDate() == null && s.getSurveyDate().isBefore(localDateTime))
 				.max(Comparator.comparing(StoreSurvey::getSurveyDate));
 	}
 
 	static Optional<StoreVolume> getLatestVolumeAsOfDateTime(Store store, LocalDate localDate) {
+		if (store == null || store.getVolumes() == null) {
+			return Optional.empty();
+		}
 		return store.getVolumes().stream()
-				.filter(s -> s.getDeletedDate() == null && s.getVolumeDate().isBefore(localDate))
+				.filter(s -> s.getDeletedDate() == null && s.getVolumeDate().isBefore(localDate.plusDays(1)))
 				.max(Comparator.comparing(StoreVolume::getVolumeDate));
 	}
 }

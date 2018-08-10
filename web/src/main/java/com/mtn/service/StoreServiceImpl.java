@@ -117,9 +117,9 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 		if (requestCasing.getStoreSurvey() != null) {
 			throw new IllegalArgumentException("Do not include store survey. Will be provided by web service");
 		} else {
-			Optional<StoreSurvey> latestSurvey = StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now());
 			// If the store has a latest non-deleted survey, clone it, otherwise create a brand new one
-			StoreSurvey newSurvey = latestSurvey.map(StoreSurvey::new).orElseGet(StoreSurvey::new);
+			StoreSurvey newSurvey = StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now())
+					.map(StoreSurvey::new).orElseGet(StoreSurvey::new);
 			newSurvey.setSurveyDate(requestCasing.getCasingDate());
 			newSurvey.setStore(store);
 			storeSurveyService.addOne(newSurvey);

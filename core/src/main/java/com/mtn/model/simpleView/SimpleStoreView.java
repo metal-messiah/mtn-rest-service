@@ -4,122 +4,61 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Store;
-import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.utils.StoreUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 
-/**
- * Created by Allen on 4/26/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStoreView {
 
-    private Integer id;
-    private SimpleSiteView site;
-    private String storeName;
-    private String storeNumber;
-    private Boolean floating;
-    private StoreType storeType;
-    private SimpleStoreVolumeView latestStoreVolume;
+	private Store store;
 
-    private SimpleBannerView banner;
-    private SimpleStoreStatusView currentStoreStatus;
+	public SimpleStoreView(Store store) {
+		this.store = store;
+	}
 
-    public SimpleStoreView(Store store) {
-        this.id = store.getId();
-        this.site = new SimpleSiteView(store.getSite());
-        this.storeName = store.getStoreName();
-        this.storeNumber = store.getStoreNumber();
-        this.floating = store.getFloating();
-        this.storeType = store.getStoreType();
+	public Integer getId() {
+		return store.getId();
+	}
 
-        Banner banner = store.getBanner();
-        if (banner != null) {
-            this.banner = new SimpleBannerView(banner);
-        }
-        if (store.getStatuses() != null) {
-            StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now())
-                    .ifPresent(status -> this.currentStoreStatus = new SimpleStoreStatusView(status));
-        }
+	public SimpleSiteView getSite() {
+		return new SimpleSiteView(this.store.getSite());
+	}
 
-        if (store.getVolumes() != null) {
-            StoreUtil.getLatestVolumeAsOfDateTime(store, LocalDate.now())
-					.ifPresent(latest -> this.latestStoreVolume = new SimpleStoreVolumeView(latest));
-        }
-    }
+	public String getStoreName() {
+		return this.store.getStoreName();
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public String getStoreNumber() {
+		return this.store.getStoreNumber();
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public SimpleBannerView getBanner() {
+		Banner banner = this.store.getBanner();
+		if (banner != null) {
+			return new SimpleBannerView(banner);
+		} else {
+			return null;
+		}
+	}
 
-    public SimpleSiteView getSite() {
-        return site;
-    }
+	public SimpleStoreStatusView getCurrentStoreStatus() {
+		return StoreUtil.getLatestStatusAsOfDateTime(this.store, LocalDateTime.now())
+				.map(SimpleStoreStatusView::new).orElse(null);
+	}
 
-    public void setSite(SimpleSiteView site) {
-        this.site = site;
-    }
+	public Boolean getFloating() {
+		return this.store.getFloating();
+	}
 
-    public String getStoreName() {
-        return storeName;
-    }
+	public StoreType getStoreType() {
+		return this.store.getStoreType();
+	}
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
+	public SimpleStoreVolumeView getLatestStoreVolume() {
+		return StoreUtil.getLatestVolumeAsOfDateTime(store, LocalDate.now())
+				.map(SimpleStoreVolumeView::new).orElse(null);
+	}
 
-    public String getStoreNumber() {
-        return storeNumber;
-    }
-
-    public void setStoreNumber(String storeNumber) {
-        this.storeNumber = storeNumber;
-    }
-
-    public SimpleBannerView getBanner() {
-        return banner;
-    }
-
-    public void setBanner(SimpleBannerView banner) {
-        this.banner = banner;
-    }
-
-    public SimpleStoreStatusView getCurrentStoreStatus() {
-        return currentStoreStatus;
-    }
-
-    public void setCurrentStoreStatus(SimpleStoreStatusView currentStoreStatus) {
-        this.currentStoreStatus = currentStoreStatus;
-    }
-
-    public Boolean getFloating() {
-        return floating;
-    }
-
-    public void setFloating(Boolean floating) {
-        this.floating = floating;
-    }
-
-    public StoreType getStoreType() {
-        return storeType;
-    }
-
-    public void setStoreType(StoreType storeType) {
-        this.storeType = storeType;
-    }
-
-    public SimpleStoreVolumeView getLatestStoreVolume() {
-        return latestStoreVolume;
-    }
-
-    public void setLatestStoreVolume(SimpleStoreVolumeView latestStoreVolume) {
-        this.latestStoreVolume = latestStoreVolume;
-    }
 }

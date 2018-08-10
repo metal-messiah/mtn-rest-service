@@ -331,23 +331,18 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 
 		if (attributesNode.hasNonNull("STATUS")) {
 			String sourceStatus = getStatusMap().get(attributesNode.get("STATUS").intValue());
-			if (store.getStatuses() != null && store.getStatuses().size() > 0) {
-				// Ignore outdated statuses (latest before sourceEditedDate)
-				Optional<StoreStatus> mostRelevantStatus = StoreUtil.getLatestStatusAsOfDateTime(store, sourceEditedDate);
-				if (mostRelevantStatus.isPresent()) {
-					String status = mostRelevantStatus.get().getStatus();
-					// Planned Grocery doesn't do closings, so if we already have it as open, leave it open.
-					if (getStatusRank(sourceStatus) >= getStatusRank(status)) {
-						// Only create new if changed (progressively)
-						if (!sourceStatus.equals(status)) {
-							this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
-						}
-					} else {
-						// Store status must be validated manually
-						throw new Exception("Status Out of Order");
+			Optional<StoreStatus> mostRelevantStatus = StoreUtil.getLatestStatusAsOfDateTime(store, sourceEditedDate);
+			if (mostRelevantStatus.isPresent()) {
+				String status = mostRelevantStatus.get().getStatus();
+				// Planned Grocery doesn't do closings, so if we already have it as open, leave it open.
+				if (getStatusRank(sourceStatus) >= getStatusRank(status)) {
+					// Only create new if changed (progressively)
+					if (!sourceStatus.equals(status)) {
+						this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
 					}
 				} else {
-					this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
+					// Store status must be validated manually
+					throw new Exception("Status Out of Order");
 				}
 			} else {
 				this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);

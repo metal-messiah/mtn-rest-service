@@ -128,9 +128,9 @@ public class PlannedGroceryUpdatable {
         this.dateOpened = store.getDateOpened();
         this.storeStatuses = store.getStatuses().stream().map(SimpleStoreStatusView::new).collect(Collectors.toList());
 
-        StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now()).ifPresent(storeSurvey -> {
-            this.areaTotal = storeSurvey.getAreaTotal();
-        });
+        StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now())
+                .ifPresent(storeSurvey -> this.areaTotal = storeSurvey.getAreaTotal());
+
         this.setSiteData(store.getSite());
     }
 

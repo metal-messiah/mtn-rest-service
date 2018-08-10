@@ -1,9 +1,6 @@
 INSERT INTO user_profile (email, first_name, last_name, created_by, created_date, updated_by, updated_date) VALUES
   ('system.administrator@mtnra.com', 'System', 'Administrator', 1, NOW(), 1, NOW());
 
-INSERT INTO api_client (storeName, client_id, client_secret) VALUES
-  ('MTN-RS Administration', 'YVQTbbTwp4ZIgmC9LtpuoG5gx0i8lUaR', '3nKggQwEUQkWTx-bzkySJ_dQ66ur2W9gxV9Hi3ANM7qWphmJH8dGTOF2rXw-LPg9');
-
 INSERT INTO auth_permission (system_name, display_name, description, subject, action, created_by, created_date, deleted_by, deleted_date, updated_by, updated_date) VALUES
 ('PERMISSIONS_READ', 'Permissions (Read)', 'Ability to read Permissions', 'PERMISSIONS', 'READ', 1, NOW(), NULL, NULL, 1, NOW()),
 ('PERMISSIONS_UPDATE', 'Permissions (Update)', 'Ability to update Permissions', 'PERMISSIONS', 'UPDATE', 1, NOW(), NULL, NULL, 1, NOW()),

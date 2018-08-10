@@ -1,46 +1,68 @@
 # MTN REST Service
-This is the core MTN REST service project.
+This is the MTN REST service project. It includes three modules: core, qa, and web.
+
+Core includes domain, view, and simplified view models as well as migration scripts and application.properties which 
+manage the database connection, Auth0, and other third party properties
 
 ## API Documentation
-API documentation is achieved through Postman. The following link should import the current state of the collection into your Postman instance:
+API documentation is achieved through Postman. The following link should import the current state of the collection 
+into your Postman instance:
 
-https://www.getpostman.com/collections/1426e247cae861736d62
+https://www.getpostman.com/collections/f990c571cc1333ee93f0
 
-Any updates to the collection will be published back to this same link, so all you should have to do is click the link to get the updates.
+Any updates to the collection will be published back to this same link, so all you should have to do is click the link 
+to get the updates. This may create a duplicate Postman collection, so you can delete your old one. This may need to 
+be rethought if there is every collaboration on this project.
 
-This collection uses environment variables. You'll want to set up Environments in Postman for Local, Dev, and Prod, and will need to provide "host", "idToken", and "accessToken" variables. Due to the nature of JWT, you'll have to update these tokens for each testing session. I've added some help for that on the main web service page once you sign in.
+This collection uses environment variables. You'll want to set up Environments in Postman for dev and test 
+and will need to provide "host" and "authorization" variables. The authorization variable will need to be updated
+about every 12 hours as the tokens expire. The value for the authorization can be copied from a request in the dev 
+console including the word "Bearer ".
 
 ## Getting Started
 
-### First-Time Installation
+### Set up Development Environment
 Follow these steps to get the app up and running locally:
 1. Check out the project from Bitbucket
-3. Open project in IntelliJ
-4. Open IntelliJ's Terminal (which should open to the project root by default)
-5. Run `mvn clean install` (Must be done once, but then only needs to be done if the Maven dependencies are changed, which should be infrequent. You can also create a Run Configuration in IntelliJ to run this from a single click)
-6. Create an empty Postgres database on your local Postgres server
-13. Navigate in the project to core/src/main/resources, and copy the application-allen.properties file, replacing "allen" with your own storeName. 
-14. Replace the connection information in your new properties file with the connection information for your new database
-15. Create a Spring Boot Run Configuration called "Local" or some other fancy storeName
+2. Open project in IntelliJ
+3. Open IntelliJ's Terminal (which should open to the project root by default)
+4. Run `mvn clean install` (Must be done once, but then only needs to be done if the Maven dependencies are changed, 
+    which should be infrequent. You can also create a Run Configuration in IntelliJ to run this from a single click)
+5. Create an empty MySQL database on your local MySQL server
+6. Create environment variables
+    * OPENSHIFT_MYSQL_DB_HOST - ex. localhost
+    * OPENSHIFT_MYSQL_DB_PORT - ex. 3306
+    * OPENSHIFT_APP_NAME - Name of your DB, ex. mtn_dev
+    * OPENSHIFT_MYSQL_DB_USERNAME
+    * OPENSHIFT_MYSQL_DB_PASSWORD
+    * PLANNED_GROCERY_CLIENT_ID
+    * PLANNED_GROCERY_CLIENT_SECRET
+    * AUTH0_API_AUDIENCE
+    * AUTH0_ISSUER
+    * AUTH0_CLIENT_ID
+    * AUTH0_CLIENT_SECRET
+    * AUTH0_DOMAIN
+7. Create a Spring Boot Run Configuration
 	* Set the Main Class to `com.mtn.Application`
-	* Set the VM Options to `-Dspring.profiles.active=allen`, where "allen" is replaced with your own storeName, or the storeName you used in your new `application-<storeName>.properties` file
 	* Set the Working Directory to the `web` folder
 	* JRE must be a Java 1.8 or higher JDK
-16. Run the new Spring Boot configuration to start the application
+8. Run the new Spring Boot configuration to start the application
 
-Flyway should run all necessary database migration scripts on application startup. If you encounter an error during the Flyway migration, chances are your connection string information is incorrect. 
+Flyway should run all necessary database migration scripts on application startup. If you encounter an error during the 
+Flyway migration, chances are your connection string information is incorrect, or there is an error in one of your 
+migration scripts. If the latter is true, you must resolve the issue manually. Be sure to update the schema_version 
+table appropriately, otherwise it will continue to fail.
 
-NOTE: spring.datasource.username needs to be a Superuser to enable the PostGis Extension.
-
-### Running Without the Admin UI
-Typically, if you are only working on back-end files, or you only need access to the API, and not the Admin UI, you can skip the Gulp process, and simply do:
+### Running Without IntelliJ config
 1. Run `mvn clean install`
-2. Run/Debug your Spring Boot Run Configuration
+2. Run `java -jar web\target\web-1.0.0.jar` from the command line
 
 ## Correlation ID Header
-A client may provide a "mtn-correlation-id" header, which will be used internally by the REST service and appended to most log statements related to that particular request. This allows quick location of relevant messages for debugging.
+A client may provide a "mtn-correlation-id" header, which will be used internally by the REST service and appended to 
+most log statements related to that particular request. This allows quick location of relevant messages for debugging.
 
-If the header is not provided by the client, it will be appended to the reqest internally by the REST service before processing the request, and will be returned in the response.
+If the header is not provided by the client, it will be appended to the request internally by the REST service before 
+processing the request, and will be returned in the response.
 
 An example of this header in action in the server logs, tying several log statements together:
 ```
@@ -52,79 +74,33 @@ java.lang.RuntimeException: null
 	at com.mtn.controller.UserProfileController.findAll(UserProfileController.java:32) ~[classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_20]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_20]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_20]
-	at java.lang.reflect.Method.invoke(Method.java:483) ~[na:1.8.0_20]
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205) ~[spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:133) ~[spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:116) ~[spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:827) ~[spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:738) ~[spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:85) ~[spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:897) ~[spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970) [spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:861) [spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:687) [javax.servlet-api-3.1.0.jar:3.1.0]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846) [spring-webmvc-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:790) [javax.servlet-api-3.1.0.jar:3.1.0]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:230) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52) [tomcat-embed-websocket-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at com.mtn.correlation.RequestLoggingFilter.doFilter(RequestLoggingFilter.java:19) [classes/:na]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at com.mtn.correlation.CorrelationIdFilter.doFilter(CorrelationIdFilter.java:39) [classes/:na]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99) [spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) [spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:105) [spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) [spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:81) [spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) [spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:197) [spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) [spring-web-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:474) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:349) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:783) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:798) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1434) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_20]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_20]
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-8.5.11.jar:8.5.11]
-	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_20]
-
+	...
 2017-04-22 09:33:28.231 ERROR 10608 --- [nio-8080-exec-1] com.mtn.util.MtnLogger                   : RESPONSE - af59ea58-b457-4f8a-b713-a8d5cb1fb1af - 500 - http://localhost:8080/api/user
 
 ```
 
-This header, together with the GlobalExceptionHandler and RequestLoggingFilter, aim to reduce the amount of boilerplate code that must be written in the service and controller layer for logging as much as possible.
+This header, together with the GlobalExceptionHandler and RequestLoggingFilter, aim to reduce the amount of boilerplate 
+code that must be written in the service and controller layer for logging as much as possible.
 
 ## Model Validation
-Model validation is done in the service layer by the data services, after extending ValidatingDataService and implementing the required methods. This allows easy interaction between services and storeModels, and keeps the domain storeModels themselves clean, and without having to implement or extend other interfaces or classes to provide a consistent validation framework.
+Model validation is done in the service layer by the data services, after extending ValidatingDataService and 
+implementing the required methods. This allows easy interaction between services and models, and keeps the domain 
+models themselves clean, and without having to implement or extend other interfaces or classes to provide a 
+consistent validation framework.
  
 ## Domain Model to View Model Conversion
-Domain storeModels are not directly exposed to the client, but instead should be passed through a Converter and converted to a View Model. This allows flexibility in what data is returned to the client in different circumstances, and again keeps domain storeModels clean of any changes that would have been done to accommodate the client. This keeps a nice separation of concerns, puts all conversion logic into a single consistent framework, and again, keeps the domain storeModels nice and clean.
+Domain models are not directly exposed to the client, but instead should be passed through a Converter and converted to 
+a View Model. This allows flexibility in what data is returned to the client in different circumstances, and again 
+keeps domain models clean of any changes that would have been done to accommodate the client. This keeps a nice 
+separation of concerns, puts all conversion logic into a single consistent framework, and again, keeps the domain 
+models nice and clean.
 
 ## Query Specifications (Dynamic WHERE Clause)
-Dynamic WHERE clauses can be constructed using Spring Data Specifications. A Specification creates a structure of Predicates that are translated into the WHERE clause of a query, and is used with the default JpaRepository findOne, findAll, etc, methods. These Specifications do introduce a fair bit of boilerplate and duplicate code, but provide the functionality necessary for preventing access to "protected" records, deleted records, and for the client-specific query restrictions discussed as future requirements of this service.
+Dynamic WHERE clauses can be constructed using Spring Data Specifications. A Specification creates a structure of 
+Predicates that are translated into the WHERE clause of a query, and is used with the default JpaRepository findOne, 
+findAll, etc, methods. These Specifications do introduce a fair bit of boilerplate and duplicate code, but provide the 
+functionality necessary for preventing access to "protected" records, deleted records, and for the client-specific 
+query restrictions discussed as future requirements of this service.
 
 For example:
 ```
@@ -138,26 +114,9 @@ For example:
     }
 ```
 
-Which can be join with another Specification to create a composite Specification, as follows:
-```
-    public static Specification<UserProfile> queryWhereNotSystemAdministratorAndNotDeleted() {
-        return new Specification<UserProfile>() {
-            @Override
-            public Predicate toPredicate(Root<UserProfile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new ArrayList<>();
-
-                predicates.add(isNotSystemAdministrator().toPredicate(root, criteriaQuery, criteriaBuilder));
-                predicates.add(isNotDeleted().toPredicate(root, criteriaQuery, criteriaBuilder));
-
-                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-    }
-```
-
 And used in any service as such:
 ```
     public Page<UserProfile> findAllUsingSpecs(Pageable page) {
-        return userProfileRepository.findAll(UserProfileSpecifications.queryWhereNotSystemAdministratorAndNotDeleted(), page);
+        return userProfileRepository.findAll(UserProfileSpecifications.isNotDeleted(), page);
     }
 ```

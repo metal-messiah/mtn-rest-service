@@ -36,10 +36,10 @@ public class CorrelationIdFilter implements Filter {
             enhancedRequest.addHeader(MTN_CORRELATION_ID_HEADER, correlationId);
         }
 
-        chain.doFilter(enhancedRequest, response);
-
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setHeader(MTN_CORRELATION_ID_HEADER, correlationId);
+
+        chain.doFilter(enhancedRequest, httpServletResponse);
     }
 
     @Override

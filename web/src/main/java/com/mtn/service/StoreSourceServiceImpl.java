@@ -4,7 +4,6 @@ import com.mtn.model.domain.*;
 import com.mtn.repository.StoreSourceRepository;
 import com.mtn.validators.StoreSourceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specifications;
@@ -24,12 +23,6 @@ public class StoreSourceServiceImpl extends StoreChildServiceImpl<StoreSource> i
 	private StoreSourceRepository storeSourceRepository;
 	@Autowired
 	private StoreSourceValidator storeSourceValidator;
-
-	@Value("${planned-grocery.client_id}")
-	private String pgClientId;
-
-	@Value("${planned-grocery.client_secret}")
-	private String pgClientSecret;
 
 	@Override
 	public LocalDateTime getMaxSourceEditedDate(String sourceName) {

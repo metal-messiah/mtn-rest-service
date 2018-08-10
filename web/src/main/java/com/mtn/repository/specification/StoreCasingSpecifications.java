@@ -12,7 +12,7 @@ import javax.persistence.criteria.*;
 public class StoreCasingSpecifications extends StoreChildSpecifications {
 
 	private static final String ID = "id";
-	private static final String PROJECT = "project";
+	private static final String PROJECT = "projects";
 
 	public static Specification<StoreCasing> projectIdEquals(Integer projectId) {
 		return new Specification<StoreCasing>() {

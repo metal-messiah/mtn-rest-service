@@ -17,7 +17,6 @@
 
     <modules>
         <module>web</module>
-        <!--<module>qa</module>-->
         <module>core</module>
     </modules>
 

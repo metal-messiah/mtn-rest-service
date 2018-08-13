@@ -23,6 +23,7 @@ console including the word "Bearer ".
 
 ### Set up Development Environment
 Follow these steps to get the app up and running locally:
+
 1.  Check out the project from Bitbucket
 2.  Open project in IntelliJ
 3.  Open IntelliJ's Terminal (which should open to the project root by default)

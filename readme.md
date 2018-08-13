@@ -23,30 +23,30 @@ console including the word "Bearer ".
 
 ### Set up Development Environment
 Follow these steps to get the app up and running locally:
-1. Check out the project from Bitbucket
-2. Open project in IntelliJ
-3. Open IntelliJ's Terminal (which should open to the project root by default)
-4. Run `mvn clean install` (Must be done once, but then only needs to be done if the Maven dependencies are changed, 
+1.  Check out the project from Bitbucket
+2.  Open project in IntelliJ
+3.  Open IntelliJ's Terminal (which should open to the project root by default)
+4.  Run `mvn clean install` (Must be done once, but then only needs to be done if the Maven dependencies are changed, 
     which should be infrequent. You can also create a Run Configuration in IntelliJ to run this from a single click)
-5. Create an empty MySQL database on your local MySQL server
-6. Create environment variables
-    * OPENSHIFT_MYSQL_DB_HOST - ex. localhost
-    * OPENSHIFT_MYSQL_DB_PORT - ex. 3306
-    * OPENSHIFT_APP_NAME - Name of your DB, ex. mtn_dev
-    * OPENSHIFT_MYSQL_DB_USERNAME
-    * OPENSHIFT_MYSQL_DB_PASSWORD
-    * PLANNED_GROCERY_CLIENT_ID
-    * PLANNED_GROCERY_CLIENT_SECRET
-    * AUTH0_API_AUDIENCE
-    * AUTH0_ISSUER
-    * AUTH0_CLIENT_ID
-    * AUTH0_CLIENT_SECRET
-    * AUTH0_DOMAIN
-7. Create a Spring Boot Run Configuration
+5.  Create an empty MySQL database on your local MySQL server
+6.  Create environment variables
+    *  OPENSHIFT_MYSQL_DB_HOST - ex. localhost
+    *  OPENSHIFT_MYSQL_DB_PORT - ex. 3306
+    *  OPENSHIFT_APP_NAME - Name of your DB, ex. mtn_dev
+    *  OPENSHIFT_MYSQL_DB_USERNAME
+    *  OPENSHIFT_MYSQL_DB_PASSWORD
+    *  PLANNED_GROCERY_CLIENT_ID
+    *  PLANNED_GROCERY_CLIENT_SECRET
+    *  AUTH0_API_AUDIENCE
+    *  AUTH0_ISSUER
+    *  AUTH0_CLIENT_ID
+    *  AUTH0_CLIENT_SECRET
+    *  AUTH0_DOMAIN
+7.  Create a Spring Boot Run Configuration
 	* Set the Main Class to `com.mtn.Application`
 	* Set the Working Directory to the `web` folder
 	* JRE must be a Java 1.8 or higher JDK
-8. Run the new Spring Boot configuration to start the application
+8.  Run the new Spring Boot configuration to start the application
 
 Flyway should run all necessary database migration scripts on application startup. If you encounter an error during the 
 Flyway migration, chances are your connection string information is incorrect, or there is an error in one of your 

@@ -21,18 +21,20 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/store")
 public class StoreController extends CrudControllerImpl<Store> {
 
+	private final StoreService storeService;
+	private final StoreSurveyService surveyService;
+	private final StoreVolumeService volumeService;
+	private final StoreCasingService casingService;
+	private final StoreModelService modelService;
+
 	@Autowired
-	private StoreService storeService;
-	@Autowired
-	private StoreSurveyService surveyService;
-	@Autowired
-	private StoreVolumeService volumeService;
-	@Autowired
-	private StoreCasingService casingService;
-	@Autowired
-	private StoreModelService modelService;
-	@Autowired
-	StoreStatusService storeStatusService;
+	public StoreController(StoreService storeService, StoreSurveyService surveyService, StoreVolumeService volumeService, StoreCasingService casingService, StoreModelService modelService) {
+		this.storeService = storeService;
+		this.surveyService = surveyService;
+		this.volumeService = volumeService;
+		this.casingService = casingService;
+		this.modelService = modelService;
+	}
 
 	@RequestMapping(method = RequestMethod.GET, params = {"north", "south", "east", "west"})
 	public ResponseEntity findAllInBounds(
@@ -47,8 +49,15 @@ public class StoreController extends CrudControllerImpl<Store> {
 		if (includeProjectIds) {
 			return ResponseEntity.ok(domainModels.map(SimpleStoreViewWithProjects::new));
 		} else {
-			return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+			return ResponseEntity.ok(domainModels.map(SimpleStoreView::new));
 		}
+	}
+
+	@GetMapping(params = {"geojson"})
+	public ResponseEntity findAllInGeoJson(@RequestParam("geojson") String geoJson) {
+		List<Store> stores = storeService.findAllInGeoJson(geoJson);
+		List<Integer> ids = stores.stream().map(AuditingEntity::getId).distinct().collect(Collectors.toList());
+		return ResponseEntity.ok(ids);
 	}
 
 	@RequestMapping(value = "/{id}/store-casings", method = RequestMethod.POST)

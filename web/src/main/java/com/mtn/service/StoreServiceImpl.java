@@ -46,6 +46,8 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
+	private SiteService siteService;
+	@Autowired
 	private ShoppingCenterSurveyService shoppingCenterSurveyService;
 	@Autowired
 	private ShoppingCenterCasingService shoppingCenterCasingService;
@@ -61,6 +63,11 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 		spec = spec.and(AuditingEntitySpecifications.isNotDeleted());
 
 		return storeRepository.findAll(spec, page);
+	}
+
+	@Override
+	public List<Store> findAllInGeoJson(String geoJson) {
+		return storeRepository.findAllInGeoJson(geoJson);
 	}
 
 	@Override
@@ -125,7 +132,6 @@ public class StoreServiceImpl extends EntityServiceImpl<Store> implements StoreS
 			storeSurveyService.addOne(newSurvey);
 
 			requestCasing.setStoreSurvey(newSurvey);
-			store.setCurrentStoreSurvey(newSurvey);
 		}
 
 		if (requestCasing.getShoppingCenterCasing() != null) {

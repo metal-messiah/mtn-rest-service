@@ -78,6 +78,11 @@ public class SiteServiceImpl extends EntityServiceImpl<Site> implements SiteServ
     }
 
     @Override
+    public List<Site> findAllInGeoJson(String geoJson) {
+        return siteRepository.findWithinGeoJson(geoJson);
+    }
+
+    @Override
     public Page<Site> findAllDuplicatesUsingSpecs(Pageable page) {
         return siteRepository.findAll(where(isDuplicate()).and(isNotDeleted()), page);
     }

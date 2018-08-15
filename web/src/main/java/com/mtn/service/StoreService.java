@@ -14,6 +14,8 @@ public interface StoreService extends EntityService<Store> {
 
 	Page<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west, List<StoreType> storeTypes, Pageable page);
 
+	List<Store> findAllInGeoJson(String geoJson);
+
 	Page<Store> findAllAssignedTo(Integer assigneeId, List<StoreType> storeTypes, Pageable page);
 
 	StoreCasing addOneCasingToStore(Integer storeId, StoreCasing request);

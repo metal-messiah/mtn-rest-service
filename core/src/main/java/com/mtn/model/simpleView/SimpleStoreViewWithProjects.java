@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleStoreViewWithProjects extends SimpleStoreView{
+public class SimpleStoreViewWithProjects extends SimpleStoreView {
 
 	private List<Integer> projectIds;
 
@@ -27,9 +27,5 @@ public class SimpleStoreViewWithProjects extends SimpleStoreView{
 
 	public List<Integer> getProjectIds() {
 		return projectIds;
-	}
-
-	public void setProjectIds(List<Integer> projectIds) {
-		this.projectIds = projectIds;
 	}
 }

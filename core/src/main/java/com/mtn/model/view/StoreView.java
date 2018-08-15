@@ -56,9 +56,8 @@ public class StoreView extends AuditingEntityView {
 		StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now())
 				.ifPresent(status -> this.currentStoreStatus = new SimpleStoreStatusView(status));
 
-		if (store.getCurrentStoreSurvey() != null) {
-			this.currentStoreSurvey = new SimpleStoreSurveyView((store.getCurrentStoreSurvey()));
-		}
+		StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now())
+				.ifPresent(storeSurvey -> this.currentStoreSurvey = new SimpleStoreSurveyView(storeSurvey));
 		if (store.getBanner() != null) {
 			this.banner = new SimpleBannerView(store.getBanner());
 		}

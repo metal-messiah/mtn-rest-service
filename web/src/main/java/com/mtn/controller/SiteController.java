@@ -25,10 +25,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/site")
 public class SiteController extends CrudControllerImpl<Site> {
 
+	private final SiteService siteService;
+	private final StoreService storeService;
+
 	@Autowired
-	private SiteService siteService;
-	@Autowired
-	private StoreService storeService;
+	public SiteController(SiteService siteService, StoreService storeService) {
+		this.siteService = siteService;
+		this.storeService = storeService;
+	}
 
 	@RequestMapping(value = "/{id}/store", method = RequestMethod.POST)
 	public ResponseEntity addOneStoreToSite(
@@ -69,6 +73,12 @@ public class SiteController extends CrudControllerImpl<Site> {
 			domainModels = siteService.findAllUsingSpecs(page);
 		}
 		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+	}
+
+	@GetMapping(params = {"geojson"})
+	public ResponseEntity findAllWithinGeoJson(@RequestParam("geojson") String geoJson) {
+		List<Site> sites = siteService.findAllInGeoJson(geoJson);
+		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
 	@RequestMapping(value = "/points", method = RequestMethod.GET, params = {"north", "south", "east", "west"})

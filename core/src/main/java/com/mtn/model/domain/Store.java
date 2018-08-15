@@ -25,7 +25,6 @@ public class Store extends AuditingEntity {
 
     private Site site;
     private Banner banner;
-    private StoreSurvey currentStoreSurvey;
 
     private List<StoreCasing> casings = new ArrayList<>();
     private List<StoreModel> models = new ArrayList<>();
@@ -93,16 +92,6 @@ public class Store extends AuditingEntity {
 
     public void setBanner(Banner banner) {
         this.banner = banner;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "current_store_survey_id")
-    public StoreSurvey getCurrentStoreSurvey() {
-        return currentStoreSurvey;
-    }
-
-    public void setCurrentStoreSurvey(StoreSurvey currentStoreSurvey) {
-        this.currentStoreSurvey = currentStoreSurvey;
     }
 
     public String getStoreNumber() {

@@ -14,6 +14,8 @@ public interface SiteService extends EntityService<Site> {
 
 	List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId);
 
+	List<Site> findAllInGeoJson(String geoJson);
+
 	List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west);
 
 	List<Site> findAllInProjectBoundary(Integer projectId);

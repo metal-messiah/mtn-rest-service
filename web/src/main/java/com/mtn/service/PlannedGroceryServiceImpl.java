@@ -322,11 +322,14 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 			storeEdited = true;
 		}
 
-		StoreSurvey survey = store.getCurrentStoreSurvey();
-		if (attributesNode.hasNonNull("SIZESF") && survey != null && survey.getAreaTotal() == null) {
-			Integer siteSF = attributesNode.get("SIZESF").intValue();
-			survey.setAreaTotal(siteSF);
-			storeSurveyService.updateOne(survey.getId(), survey);
+		if (attributesNode.hasNonNull("SIZESF")) {
+			StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now()).ifPresent(storeSurvey -> {
+				if (storeSurvey.getAreaTotal() == null) {
+					Integer siteSF = attributesNode.get("SIZESF").intValue();
+					storeSurvey.setAreaTotal(siteSF);
+					storeSurveyService.updateOne(storeSurvey.getId(), storeSurvey);
+				}
+			});
 		}
 
 		if (attributesNode.hasNonNull("STATUS")) {

@@ -9,7 +9,10 @@ import java.util.List;
 
 public interface SiteRepository extends EntityRepository<Site> {
 
-	@Query(value = "Select si from Site si where st_within(si.location, :area) = true")
+	@Query(value = "Select si from Site si where st_within(si.location, :area) = true and si.deletedDate is null")
 	List<Site> findWithinGeometry(@Param("area") Geometry area);
+
+	@Query(value = "Select si from Site si where st_within(si.location, ST_GeomFromGeoJson(:geoJson, 1, 4326)) = true and si.deletedDate is null")
+	List<Site> findWithinGeoJson(@Param("geoJson") String geoJson);
 
 }

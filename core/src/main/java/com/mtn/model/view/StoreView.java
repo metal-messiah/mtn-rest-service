@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoreView extends AuditingEntityView {
 
-	private Integer id;
 	private String storeName;
 	private StoreType storeType;
 	private LocalDateTime dateOpened;
@@ -88,10 +87,6 @@ public class StoreView extends AuditingEntityView {
 		}
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
 	public String getStoreName() {
 		return storeName;
 	}
@@ -116,6 +111,18 @@ public class StoreView extends AuditingEntityView {
 		return legacyLocationId;
 	}
 
+	public Boolean getFloating() {
+		return floating;
+	}
+
+	public SimpleStoreStatusView getCurrentStoreStatus() {
+		return currentStoreStatus;
+	}
+
+	public SimpleStoreSurveyView getCurrentStoreSurvey() {
+		return currentStoreSurvey;
+	}
+
 	public SimpleSiteView getSite() {
 		return site;
 	}
@@ -128,28 +135,15 @@ public class StoreView extends AuditingEntityView {
 		return storeCasings;
 	}
 
-	public List<SimpleStoreVolumeView> getStoreVolumes() {
-		return storeVolumes;
-	}
-
 	public List<SimpleStoreModelView> getStoreModels() {
 		return storeModels;
 	}
 
-	public SimpleStoreStatusView getCurrentStoreStatus() {
-		return currentStoreStatus;
-	}
-
-	public SimpleStoreSurveyView getCurrentStoreSurvey() {
-		return currentStoreSurvey;
+	public List<SimpleStoreVolumeView> getStoreVolumes() {
+		return storeVolumes;
 	}
 
 	public List<SimpleStoreStatusView> getStoreStatuses() {
 		return storeStatuses;
 	}
-
-	public Boolean getFloating() {
-		return floating;
-	}
-
 }

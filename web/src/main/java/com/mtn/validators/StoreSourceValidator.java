@@ -1,32 +1,27 @@
 package com.mtn.validators;
 
 import com.mtn.model.domain.StoreSource;
-import com.mtn.model.domain.StoreVolume;
-import com.mtn.service.StoreSourceService;
-import com.mtn.service.StoreVolumeService;
-import org.apache.commons.lang3.StringUtils;
+import com.mtn.model.view.StoreSourceView;
+import com.mtn.repository.StoreSourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StoreSourceValidator extends ValidatingDataService<StoreSource> {
+public class StoreSourceValidator extends EntityValidator<StoreSource, StoreSourceView> {
 
 	@Autowired
-	private StoreSourceService storeSourceService;
-
-	@Override
-	public StoreSourceService getEntityService() {
-		return storeSourceService;
+	public StoreSourceValidator(StoreSourceRepository repository) {
+		super(repository);
 	}
 
 	@Override
-	public void validateForInsert(StoreSource object) {
-		super.validateForInsert(object);
+	protected void validateUpdateInsertBusinessRules(StoreSourceView request) {
+		super.validateForInsert(request);
 
-		if (object.getSourceName() == null) {
+		if (request.getSourceName() == null) {
 			throw new IllegalStateException("StoreSource must have a Source Name (ex. Planned Grocery)!");
 		}
-		if (object.getSourceNativeId() == null) {
+		if (request.getSourceNativeId() == null) {
 			throw new IllegalStateException("StoreSource must have a Source Native Id!");
 		}
 	}

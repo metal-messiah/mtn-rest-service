@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShoppingCenterCasingView extends AuditingEntityView {
 
-    private Integer id;
     private LocalDateTime casingDate;
     private String note;
     private RatingType ratingParkingLot;
@@ -27,7 +26,7 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
 
     public ShoppingCenterCasingView(ShoppingCenterCasing casing) {
         super(casing);
-        this.id = casing.getId();
+
         this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
         this.ratingBuildings = casing.getRatingBuildings();
@@ -47,83 +46,40 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
         }
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public LocalDateTime getCasingDate() {
         return casingDate;
-    }
-
-    public void setCasingDate(LocalDateTime casingDate) {
-        this.casingDate = casingDate;
     }
 
     public String getNote() {
         return note;
     }
 
-    public void setNote(String note) {
-        this.note = note;
-    }
-
     public RatingType getRatingParkingLot() {
         return ratingParkingLot;
-    }
-
-    public void setRatingParkingLot(RatingType ratingParkingLot) {
-        this.ratingParkingLot = ratingParkingLot;
     }
 
     public RatingType getRatingBuildings() {
         return ratingBuildings;
     }
 
-    public void setRatingBuildings(RatingType ratingBuildings) {
-        this.ratingBuildings = ratingBuildings;
-    }
-
     public RatingType getRatingLighting() {
         return ratingLighting;
-    }
-
-    public void setRatingLighting(RatingType ratingLighting) {
-        this.ratingLighting = ratingLighting;
     }
 
     public RatingType getRatingSynergy() {
         return ratingSynergy;
     }
 
-    public void setRatingSynergy(RatingType ratingSynergy) {
-        this.ratingSynergy = ratingSynergy;
-    }
-
     public Integer getLegacyCasingId() {
         return legacyCasingId;
-    }
-
-    public void setLegacyCasingId(Integer legacyCasingId) {
-        this.legacyCasingId = legacyCasingId;
     }
 
     public ShoppingCenterSurveyView getShoppingCenterSurvey() {
         return shoppingCenterSurvey;
     }
 
-    public void setShoppingCenterSurvey(ShoppingCenterSurveyView shoppingCenterSurvey) {
-        this.shoppingCenterSurvey = shoppingCenterSurvey;
-    }
-
     public List<SimpleProjectView> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<SimpleProjectView> projects) {
-        this.projects = projects;
-    }
 }

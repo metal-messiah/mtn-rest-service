@@ -11,7 +11,6 @@ import java.util.List;
 @AttributeOverride(name="id", column=@Column(name="field_set_id"))
 public class ExtractionFieldSet extends AuditingEntity {
 
-    private Integer id;
     private String fieldSetName;
 
     private List<ExtractionField> fields;

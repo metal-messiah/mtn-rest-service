@@ -1,10 +1,15 @@
 package com.mtn.controller;
 
+import com.mtn.model.domain.Project;
+import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.simpleView.SimpleStoreCasingView;
 import com.mtn.model.view.StoreCasingView;
+import com.mtn.model.view.StoreVolumeView;
+import com.mtn.service.ProjectService;
 import com.mtn.service.StoreCasingService;
+import com.mtn.service.StoreVolumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +20,16 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
 
     @Autowired
     private StoreCasingService storeCasingService;
+    @Autowired
+    private StoreVolumeService storeVolumeService;
+    @Autowired
+    private ProjectService projectService;
 
-    @RequestMapping(value = "/{storeCasingId}/projects/{projectId}", method = RequestMethod.PUT)
+    @PutMapping(value = "/{storeCasingId}/projects/{projectId}")
     public ResponseEntity addProject(@PathVariable("storeCasingId") Integer storeCasingId,
                                      @PathVariable("projectId") Integer projectId) {
-        StoreCasing domainModel = storeCasingService.addProject(storeCasingId, projectId);
+        Project project = projectService.findOne(projectId);
+        StoreCasing domainModel = storeCasingService.addProject(storeCasingId, project);
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
@@ -38,15 +48,18 @@ public class StoreCasingController extends CrudControllerImpl<StoreCasing> {
 
     @RequestMapping(value = "/{storeCasingId}/store-volume", method = RequestMethod.POST)
     public ResponseEntity createNewVolume(@PathVariable("storeCasingId") Integer storeCasingId,
-                                       @RequestBody StoreVolume volumeRequest) {
-        StoreCasing domainModel = storeCasingService.createStoreVolume(storeCasingId, volumeRequest);
-        return ResponseEntity.ok(new StoreCasingView(domainModel));
+                                       @RequestBody StoreVolumeView volumeRequest) {
+        Store store = storeCasingService.findOneUsingSpecs(storeCasingId).getStore();
+        StoreVolume volume = storeVolumeService.addOneToStore(volumeRequest, store);
+        StoreCasing casing = storeCasingService.setStoreVolume(storeCasingId, volume);
+        return ResponseEntity.ok(new StoreCasingView(casing));
     }
 
     @RequestMapping(value = "/{storeCasingId}/store-volume/{storeVolumeId}", method = RequestMethod.PUT)
     public ResponseEntity updateVolume(@PathVariable("storeCasingId") Integer storeCasingId,
                                        @PathVariable("storeVolumeId") Integer storeVolumeId) {
-        StoreCasing domainModel = storeCasingService.setStoreVolume(storeCasingId, storeVolumeId);
+        StoreVolume volume = storeVolumeService.findOneUsingSpecs(storeVolumeId);
+        StoreCasing domainModel = storeCasingService.setStoreVolume(storeCasingId, volume);
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 

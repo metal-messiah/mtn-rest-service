@@ -1,10 +1,11 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.AuditingEntity;
+import com.mtn.model.view.AuditingEntityView;
 import com.mtn.service.EntityService;
 import org.springframework.http.ResponseEntity;
 
-public interface CrudController<T extends AuditingEntity> {
+public interface CrudController<T extends AuditingEntity, V extends AuditingEntityView> {
 	ResponseEntity addOne(T request);
 
 	ResponseEntity deleteOne(Integer id);
@@ -13,7 +14,7 @@ public interface CrudController<T extends AuditingEntity> {
 
 	ResponseEntity updateOne(Integer id, T request);
 
-	EntityService<T> getEntityService();
+	EntityService<T, V> getEntityService();
 
 	Object getViewFromModel(T model);
 

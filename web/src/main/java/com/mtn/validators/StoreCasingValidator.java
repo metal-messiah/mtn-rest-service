@@ -1,29 +1,17 @@
 package com.mtn.validators;
 
-import com.mtn.model.domain.Site;
 import com.mtn.model.domain.StoreCasing;
-import com.mtn.service.StoreCasingService;
+import com.mtn.model.view.StoreCasingView;
+import com.mtn.repository.StoreCasingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StoreCasingValidator extends ValidatingDataService<StoreCasing> {
+public class StoreCasingValidator extends EntityValidator<StoreCasing, StoreCasingView> {
 
 	@Autowired
-	private StoreCasingService storeCasingService;
-
-	@Override
-	public StoreCasingService getEntityService() {
-		return storeCasingService;
-	}
-
-	@Override
-	public void validateForInsert(StoreCasing object) {
-		super.validateForInsert(object);
-
-		if (object.getStore() == null) {
-			throw new IllegalStateException("StoreCasing was not mapped to Store before saving!");
-		}
+	public StoreCasingValidator(StoreCasingRepository repository) {
+		super(repository);
 	}
 
 }

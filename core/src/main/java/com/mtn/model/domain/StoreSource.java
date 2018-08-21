@@ -14,13 +14,14 @@ public class StoreSource extends AuditingEntity {
     private String sourceName;
     private String sourceNativeId;
     private String sourceUrl;
-    private Integer legacySourceId;
-    private UserProfile validatedBy;
-    private LocalDateTime validatedDate;
     private String sourceStoreName;
     private LocalDateTime sourceCreatedDate;
     private LocalDateTime sourceEditedDate;
+    private Integer legacySourceId;
 
+    private LocalDateTime validatedDate;
+
+    private UserProfile validatedBy;
     private Store store;
 
     @ManyToOne

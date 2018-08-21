@@ -2,41 +2,56 @@ package com.mtn.service;
 
 import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.view.AuditingEntityView;
 import com.mtn.repository.EntityRepository;
 import com.mtn.repository.specification.AuditingEntitySpecifications;
+import com.mtn.validators.EntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
-public abstract class EntityServiceImpl<T extends AuditingEntity> implements EntityService<T> {
+@Service
+public abstract class EntityServiceImpl<T extends AuditingEntity, V extends AuditingEntityView> implements EntityService<T, V> {
+
+	protected final UserProfileService userProfileService;
+	protected final SecurityService securityService;
+	protected final EntityRepository<T> repository;
+	protected final EntityValidator<T, V> validator;
 
 	@Autowired
-	protected UserProfileService userProfileService;
-	@Autowired
-	protected SecurityService securityService;
-	@Autowired
-	private EntityRepository<T> entityRepository;
+	public EntityServiceImpl(EntityServiceDependencies services,
+							 EntityRepository<T> repository,
+							 EntityValidator<T, V> validator) {
+		this.userProfileService = services.getUserProfileService();
+		this.securityService = services.getSecurityService();
+		this.repository = repository;
+		this.validator = validator;
+	}
 
 	@Override
 	final public T findOne(Integer id) {
-		return entityRepository.findOne(id);
+		T object = repository.findOne(id);
+		if (object == null) {
+			throw new EntityNotFoundException();
+		}
+		return object;
 	}
 
 	@Override
 	final public Page<T> findAll(Pageable page) {
-		return entityRepository.findAll(page);
+		return repository.findAll(page);
 	}
 
 	@Override
 	public Page<T> findAllUsingSpecs(Pageable page) {
-		JpaSpecificationExecutor<T> executor = this.entityRepository;
-		return executor.findAll(
+		return this.repository.findAll(
 				where(AuditingEntitySpecifications.isNotDeleted()),
 				page
 		);
@@ -44,34 +59,46 @@ public abstract class EntityServiceImpl<T extends AuditingEntity> implements Ent
 
 	@Override
 	public T findOneUsingSpecs(Integer id) {
-		JpaSpecificationExecutor<T> executor = this.entityRepository;
-		return executor.findOne(
+		T object = this.repository.findOne(
 				where(AuditingEntitySpecifications.<T>idEquals(id))
-						.and(AuditingEntitySpecifications.isNotDeleted())
-		);
+						.and(AuditingEntitySpecifications.isNotDeleted()));
+		if (object == null) {
+			throw new EntityNotFoundException();
+		}
+		return object;
 	}
-
 
 	@Override
 	@Transactional
-	public T addOne(T request) {
-		getValidator().validateForInsert(request);
+	public T addOne(V request) {
+		this.validator.validateForInsert(request);
 
 		UserProfile currentUser = securityService.getCurrentUser();
-		request.setCreatedBy(currentUser);
-		request.setUpdatedBy(currentUser);
 
-		handleAssociationsOnCreation(request);
+		T newEntity = createNewEntityFromRequest(request);
+		newEntity.setCreatedBy(currentUser);
+		newEntity.setUpdatedBy(currentUser);
 
-		return entityRepository.save(request);
+		return newEntity;
+	}
+
+	@Override
+	@Transactional
+	public T updateOne(V request) {
+		this.validator.validateForUpdate(request);
+
+		T updatedEntity = updateEntityFromRequest(request);
+		updatedEntity.setUpdatedBy(securityService.getCurrentUser());
+
+		return updatedEntity;
 	}
 
 	@Override
 	@Transactional
 	public void deleteOne(Integer id) {
-		T existing = findOneUsingSpecs(id);
-		getValidator().validateForDelete(existing);
+		this.validator.validateForDelete(id);
 
+		T existing = findOneUsingSpecs(id);
 		handleAssociationsOnDeletion(existing);
 
 		existing.setDeletedBy(securityService.getCurrentUser());
@@ -79,31 +106,21 @@ public abstract class EntityServiceImpl<T extends AuditingEntity> implements Ent
 	}
 
 	@Override
-	@Transactional
-	public T reactivateOne(T existingEntity, T request) {
-		existingEntity.setDeletedBy(null);
-		existingEntity.setDeletedDate(null);
-
-		return updateEntityAttributes(existingEntity, request);
+	final public T createNewEntityFromRequest(V request) {
+		T extractionField = this.createNewEntity();
+		this.setEntityAttributesFromRequest(extractionField, request);
+		return extractionField;
 	}
 
 	@Override
-	@Transactional
-	public T updateOne(Integer id, T request) {
-		T existing = findOneUsingSpecs(id);
-		getValidator().validateForUpdate(request, existing);
-		updateEntityAttributes(existing, request);
-		existing.setUpdatedBy(securityService.getCurrentUser());
-		return existing;
+	final public T updateEntityFromRequest(V request) {
+		T extractionField = this.repository.findOne(request.getId());
+		this.setEntityAttributesFromRequest(extractionField, request);
+		return extractionField;
 	}
 
-	@Override
-	public void handleAssociationsOnCreation(T request) {
+	protected abstract T createNewEntity();
 
-	}
+	protected abstract void setEntityAttributesFromRequest(T entity, V request);
 
-	@Override
-	public void handleAssociationsOnDeletion(T existing) {
-
-	}
 }

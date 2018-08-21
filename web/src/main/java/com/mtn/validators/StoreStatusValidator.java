@@ -1,37 +1,24 @@
 package com.mtn.validators;
 
 import com.mtn.model.domain.StoreStatus;
-import com.mtn.service.StoreStatusService;
+import com.mtn.model.view.StoreStatusView;
+import com.mtn.repository.StoreStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class StoreStatusValidator extends ValidatingDataService<StoreStatus> {
+public class StoreStatusValidator extends EntityValidator<StoreStatus, StoreStatusView> {
 
 	@Autowired
-	private StoreStatusService storeStatusService;
-
-	@Override
-	public StoreStatusService getEntityService() {
-		return storeStatusService;
+	public StoreStatusValidator(StoreStatusRepository repository) {
+		super(repository);
 	}
 
 	@Override
-	public void validateForInsert(StoreStatus object) {
-		super.validateForInsert(object);
-
-		if (object.getStore() == null) {
-			throw new IllegalStateException("StoreStatus was not mapped to Store before saving!");
-		}
-	}
-
-	@Override
-	public void validateBusinessRules(StoreStatus object) {
-		if (object.getStatus() == null) {
+	protected void validateUpdateInsertBusinessRules(StoreStatusView request) {
+		if (request.getStatus() == null) {
 			throw new IllegalArgumentException("StoreStatus status must be provided");
-		} else if (object.getStatusStartDate() == null) {
+		} else if (request.getStatusStartDate() == null) {
 			throw new IllegalArgumentException("StoreStatus statusStartDate must be provided");
 		}
 	}

@@ -1,12 +1,12 @@
 package com.mtn.service;
 
 import com.mtn.model.domain.AuditingEntity;
-import com.mtn.validators.ValidatingDataService;
+import com.mtn.model.view.AuditingEntityView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface EntityService<T extends AuditingEntity> {
-	T addOne(T request);
+public interface EntityService<T extends AuditingEntity, V extends AuditingEntityView> {
+	T addOne(V request);
 
 	void deleteOne(Integer id);
 
@@ -18,18 +18,12 @@ public interface EntityService<T extends AuditingEntity> {
 
 	T findOneUsingSpecs(Integer id);
 
-	T reactivateOne(T existingEntity, T request);
-
-	T updateOne(Integer id, T request);
-
-	T updateEntityAttributes(T existing, T request);
-
-	String getEntityName();
+	T updateOne(V request);
 
 	void handleAssociationsOnDeletion(T existing);
 
-	void handleAssociationsOnCreation(T request);
+	T createNewEntityFromRequest(V request);
 
-	ValidatingDataService<T> getValidator();
+	T updateEntityFromRequest(V request);
 
 }

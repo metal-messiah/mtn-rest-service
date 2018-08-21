@@ -20,6 +20,8 @@ public class ProjectController extends CrudControllerImpl<Project> {
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
+	private BoundaryService boundaryService;
+	@Autowired
 	private StoreModelService modelService;
 	@Autowired
 	private StoreService storeService;
@@ -63,14 +65,15 @@ public class ProjectController extends CrudControllerImpl<Project> {
 	}
 
 	@PostMapping(path = "/{id}/boundary")
-	public ResponseEntity saveBoundaryForProject(@PathVariable("id") Integer projectId, @RequestBody String geoJsonBoundary) {
-		Project project = projectService.saveBoundary(projectId, geoJsonBoundary);
+	public ResponseEntity createProjectBoundary(@PathVariable("id") Integer projectId, @RequestBody BoundaryView request) {
+		Boundary boundary = boundaryService.addOne(request);
+		Project project = projectService.setProjectBoundary(projectId, boundary);
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
 	@DeleteMapping(path = "/{id}/boundary")
-	public ResponseEntity saveBoundaryForProject(@PathVariable("id") Integer projectId) {
-		Project project = projectService.deleteBoundary(projectId);
+	public ResponseEntity removeProjectBoundary(@PathVariable("id") Integer projectId) {
+		Project project = projectService.removeProjectBoundary(projectId);
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 

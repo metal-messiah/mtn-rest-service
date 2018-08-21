@@ -63,7 +63,7 @@ public class ShoppingCenterSurvey extends AuditingEntity {
         this.shoppingCenter = shoppingCenter;
     }
 
-    @OneToMany(mappedBy = "survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "survey", cascade = {CascadeType.PERSIST})
     public List<ShoppingCenterAccess> getAccesses() {
         return accesses;
     }
@@ -72,13 +72,23 @@ public class ShoppingCenterSurvey extends AuditingEntity {
         this.accesses = accesses;
     }
 
-    @OneToMany(mappedBy = "survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    public void addAccess(ShoppingCenterAccess access) {
+        this.getAccesses().add(access);
+        access.setSurvey(this);
+    }
+
+    @OneToMany(mappedBy = "survey", cascade = {CascadeType.PERSIST})
     public List<ShoppingCenterTenant> getTenants() {
         return tenants;
     }
 
     public void setTenants(List<ShoppingCenterTenant> tenants) {
         this.tenants = tenants;
+    }
+
+    public void addTenant(ShoppingCenterTenant tenant) {
+        this.getTenants().add(tenant);
+        tenant.setSurvey(this);
     }
 
     public Boolean getFlowHasOneWayAisles() {

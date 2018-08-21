@@ -1,41 +1,29 @@
 package com.mtn.validators;
 
-import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Role;
-import com.mtn.service.RoleService;
+import com.mtn.model.view.RoleView;
+import com.mtn.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoleValidator extends ValidatingDataService<Role> {
+public class RoleValidator extends EntityValidator<Role, RoleView> {
 
 	@Autowired
-	private RoleService roleService;
-
-	@Override
-	public RoleService getEntityService() {
-		return roleService;
+	public RoleValidator(RoleRepository repository) {
+		super(repository);
 	}
 
 	@Override
-	public AuditingEntity getPotentialDuplicate(Role object) {
-		return getEntityService().findOneByDisplayName(object.getDisplayName());
-	}
-
-	@Override
-	public void validateForDelete(Role object) {
-		super.validateForDelete(object);
-		// Prevent Deletion of Super Admin Role
-		if (object.getId().equals(1)) {
-			throw new IllegalArgumentException("You may not delete this role!");
+	protected void validateUpdateInsertBusinessRules(RoleView request) {
+		if (request.getId() == 1) {
+			throw new IllegalArgumentException("This role may not be updated");
 		}
 	}
 
 	@Override
-	public void validateForUpdate(Role object, Role existing) {
-		super.validateForUpdate(object, existing);
-		// Prevent Update of Super Admin Role
-		if (object.getId().equals(1)) {
+	protected void validateDeletionBusinessRules(Integer id) {
+		if (id.equals(1)) {
 			throw new IllegalArgumentException("You may not delete this role!");
 		}
 	}

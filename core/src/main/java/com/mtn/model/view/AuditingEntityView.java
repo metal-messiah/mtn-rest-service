@@ -3,9 +3,12 @@ package com.mtn.model.view;
 import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public abstract class AuditingEntityView {
+public abstract class AuditingEntityView implements Serializable {
+
+	protected Integer id;
 	protected SimpleUserProfileView createdBy;
 	protected LocalDateTime createdDate;
 	protected SimpleUserProfileView updatedBy;
@@ -15,6 +18,7 @@ public abstract class AuditingEntityView {
 	AuditingEntityView() {}
 
 	AuditingEntityView(AuditingEntity entity) {
+		this.id = entity.getId();
 		this.createdBy = new SimpleUserProfileView(entity.getCreatedBy());
 		this.createdDate = entity.getCreatedDate();
 		this.updatedBy = new SimpleUserProfileView(entity.getUpdatedBy());
@@ -22,43 +26,27 @@ public abstract class AuditingEntityView {
 		this.version = entity.getVersion();
 	}
 
-	final public SimpleUserProfileView getCreatedBy() {
+	public Integer getId() {
+		return id;
+	}
+
+	public SimpleUserProfileView getCreatedBy() {
 		return createdBy;
 	}
 
-	final public void setCreatedBy(SimpleUserProfileView createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	final public LocalDateTime getCreatedDate() {
+	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
 
-	final public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	final public SimpleUserProfileView getUpdatedBy() {
+	public SimpleUserProfileView getUpdatedBy() {
 		return updatedBy;
 	}
 
-	final public void setUpdatedBy(SimpleUserProfileView updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	final public LocalDateTime getUpdatedDate() {
+	public LocalDateTime getUpdatedDate() {
 		return updatedDate;
 	}
 
-	final public Integer getVersion() {
+	public Integer getVersion() {
 		return version;
-	}
-
-	final public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	final public void setUpdatedDate(LocalDateTime updatedDate) {
-		this.updatedDate = updatedDate;
 	}
 }

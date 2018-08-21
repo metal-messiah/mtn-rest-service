@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PermissionView extends AuditingEntityView {
 
-    private Integer id;
     private String systemName;
     private String displayName;
     private String description;
@@ -27,7 +26,7 @@ public class PermissionView extends AuditingEntityView {
 
     public PermissionView(Permission permission) {
         super(permission);
-        this.id = permission.getId();
+
         this.systemName = permission.getSystemName();
         this.displayName = permission.getDisplayName();
         this.description = permission.getDescription();
@@ -36,59 +35,28 @@ public class PermissionView extends AuditingEntityView {
         this.roles = permission.getRoles().stream().filter(role -> role.getDeletedDate() == null).map(SimpleRoleView::new).collect(Collectors.toList());
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getSystemName() {
         return systemName;
-    }
-
-    public void setSystemName(String systemName) {
-        this.systemName = systemName;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
     public CrudAction getAction() {
         return action;
-    }
-
-    public void setAction(CrudAction action) {
-        this.action = action;
     }
 
     public List<SimpleRoleView> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<SimpleRoleView> roles) {
-        this.roles = roles;
-    }
 }

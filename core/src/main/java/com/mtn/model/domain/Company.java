@@ -14,8 +14,8 @@ public class Company extends AuditingEntity {
 
     private String companyName;
     private String websiteUrl;
-    private Company parentCompany;
 
+    private Company parentCompany;
     private List<Company> childCompanies = new ArrayList<>();
     private List<Banner> banners = new ArrayList<>();
 

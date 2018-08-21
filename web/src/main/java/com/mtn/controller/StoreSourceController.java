@@ -10,24 +10,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/store-source")
 public class StoreSourceController extends CrudControllerImpl<StoreSource> {
 
-	@Autowired
-	private StoreSourceService storeSourceService;
+	private final StoreSourceService storeSourceService;
+	private final SecurityService securityService;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@Autowired
+	public StoreSourceController(StoreSourceService storeSourceService, SecurityService securityService) {
+		this.storeSourceService = storeSourceService;
+		this.securityService = securityService;
+	}
+
+	@GetMapping
 	public ResponseEntity findAll(Pageable page, @RequestParam Map<String, String> queryMap) {
 		Page<StoreSource> domainModels = storeSourceService.findAllByQuery(queryMap, page);
-		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+		return ResponseEntity.ok(domainModels.map(StoreSourceView::new));
+	}
+
+	@PutMapping(params = {"validate"})
+	public ResponseEntity update(@RequestBody StoreSource storeSource, @RequestParam boolean validate) {
+		if (validate) {
+			storeSource.setValidatedDate(LocalDateTime.now());
+			storeSource.setValidatedBy(securityService.getCurrentUser());
+		}
+		return this.updateOne(storeSource.getId(), storeSource);
 	}
 
 	@Override

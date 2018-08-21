@@ -23,7 +23,7 @@ public class ShoppingCenterCasing extends AuditingEntity {
     private ShoppingCenter shoppingCenter;
     private ShoppingCenterSurvey shoppingCenterSurvey;
     private List<Project> projects = new ArrayList<>();
-    private List<StoreCasing> storeCasings = new ArrayList();
+    private List<StoreCasing> storeCasings = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "shopping_center_id")

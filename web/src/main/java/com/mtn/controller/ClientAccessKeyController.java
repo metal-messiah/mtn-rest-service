@@ -19,7 +19,7 @@ public class ClientAccessKeyController extends CrudControllerImpl<ClientAccessKe
 		if (clientAccessKey.getAccessKey() == null || clientAccessKey.getClientUniqueIdentifier() == null) {
 			return ResponseEntity.badRequest().body("Body must contain 'accessKey' and 'clientUniqueIdentifier'");
 		}
-		ClientAccessKey key = getEntityService().validate(clientAccessKey.getAccessKey(), clientAccessKey.getClientUniqueIdentifier());
+		ClientAccessKey key = getEntityService().validateKey(clientAccessKey.getAccessKey(), clientAccessKey.getClientUniqueIdentifier());
 		return ResponseEntity.ok(this.getViewFromModel(key));
 	}
 

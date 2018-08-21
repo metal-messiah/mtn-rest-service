@@ -1,16 +1,81 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.model.domain.Site;
+import com.mtn.model.domain.*;
+import com.mtn.model.view.ShoppingCenterView;
+import com.mtn.repository.ShoppingCenterRepository;
+import com.mtn.repository.specification.ShoppingCenterSpecifications;
+import com.mtn.validators.ShoppingCenterValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-public interface ShoppingCenterService extends EntityService<ShoppingCenter> {
-	Site addOneSiteToShoppingCenter(Integer shoppingCenterId, Site request);
+import static org.springframework.data.jpa.domain.Specifications.where;
 
-	Page<ShoppingCenter> findAllByNameUsingSpecs(String name, Pageable page);
+@Service
+public class ShoppingCenterService extends EntityServiceImpl<ShoppingCenter, ShoppingCenterView> {
 
-	Page<ShoppingCenter> findAllByOwnerUsingSpecs(String owner, Pageable page);
+    @Autowired
+    public ShoppingCenterService(EntityServiceDependencies services,
+                                 ShoppingCenterRepository repository,
+                                 ShoppingCenterValidator validator) {
+        super(services, repository, validator);
+    }
 
-	Page<ShoppingCenter> findAllByNameOrOwnerUsingSpecs(String q, Pageable page);
+    public Page<ShoppingCenter> findAllByNameUsingSpecs(String name, Pageable page) {
+        return this.repository.findAll(
+                Specifications.where(ShoppingCenterSpecifications.nameContains(name))
+                        .and(ShoppingCenterSpecifications.isNotDeleted())
+                , page
+        );
+    }
+
+    public Page<ShoppingCenter> findAllByOwnerUsingSpecs(String owner, Pageable page) {
+        return this.repository.findAll(
+                Specifications.where(ShoppingCenterSpecifications.ownerContains(owner))
+                        .and(ShoppingCenterSpecifications.isNotDeleted())
+                , page
+        );
+    }
+
+    public Page<ShoppingCenter> findAllByNameOrOwnerUsingSpecs(String q, Pageable page) {
+        return this.repository.findAll(
+                Specifications.where(
+                        where(ShoppingCenterSpecifications.nameContains(q))
+                                .or(ShoppingCenterSpecifications.ownerContains(q)))
+                        .and(ShoppingCenterSpecifications.isNotDeleted())
+                , page
+        );
+    }
+
+    @Transactional
+    public ShoppingCenter createNew() {
+        UserProfile currentUser = securityService.getCurrentUser();
+
+        ShoppingCenter newEntity = this.createNewEntity();
+        newEntity.setCreatedBy(currentUser);
+        newEntity.setUpdatedBy(currentUser);
+
+        return newEntity;
+    }
+
+    @Override
+    protected ShoppingCenter createNewEntity() {
+        return new ShoppingCenter();
+    }
+
+    @Override
+    protected void setEntityAttributesFromRequest(ShoppingCenter shoppingCenter, ShoppingCenterView request) {
+        shoppingCenter.setName(StringUtils.isEmpty(request.getName()) ? null : request.getName());
+        shoppingCenter.setOwner(StringUtils.isEmpty(request.getOwner()) ? null : request.getOwner());
+        shoppingCenter.setCenterType(request.getCenterType());
+    }
+
+    @Override
+    public void handleAssociationsOnDeletion(ShoppingCenter existing) {
+        existing.getSites().forEach(site -> site.setShoppingCenter(null));
+    }
 }

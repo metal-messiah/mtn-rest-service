@@ -1,25 +1,22 @@
 package com.mtn.validators;
 
 import com.mtn.model.domain.Site;
-import com.mtn.service.SiteService;
-import org.apache.commons.lang3.StringUtils;
+import com.mtn.model.view.SiteView;
+import com.mtn.repository.SiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SiteValidator extends ValidatingDataService<Site> {
+public class SiteValidator extends EntityValidator<Site, SiteView> {
 
 	@Autowired
-	private SiteService siteService;
-
-	@Override
-	public SiteService getEntityService() {
-		return siteService;
+	public SiteValidator(SiteRepository repository) {
+		super(repository);
 	}
 
 	@Override
-	public void validateBusinessRules(Site object) {
-		if (object.getLatitude() == null || object.getLongitude() == null) {
+	protected void validateUpdateInsertBusinessRules(SiteView request) {
+		if (request.getLatitude() == null || request.getLongitude() == null) {
 			throw new IllegalArgumentException("Site must have Latitude and Longitude");
 		}
 	}

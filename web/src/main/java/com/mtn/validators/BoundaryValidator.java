@@ -1,19 +1,16 @@
 package com.mtn.validators;
 
 import com.mtn.model.domain.Boundary;
-import com.mtn.service.BoundaryService;
+import com.mtn.model.view.BoundaryView;
+import com.mtn.repository.BoundaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BoundaryValidator extends ValidatingDataService<Boundary> {
+public class BoundaryValidator extends EntityValidator<Boundary, BoundaryView> {
 
 	@Autowired
-	private BoundaryService boundaryService;
-
-	@Override
-	public BoundaryService getEntityService() {
-		return boundaryService;
+	public BoundaryValidator(BoundaryRepository boundaryRepository) {
+		super(boundaryRepository);
 	}
-
 }

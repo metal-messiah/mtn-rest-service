@@ -1,40 +1,29 @@
 package com.mtn.validators;
 
 import com.mtn.model.domain.StoreVolume;
-import com.mtn.service.StoreVolumeService;
+import com.mtn.model.view.StoreVolumeView;
+import com.mtn.repository.StoreVolumeRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StoreVolumeValidator extends ValidatingDataService<StoreVolume> {
+public class StoreVolumeValidator extends EntityValidator<StoreVolume, StoreVolumeView> {
 
 	@Autowired
-	private StoreVolumeService storeVolumeService;
-
-	@Override
-	public StoreVolumeService getEntityService() {
-		return storeVolumeService;
+	public StoreVolumeValidator(StoreVolumeRepository repository) {
+		super(repository);
 	}
 
 	@Override
-	public void validateForInsert(StoreVolume object) {
-		super.validateForInsert(object);
-
-		if (object.getStore() == null) {
-			throw new IllegalStateException("StoreVolume was not mapped to Store before saving!");
-		}
-	}
-
-	@Override
-	public void validateBusinessRules(StoreVolume object) {
-		if (object.getVolumeTotal() == null) {
+	protected void validateUpdateInsertBusinessRules(StoreVolumeView request) {
+		if (request.getVolumeTotal() == null) {
 			throw new IllegalArgumentException("StoreVolume volumeTotal must be provided");
-		} else if (object.getVolumeDate() == null) {
+		} else if (request.getVolumeDate() == null) {
 			throw new IllegalArgumentException("StoreVolume volumeDate must be provided");
-		} else if (object.getVolumeType() == null) {
+		} else if (request.getVolumeType() == null) {
 			throw new IllegalArgumentException("StoreVolume volumeType must be provided");
-		} else if (StringUtils.isBlank(object.getSource())) {
+		} else if (StringUtils.isBlank(request.getSource())) {
 			throw new IllegalArgumentException("StoreVolume source must be provided");
 		}
 	}

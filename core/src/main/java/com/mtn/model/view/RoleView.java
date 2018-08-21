@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RoleView extends AuditingEntityView {
 
-    private Integer id;
     private String displayName;
     private String description;
 
@@ -26,50 +25,27 @@ public class RoleView extends AuditingEntityView {
 
     public RoleView(Role role) {
         super(role);
-        this.id = role.getId();
+
         this.displayName = role.getDisplayName();
         this.description = role.getDescription();
         this.members = role.getMembers().stream().filter(member -> member.getDeletedDate() == null).map(SimpleUserProfileView::new).collect(Collectors.toList());
         this.permissions = role.getPermissions().stream().map(SimplePermissionView::new).collect(Collectors.toList());
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getDisplayName() {
         return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public List<SimpleUserProfileView> getMembers() {
         return members;
-    }
-
-    public void setMembers(List<SimpleUserProfileView> members) {
-        this.members = members;
     }
 
     public List<SimplePermissionView> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<SimplePermissionView> permissions) {
-        this.permissions = permissions;
-    }
 }

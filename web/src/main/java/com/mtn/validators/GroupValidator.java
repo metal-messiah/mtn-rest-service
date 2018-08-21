@@ -1,25 +1,33 @@
 package com.mtn.validators;
 
-import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Group;
-import com.mtn.service.GroupService;
+import com.mtn.model.view.GroupView;
+import com.mtn.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class GroupValidator extends ValidatingDataService<Group> {
+public class GroupValidator extends EntityValidator<Group, GroupView> {
+
+	private final GroupRepository groupRepository;
 
 	@Autowired
-	private GroupService groupService;
-
-	@Override
-	public AuditingEntity getPotentialDuplicate(Group object) {
-		return groupService.findOneByDisplayName(object.getDisplayName());
+	public GroupValidator(GroupRepository repository) {
+		super(repository);
+		this.groupRepository = repository;
 	}
 
 	@Override
-	public GroupService getEntityService() {
-		return groupService;
+	protected void validateUpdateInsertBusinessRules(GroupView request) {
+		// If another Group (different ID) with the same display name already exists
+		List<Group> usersWithEmail = this.groupRepository.findAllByDisplayNameAndDeletedDateIsNull(request.getDisplayName().toLowerCase());
+		if (usersWithEmail.stream()
+				.anyMatch(group -> group.getDisplayName().toLowerCase().equals(request.getDisplayName().toLowerCase()) &&
+						!group.getId().equals(request.getId()))) {
+			throw new IllegalArgumentException(String.format("Group with display name '%s' already exists!", request.getDisplayName()));
+		}
 	}
 
 }

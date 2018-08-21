@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 @AttributeOverride(name="id", column=@Column(name="store_model_id"))
 public class StoreModel extends AuditingEntity {
 
-    private Store store;
-    private Project project;
     private String mapkey;
     private Double curve;
     private Double pwta;
@@ -20,6 +18,9 @@ public class StoreModel extends AuditingEntity {
     private ModelType modelType;
     private LocalDateTime modelDate;
     private Integer legacyCasingId;
+
+    private Store store;
+    private Project project;
 
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "store_id")

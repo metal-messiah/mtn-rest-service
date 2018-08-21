@@ -1,32 +1,50 @@
 package com.mtn.validators;
 
-import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.service.UserProfileService;
+import com.mtn.model.view.UserProfileView;
+import com.mtn.repository.UserProfileRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class UserProfileValidator extends ValidatingDataService<UserProfile> {
+public class UserProfileValidator extends EntityValidator<UserProfile, UserProfileView> {
+
+	private final UserProfileRepository userProfileRepository;
 
 	@Autowired
-	private UserProfileService userProfileService;
-
-	@Override
-	public UserProfileService getEntityService() {
-		return userProfileService;
+	public UserProfileValidator(UserProfileRepository userProfileRepository) {
+		super(userProfileRepository);
+		this.userProfileRepository = userProfileRepository;
 	}
 
 	@Override
-	public void validateBusinessRules(UserProfile object) {
-		if (StringUtils.isBlank(object.getEmail())) {
+	protected void validateUpdateInsertBusinessRules(UserProfileView request) {
+		if (request.getId() == 1) {
+			throw new IllegalArgumentException("This user may not be updated");
+		}
+		if (StringUtils.isBlank(request.getEmail())) {
 			throw new IllegalArgumentException("UserProfile email must be provided");
+		}
+		if (request.getEmail() == null || request.getEmail().isEmpty()) {
+			throw new IllegalArgumentException("User Profile email must be provided");
+		}
+
+		// If another UserProfile (different ID) with the same email already exists
+		List<UserProfile> usersWithEmail = userProfileRepository.findAllByEmailAndDeletedDateIsNull(request.getEmail().toLowerCase());
+		if (usersWithEmail.stream()
+				.anyMatch(userProfile -> userProfile.getEmail().toLowerCase().equals(request.getEmail().toLowerCase()) &&
+						!userProfile.getId().equals(request.getId()))) {
+			throw new IllegalArgumentException(String.format("User Profile with email '%s' already exists!", request.getEmail()));
 		}
 	}
 
 	@Override
-	public AuditingEntity getPotentialDuplicate(UserProfile object) {
-		return getEntityService().findOneByEmail(object.getEmail().toLowerCase());
+	protected void validateDeletionBusinessRules(Integer id) {
+		if (id.equals(1)) {
+			throw new IllegalArgumentException("You may not delete this User Profile!");
+		}
 	}
 }

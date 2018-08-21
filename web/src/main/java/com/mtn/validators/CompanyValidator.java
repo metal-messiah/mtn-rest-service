@@ -1,25 +1,17 @@
 package com.mtn.validators;
 
-import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Company;
-import com.mtn.service.CompanyService;
+import com.mtn.model.view.CompanyView;
+import com.mtn.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CompanyValidator extends ValidatingDataService<Company> {
+public class CompanyValidator extends EntityValidator<Company, CompanyView> {
 
 	@Autowired
-	private CompanyService companyService;
-
-	@Override
-	public CompanyService getEntityService() {
-		return companyService;
-	}
-
-	@Override
-	public AuditingEntity getPotentialDuplicate(Company object) {
-		return getEntityService().findOneByCompanyName(object.getCompanyName());
+	public CompanyValidator(CompanyRepository repository) {
+		super(repository);
 	}
 
 }

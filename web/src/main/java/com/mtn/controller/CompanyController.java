@@ -1,10 +1,8 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.Company;
-import com.mtn.model.domain.Store;
 import com.mtn.model.simpleView.SimpleCompanyView;
 import com.mtn.model.view.CompanyView;
-import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.service.CompanyService;
 import com.mtn.service.StoreService;
 import org.apache.commons.lang3.StringUtils;
@@ -13,9 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Allen on 6/10/2017.
@@ -43,7 +38,7 @@ public class CompanyController extends CrudControllerImpl<Company> {
 
 	@RequestMapping(value = "/{childId}/parent/{parentId}")
 	public ResponseEntity updateOneParentCompany(@PathVariable("childId") Integer childId, @PathVariable("parentId") Integer parentId) {
-		Company domainModel = getEntityService().updateOneParentCompany(childId, parentId);
+		Company domainModel = getEntityService().setParentCompany(childId, parentId);
 		return ResponseEntity.ok(new CompanyView(domainModel));
 	}
 

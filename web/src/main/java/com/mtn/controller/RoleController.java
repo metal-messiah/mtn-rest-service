@@ -41,7 +41,8 @@ public class RoleController extends CrudControllerImpl<Role> {
         if (roleId == 1) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        Role domainModel = getEntityService().addOneMemberToRole(roleId, userId);
+        UserProfile userProfile = userProfileService.findOneUsingSpecs(userId);
+        Role domainModel = roleService.addOneMemberToRole(roleId, userProfile);
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
@@ -50,7 +51,8 @@ public class RoleController extends CrudControllerImpl<Role> {
         if (roleId == 1) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        Role domainModel = getEntityService().addOnePermissionToRole(roleId, permissionId);
+        Permission permission = permissionService.findOneUsingSpecs(permissionId);
+        Role domainModel = getEntityService().addOnePermissionToRole(roleId, permission);
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 

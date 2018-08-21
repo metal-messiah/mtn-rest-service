@@ -1,19 +1,16 @@
 package com.mtn.validators;
 
 import com.mtn.model.domain.ClientAccessKey;
-import com.mtn.service.ClientAccessKeyService;
+import com.mtn.model.view.ClientAccessKeyView;
+import com.mtn.repository.ClientAccessKeyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientAccessKeyValidator extends ValidatingDataService<ClientAccessKey> {
+public class ClientAccessKeyValidator extends EntityValidator<ClientAccessKey, ClientAccessKeyView> {
 
 	@Autowired
-	private ClientAccessKeyService clientAccessKeyService;
-
-	@Override
-	public ClientAccessKeyService getEntityService() {
-		return clientAccessKeyService;
+	public ClientAccessKeyValidator(ClientAccessKeyRepository repository) {
+		super(repository);
 	}
-
 }

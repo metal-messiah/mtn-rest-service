@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/banner")
-public class BannerController extends CrudControllerImpl<Banner> {
+public class BannerController extends CrudControllerImpl<Banner, BannerView> {
 
     @Autowired
     private BannerService bannerService;

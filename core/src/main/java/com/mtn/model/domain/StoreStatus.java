@@ -8,11 +8,12 @@ import java.time.LocalDateTime;
 @AttributeOverride(name="id", column=@Column(name="store_status_id"))
 public class StoreStatus extends AuditingEntity {
 
-    private Store store;
     private String status;
     private LocalDateTime statusStartDate;
     private Integer legacyLocationId;
     private Integer legacyCasingId;
+
+    private Store store;
 
     @ManyToOne
     @JoinColumn(name = "store_id")

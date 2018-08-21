@@ -1,12 +1,17 @@
 package com.mtn.controller;
 
+import com.mtn.model.domain.Project;
+import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.simpleView.SitePoint;
+import com.mtn.model.view.ShoppingCenterView;
 import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
+import com.mtn.service.ProjectService;
+import com.mtn.service.ShoppingCenterService;
 import com.mtn.service.SiteService;
 import com.mtn.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,19 +33,40 @@ public class SiteController extends CrudControllerImpl<Site> {
 
 	private final SiteService siteService;
 	private final StoreService storeService;
+	private final ProjectService projectService;
+	private final ShoppingCenterService shoppingCenterService;
 
 	@Autowired
-	public SiteController(SiteService siteService, StoreService storeService) {
+	public SiteController(SiteService siteService,
+						  StoreService storeService,
+						  ProjectService projectService,
+						  ShoppingCenterService shoppingCenterService) {
 		this.siteService = siteService;
 		this.storeService = storeService;
+		this.projectService = projectService;
+		this.shoppingCenterService = shoppingCenterService;
 	}
 
-	@RequestMapping(value = "/{id}/store", method = RequestMethod.POST)
+	@PostMapping(params = {"shopping-center-id"})
+	final public ResponseEntity addOne(@RequestBody SiteView request,
+									   @RequestParam(required = false, value = "shopping-center-id") Integer shoppingCenterId) {
+		ShoppingCenter sc;
+		if (shoppingCenterId != null) {
+			sc = shoppingCenterService.findOne(shoppingCenterId);
+		} else {
+			sc = shoppingCenterService.addOne(new ShoppingCenterView(new ShoppingCenter()));
+		}
+		Site domainModel = this.siteService.addOne(request, sc);
+		return ResponseEntity.ok(getViewFromModel(domainModel));
+	}
+
+	@PostMapping(value = "/{id}/store")
 	public ResponseEntity addOneStoreToSite(
 			@PathVariable("id") Integer siteId,
 			@RequestParam(value = "overrideActiveStore", defaultValue = "false") Boolean overrideActiveStore,
-			@RequestBody Store request) {
-		Store domainModel = siteService.addOneStoreToSite(siteId, request, overrideActiveStore);
+			@RequestBody StoreView request) {
+		Site site = siteService.findOne(siteId);
+		Store domainModel = storeService.createStoreForSiteFromRequest(request, site, overrideActiveStore);
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
@@ -92,7 +119,11 @@ public class SiteController extends CrudControllerImpl<Site> {
 
 	@RequestMapping(value = "/points", method = RequestMethod.GET, params = {"projectId"})
 	public ResponseEntity findAllSitesPointsWithinProjectBoundary(@RequestParam Integer projectId) {
-		List<Site> domainModels = siteService.findAllInProjectBoundary(projectId);
+		Project project = this.projectService.findOne(projectId);
+		if (project.getBoundary() == null) {
+			throw new EntityNotFoundException(String.format("Project %s does not have a boundary", projectId));
+		}
+		List<Site> domainModels = siteService.findAllInShape(project.getBoundary());
 		return ResponseEntity.ok(domainModels.stream().map(SitePoint::new).collect(Collectors.toList()));
 	}
 

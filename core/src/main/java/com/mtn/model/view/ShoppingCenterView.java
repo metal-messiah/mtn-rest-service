@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShoppingCenterView extends AuditingEntityView {
 
-    private Integer id;
     private String name;
     private String owner;
     private String centerType;
@@ -23,7 +22,7 @@ public class ShoppingCenterView extends AuditingEntityView {
 
     public ShoppingCenterView(ShoppingCenter shoppingCenter) {
         super(shoppingCenter);
-        this.id = shoppingCenter.getId();
+
         this.name = shoppingCenter.getName();
         this.owner = shoppingCenter.getOwner();
         this.centerType = shoppingCenter.getCenterType();
@@ -36,59 +35,27 @@ public class ShoppingCenterView extends AuditingEntityView {
         }
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
     public String getCenterType() {
         return centerType;
-    }
-
-    public void setCenterType(String centerType) {
-        this.centerType = centerType;
     }
 
     public Integer getLegacyLocationId() {
         return legacyLocationId;
     }
 
-    public void setLegacyLocationId(Integer legacyLocationId) {
-        this.legacyLocationId = legacyLocationId;
-    }
-
-    public List<SimpleSiteView> getSites() {
-        return sites;
-    }
-
-    public void setSites(List<SimpleSiteView> sites) {
-        this.sites = sites;
-    }
-
     public List<SimpleShoppingCenterCasingView> getShoppingCenterCasings() {
         return shoppingCenterCasings;
     }
 
-    public void setShoppingCenterCasings(List<SimpleShoppingCenterCasingView> shoppingCenterCasings) {
-        this.shoppingCenterCasings = shoppingCenterCasings;
+    public List<SimpleSiteView> getSites() {
+        return sites;
     }
 }

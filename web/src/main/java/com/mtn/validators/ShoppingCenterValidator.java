@@ -1,25 +1,17 @@
 package com.mtn.validators;
 
 import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.service.ShoppingCenterService;
-import org.apache.commons.lang3.StringUtils;
+import com.mtn.model.view.ShoppingCenterView;
+import com.mtn.repository.ShoppingCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ShoppingCenterValidator extends ValidatingDataService<ShoppingCenter> {
+public class ShoppingCenterValidator extends EntityValidator<ShoppingCenter, ShoppingCenterView> {
 
 	@Autowired
-	private ShoppingCenterService shoppingCenterService;
-
-	@Override
-	public ShoppingCenterService getEntityService() {
-		return shoppingCenterService;
-	}
-
-
-	@Override
-	public void validateBusinessRules(ShoppingCenter object) {
+	public ShoppingCenterValidator(ShoppingCenterRepository repository) {
+		super(repository);
 	}
 
 }

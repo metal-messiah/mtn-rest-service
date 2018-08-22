@@ -23,6 +23,10 @@ public class StoreSourceView extends AuditingEntityView {
 	private SimpleUserProfileView validatedBy;
 	private SimpleStoreView store;
 
+	public StoreSourceView() {
+
+	}
+
 	public StoreSourceView(StoreSource storeSource) {
 		super(storeSource);
 		this.id = storeSource.getId();

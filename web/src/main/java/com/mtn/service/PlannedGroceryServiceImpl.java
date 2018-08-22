@@ -154,6 +154,7 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 	}
 
 	@Override
+	@Transactional
 	public Store updateFromUpdatable(PlannedGroceryUpdatable updatable) {
 		Store store;
 		if (updatable.getShoppingCenterId() == null) {
@@ -173,6 +174,11 @@ public class PlannedGroceryServiceImpl implements PlannedGroceryService {
 		this.updateStoreFromUpdatable(updatable, store);
 		this.updateSiteFromUpdatable(updatable, store.getSite());
 		this.updateShoppingCenterFromUpdatable(updatable, store.getSite().getShoppingCenter());
+		if (updatable.getStoreSource() != null) {
+			StoreSource source = storeSourceService.findOne(updatable.getStoreSource().getId());
+			source.setValidatedDate(LocalDateTime.now());
+			source.setValidatedBy(securityService.getCurrentUser());
+		}
 		return store;
 	}
 

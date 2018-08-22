@@ -35,6 +35,8 @@ public class PlannedGroceryUpdatable {
     private List<SimpleStoreStatusView> storeStatuses;
     private Integer areaTotal;
 
+    private StoreSourceView storeSource;
+
     public PlannedGroceryUpdatable() {
     }
 
@@ -120,6 +122,10 @@ public class PlannedGroceryUpdatable {
 
     public Integer getAreaTotal() {
         return areaTotal;
+    }
+
+    public StoreSourceView getStoreSource() {
+        return storeSource;
     }
 
     private void setStoreData(Store store) {

@@ -21,20 +21,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-/**
- * Created by Allen on 5/6/2017.
- */
 @RestController
 @RequestMapping("/api/role")
-public class RoleController extends CrudControllerImpl<Role> {
+public class RoleController extends CrudController<Role, RoleView> {
+
+    private final PermissionService permissionService;
+    private final UserProfileService userProfileService;
 
     @Autowired
-    private RoleService roleService;
-    @Autowired
-    private PermissionService permissionService;
-    @Autowired
-    private UserProfileService userProfileService;
+    public RoleController(RoleService roleService, PermissionService permissionService, UserProfileService userProfileService) {
+        super(roleService, RoleView::new);
+        this.permissionService = permissionService;
+        this.userProfileService = userProfileService;
+    }
 
     @RequestMapping(value = "/{roleId}/member/{userId}", method = RequestMethod.POST)
     public ResponseEntity addOneMemberToRole(@PathVariable("roleId") Integer roleId, @PathVariable("userId") Integer userId) {
@@ -42,7 +41,7 @@ public class RoleController extends CrudControllerImpl<Role> {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         UserProfile userProfile = userProfileService.findOneUsingSpecs(userId);
-        Role domainModel = roleService.addOneMemberToRole(roleId, userProfile);
+        Role domainModel = ((RoleService) this.entityService).addOneMemberToRole(roleId, userProfile);
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
@@ -52,7 +51,7 @@ public class RoleController extends CrudControllerImpl<Role> {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         Permission permission = permissionService.findOneUsingSpecs(permissionId);
-        Role domainModel = getEntityService().addOnePermissionToRole(roleId, permission);
+        Role domainModel = ((RoleService) this.entityService).addOnePermissionToRole(roleId, permission);
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
@@ -60,11 +59,11 @@ public class RoleController extends CrudControllerImpl<Role> {
     public ResponseEntity findAll(@RequestParam(value = "displayName", required = false) String displayName, Pageable page) {
         Page<Role> domainModels;
         if (StringUtils.isNotBlank(displayName)) {
-            domainModels = roleService.findAllByNameUsingSpecs(displayName, page);
+            domainModels = ((RoleService) this.entityService).findAllByNameUsingSpecs(displayName, page);
         } else {
-            domainModels = roleService.findAllUsingSpecs(page);
+            domainModels = this.entityService.findAllUsingSpecs(page);
         }
-        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+        return ResponseEntity.ok(domainModels.map(SimpleRoleView::new));
     }
 
     @RequestMapping(value = "/{id}/member", method = RequestMethod.GET)
@@ -84,7 +83,7 @@ public class RoleController extends CrudControllerImpl<Role> {
         if (roleId == 1) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        Role domainModel = roleService.removeOneMemberFromRole(roleId, userId);
+        Role domainModel = ((RoleService) this.entityService).removeOneMemberFromRole(roleId, userId);
         if (domainModel == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -96,25 +95,11 @@ public class RoleController extends CrudControllerImpl<Role> {
         if (roleId == 1) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        Role domainModel = roleService.removeOnePermissionFromRole(roleId, permissionId);
+        Role domainModel = ((RoleService) this.entityService).removeOnePermissionFromRole(roleId, permissionId);
         if (domainModel == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(new RoleView(domainModel));
     }
 
-    @Override
-    public RoleService getEntityService() {
-        return roleService;
-    }
-
-    @Override
-    public Object getViewFromModel(Role model) {
-        return new RoleView(model);
-    }
-
-    @Override
-    public Object getSimpleViewFromModel(Role model) {
-        return new SimpleRoleView(model);
-    }
 }

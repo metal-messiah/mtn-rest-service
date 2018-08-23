@@ -17,13 +17,13 @@ import java.util.List;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class StoreModelService extends StoreChildServiceImpl<StoreModel, StoreModelView> {
+public class StoreModelService extends StoreChildService<StoreModel, StoreModelView> {
 
     @Autowired
-    public StoreModelService(EntityServiceDependencies services,
+    public StoreModelService(SecurityService securityService,
                              StoreModelRepository repository,
                              StoreModelValidator validator) {
-        super(services, repository, validator);
+        super(securityService, repository, validator, StoreModel::new);
     }
 
 	public List<StoreModel> findAllByProjectId(Integer projectId) {
@@ -50,11 +50,6 @@ public class StoreModelService extends StoreChildServiceImpl<StoreModel, StoreMo
         model.setStore(store);
 
         return model;
-    }
-
-    @Override
-    protected StoreModel createNewEntity() {
-        return new StoreModel();
     }
 
     @Override

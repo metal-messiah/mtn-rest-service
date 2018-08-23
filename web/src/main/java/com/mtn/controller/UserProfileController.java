@@ -11,40 +11,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by Allen on 4/21/2017.
- */
 @RestController
 @RequestMapping("/api/user")
-public class UserProfileController extends CrudControllerImpl<UserProfile> {
+public class UserProfileController extends CrudController<UserProfile, UserProfileView> {
 
     @Autowired
-    private UserProfileService userProfileService;
+    public UserProfileController(UserProfileService userProfileService) {
+        super(userProfileService, UserProfileView::new);
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(@RequestParam(value = "q", required = false) String q, Pageable page) {
         Page<UserProfile> domainModels;
         if (StringUtils.isNotBlank(q)) {
-            domainModels = userProfileService.query(q, page);
+            domainModels = ((UserProfileService) this.entityService).query(q, page);
         } else {
-            domainModels = userProfileService.findAllUsingSpecs(page);
+            domainModels = this.entityService.findAllUsingSpecs(page);
         }
 
-        return ResponseEntity.ok(domainModels.map(this::getViewFromModel));
+        return ResponseEntity.ok(domainModels.map(UserProfileView::new));
     }
 
-    @Override
-    public UserProfileService getEntityService() {
-        return userProfileService;
-    }
-
-    @Override
-    public Object getViewFromModel(UserProfile model) {
-        return new UserProfileView(model);
-    }
-
-    @Override
-    public Object getSimpleViewFromModel(UserProfile model) {
-        return new SimpleUserProfileView(model);
-    }
 }

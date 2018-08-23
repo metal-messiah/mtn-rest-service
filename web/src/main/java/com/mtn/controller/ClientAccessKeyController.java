@@ -9,32 +9,20 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/client-access-key")
-public class ClientAccessKeyController extends CrudControllerImpl<ClientAccessKey> {
+public class ClientAccessKeyController extends CrudController<ClientAccessKey, ClientAccessKeyView> {
 
 	@Autowired
-	private ClientAccessKeyService clientAccessKeyService;
+	public ClientAccessKeyController(ClientAccessKeyService clientAccessKeyService) {
+		super(clientAccessKeyService, ClientAccessKeyView::new);
+	}
 
+	@Override
 	@RequestMapping(method = RequestMethod.PUT)
-	public ResponseEntity validate(@RequestBody ClientAccessKey clientAccessKey) {
+	public ResponseEntity updateOne(@RequestBody ClientAccessKeyView clientAccessKey) {
 		if (clientAccessKey.getAccessKey() == null || clientAccessKey.getClientUniqueIdentifier() == null) {
 			return ResponseEntity.badRequest().body("Body must contain 'accessKey' and 'clientUniqueIdentifier'");
 		}
-		ClientAccessKey key = getEntityService().validateKey(clientAccessKey.getAccessKey(), clientAccessKey.getClientUniqueIdentifier());
-		return ResponseEntity.ok(this.getViewFromModel(key));
-	}
-
-	@Override
-	public ClientAccessKeyService getEntityService() {
-		return clientAccessKeyService;
-	}
-
-	@Override
-	public Object getViewFromModel(ClientAccessKey model) {
-		return new ClientAccessKeyView(model);
-	}
-
-	@Override
-	public Object getSimpleViewFromModel(ClientAccessKey model) {
-		return new ClientAccessKeyView(model);
+		ClientAccessKey key = ((ClientAccessKeyService) this.entityService).validateKey(clientAccessKey.getAccessKey(), clientAccessKey.getClientUniqueIdentifier());
+		return ResponseEntity.ok(new ClientAccessKeyView(key));
 	}
 }

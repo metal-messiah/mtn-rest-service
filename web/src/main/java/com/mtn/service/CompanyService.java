@@ -16,13 +16,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class CompanyService extends EntityServiceImpl<Company, CompanyView> {
+public class CompanyService extends EntityService<Company, CompanyView> {
 
 	@Autowired
-	public CompanyService(EntityServiceDependencies services,
+	public CompanyService(SecurityService securityService,
 						  CompanyRepository repository,
 						  CompanyValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, Company::new);
 	}
 
 	public Set<Company> findAllChildCompaniesRecursive(Company company) {
@@ -58,11 +58,6 @@ public class CompanyService extends EntityServiceImpl<Company, CompanyView> {
 	public void handleAssociationsOnDeletion(Company company) {
 		company.getChildCompanies().forEach(child -> this.deleteOne(child.getId()));
 		company.getBanners().forEach(banner -> banner.setCompany(null));
-	}
-
-	@Override
-	protected Company createNewEntity() {
-		return new Company();
 	}
 
 	@Override

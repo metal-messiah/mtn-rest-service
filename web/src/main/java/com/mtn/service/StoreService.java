@@ -22,13 +22,13 @@ import java.util.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class StoreService extends EntityServiceImpl<Store, StoreView> {
+public class StoreService extends EntityService<Store, StoreView> {
 
 	@Autowired
-	public StoreService(EntityServiceDependencies services,
+	public StoreService(SecurityService securityService,
 						StoreRepository repository,
 						StoreValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, Store::new);
 	}
 
 	public Page<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west, List<StoreType> storeTypes, Pageable page) {
@@ -72,7 +72,7 @@ public class StoreService extends EntityServiceImpl<Store, StoreView> {
 
 	@Transactional
 	public Store createNewStoreForSite(Site site) {
-		Store store = this.createNewEntity();
+		Store store = new Store();
 		store.setSite(site);
 		store.setStoreType(StoreType.ACTIVE);
 		return store;
@@ -115,11 +115,6 @@ public class StoreService extends EntityServiceImpl<Store, StoreView> {
 		Store store = findOne(storeId);
 		store.setBanner(banner);
 		return store;
-	}
-
-	@Override
-	protected Store createNewEntity() {
-		return new Store();
 	}
 
 	@Override

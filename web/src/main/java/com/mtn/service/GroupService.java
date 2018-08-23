@@ -15,13 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class GroupService extends EntityServiceImpl<Group, GroupView> {
+public class GroupService extends EntityService<Group, GroupView> {
+
+    private final UserProfileService userProfileService;
 
     @Autowired
-    public GroupService(EntityServiceDependencies services,
+    public GroupService(SecurityService securityService,
                         GroupRepository repository,
-                        GroupValidator validator) {
-        super(services, repository, validator);
+                        GroupValidator validator, UserProfileService userProfileService) {
+        super(securityService, repository, validator, Group::new);
+        this.userProfileService = userProfileService;
     }
 
     public Page<Group> findAllByNameUsingSpecs(String name, Pageable page) {
@@ -49,11 +52,6 @@ public class GroupService extends EntityServiceImpl<Group, GroupView> {
         group.getMembers().add(member);
 
         return group;
-    }
-
-    @Override
-    protected Group createNewEntity() {
-        return new Group();
     }
 
     @Override

@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class BannerService extends EntityServiceImpl<Banner, BannerView> {
+public class BannerService extends EntityService<Banner, BannerView> {
 
 	@Autowired
-	public BannerService(EntityServiceDependencies services,
-						 BannerRepository bannerRepository,
-						 BannerValidator bannerValidator) {
-		super(services, bannerRepository, bannerValidator);
+	public BannerService(SecurityService securityService,
+						 BannerRepository repository,
+						 BannerValidator validator) {
+		super(securityService, repository, validator, Banner::new);
 	}
 
 	public Page<Banner> findAllByQueryUsingSpecs(Pageable page, String query) {
@@ -30,11 +30,6 @@ public class BannerService extends EntityServiceImpl<Banner, BannerView> {
 			spec = spec.and(BannerSpecifications.bannerNameLike("%" + query + "%"));
 		}
 		return this.repository.findAll(spec, page);
-	}
-
-	@Override
-	public Banner createNewEntity() {
-		return new Banner();
 	}
 
 	@Override

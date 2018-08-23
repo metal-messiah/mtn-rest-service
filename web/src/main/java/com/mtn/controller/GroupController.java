@@ -17,33 +17,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @RestController
 @RequestMapping("/api/group")
-public class GroupController extends CrudControllerImpl<Group> {
+public class GroupController extends CrudController<Group, GroupView> {
+
+    private final UserProfileService userProfileService;
 
     @Autowired
-    private GroupService groupService;
-    @Autowired
-    private UserProfileService userProfileService;
+    public GroupController(GroupService groupService, UserProfileService userProfileService) {
+        super(groupService, GroupView::new);
+        this.userProfileService = userProfileService;
+    }
 
     @RequestMapping(value = "/{groupId}/member/{userId}", method = RequestMethod.POST)
     public ResponseEntity addOneMemberToGroup(@PathVariable("groupId") Integer groupId, @PathVariable("userId") Integer userId) {
-        Group domainModel = getEntityService().addOneMemberToGroup(groupId, userId);
-        return ResponseEntity.ok(getViewFromModel(domainModel));
+        Group domainModel = ((GroupService) this.entityService).addOneMemberToGroup(groupId, userId);
+        return ResponseEntity.ok(new GroupView(domainModel));
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAllByDisplayName(@RequestParam(value = "displayName", required = false) String displayName, Pageable page) {
         Page<Group> domainModels;
         if (StringUtils.isNotBlank(displayName)) {
-            domainModels = getEntityService().findAllByNameUsingSpecs(displayName, page);
+            domainModels = ((GroupService) this.entityService).findAllByNameUsingSpecs(displayName, page);
         } else {
-            domainModels = getEntityService().findAllUsingSpecs(page);
+            domainModels = this.entityService.findAllUsingSpecs(page);
         }
-        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+        return ResponseEntity.ok(domainModels.map(SimpleGroupView::new));
     }
 
     @RequestMapping(value = "/{id}/member", method = RequestMethod.GET)
@@ -54,22 +54,8 @@ public class GroupController extends CrudControllerImpl<Group> {
 
     @RequestMapping(value = "/{groupId}/member/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity removeOneMemberFromGroup(@PathVariable("groupId") Integer groupId, @PathVariable("userId") Integer userId) {
-        Group domainModel = this.getEntityService().removeOneMemberFromGroup(groupId, userId);
-        return ResponseEntity.ok(this.getViewFromModel(domainModel));
+        Group domainModel = ((GroupService) this.entityService).removeOneMemberFromGroup(groupId, userId);
+        return ResponseEntity.ok(new GroupView(domainModel));
     }
 
-    @Override
-    public GroupService getEntityService() {
-        return groupService;
-    }
-
-    @Override
-    public Object getViewFromModel(Group model) {
-        return new GroupView(model);
-    }
-
-    @Override
-    public Object getSimpleViewFromModel(Group model) {
-        return new SimpleGroupView(model);
-    }
 }

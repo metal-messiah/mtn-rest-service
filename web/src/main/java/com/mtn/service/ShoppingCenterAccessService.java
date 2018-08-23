@@ -16,13 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class ShoppingCenterAccessService extends EntityServiceImpl<ShoppingCenterAccess, ShoppingCenterAccessView> {
+public class ShoppingCenterAccessService extends EntityService<ShoppingCenterAccess, ShoppingCenterAccessView> {
 
 	@Autowired
-	public ShoppingCenterAccessService(EntityServiceDependencies services,
+	public ShoppingCenterAccessService(SecurityService securityService,
 									   ShoppingCenterAccessRepository repository,
 									   ShoppingCenterAccessValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, ShoppingCenterAccess::new);
 	}
 
 	public List<ShoppingCenterAccess> findAllBySurveyIdUsingSpecs(Integer id) {
@@ -44,11 +44,6 @@ public class ShoppingCenterAccessService extends EntityServiceImpl<ShoppingCente
 		access.setUpdatedBy(currentUser);
 
 		return access;
-	}
-
-	@Override
-	protected ShoppingCenterAccess createNewEntity() {
-		return new ShoppingCenterAccess();
 	}
 
 	@Override

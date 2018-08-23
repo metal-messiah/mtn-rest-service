@@ -16,13 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class RoleService extends EntityServiceImpl<Role, RoleView> {
+public class RoleService extends EntityService<Role, RoleView> {
 
 	@Autowired
-	public RoleService(EntityServiceDependencies services,
+	public RoleService(SecurityService securityService,
 					   RoleRepository repository,
 					   RoleValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, Role::new);
 	}
 
 	public Page<Role> findAllByNameUsingSpecs(String name, Pageable page) {
@@ -66,11 +66,6 @@ public class RoleService extends EntityServiceImpl<Role, RoleView> {
 		role.setUpdatedBy(securityService.getCurrentUser());
 
 		return role;
-	}
-
-	@Override
-	protected Role createNewEntity() {
-		return new Role();
 	}
 
 	@Override

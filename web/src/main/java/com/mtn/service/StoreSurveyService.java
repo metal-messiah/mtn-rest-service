@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
-public class StoreSurveyService extends StoreChildServiceImpl<StoreSurvey, StoreSurveyView> {
+public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurveyView> {
 
 	@Autowired
-	public StoreSurveyService(EntityServiceDependencies services,
+	public StoreSurveyService(SecurityService securityService,
 							  StoreSurveyRepository repository,
 							  StoreSurveyValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, StoreSurvey::new);
 	}
 
 	@Transactional
@@ -53,11 +53,6 @@ public class StoreSurveyService extends StoreChildServiceImpl<StoreSurvey, Store
 		survey.setStore(store);
 
 		return survey;
-	}
-
-	@Override
-	protected StoreSurvey createNewEntity() {
-		return new StoreSurvey();
 	}
 
 	@Override

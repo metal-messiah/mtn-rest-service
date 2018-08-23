@@ -15,13 +15,13 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
 @Service
-public class ClientAccessKeyService extends EntityServiceImpl<ClientAccessKey, ClientAccessKeyView> {
+public class ClientAccessKeyService extends EntityService<ClientAccessKey, ClientAccessKeyView> {
 
 	@Autowired
-	public ClientAccessKeyService(EntityServiceDependencies services,
+	public ClientAccessKeyService(SecurityService securityService,
 								  ClientAccessKeyRepository repository,
 								  ClientAccessKeyValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, ClientAccessKey::new);
 	}
 
 	@Transactional
@@ -54,11 +54,6 @@ public class ClientAccessKeyService extends EntityServiceImpl<ClientAccessKey, C
 	@Override
 	public void handleAssociationsOnDeletion(ClientAccessKey existing) {
 		// No Associations
-	}
-
-	@Override
-	protected ClientAccessKey createNewEntity() {
-		return new ClientAccessKey();
 	}
 
 	@Override

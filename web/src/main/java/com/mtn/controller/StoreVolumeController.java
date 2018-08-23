@@ -8,23 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/store-volume")
-public class StoreVolumeController extends CrudControllerImpl<StoreVolume> {
+public class StoreVolumeController extends CrudController<StoreVolume, StoreVolumeView> {
 
     @Autowired
-    private StoreVolumeService storeVolumeService;
-
-    @Override
-    public StoreVolumeService getEntityService() {
-        return storeVolumeService;
-    }
-
-    @Override
-    public Object getViewFromModel(StoreVolume model) {
-        return new StoreVolumeView(model);
-    }
-
-    @Override
-    public Object getSimpleViewFromModel(StoreVolume model) {
-        return getViewFromModel(model);
+    public StoreVolumeController(StoreVolumeService storeVolumeService) {
+        super(storeVolumeService, StoreVolumeView::new);
     }
 }

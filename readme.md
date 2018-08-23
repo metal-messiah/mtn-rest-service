@@ -96,6 +96,11 @@ keeps domain models clean of any changes that would have been done to accommodat
 separation of concerns, puts all conversion logic into a single consistent framework, and again, keeps the domain 
 models nice and clean.
 
+IMPORTANT
+
+* Controllers shall only return Views (wrapped in ResponseEntities). They do not return full entities
+* Controllers shall only receive Views. Do not tread views sent from clients as full entities, otherwise you risk overwriting data the user didn't intend to overwrite.
+
 ## Query Specifications (Dynamic WHERE Clause)
 Dynamic WHERE clauses can be constructed using Spring Data Specifications. A Specification creates a structure of 
 Predicates that are translated into the WHERE clause of a query, and is used with the default JpaRepository findOne, 

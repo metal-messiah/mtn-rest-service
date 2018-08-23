@@ -2,11 +2,9 @@ package com.mtn.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
 import com.mtn.model.utils.StoreUtil;
-import com.mtn.model.view.PlannedGroceryUpdatable;
-import com.mtn.model.view.ShoppingCenterView;
+import com.mtn.model.view.*;
 import com.mtn.util.MtnLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,20 +53,6 @@ public class PlannedGroceryService {
 		this.securityService = securityService;
 	}
 
-	private ResponseEntity<String> getAccessToken() {
-		UriComponents keyUri = UriComponentsBuilder.newInstance()
-				.scheme("https")
-				.host("www.arcgis.com")
-				.path("/sharing/rest/oauth2/token/")
-				.queryParam("client_id", this.pgClientId)
-				.queryParam("client_secret", this.pgClientSecret)
-				.queryParam("grant_type", "client_credentials")
-				.queryParam("expiration", "20160")
-				.build();
-
-		return new RestTemplate().getForEntity(keyUri.toUriString(), String.class);
-	}
-
 	public ResponseEntity<String> getFeatureByObjectId(String objectId) throws IOException {
 		ResponseEntity<String> token = this.getAccessToken();
 		JsonNode keyRoot = new ObjectMapper().readTree(token.getBody());
@@ -88,32 +72,6 @@ public class PlannedGroceryService {
 				.build();
 
 		return new RestTemplate().getForEntity(featureQueryUri.toUriString(), String.class);
-	}
-
-	private JsonNode getFeaturesEditedSince(LocalDateTime since) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
-
-		ResponseEntity<String> token = this.getAccessToken();
-		JsonNode keyRoot = mapper.readTree(token.getBody());
-		JsonNode accessTokenField = keyRoot.path("access_token");
-		String accessToken = accessTokenField.textValue();
-
-		String maxSourceEditedDateString = since.toString().replace('T', ' ');
-
-		UriComponents featureQueryUri = UriComponentsBuilder.newInstance()
-				.scheme("https")
-				.host("services1.arcgis.com")
-				.path("/aUqH6d4IMis39TBB/arcgis/rest/services/BD_FUTURE_RETAIL/FeatureServer/0/query")
-				.queryParam("where", String.format("EditDate>='%s'", maxSourceEditedDateString))
-				.queryParam("outFields", "*")
-				.queryParam("f", "json")
-				.queryParam("token", accessToken)
-				.queryParam("outSR", "4326")
-				.build();
-
-		ResponseEntity<String> response = new RestTemplate().getForEntity(featureQueryUri.toUriString(), String.class);
-		JsonNode root = mapper.readTree(response.getBody());
-		return root.get("features");
 	}
 
 	public void addAndUpdateSourcesFromPlannedGrocery(UserProfile validator) {
@@ -173,6 +131,47 @@ public class PlannedGroceryService {
 		return store;
 	}
 
+
+	private ResponseEntity<String> getAccessToken() {
+		UriComponents keyUri = UriComponentsBuilder.newInstance()
+				.scheme("https")
+				.host("www.arcgis.com")
+				.path("/sharing/rest/oauth2/token/")
+				.queryParam("client_id", this.pgClientId)
+				.queryParam("client_secret", this.pgClientSecret)
+				.queryParam("grant_type", "client_credentials")
+				.queryParam("expiration", "20160")
+				.build();
+
+		return new RestTemplate().getForEntity(keyUri.toUriString(), String.class);
+	}
+
+	private JsonNode getFeaturesEditedSince(LocalDateTime since) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		ResponseEntity<String> token = this.getAccessToken();
+		JsonNode keyRoot = mapper.readTree(token.getBody());
+		JsonNode accessTokenField = keyRoot.path("access_token");
+		String accessToken = accessTokenField.textValue();
+
+		String maxSourceEditedDateString = since.toString().replace('T', ' ');
+
+		UriComponents featureQueryUri = UriComponentsBuilder.newInstance()
+				.scheme("https")
+				.host("services1.arcgis.com")
+				.path("/aUqH6d4IMis39TBB/arcgis/rest/services/BD_FUTURE_RETAIL/FeatureServer/0/query")
+				.queryParam("where", String.format("EditDate>='%s'", maxSourceEditedDateString))
+				.queryParam("outFields", "*")
+				.queryParam("f", "json")
+				.queryParam("token", accessToken)
+				.queryParam("outSR", "4326")
+				.build();
+
+		ResponseEntity<String> response = new RestTemplate().getForEntity(featureQueryUri.toUriString(), String.class);
+		JsonNode root = mapper.readTree(response.getBody());
+		return root.get("features");
+	}
+
 	@Transactional
 	protected Site createNewSiteInShoppingCenter(ShoppingCenter sc, Float latitude, Float longitude) {
 		Site site = new Site();
@@ -183,13 +182,13 @@ public class PlannedGroceryService {
 	}
 
 	@Transactional
-	protected ShoppingCenter updateShoppingCenterFromUpdatable(PlannedGroceryUpdatable updatable, ShoppingCenter shoppingCenter) {
+	protected void updateShoppingCenterFromUpdatable(PlannedGroceryUpdatable updatable, ShoppingCenter shoppingCenter) {
 		shoppingCenter.setName(updatable.getShoppingCenterName());
-		return shoppingCenterService.updateOne(new ShoppingCenterView(shoppingCenter));
+		shoppingCenterService.updateOne(new ShoppingCenterView(shoppingCenter));
 	}
 
 	@Transactional
-	protected Site updateSiteFromUpdatable(PlannedGroceryUpdatable updatable, Site site) {
+	protected void updateSiteFromUpdatable(PlannedGroceryUpdatable updatable, Site site) {
 		site.setAddress1(updatable.getAddress());
 		site.setQuad(updatable.getQuad());
 		site.setIntersectionStreetPrimary(updatable.getIntersectionStreetPrimary());
@@ -200,11 +199,11 @@ public class PlannedGroceryService {
 		site.setPostalCode(updatable.getPostalCode());
 		site.setLatitude(updatable.getLatitude());
 		site.setLongitude(updatable.getLongitude());
-		return siteService.updateOne(site.getId(), site);
+		siteService.updateOne(new SiteView(site));
 	}
 
 	@Transactional
-	protected Store updateStoreFromUpdatable(PlannedGroceryUpdatable updatable, Store store) {
+	protected void updateStoreFromUpdatable(PlannedGroceryUpdatable updatable, Store store) {
 		store.setStoreName(updatable.getStoreName());
 		store.setDateOpened(updatable.getDateOpened());
 		if (updatable.getStoreStatuses() != null) {
@@ -213,7 +212,7 @@ public class PlannedGroceryService {
 				newStoreStatus.setStore(store);
 				newStoreStatus.setStatus(status.getStatus());
 				newStoreStatus.setStatusStartDate(status.getStatusStartDate());
-				storeStatusService.addOne(newStoreStatus);
+				storeStatusService.addOne(new StoreStatusView(newStoreStatus));
 			});
 		}
 		StoreSurvey storeSurvey = StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now()).orElseGet(() -> {
@@ -224,11 +223,11 @@ public class PlannedGroceryService {
 		});
 		storeSurvey.setAreaTotal(updatable.getAreaTotal());
 		storeSurvey.setUpdatedBy(securityService.getCurrentUser());
-		return storeService.updateOne(store.getId(), store);
+		storeService.updateOne(new StoreView(store));
 	}
 
-	private void processFeatureNode(JsonNode featureNode, UserProfile validatingUser) {
-
+	@Transactional
+	protected void processFeatureNode(JsonNode featureNode, UserProfile validatingUser) {
 		// Parse Node into values
 		JsonNode attributesNode = featureNode.path("attributes");
 
@@ -264,13 +263,14 @@ public class PlannedGroceryService {
 		}
 
 		if (source.getId() != null) {
-			this.storeSourceService.updateOne(source.getId(), source);
+			this.storeSourceService.updateOne(new StoreSourceView(source));
 		} else {
-			this.storeSourceService.addOne(source);
+			this.storeSourceService.addOne(new StoreSourceView(source));
 		}
 	}
 
-	private boolean updateDatabaseRecords(JsonNode attributesNode, StoreSource source) {
+	@Transactional
+	protected boolean updateDatabaseRecords(JsonNode attributesNode, StoreSource source) {
 		Store store = source.getStore();
 		if (store == null) {
 			return false; // Not yet matched
@@ -280,7 +280,7 @@ public class PlannedGroceryService {
 			throw new IllegalStateException("Store must have a site!");
 		}
 
-		this.updateSite(site, attributesNode);
+		this.updateSiteFromPGFeature(site, attributesNode);
 		this.updateShoppingCenter(site.getShoppingCenter(), attributesNode);
 
 		// If the stores are mismatched, or if store status is messed up, it won't be marked as validated
@@ -296,7 +296,8 @@ public class PlannedGroceryService {
 		}
 	}
 
-	private Store updateStoreFromJson(Store store, JsonNode attributesNode, LocalDateTime sourceEditedDate) throws Exception {
+	@Transactional
+	protected void updateStoreFromJson(Store store, JsonNode attributesNode, LocalDateTime sourceEditedDate) throws Exception {
 		boolean storeEdited = false;
 		// TODO Get OPENDATEAPPROX and translate, use where OPENDATE is null
 		if (attributesNode.hasNonNull("OPENDATE") && store.getDateOpened() == null) {
@@ -310,7 +311,7 @@ public class PlannedGroceryService {
 				if (storeSurvey.getAreaTotal() == null) {
 					Integer siteSF = attributesNode.get("SIZESF").intValue();
 					storeSurvey.setAreaTotal(siteSF);
-					storeSurveyService.updateOne(storeSurvey.getId(), storeSurvey);
+					storeSurveyService.updateOne(new StoreSurveyView(storeSurvey));
 				}
 			});
 		}
@@ -335,13 +336,12 @@ public class PlannedGroceryService {
 			}
 		}
 		if (storeEdited) {
-			storeService.updateOne(store.getId(), store);
+			storeService.updateOne(new StoreView(store));
 		}
-
-		return store;
 	}
 
-	private Site updateSite(Site site, JsonNode attributesNode) {
+	@Transactional
+	protected void updateSiteFromPGFeature(Site site, JsonNode attributesNode) {
 		boolean siteEdited = false;
 		if (attributesNode.hasNonNull("DESCLOCATION") && site.getAddress1() == null) {
 			String address = attributesNode.get("DESCLOCATION").textValue();
@@ -370,35 +370,33 @@ public class PlannedGroceryService {
 		}
 
 		if (siteEdited) {
-			siteService.updateOne(site.getId(), site);
+			siteService.updateOne(new SiteView(site));
 		}
-		return site;
 	}
 
-	private ShoppingCenter updateShoppingCenter(ShoppingCenter shoppingCenter, JsonNode attributesNode) {
+	@Transactional
+	protected void updateShoppingCenter(ShoppingCenter shoppingCenter, JsonNode attributesNode) {
 		if (attributesNode.hasNonNull("NAMECENTER") && shoppingCenter != null && shoppingCenter.getName() == null) {
 			String nameCenter = attributesNode.get("NAMECENTER").textValue();
 			shoppingCenter.setName(nameCenter);
-			shoppingCenterService.updateOne(shoppingCenter.getId(), shoppingCenter);
+			shoppingCenterService.updateOne(new ShoppingCenterView(shoppingCenter));
 		}
-		return shoppingCenter;
 	}
 
+	@Transactional
+	protected void createNewStatusFromSource(Store store, String sourceStatus, LocalDateTime statusStartDate) {
+		StoreStatus newStatus = new StoreStatus();
+		newStatus.setStore(store);
+		newStatus.setStatus(sourceStatus);
+		newStatus.setStatusStartDate(statusStartDate);
+		storeStatusService.addOne(new StoreStatusView(newStatus));
+	}
 
 	private LocalDateTime epochMillisecondsToLocalDateTime(Long epochMilliseconds) {
 		if (epochMilliseconds == null) {
 			return null;
 		}
 		return LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMilliseconds), ZoneId.systemDefault());
-	}
-
-
-	private StoreStatus createNewStatusFromSource(Store store, String sourceStatus, LocalDateTime statusStartDate) {
-		StoreStatus newStatus = new StoreStatus();
-		newStatus.setStore(store);
-		newStatus.setStatus(sourceStatus);
-		newStatus.setStatusStartDate(statusStartDate);
-		return storeStatusService.addOne(newStatus);
 	}
 
 	private Integer getStatusRank(String status) {

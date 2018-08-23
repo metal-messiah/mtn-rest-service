@@ -3,7 +3,6 @@ package com.mtn.controller;
 import com.mtn.model.domain.ShoppingCenterAccess;
 import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.ShoppingCenterTenant;
-import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
 import com.mtn.model.view.ShoppingCenterAccessView;
 import com.mtn.model.view.ShoppingCenterSurveyView;
 import com.mtn.model.view.ShoppingCenterTenantView;
@@ -15,23 +14,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 5/4/2017.
- */
 @RestController
 @RequestMapping("/api/shopping-center-survey")
-public class ShoppingCenterSurveyController extends CrudControllerImpl<ShoppingCenterSurvey> {
+public class ShoppingCenterSurveyController extends CrudController<ShoppingCenterSurvey, ShoppingCenterSurveyView> {
+
+    private final ShoppingCenterAccessService accessService;
+    private final ShoppingCenterTenantService tenantService;
 
     @Autowired
-    private ShoppingCenterAccessService accessService;
-    @Autowired
-    private ShoppingCenterSurveyService shoppingCenterSurveyService;
-    @Autowired
-    private ShoppingCenterTenantService tenantService;
+    public ShoppingCenterSurveyController(ShoppingCenterAccessService accessService, ShoppingCenterSurveyService shoppingCenterSurveyService, ShoppingCenterTenantService tenantService) {
+        super(shoppingCenterSurveyService, ShoppingCenterSurveyView::new);
+        this.accessService = accessService;
+        this.tenantService = tenantService;
+    }
 
     @RequestMapping(path = "/{id}/accesses", method = RequestMethod.POST)
     public ResponseEntity createAccessForSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterAccessView request) {
-        ShoppingCenterSurvey survey = shoppingCenterSurveyService.findOneUsingSpecs(surveyId);
+        ShoppingCenterSurvey survey = this.entityService.findOneUsingSpecs(surveyId);
         ShoppingCenterAccess domainModel = accessService.addOne(request, survey);
         return ResponseEntity.ok(new ShoppingCenterAccessView(domainModel));
     }
@@ -44,7 +43,7 @@ public class ShoppingCenterSurveyController extends CrudControllerImpl<ShoppingC
 
     @RequestMapping(path = "/{id}/tenants", method = RequestMethod.POST)
     public ResponseEntity createTenantsForSurvey(@PathVariable("id") Integer surveyId, @RequestBody List<ShoppingCenterTenantView> requestTenants) {
-        ShoppingCenterSurvey survey = shoppingCenterSurveyService.findOneUsingSpecs(surveyId);
+        ShoppingCenterSurvey survey = this.entityService.findOneUsingSpecs(surveyId);
         List<ShoppingCenterTenant> domainModels = tenantService.addMultiple(requestTenants, survey);
         return ResponseEntity.ok(domainModels.stream()
                 .map(ShoppingCenterTenantView::new)
@@ -57,18 +56,4 @@ public class ShoppingCenterSurveyController extends CrudControllerImpl<ShoppingC
         return ResponseEntity.ok(domainModels.stream().map(ShoppingCenterTenantView::new).collect(Collectors.toList()));
     }
 
-    @Override
-    public ShoppingCenterSurveyService getEntityService() {
-        return shoppingCenterSurveyService;
-    }
-
-    @Override
-    public Object getViewFromModel(ShoppingCenterSurvey model) {
-        return new ShoppingCenterSurveyView(model);
-    }
-
-    @Override
-    public Object getSimpleViewFromModel(ShoppingCenterSurvey model) {
-        return new SimpleShoppingCenterSurveyView(model);
-    }
 }

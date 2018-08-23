@@ -3,8 +3,11 @@ package com.mtn.service;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.model.domain.Role;
-import com.mtn.repository.EntityRepository;
+import com.mtn.model.view.UserProfileView;
+import com.mtn.repository.GroupRepository;
+import com.mtn.repository.RoleRepository;
 import com.mtn.repository.UserProfileRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
 import com.mtn.repository.specification.UserProfileSpecifications;
 import com.mtn.validators.UserProfileValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,76 +20,51 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-import static com.mtn.repository.specification.UserProfileSpecifications.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
-/**
- * Created by Allen on 4/21/2017.
- */
 @Service
-public class UserProfileService extends EntityServiceImpl<UserProfile> {
+public class UserProfileService extends EntityService<UserProfile, UserProfileView> {
+
+	private final GroupRepository groupRepository;
+	private final RoleRepository roleRepository;
 
 	@Autowired
-	private GroupService groupService;
-	@Autowired
-	private RoleService roleService;
-	@Autowired
-	private UserProfileRepository userProfileRepository;
-	@Autowired
-	private UserProfileValidator userProfileValidator;
-
-	@Override
-	public void handleAssociationsOnCreation(UserProfile request) {
-		request.setEmail(request.getEmail().toLowerCase());
-
-		if (request.getRole() != null) {
-			Role role = roleService.findOne(request.getRole().getId());
-			if (role != null) {
-				request.setRole(role);
-			}
-		}
-
-		if (request.getGroup() != null) {
-			Group group = groupService.findOne(request.getGroup().getId());
-			if (group != null) {
-				request.setGroup(group);
-			}
-		}
+	public UserProfileService(SecurityService securityService,
+							  UserProfileRepository repository,
+							  UserProfileValidator validator,
+							  GroupRepository groupRepository,
+							  RoleRepository roleRepository) {
+		super(securityService, repository, validator, UserProfile::new);
+		this.groupRepository = groupRepository;
+		this.roleRepository = roleRepository;
 	}
 
-	@Override
 	public List<UserProfile> findAllByGroupIdUsingSpecs(Integer groupId) {
-		return userProfileRepository.findAll(
-				where(groupIdEquals(groupId))
-						.and(isNotSystemAdministrator())
-						.and(isNotDeleted())
+		return this.repository.findAll(
+				where(UserProfileSpecifications.groupIdEquals(groupId))
+						.and(UserProfileSpecifications.isNotSystemAdministrator())
+						.and(UserProfileSpecifications.isNotDeleted())
 		);
 	}
 
-	@Override
 	public List<UserProfile> findAllByRoleIdUsingSpecs(Integer roleId) {
-		return userProfileRepository.findAll(
-				where(roleIdEquals(roleId))
-						.and(isNotSystemAdministrator())
-						.and(isNotDeleted())
+		return this.repository.findAll(
+				where(UserProfileSpecifications.roleIdEquals(roleId))
+						.and(UserProfileSpecifications.isNotSystemAdministrator())
+						.and(UserProfileSpecifications.isNotDeleted())
 		);
 	}
 
 	@Override
 	public Page<UserProfile> findAllUsingSpecs(Pageable page) {
-		Specification<UserProfile> spec = where(isNotSystemAdministrator()).and(isNotDeleted());
-		return userProfileRepository.findAll(spec, page);
-	}
-
-	@Override
-	public List<UserProfile> findAllUsingSpecs() {
-		Specification<UserProfile> spec = where(isNotSystemAdministrator()).and(isNotDeleted());
-		return userProfileRepository.findAll(spec);
+		Specification<UserProfile> spec = where(UserProfileSpecifications.isNotSystemAdministrator())
+				.and(UserProfileSpecifications.isNotDeleted());
+		return this.repository.findAll(spec, page);
 	}
 
 	@Override
 	public UserProfile findOneUsingSpecs(Integer id) {
-		UserProfile userProfile =  userProfileRepository.findOne(
+		UserProfile userProfile =  this.repository.findOne(
 				where(UserProfileSpecifications.isNotSystemAdministrator())
 						.and(UserProfileSpecifications.idEquals(id))
 						.and(UserProfileSpecifications.isNotDeleted())
@@ -98,19 +76,41 @@ public class UserProfileService extends EntityServiceImpl<UserProfile> {
 	}
 
 	@Override
+	public void handleAssociationsOnDeletion(UserProfile existing) {
+		existing.setRole(null);
+		existing.setGroup(null);
+	}
+
+	@Override
+	protected void setEntityAttributesFromRequest(UserProfile userProfile, UserProfileView request) {
+		userProfile.setEmail(request.getEmail().toLowerCase());
+		userProfile.setFirstName(request.getFirstName());
+		userProfile.setLastName(request.getLastName());
+
+		Group group = null;
+		if (request.getGroup() != null) {
+			group = groupRepository.findOne(
+					where(AuditingEntitySpecifications.<Group>idEquals(request.getGroup().getId()))
+							.and(AuditingEntitySpecifications.isNotDeleted()));
+		}
+		userProfile.setGroup(group);
+
+		Role role = null;
+		if (request.getRole() != null) {
+			role = roleRepository.findOne(
+					where(AuditingEntitySpecifications.<Role>idEquals(request.getRole().getId()))
+							.and(AuditingEntitySpecifications.isNotDeleted()));
+		}
+		userProfile.setRole(role);
+	}
+
 	public UserProfile findOneByEmailUsingSpecs(String email) {
-		return userProfileRepository.findOne(Specifications.where(UserProfileSpecifications.emailEqualsIgnoreCase(email))
+		return this.repository.findOne(Specifications.where(UserProfileSpecifications.emailEqualsIgnoreCase(email))
 				.and(UserProfileSpecifications.isNotDeleted()));
 	}
 
-	@Override
-	public UserProfile findOneByEmail(String email) {
-		return userProfileRepository.findOne(Specifications.where(UserProfileSpecifications.emailEqualsIgnoreCase(email)));
-	}
-
-	@Override
 	public Page<UserProfile> query(String q, Pageable page) {
-		return userProfileRepository.findAll(
+		return this.repository.findAll(
 				where(
 						where(UserProfileSpecifications.emailContains(q))
 								.or(UserProfileSpecifications.firstNameContains(q))
@@ -119,27 +119,6 @@ public class UserProfileService extends EntityServiceImpl<UserProfile> {
 						.and(UserProfileSpecifications.isNotDeleted())
 				, page
 		);
-	}
-
-	@Override
-	public UserProfile updateEntityAttributes(UserProfile existing, UserProfile request) {
-		existing.setEmail(request.getEmail().toLowerCase());
-		existing.setFirstName(request.getFirstName());
-		existing.setLastName(request.getLastName());
-
-		Group group = null;
-		if (request.getGroup() != null) {
-			group = groupService.findOneUsingSpecs(request.getGroup().getId());
-		}
-		existing.setGroup(group);
-
-		Role role = null;
-		if (request.getRole() != null) {
-			role = roleService.findOneUsingSpecs(request.getRole().getId());
-		}
-		existing.setRole(role);
-
-		return existing;
 	}
 
 }

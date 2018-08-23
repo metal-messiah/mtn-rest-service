@@ -1,6 +1,9 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.domain.ShoppingCenterCasing;
+import com.mtn.model.domain.ShoppingCenterSurvey;
+import com.mtn.model.domain.Site;
 import com.mtn.model.simpleView.SimpleShoppingCenterCasingView;
 import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
 import com.mtn.model.simpleView.SimpleShoppingCenterView;
@@ -17,21 +20,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 4/23/2017.
- */
 @RestController
 @RequestMapping("/api/shopping-center")
-public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter> {
+public class ShoppingCenterController extends CrudController<ShoppingCenter, ShoppingCenterView> {
+
+    private final SiteService siteService;
+    private final ShoppingCenterSurveyService surveyService;
+    private final ShoppingCenterCasingService casingService;
 
     @Autowired
-    private ShoppingCenterService shoppingCenterService;
-    @Autowired
-    private SiteService siteService;
-    @Autowired
-    private ShoppingCenterSurveyService surveyService;
-    @Autowired
-    private ShoppingCenterCasingService casingService;
+    public ShoppingCenterController(ShoppingCenterService shoppingCenterService, SiteService siteService, ShoppingCenterSurveyService surveyService, ShoppingCenterCasingService casingService) {
+        super(shoppingCenterService, ShoppingCenterView::new);
+        this.siteService = siteService;
+        this.surveyService = surveyService;
+        this.casingService = casingService;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(
@@ -42,16 +45,16 @@ public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter>
     ) {
         Page<ShoppingCenter> domainModels;
         if (StringUtils.isNotBlank(q)) {
-            domainModels = shoppingCenterService.findAllByNameOrOwnerUsingSpecs(q, page);
+            domainModels = ((ShoppingCenterService) this.entityService).findAllByNameOrOwnerUsingSpecs(q, page);
         } else if (StringUtils.isNotBlank(name)) {
-            domainModels = shoppingCenterService.findAllByNameUsingSpecs(name, page);
+            domainModels = ((ShoppingCenterService) this.entityService).findAllByNameUsingSpecs(name, page);
         } else if (StringUtils.isNotBlank(owner)) {
-            domainModels = shoppingCenterService.findAllByOwnerUsingSpecs(owner, page);
+            domainModels = ((ShoppingCenterService) this.entityService).findAllByOwnerUsingSpecs(owner, page);
         } else {
-            domainModels = shoppingCenterService.findAllUsingSpecs(page);
+            domainModels = this.entityService.findAllUsingSpecs(page);
         }
 
-        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+        return ResponseEntity.ok(domainModels.map(SimpleShoppingCenterView::new));
     }
 
     @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.GET)
@@ -72,18 +75,4 @@ public class ShoppingCenterController extends CrudControllerImpl<ShoppingCenter>
         return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
     }
 
-    @Override
-    public ShoppingCenterService getEntityService() {
-        return shoppingCenterService;
-    }
-
-    @Override
-    public Object getViewFromModel(ShoppingCenter model) {
-        return new ShoppingCenterView(model);
-    }
-
-    @Override
-    public Object getSimpleViewFromModel(ShoppingCenter model) {
-        return new SimpleShoppingCenterView(model);
-    }
 }

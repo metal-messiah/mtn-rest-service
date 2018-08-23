@@ -16,20 +16,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StoreCasingService extends StoreChildServiceImpl<StoreCasing, StoreCasingView> {
+public class StoreCasingService extends StoreChildService<StoreCasing, StoreCasingView> {
 
 	private final StoreStatusService storeStatusService;
 	private final StoreSurveyService storeSurveyService;
 	private final ShoppingCenterCasingService shoppingCenterCasingService;
 
 	@Autowired
-	public StoreCasingService(EntityServiceDependencies services,
+	public StoreCasingService(SecurityService securityService,
 							  StoreCasingRepository repository,
 							  StoreCasingValidator validator,
 							  StoreStatusService storeStatusService,
 							  StoreSurveyService storeSurveyService,
 							  ShoppingCenterCasingService shoppingCenterCasingService) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, StoreCasing::new);
 		this.storeStatusService = storeStatusService;
 		this.storeSurveyService = storeSurveyService;
 		this.shoppingCenterCasingService = shoppingCenterCasingService;
@@ -88,11 +88,6 @@ public class StoreCasingService extends StoreChildServiceImpl<StoreCasing, Store
 		StoreCasing casing = this.findOne(storeCasingId);
 		casing.setStoreVolume(null);
 		return casing;
-	}
-
-	@Override
-	protected StoreCasing createNewEntity() {
-		return new StoreCasing();
 	}
 
 	@Override

@@ -1,29 +1,29 @@
 package com.mtn.service;
 
 import com.mtn.model.domain.UserProfile;
-import com.mtn.security.MtnAuthentication;
+import com.mtn.repository.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by Allen on 5/11/2017.
- */
 @Service
 public class SecurityService {
 
+	private final UserProfileRepository userProfileRepository;
+
 	@Autowired
-	private UserProfileService userProfileService;
+	public SecurityService(UserProfileRepository userProfileRepository) {
+		this.userProfileRepository = userProfileRepository;
+	}
 
 	public UserProfile getCurrentUser() {
 		Authentication currentAuthentication = getCurrentAuthentication();
 		if (currentAuthentication != null && !currentAuthentication.getPrincipal().equals("anonymousUser")) {
 			return (UserProfile) currentAuthentication.getPrincipal();
 		}
-		return userProfileService.findOne(1);
+		return userProfileRepository.findOne(1);
 	}
 
 	private Authentication getCurrentAuthentication() {

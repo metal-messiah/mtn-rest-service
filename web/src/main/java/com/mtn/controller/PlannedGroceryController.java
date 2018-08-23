@@ -14,10 +14,14 @@ import java.io.IOException;
 @RequestMapping("/api/planned-grocery")
 public class PlannedGroceryController {
 
+	private final PlannedGroceryService plannedGroceryService;
+	private final SecurityService securityService;
+
 	@Autowired
-	private PlannedGroceryService plannedGroceryService;
-	@Autowired
-	private SecurityService securityService;
+	public PlannedGroceryController(PlannedGroceryService plannedGroceryService, SecurityService securityService) {
+		this.plannedGroceryService = plannedGroceryService;
+		this.securityService = securityService;
+	}
 
 	// Triggers a pull from planned grocery (also scheduled to run nightly)
 	@PostMapping

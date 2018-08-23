@@ -24,11 +24,14 @@ import java.util.List;
 @RequestMapping("/api/extraction")
 public class ExtractionController {
 
-	@Autowired
-	private StoreCasingService storeCasingService;
+	private final StoreCasingService storeCasingService;
+	private final ExtractionFieldSetService extractionFieldSetService;
 
 	@Autowired
-	private ExtractionFieldSetService extractionFieldSetService;
+	public ExtractionController(StoreCasingService storeCasingService, ExtractionFieldSetService extractionFieldSetService) {
+		this.storeCasingService = storeCasingService;
+		this.extractionFieldSetService = extractionFieldSetService;
+	}
 
 	@RequestMapping(method = RequestMethod.GET, params = {"project-id", "field-set-id"})
 	public void findAll(HttpServletResponse response,
@@ -52,34 +55,35 @@ public class ExtractionController {
 		final CellProcessor[] processors = extractionFields.stream()
 				.map(ef -> {
 					if (ef.getExtractionDataType() != null) {
-						if (ef.getExtractionDataType().equals("DATE_TIME")) {
-							return new FmtLocalDateTime();
-						} else if (ef.getExtractionDataType().equals("DATE")) {
-							return new FmtLocalDate();
-						} else if (ef.getExtractionDataType().equals("INTERSECTION")) {
-							return new FmtIntersection();
-						} else if (ef.getExtractionDataType().equals("BLANK")) {
-							return new FmtBlank();
-						} else if (ef.getExtractionDataType().equals("ACCESS_COUNT")) {
-							return new FmtAccessCount();
-						} else if (ef.getExtractionDataType().equals("ACCESS_FRONT_MAIN_COUNT")) {
-							return new FmtAccessFrontMainCount();
-						} else if (ef.getExtractionDataType().equals("ACCESS_SIDE_MAIN_COUNT")) {
-							return new FmtAccessSideMainCount();
-						} else if (ef.getExtractionDataType().equals("ACCESS_NON_MAIN_COUNT")) {
-							return new FmtAccessNonMainCount();
-						} else if (ef.getExtractionDataType().equals("PROJECT_LIST")) {
-							return new FmtProjectList();
-						} else if (ef.getExtractionDataType().equals("TENANT_COUNT")) {
-							return new FmtTenantCount();
-						} else if (ef.getExtractionDataType().equals("TENANT_INLINE_COUNT")) {
-							return new FmtTenantInlineCount();
-						} else if (ef.getExtractionDataType().equals("TENANT_INLINE_LIST")) {
-							return new FmtTenantInlineList();
-						} else if (ef.getExtractionDataType().equals("TENANT_OUTPARCEL_COUNT")) {
-							return new FmtTenantOutparcelCount();
-						} else if (ef.getExtractionDataType().equals("TENANT_OUTPARCEL_LIST")) {
-							return new FmtTenantOutparcelList();
+						switch (ef.getExtractionDataType()) {
+							case "DATE_TIME":
+								return new FmtLocalDateTime();
+							case "DATE":
+								return new FmtLocalDate();
+							case "INTERSECTION":
+								return new FmtIntersection();
+							case "BLANK":
+								return new FmtBlank();
+							case "ACCESS_COUNT":
+								return new FmtAccessCount();
+							case "ACCESS_FRONT_MAIN_COUNT":
+								return new FmtAccessFrontMainCount();
+							case "ACCESS_SIDE_MAIN_COUNT":
+								return new FmtAccessSideMainCount();
+							case "ACCESS_NON_MAIN_COUNT":
+								return new FmtAccessNonMainCount();
+							case "PROJECT_LIST":
+								return new FmtProjectList();
+							case "TENANT_COUNT":
+								return new FmtTenantCount();
+							case "TENANT_INLINE_COUNT":
+								return new FmtTenantInlineCount();
+							case "TENANT_INLINE_LIST":
+								return new FmtTenantInlineList();
+							case "TENANT_OUTPARCEL_COUNT":
+								return new FmtTenantOutparcelCount();
+							case "TENANT_OUTPARCEL_LIST":
+								return new FmtTenantOutparcelList();
 						}
 					}
 					return null;

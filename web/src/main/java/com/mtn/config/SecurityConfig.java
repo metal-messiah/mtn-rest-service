@@ -151,6 +151,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/extraction/**").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/extraction-field-set/**").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/client-access-key/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/v2/api-docs").permitAll()
+                .antMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
+                .antMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll()
+                .antMatchers(HttpMethod.GET, "/webjars/springfox-swagger-ui/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
                 .anyRequest().denyAll();
     }
 

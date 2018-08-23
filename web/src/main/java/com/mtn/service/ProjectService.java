@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class ProjectService extends EntityServiceImpl<Project, ProjectView> {
+public class ProjectService extends EntityService<Project, ProjectView> {
 
 	@Autowired
-	public ProjectService(EntityServiceDependencies services,
+	public ProjectService(SecurityService securityService,
 						  ProjectRepository repository,
 						  ProjectValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, Project::new);
 	}
 
 	public Page<Project> findAllByQueryUsingSpecs(Pageable page, String query, Boolean active, Boolean primaryData) {
@@ -61,11 +61,6 @@ public class ProjectService extends EntityServiceImpl<Project, ProjectView> {
 		Project project = this.findOne(projectId);
 		project.setBoundary(null);
 		return project;
-	}
-
-	@Override
-	protected Project createNewEntity() {
-		return new Project();
 	}
 
 	@Override

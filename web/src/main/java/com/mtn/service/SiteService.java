@@ -21,13 +21,16 @@ import java.util.List;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class SiteService extends EntityServiceImpl<Site, SiteView> {
+public class SiteService extends EntityService<Site, SiteView> {
+
+	private final UserProfileService userProfileService;
 
 	@Autowired
-	public SiteService(EntityServiceDependencies services,
+	public SiteService(SecurityService securityService,
 					   SiteRepository repository,
-					   SiteValidator validator) {
-		super(services, repository, validator);
+					   SiteValidator validator, UserProfileService userProfileService) {
+		super(securityService, repository, validator, Site::new);
+		this.userProfileService = userProfileService;
 	}
 
 	public List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
@@ -93,7 +96,7 @@ public class SiteService extends EntityServiceImpl<Site, SiteView> {
 	public Site createOne(ShoppingCenter sc, Float latitude, Float longitude) {
 		UserProfile currentUser = securityService.getCurrentUser();
 
-		Site site = createNewEntity();
+		Site site = new Site();
 		site.setCreatedBy(currentUser);
 		site.setUpdatedBy(currentUser);
 
@@ -102,11 +105,6 @@ public class SiteService extends EntityServiceImpl<Site, SiteView> {
 		site.setLongitude(longitude);
 
 		return site;
-	}
-
-	@Override
-	protected Site createNewEntity() {
-		return new Site();
 	}
 
 	@Override

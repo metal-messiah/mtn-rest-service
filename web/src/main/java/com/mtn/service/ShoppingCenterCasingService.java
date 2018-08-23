@@ -17,15 +17,15 @@ import java.util.List;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class ShoppingCenterCasingService extends EntityServiceImpl<ShoppingCenterCasing, ShoppingCenterCasingView> {
+public class ShoppingCenterCasingService extends EntityService<ShoppingCenterCasing, ShoppingCenterCasingView> {
 
     private final ShoppingCenterSurveyService shoppingCenterSurveyService;
 
     @Autowired
-    public ShoppingCenterCasingService(EntityServiceDependencies services,
+    public ShoppingCenterCasingService(SecurityService securityService,
                                        ShoppingCenterCasingRepository repository,
                                        ShoppingCenterCasingValidator validator, ShoppingCenterSurveyService shoppingCenterSurveyService) {
-        super(services, repository, validator);
+        super(securityService, repository, validator, ShoppingCenterCasing::new);
         this.shoppingCenterSurveyService = shoppingCenterSurveyService;
     }
 
@@ -45,11 +45,6 @@ public class ShoppingCenterCasingService extends EntityServiceImpl<ShoppingCente
         ShoppingCenterSurvey scSurvey = shoppingCenterSurveyService.getCloneOfLatestForShoppingCenter(shoppingCenter, dateTime);
         shoppingCenterCasing.setShoppingCenterSurvey(scSurvey);
         return shoppingCenterCasing;
-    }
-
-    @Override
-    protected ShoppingCenterCasing createNewEntity() {
-        return new ShoppingCenterCasing();
     }
 
     @Override

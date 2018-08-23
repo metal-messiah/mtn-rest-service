@@ -12,13 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class StoreStatusService extends StoreChildServiceImpl<StoreStatus, StoreStatusView> {
+public class StoreStatusService extends StoreChildService<StoreStatus, StoreStatusView> {
 
     @Autowired
-    public StoreStatusService(EntityServiceDependencies services,
+    public StoreStatusService(SecurityService securityService,
                               StoreStatusRepository repository,
                               StoreStatusValidator validator) {
-        super(services, repository, validator);
+        super(securityService, repository, validator, StoreStatus::new);
     }
 
     @Transactional
@@ -45,11 +45,6 @@ public class StoreStatusService extends StoreChildServiceImpl<StoreStatus, Store
             newStatus.setStatus("Open");
             newStatus.setStore(casing.getStore());
         }
-    }
-
-    @Override
-    protected StoreStatus createNewEntity() {
-        return new StoreStatus();
     }
 
     @Override

@@ -10,34 +10,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @RestController
 @RequestMapping("/api/permission")
-public class PermissionController extends CrudControllerImpl<Permission> {
+public class PermissionController extends CrudController<Permission, PermissionView> {
 
     @Autowired
-    private PermissionService permissionService;
+    public PermissionController(PermissionService permissionService) {
+        super(permissionService, PermissionView::new);
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity findAll(Pageable page) {
-        Page<Permission> domainModels = getEntityService().findAll(page);
-        return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
+        Page<Permission> domainModels = this.entityService.findAll(page);
+        return ResponseEntity.ok(domainModels.map(SimplePermissionView::new));
     }
 
-    @Override
-    public PermissionService getEntityService() {
-        return permissionService;
-    }
-
-    @Override
-    public Object getViewFromModel(Permission model) {
-        return new PermissionView(model);
-    }
-
-    @Override
-    public Object getSimpleViewFromModel(Permission model) {
-        return new SimplePermissionView(model);
-    }
 }

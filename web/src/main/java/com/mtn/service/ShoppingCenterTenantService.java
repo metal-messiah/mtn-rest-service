@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ShoppingCenterTenantService extends EntityServiceImpl<ShoppingCenterTenant, ShoppingCenterTenantView> {
+public class ShoppingCenterTenantService extends EntityService<ShoppingCenterTenant, ShoppingCenterTenantView> {
 
 	@Autowired
-	public ShoppingCenterTenantService(EntityServiceDependencies services,
+	public ShoppingCenterTenantService(SecurityService securityService,
 									   ShoppingCenterTenantRepository repository,
 									   ShoppingCenterTenantValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, ShoppingCenterTenant::new);
 	}
 
 	public List<ShoppingCenterTenant> findAllBySurveyIdUsingSpecs(Integer id) {
@@ -45,11 +45,6 @@ public class ShoppingCenterTenantService extends EntityServiceImpl<ShoppingCente
 			tenant.setCreatedDate(LocalDateTime.now());
 			return tenant;
 		}).collect(Collectors.toList());
-	}
-
-	@Override
-	protected ShoppingCenterTenant createNewEntity() {
-		return new ShoppingCenterTenant();
 	}
 
 	@Override

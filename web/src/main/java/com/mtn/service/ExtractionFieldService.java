@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ExtractionFieldService extends EntityServiceImpl<ExtractionField, ExtractionFieldView> {
+public class ExtractionFieldService extends EntityService<ExtractionField, ExtractionFieldView> {
 
 	@Autowired
-	public ExtractionFieldService(EntityServiceDependencies services,
+	public ExtractionFieldService(SecurityService securityService,
 								  ExtractionFieldRepository repository,
 								  ExtractionFieldValidator validator) {
-		super(services, repository, validator);
+		super(securityService, repository, validator, ExtractionField::new);
 	}
 
 	@Override
@@ -31,11 +31,6 @@ public class ExtractionFieldService extends EntityServiceImpl<ExtractionField, E
 			fieldSet.getFields().remove(existing);
 		});
 		existing.getFieldSets().clear();
-	}
-
-	@Override
-	protected ExtractionField createNewEntity() {
-		return new ExtractionField();
 	}
 
 }

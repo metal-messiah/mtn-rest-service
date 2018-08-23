@@ -14,14 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 4/25/2017.
- */
 @RestController
 @RequestMapping("/api/store")
-public class StoreController extends CrudControllerImpl<Store> {
+public class StoreController extends CrudController<Store, StoreView> {
 
-	private final StoreService storeService;
 	private final StoreSurveyService storeSurveyService;
 	private final StoreVolumeService volumeService;
 	private final StoreCasingService casingService;
@@ -30,7 +26,6 @@ public class StoreController extends CrudControllerImpl<Store> {
 	private final ProjectService projectService;
 	private final StoreStatusService storeStatusService;
 	private final BannerService bannerService;
-	private final ShoppingCenterCasingService shoppingCenterCasingService;
 
 	@Autowired
 	public StoreController(StoreService storeService,
@@ -41,9 +36,8 @@ public class StoreController extends CrudControllerImpl<Store> {
 						   StoreCasingService storeCasingService,
 						   ProjectService projectService,
 						   StoreStatusService storeStatusService,
-						   BannerService bannerService,
-						   ShoppingCenterCasingService shoppingCenterCasingService) {
-		this.storeService = storeService;
+						   BannerService bannerService) {
+		super(storeService, StoreView::new);
 		this.storeSurveyService = surveyService;
 		this.volumeService = volumeService;
 		this.casingService = casingService;
@@ -52,7 +46,6 @@ public class StoreController extends CrudControllerImpl<Store> {
 		this.projectService = projectService;
 		this.storeStatusService = storeStatusService;
 		this.bannerService = bannerService;
-		this.shoppingCenterCasingService = shoppingCenterCasingService;
 	}
 
 	@GetMapping(params = {"north", "south", "east", "west"})
@@ -64,7 +57,7 @@ public class StoreController extends CrudControllerImpl<Store> {
 			@RequestParam("store_types") List<StoreType> storeTypes,
 			@RequestParam(value = "include_project_ids", required = false) boolean includeProjectIds,
 			Pageable page) {
-		Page<Store> domainModels = storeService.findAllOfTypesInBounds(north, south, east, west, storeTypes, page);
+		Page<Store> domainModels = ((StoreService) this.entityService).findAllOfTypesInBounds(north, south, east, west, storeTypes, page);
 		if (includeProjectIds) {
 			return ResponseEntity.ok(domainModels.map(SimpleStoreViewWithProjects::new));
 		} else {
@@ -74,7 +67,7 @@ public class StoreController extends CrudControllerImpl<Store> {
 
 	@GetMapping(params = {"geojson"})
 	public ResponseEntity findAllInGeoJson(@RequestParam("geojson") String geoJson) {
-		List<Store> stores = storeService.findAllInGeoJson(geoJson);
+		List<Store> stores = ((StoreService) this.entityService).findAllInGeoJson(geoJson);
 		List<Integer> ids = stores.stream().map(AuditingEntity::getId).distinct().collect(Collectors.toList());
 		return ResponseEntity.ok(ids);
 	}
@@ -89,11 +82,11 @@ public class StoreController extends CrudControllerImpl<Store> {
 		if (request.getShoppingCenterCasing() != null) {
 			throw new IllegalArgumentException("Do not include shopping center casing. Will be provided by web service");
 		}
-		Store store = storeService.findOneUsingSpecs(storeId);
+		Store store = this.entityService.findOneUsingSpecs(storeId);
 		// Add Casing to project(s)
 		StoreCasing storeCasing = storeCasingService.addOneCasingToStore(request, store);
 		request.getProjects().forEach(project -> projectService.addStoreCasingToProject(project.getId(), storeCasing));
-		storeStatusService.updateStoreStatusesFromCasing(store, storeCasing);
+		storeStatusService.updateStoreStatusesFromCasing(storeCasing);
 
 		return ResponseEntity.ok(new StoreCasingView(storeCasing));
 	}
@@ -112,7 +105,7 @@ public class StoreController extends CrudControllerImpl<Store> {
 
 	@PostMapping(value = "/{id}/store-surveys")
 	public ResponseEntity addOneStoreSurveyToStore(@PathVariable("id") Integer storeId, @RequestBody StoreSurveyView request) {
-		Store store = storeService.findOneUsingSpecs(storeId);
+		Store store = this.entityService.findOneUsingSpecs(storeId);
 		StoreSurvey survey = storeSurveyService.addOneToStore(request, store);
 		return ResponseEntity.ok(new StoreSurveyView(survey));
 	}
@@ -126,28 +119,29 @@ public class StoreController extends CrudControllerImpl<Store> {
 	@PutMapping(value = "/{storeId}/banner/{bannerId}")
 	public ResponseEntity updateOneBanner(@PathVariable("storeId") Integer storeId, @PathVariable("bannerId") Integer bannerId) {
 		Banner banner = bannerService.findOneUsingSpecs(bannerId);
-		Store domainModel = storeService.updateOneBanner(storeId, banner);
+		Store domainModel = ((StoreService) this.entityService).updateOneBanner(storeId, banner);
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
 	@RequestMapping(value = "/{id}/store-statuses", method = RequestMethod.POST)
 	public ResponseEntity addOneStoreStatusToStore(@PathVariable("id") Integer storeId, @RequestBody StoreStatusView request) {
-		Store store = storeService.findOneUsingSpecs(storeId);
+		Store store = this.entityService.findOneUsingSpecs(storeId);
 		storeStatusService.addOneToStore(request, store);
 		return ResponseEntity.ok(new StoreView(store));
 	}
 
 	@PutMapping(value = "{storeId}", params = {"is-float"})
 	public ResponseEntity updateIsDuplicate(@PathVariable("storeId") Integer storeId, @RequestParam("is-float") Boolean isFloat) {
-		Store store = storeService.findOneUsingSpecs(storeId);
+		Store store = this.entityService.findOneUsingSpecs(storeId);
 		store.setFloating(isFloat);
-		return ResponseEntity.ok(new SimpleStoreView(storeService.updateOne(store.getId(), store)));
+		StoreView request = new StoreView(store);
+		return ResponseEntity.ok(new SimpleStoreView(this.entityService.updateOne(request)));
 	}
 
 	@RequestMapping(value = "/{id}/store-statuses/{statusId}", method = RequestMethod.DELETE)
 	public ResponseEntity deleteStoreStatus(@PathVariable("id") Integer storeId, @PathVariable Integer statusId) {
 		storeStatusService.deleteOne(statusId);
-		Store domainModel = storeService.findOneUsingSpecs(storeId);
+		Store domainModel = this.entityService.findOneUsingSpecs(storeId);
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
@@ -159,7 +153,7 @@ public class StoreController extends CrudControllerImpl<Store> {
 
 	@RequestMapping(value = "/{id}/store-volumes", method = RequestMethod.POST)
 	public ResponseEntity addOneStoreVolumeToStore(@PathVariable("id") Integer storeId, @RequestBody StoreVolumeView request) {
-		Store store = storeService.findOneUsingSpecs(storeId);
+		Store store = this.entityService.findOneUsingSpecs(storeId);
 		volumeService.addOneToStore(request, store);
 		return ResponseEntity.ok(new StoreView(store));
 	}
@@ -167,22 +161,8 @@ public class StoreController extends CrudControllerImpl<Store> {
 	@RequestMapping(value = "/{id}/store-volumes/{volumeId}", method = RequestMethod.DELETE)
 	public ResponseEntity deleteStoreVolume(@PathVariable("id") Integer storeId, @PathVariable Integer volumeId) {
 		volumeService.deleteOne(volumeId);
-		Store domainModel = storeService.findOneUsingSpecs(storeId);
+		Store domainModel = this.entityService.findOneUsingSpecs(storeId);
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
-	@Override
-	public StoreService getEntityService() {
-		return storeService;
-	}
-
-	@Override
-	public Object getViewFromModel(Store model) {
-		return new StoreView(model);
-	}
-
-	@Override
-	public Object getSimpleViewFromModel(Store model) {
-		return new SimpleStoreView(model);
-	}
 }

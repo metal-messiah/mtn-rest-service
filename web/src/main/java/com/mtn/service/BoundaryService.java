@@ -8,18 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BoundaryService extends EntityServiceImpl<Boundary, BoundaryView> {
+public class BoundaryService extends EntityService<Boundary, BoundaryView> {
 
     @Autowired
-    public BoundaryService(EntityServiceDependencies services,
-                           BoundaryRepository boundaryRepository,
-                           BoundaryValidator boundaryValidator) {
-        super(services, boundaryRepository, boundaryValidator);
-    }
-
-    @Override
-    protected Boundary createNewEntity() {
-        return new Boundary();
+    public BoundaryService(SecurityService securityService,
+                           BoundaryRepository repository,
+                           BoundaryValidator validator) {
+        super(securityService, repository, validator, Boundary::new);
     }
 
     @Override

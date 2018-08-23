@@ -18,17 +18,20 @@ import static java.lang.Boolean.parseBoolean;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class StoreSourceService extends StoreChildServiceImpl<StoreSource, StoreSourceView> {
+public class StoreSourceService extends StoreChildService<StoreSource, StoreSourceView> {
 
 	private final StoreService storeService;
+	private final UserProfileService userProfileService;
 
 	@Autowired
-	public StoreSourceService(EntityServiceDependencies services,
+	public StoreSourceService(SecurityService securityService,
 							  StoreSourceRepository repository,
 							  StoreSourceValidator validator,
-							  StoreService storeService) {
-		super(services, repository, validator);
+							  StoreService storeService,
+							  UserProfileService userProfileService) {
+		super(securityService, repository, validator, StoreSource::new);
 		this.storeService = storeService;
+		this.userProfileService = userProfileService;
 	}
 
 	public LocalDateTime getMaxSourceEditedDate(String sourceName) {
@@ -58,11 +61,6 @@ public class StoreSourceService extends StoreChildServiceImpl<StoreSource, Store
 		}
 
 		return this.repository.findAll(specs, page);
-	}
-
-	@Override
-	protected StoreSource createNewEntity() {
-		return new StoreSource();
 	}
 
 	@Override

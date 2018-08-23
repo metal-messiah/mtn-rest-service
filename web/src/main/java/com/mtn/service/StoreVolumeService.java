@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-public class StoreVolumeService extends StoreChildServiceImpl<StoreVolume, StoreVolumeView> {
+public class StoreVolumeService extends StoreChildService<StoreVolume, StoreVolumeView> {
 
     @Autowired
-    public StoreVolumeService(EntityServiceDependencies services,
+    public StoreVolumeService(SecurityService securityService,
                               StoreVolumeRepository repository,
                               StoreVolumeValidator validator) {
-        super(services, repository, validator);
+        super(securityService, repository, validator, StoreVolume::new);
     }
 
     @Transactional
@@ -34,11 +34,6 @@ public class StoreVolumeService extends StoreChildServiceImpl<StoreVolume, Store
         volume.setStore(store);
 
         return volume;
-    }
-
-    @Override
-    protected StoreVolume createNewEntity() {
-        return new StoreVolume();
     }
 
     @Override

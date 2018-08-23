@@ -15,23 +15,18 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/project")
-public class ProjectController extends CrudControllerImpl<Project> {
+public class ProjectController extends CrudController<Project, ProjectView> {
+
+	private final BoundaryService boundaryService;
+	private final StoreService storeService;
+	private final StoreCasingService storeCasingService;
 
 	@Autowired
-	private ProjectService projectService;
-	@Autowired
-	private BoundaryService boundaryService;
-	@Autowired
-	private StoreModelService modelService;
-	@Autowired
-	private StoreService storeService;
-	@Autowired
-	private StoreCasingService storeCasingService;
-
-	@RequestMapping(value = "/{id}/store-model", method = RequestMethod.POST)
-	public ResponseEntity addOneStoreModelToProject(@PathVariable("id") Integer id, @RequestBody StoreModel request) {
-		StoreModel domainModel = projectService.addOneModelToProject(id, request);
-		return ResponseEntity.ok(new StoreModelView(domainModel));
+	public ProjectController(ProjectService projectService, BoundaryService boundaryService, StoreService storeService, StoreCasingService storeCasingService) {
+		super(projectService, ProjectView::new);
+		this.boundaryService = boundaryService;
+		this.storeService = storeService;
+		this.storeCasingService = storeCasingService;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -41,22 +36,16 @@ public class ProjectController extends CrudControllerImpl<Project> {
 								  @RequestParam(value = "primaryData", required = false) Boolean primaryData) {
 		Page<Project> domainModels;
 		if (query != null || active != null || primaryData != null) {
-			domainModels = getEntityService().findAllByQueryUsingSpecs(page, query, active, primaryData);
+			domainModels = ((ProjectService) this.entityService).findAllByQueryUsingSpecs(page, query, active, primaryData);
 		} else {
-			domainModels = getEntityService().findAllUsingSpecs(page);
+			domainModels = this.entityService.findAllUsingSpecs(page);
 		}
-		return ResponseEntity.ok(domainModels.map(this::getSimpleViewFromModel));
-	}
-
-	@RequestMapping(path = "/{id}/store-model", method = RequestMethod.GET)
-	public ResponseEntity findAllStoreModelsForProject(@PathVariable("id") Integer projectId) {
-		List<StoreModel> domainModels = modelService.findAllByProjectIdUsingSpecs(projectId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreModelView::new).collect(Collectors.toList()));
+		return ResponseEntity.ok(domainModels.map(SimpleProjectView::new));
 	}
 
 	@RequestMapping(path = "/{id}/boundary", method = RequestMethod.GET)
 	public ResponseEntity findBoundaryFormProject(@PathVariable("id") Integer projectId) {
-		Project project = projectService.findOneUsingSpecs(projectId);
+		Project project = this.entityService.findOneUsingSpecs(projectId);
 		if (project.getBoundary() != null) {
 			return ResponseEntity.ok(new BoundaryView(project.getBoundary()));
 		} else {
@@ -67,13 +56,13 @@ public class ProjectController extends CrudControllerImpl<Project> {
 	@PostMapping(path = "/{id}/boundary")
 	public ResponseEntity createProjectBoundary(@PathVariable("id") Integer projectId, @RequestBody BoundaryView request) {
 		Boundary boundary = boundaryService.addOne(request);
-		Project project = projectService.setProjectBoundary(projectId, boundary);
+		Project project = ((ProjectService) this.entityService).setProjectBoundary(projectId, boundary);
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
 	@DeleteMapping(path = "/{id}/boundary")
 	public ResponseEntity removeProjectBoundary(@PathVariable("id") Integer projectId) {
-		Project project = projectService.removeProjectBoundary(projectId);
+		Project project = ((ProjectService) this.entityService).removeProjectBoundary(projectId);
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
@@ -89,18 +78,4 @@ public class ProjectController extends CrudControllerImpl<Project> {
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
 	}
 
-	@Override
-	public ProjectService getEntityService() {
-		return projectService;
-	}
-
-	@Override
-	public Object getViewFromModel(Project model) {
-		return new ProjectView(model);
-	}
-
-	@Override
-	public Object getSimpleViewFromModel(Project model) {
-		return new SimpleProjectView(model);
-	}
 }

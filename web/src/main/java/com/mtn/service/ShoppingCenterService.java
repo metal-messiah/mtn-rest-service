@@ -16,13 +16,13 @@ import org.springframework.util.StringUtils;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class ShoppingCenterService extends EntityServiceImpl<ShoppingCenter, ShoppingCenterView> {
+public class ShoppingCenterService extends EntityService<ShoppingCenter, ShoppingCenterView> {
 
     @Autowired
-    public ShoppingCenterService(EntityServiceDependencies services,
+    public ShoppingCenterService(SecurityService securityService,
                                  ShoppingCenterRepository repository,
                                  ShoppingCenterValidator validator) {
-        super(services, repository, validator);
+        super(securityService, repository, validator, ShoppingCenter::new);
     }
 
     public Page<ShoppingCenter> findAllByNameUsingSpecs(String name, Pageable page) {
@@ -55,16 +55,11 @@ public class ShoppingCenterService extends EntityServiceImpl<ShoppingCenter, Sho
     public ShoppingCenter createNew() {
         UserProfile currentUser = securityService.getCurrentUser();
 
-        ShoppingCenter newEntity = this.createNewEntity();
+        ShoppingCenter newEntity = new ShoppingCenter();
         newEntity.setCreatedBy(currentUser);
         newEntity.setUpdatedBy(currentUser);
 
         return newEntity;
-    }
-
-    @Override
-    protected ShoppingCenter createNewEntity() {
-        return new ShoppingCenter();
     }
 
     @Override

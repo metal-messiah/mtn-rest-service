@@ -14,18 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
-public class ShoppingCenterSurveyService extends EntityServiceImpl<ShoppingCenterSurvey, ShoppingCenterSurveyView> {
+public class ShoppingCenterSurveyService extends EntityService<ShoppingCenterSurvey, ShoppingCenterSurveyView> {
 
     @Autowired
-    public ShoppingCenterSurveyService(EntityServiceDependencies services,
+    public ShoppingCenterSurveyService(SecurityService securityService,
                                        ShoppingCenterSurveyRepository repository,
                                        ShoppingCenterSurveyValidator validator) {
-        super(services, repository, validator);
+        super(securityService, repository, validator, ShoppingCenterSurvey::new);
     }
 
     public List<ShoppingCenterSurvey> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
@@ -43,11 +42,6 @@ public class ShoppingCenterSurveyService extends EntityServiceImpl<ShoppingCente
         survey.setSurveyDate(dateTime);
         survey.setShoppingCenter(shoppingCenter);
         return survey;
-    }
-
-    @Override
-    protected ShoppingCenterSurvey createNewEntity() {
-        return new ShoppingCenterSurvey();
     }
 
     @Override

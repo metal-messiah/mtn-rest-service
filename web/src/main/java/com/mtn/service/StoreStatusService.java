@@ -33,7 +33,7 @@ public class StoreStatusService extends StoreChildService<StoreStatus, StoreStat
 
         status.setStore(store);
 
-        return status;
+        return this.repository.save(status);
     }
 
     @Transactional
@@ -55,6 +55,6 @@ public class StoreStatusService extends StoreChildService<StoreStatus, StoreStat
 
     @Override
     public void handleAssociationsOnDeletion(StoreStatus existing) {
-        existing.setStore(null);
+        // Do Nothing
     }
 }

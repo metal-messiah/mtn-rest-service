@@ -8,26 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleGroupView {
+public class SimpleGroupView extends SimpleAuditingEntityView {
 
-    private Integer id;
     private String displayName;
 
+    public SimpleGroupView() {
+    }
+
     public SimpleGroupView(Group group) {
-        this.id = group.getId();
+        super(group);
         this.displayName = group.getDisplayName();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getDisplayName() {

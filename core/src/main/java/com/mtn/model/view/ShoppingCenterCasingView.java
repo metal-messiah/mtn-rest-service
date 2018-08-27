@@ -24,6 +24,9 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
     private List<SimpleProjectView> projects = new ArrayList<>();
     private ShoppingCenterSurveyView shoppingCenterSurvey;
 
+    public ShoppingCenterCasingView() {
+    }
+
     public ShoppingCenterCasingView(ShoppingCenterCasing casing) {
         super(casing);
 
@@ -50,36 +53,71 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
         return casingDate;
     }
 
+    public void setCasingDate(LocalDateTime casingDate) {
+        this.casingDate = casingDate;
+    }
+
     public String getNote() {
         return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public RatingType getRatingParkingLot() {
         return ratingParkingLot;
     }
 
+    public void setRatingParkingLot(RatingType ratingParkingLot) {
+        this.ratingParkingLot = ratingParkingLot;
+    }
+
     public RatingType getRatingBuildings() {
         return ratingBuildings;
+    }
+
+    public void setRatingBuildings(RatingType ratingBuildings) {
+        this.ratingBuildings = ratingBuildings;
     }
 
     public RatingType getRatingLighting() {
         return ratingLighting;
     }
 
+    public void setRatingLighting(RatingType ratingLighting) {
+        this.ratingLighting = ratingLighting;
+    }
+
     public RatingType getRatingSynergy() {
         return ratingSynergy;
+    }
+
+    public void setRatingSynergy(RatingType ratingSynergy) {
+        this.ratingSynergy = ratingSynergy;
     }
 
     public Integer getLegacyCasingId() {
         return legacyCasingId;
     }
 
-    public ShoppingCenterSurveyView getShoppingCenterSurvey() {
-        return shoppingCenterSurvey;
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
     }
 
     public List<SimpleProjectView> getProjects() {
         return projects;
     }
 
+    public void setProjects(List<SimpleProjectView> projects) {
+        this.projects = projects;
+    }
+
+    public ShoppingCenterSurveyView getShoppingCenterSurvey() {
+        return shoppingCenterSurvey;
+    }
+
+    public void setShoppingCenterSurvey(ShoppingCenterSurveyView shoppingCenterSurvey) {
+        this.shoppingCenterSurvey = shoppingCenterSurvey;
+    }
 }

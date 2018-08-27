@@ -43,7 +43,7 @@ public class ShoppingCenterAccessService extends EntityService<ShoppingCenterAcc
 		access.setCreatedBy(currentUser);
 		access.setUpdatedBy(currentUser);
 
-		return access;
+		return this.repository.save(access);
 	}
 
 	@Override
@@ -59,6 +59,6 @@ public class ShoppingCenterAccessService extends EntityService<ShoppingCenterAcc
 
 	@Override
 	public void handleAssociationsOnDeletion(ShoppingCenterAccess existing) {
-		existing.setSurvey(null);
+		// Do Nothing
 	}
 }

@@ -36,11 +36,26 @@ public class ShoppingCenterSurveyService extends EntityService<ShoppingCenterSur
 
     @Transactional
     public ShoppingCenterSurvey getCloneOfLatestForShoppingCenter(ShoppingCenter shoppingCenter, LocalDateTime dateTime) {
+        UserProfile currentUser = securityService.getCurrentUser();
+
         ShoppingCenterSurvey survey = ShoppingCenterUtil
                 .getLatestSurveyAsOfDateTime(shoppingCenter, LocalDateTime.now())
                 .map(ShoppingCenterSurvey::new).orElseGet(ShoppingCenterSurvey::new);
         survey.setSurveyDate(dateTime);
         survey.setShoppingCenter(shoppingCenter);
+        survey.setCreatedBy(currentUser);
+        survey.setUpdatedBy(currentUser);
+
+        survey.getAccesses().forEach(access -> {
+            access.setCreatedBy(currentUser);
+            access.setUpdatedBy(currentUser);
+        });
+
+        survey.getTenants().forEach(tenant -> {
+            tenant.setCreatedBy(currentUser);
+            tenant.setUpdatedBy(currentUser);
+        });
+
         return survey;
     }
 
@@ -57,15 +72,6 @@ public class ShoppingCenterSurveyService extends EntityService<ShoppingCenterSur
 
     @Override
     public void handleAssociationsOnDeletion(ShoppingCenterSurvey survey) {
-        UserProfile currentUser = this.securityService.getCurrentUser();
-        survey.setShoppingCenter(null);
-        survey.getTenants().forEach(tenant -> {
-            tenant.setDeletedBy(currentUser);
-            tenant.setDeletedDate(LocalDateTime.now());
-        });
-        survey.getAccesses().forEach(access -> {
-            access.setDeletedBy(currentUser);
-            access.setDeletedDate(LocalDateTime.now());
-        });
+        // Do Nothing
     }
 }

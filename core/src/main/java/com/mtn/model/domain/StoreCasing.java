@@ -173,7 +173,7 @@ public class StoreCasing extends AuditingEntity {
         this.legacyCasingId = legacyCasingId;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "store_survey_id")
     public StoreSurvey getStoreSurvey() {
         return storeSurvey;
@@ -207,7 +207,7 @@ public class StoreCasing extends AuditingEntity {
         this.storeVolume = storeVolume;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shopping_center_casing_id")
     public ShoppingCenterCasing getShoppingCenterCasing() {
         return shoppingCenterCasing;

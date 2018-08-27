@@ -128,6 +128,12 @@ public class PlannedGroceryService {
 		this.updateStoreFromUpdatable(updatable, store);
 		this.updateSiteFromUpdatable(updatable, store.getSite());
 		this.updateShoppingCenterFromUpdatable(updatable, store.getSite().getShoppingCenter());
+
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		StoreSource storeSource = this.storeSourceService.findOne(updatable.getStoreSource().getId());
+		storeSource.setValidatedBy(currentUser);
+		storeSource.setValidatedDate(LocalDateTime.now());
+
 		return store;
 	}
 

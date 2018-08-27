@@ -20,7 +20,7 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
         super(userProfileService, UserProfileView::new);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity findAll(@RequestParam(value = "q", required = false) String q, Pageable page) {
         Page<UserProfile> domainModels;
         if (StringUtils.isNotBlank(q)) {

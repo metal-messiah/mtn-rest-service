@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 public abstract class AuditingEntityView implements Serializable {
 
-	protected Integer id;
-	protected SimpleUserProfileView createdBy;
-	protected LocalDateTime createdDate;
-	protected SimpleUserProfileView updatedBy;
-	protected LocalDateTime updatedDate;
-	protected Integer version;
+	private Integer id;
+	private SimpleUserProfileView createdBy;
+	private LocalDateTime createdDate;
+	private SimpleUserProfileView updatedBy;
+	private LocalDateTime updatedDate;
+	private Integer version;
 
 	AuditingEntityView() {}
 
@@ -30,23 +30,47 @@ public abstract class AuditingEntityView implements Serializable {
 		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public SimpleUserProfileView getCreatedBy() {
 		return createdBy;
+	}
+
+	public void setCreatedBy(SimpleUserProfileView createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
 
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
 	public SimpleUserProfileView getUpdatedBy() {
 		return updatedBy;
+	}
+
+	public void setUpdatedBy(SimpleUserProfileView updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 	public LocalDateTime getUpdatedDate() {
 		return updatedDate;
 	}
 
+	public void setUpdatedDate(LocalDateTime updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
 	public Integer getVersion() {
 		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 }

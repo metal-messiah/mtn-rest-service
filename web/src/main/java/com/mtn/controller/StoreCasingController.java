@@ -35,20 +35,20 @@ public class StoreCasingController extends CrudController<StoreCasing, StoreCasi
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
-    @RequestMapping(value = "/{storeCasingId}/projects/{projectId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{storeCasingId}/projects/{projectId}")
     public ResponseEntity removeProject(@PathVariable("storeCasingId") Integer storeCasingId,
                                      @PathVariable("projectId") Integer projectId) {
         StoreCasing domainModel = ((StoreCasingService) this.entityService).removeProject(storeCasingId, projectId);
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
-    @RequestMapping(value = "/{storeCasingId}/store-volume", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{storeCasingId}/store-volume")
     public ResponseEntity removeVolume(@PathVariable("storeCasingId") Integer storeCasingId) {
         StoreCasing domainModel = ((StoreCasingService) this.entityService).removeStoreVolume(storeCasingId);
         return ResponseEntity.ok(new StoreCasingView(domainModel));
     }
 
-    @RequestMapping(value = "/{storeCasingId}/store-volume", method = RequestMethod.POST)
+    @PostMapping(value = "/{storeCasingId}/store-volume")
     public ResponseEntity createNewVolume(@PathVariable("storeCasingId") Integer storeCasingId,
                                        @RequestBody StoreVolumeView volumeRequest) {
         Store store = this.entityService.findOneUsingSpecs(storeCasingId).getStore();
@@ -57,7 +57,7 @@ public class StoreCasingController extends CrudController<StoreCasing, StoreCasi
         return ResponseEntity.ok(new StoreCasingView(casing));
     }
 
-    @RequestMapping(value = "/{storeCasingId}/store-volume/{storeVolumeId}", method = RequestMethod.PUT)
+    @PutMapping(value = "/{storeCasingId}/store-volume/{storeVolumeId}")
     public ResponseEntity updateVolume(@PathVariable("storeCasingId") Integer storeCasingId,
                                        @PathVariable("storeVolumeId") Integer storeVolumeId) {
         StoreVolume volume = storeVolumeService.findOneUsingSpecs(storeVolumeId);

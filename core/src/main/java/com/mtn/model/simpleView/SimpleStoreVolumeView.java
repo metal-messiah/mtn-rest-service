@@ -7,26 +7,20 @@ import com.mtn.model.domain.StoreVolume;
 import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleStoreVolumeView {
+public class SimpleStoreVolumeView extends SimpleAuditingEntityView {
 
-    private Integer id;
     private Integer volumeTotal;
     private LocalDate volumeDate;
     private VolumeType volumeType;
 
+    public SimpleStoreVolumeView() {
+    }
+
     public SimpleStoreVolumeView(StoreVolume storeVolume) {
-        this.id = storeVolume.getId();
+        super(storeVolume);
         this.volumeTotal = storeVolume.getVolumeTotal();
         this.volumeDate = storeVolume.getVolumeDate();
         this.volumeType = storeVolume.getVolumeType();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getVolumeTotal() {

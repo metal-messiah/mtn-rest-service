@@ -28,20 +28,20 @@ public class ShoppingCenterSurveyController extends CrudController<ShoppingCente
         this.tenantService = tenantService;
     }
 
-    @RequestMapping(path = "/{id}/accesses", method = RequestMethod.POST)
+    @PostMapping(path = "/{id}/accesses")
     public ResponseEntity createAccessForSurvey(@PathVariable("id") Integer surveyId, @RequestBody ShoppingCenterAccessView request) {
         ShoppingCenterSurvey survey = this.entityService.findOneUsingSpecs(surveyId);
         ShoppingCenterAccess domainModel = accessService.addOne(request, survey);
         return ResponseEntity.ok(new ShoppingCenterAccessView(domainModel));
     }
 
-    @RequestMapping(path = "/{id}/accesses", method = RequestMethod.GET)
+    @GetMapping(path = "/{id}/accesses")
     public ResponseEntity findAllAccessesForSurvey(@PathVariable("id") Integer surveyId) {
         List<ShoppingCenterAccess> domainModels = accessService.findAllBySurveyIdUsingSpecs(surveyId);
         return ResponseEntity.ok(domainModels.stream().map(ShoppingCenterAccessView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(path = "/{id}/tenants", method = RequestMethod.POST)
+    @PostMapping(path = "/{id}/tenants")
     public ResponseEntity createTenantsForSurvey(@PathVariable("id") Integer surveyId, @RequestBody List<ShoppingCenterTenantView> requestTenants) {
         ShoppingCenterSurvey survey = this.entityService.findOneUsingSpecs(surveyId);
         List<ShoppingCenterTenant> domainModels = tenantService.addMultiple(requestTenants, survey);
@@ -50,7 +50,7 @@ public class ShoppingCenterSurveyController extends CrudController<ShoppingCente
                 .collect(Collectors.toList()));
     }
 
-    @RequestMapping(path = "/{id}/tenants", method = RequestMethod.GET)
+    @GetMapping(path = "/{id}/tenants")
     public ResponseEntity findAllTenantsForSurvey(@PathVariable("id") Integer surveyId) {
         List<ShoppingCenterTenant> domainModels = tenantService.findAllBySurveyIdUsingSpecs(surveyId);
         return ResponseEntity.ok(domainModels.stream().map(ShoppingCenterTenantView::new).collect(Collectors.toList()));

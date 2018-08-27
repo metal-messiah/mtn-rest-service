@@ -3,6 +3,7 @@ package com.mtn.service;
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.ShoppingCenterCasing;
 import com.mtn.model.domain.ShoppingCenterSurvey;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.ShoppingCenterCasingView;
 import com.mtn.repository.ShoppingCenterCasingRepository;
 import com.mtn.repository.specification.ShoppingCenterCasingSpecifications;
@@ -38,12 +39,17 @@ public class ShoppingCenterCasingService extends EntityService<ShoppingCenterCas
 
     @Transactional
     public ShoppingCenterCasing createNewForShoppingCenter(ShoppingCenter shoppingCenter, LocalDateTime dateTime) {
+        UserProfile currentUser = securityService.getCurrentUser();
+
         ShoppingCenterCasing shoppingCenterCasing = new ShoppingCenterCasing();
         shoppingCenterCasing.setCasingDate(dateTime);
         shoppingCenterCasing.setShoppingCenter(shoppingCenter);
+        shoppingCenterCasing.setCreatedBy(currentUser);
+        shoppingCenterCasing.setUpdatedBy(currentUser);
 
         ShoppingCenterSurvey scSurvey = shoppingCenterSurveyService.getCloneOfLatestForShoppingCenter(shoppingCenter, dateTime);
         shoppingCenterCasing.setShoppingCenterSurvey(scSurvey);
+
         return shoppingCenterCasing;
     }
 
@@ -59,7 +65,6 @@ public class ShoppingCenterCasingService extends EntityService<ShoppingCenterCas
 
     @Override
     public void handleAssociationsOnDeletion(ShoppingCenterCasing casing) {
-        casing.setShoppingCenter(null);
-        casing.getProjects().forEach(project -> project.getShoppingCenterCasings().remove(casing));
+        // Do Nothing
     }
 }

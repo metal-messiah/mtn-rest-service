@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.CrudAction;
 import com.mtn.model.domain.Permission;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimplePermissionView {
+public class SimplePermissionView extends SimpleAuditingEntityView {
 
     private Integer id;
     private String systemName;
@@ -17,21 +14,17 @@ public class SimplePermissionView {
     private String subject;
     private CrudAction action;
 
+    public SimplePermissionView() {
+    }
+
     public SimplePermissionView(Permission permission) {
+        super(permission);
         this.id = permission.getId();
         this.systemName = permission.getSystemName();
         this.displayName = permission.getDisplayName();
         this.description = permission.getDescription();
         this.subject = permission.getSubject();
         this.action = permission.getAction();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getSystemName() {

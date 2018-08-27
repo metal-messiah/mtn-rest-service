@@ -19,7 +19,7 @@ public class PermissionController extends CrudController<Permission, PermissionV
         super(permissionService, PermissionView::new);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity findAll(Pageable page) {
         Page<Permission> domainModels = this.entityService.findAll(page);
         return ResponseEntity.ok(domainModels.map(SimplePermissionView::new));

@@ -8,9 +8,6 @@ import com.mtn.model.simpleView.SimpleCompanyView;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 6/10/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CompanyView extends AuditingEntityView {
 
@@ -21,6 +18,9 @@ public class CompanyView extends AuditingEntityView {
 
     private List<SimpleCompanyView> childCompanies;
     private List<SimpleBannerView> banners;
+
+    public CompanyView() {
+    }
 
     public CompanyView(Company company) {
         super(company);
@@ -34,6 +34,26 @@ public class CompanyView extends AuditingEntityView {
 
         this.childCompanies = company.getChildCompanies().stream().map(SimpleCompanyView::new).collect(Collectors.toList());
         this.banners = company.getBanners().stream().filter(store -> store.getDeletedDate() == null).map(SimpleBannerView::new).collect(Collectors.toList());
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void setWebsiteUrl(String websiteUrl) {
+        this.websiteUrl = websiteUrl;
+    }
+
+    public void setParentCompany(CompanyView parentCompany) {
+        this.parentCompany = parentCompany;
+    }
+
+    public void setChildCompanies(List<SimpleCompanyView> childCompanies) {
+        this.childCompanies = childCompanies;
+    }
+
+    public void setBanners(List<SimpleBannerView> banners) {
+        this.banners = banners;
     }
 
     public String getCompanyName() {

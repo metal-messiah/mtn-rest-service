@@ -6,13 +6,9 @@ import com.mtn.model.domain.StoreSurvey;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * Created by Allen on 6/7/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleStoreSurveyView implements Serializable {
+public class SimpleStoreSurveyView extends SimpleAuditingEntityView {
 
-    private Integer id;
     private LocalDateTime surveyDate;
     private String fit;
     private Integer areaSales;
@@ -21,22 +17,17 @@ public class SimpleStoreSurveyView implements Serializable {
 
     private Integer legacyCasingId;
 
+    public SimpleStoreSurveyView() {
+    }
+
     public SimpleStoreSurveyView(StoreSurvey storeSurvey) {
-        this.id = storeSurvey.getId();
+        super(storeSurvey);
         this.surveyDate = storeSurvey.getSurveyDate();
         this.fit = storeSurvey.getFit();
         this.areaSales = storeSurvey.getAreaSales();
         this.areaTotal = storeSurvey.getAreaTotal();
         this.note = storeSurvey.getNote();
         this.legacyCasingId = storeSurvey.getLegacyCasingId();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public LocalDateTime getSurveyDate() {

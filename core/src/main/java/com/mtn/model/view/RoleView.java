@@ -3,17 +3,11 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Role;
 import com.mtn.model.simpleView.SimplePermissionView;
-import com.mtn.model.simpleView.SimpleRoleView;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RoleView extends AuditingEntityView {
 
@@ -22,6 +16,9 @@ public class RoleView extends AuditingEntityView {
 
     private List<SimpleUserProfileView> members;
     private List<SimplePermissionView> permissions;
+
+    public RoleView() {
+    }
 
     public RoleView(Role role) {
         super(role);
@@ -36,16 +33,31 @@ public class RoleView extends AuditingEntityView {
         return displayName;
     }
 
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<SimpleUserProfileView> getMembers() {
         return members;
     }
 
+    public void setMembers(List<SimpleUserProfileView> members) {
+        this.members = members;
+    }
+
     public List<SimplePermissionView> getPermissions() {
         return permissions;
     }
 
+    public void setPermissions(List<SimplePermissionView> permissions) {
+        this.permissions = permissions;
+    }
 }

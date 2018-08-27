@@ -16,6 +16,9 @@ public class ShoppingCenterAccessView extends AuditingEntityView {
     private Boolean hasRightOut;
     private Integer legacyCasingId;
 
+    public ShoppingCenterAccessView() {
+    }
+
     public ShoppingCenterAccessView(ShoppingCenterAccess access) {
         super(access);
 
@@ -33,32 +36,63 @@ public class ShoppingCenterAccessView extends AuditingEntityView {
         return accessType;
     }
 
+    public void setAccessType(AccessType accessType) {
+        this.accessType = accessType;
+    }
+
     public Boolean getHasLeftIn() {
         return hasLeftIn;
+    }
+
+    public void setHasLeftIn(Boolean hasLeftIn) {
+        this.hasLeftIn = hasLeftIn;
     }
 
     public Boolean getHasLeftOut() {
         return hasLeftOut;
     }
 
+    public void setHasLeftOut(Boolean hasLeftOut) {
+        this.hasLeftOut = hasLeftOut;
+    }
+
     public Boolean getHasTrafficLight() {
         return hasTrafficLight;
+    }
+
+    public void setHasTrafficLight(Boolean hasTrafficLight) {
+        this.hasTrafficLight = hasTrafficLight;
     }
 
     public Boolean getOneWayRoad() {
         return oneWayRoad;
     }
 
+    public void setOneWayRoad(Boolean oneWayRoad) {
+        this.oneWayRoad = oneWayRoad;
+    }
+
     public Boolean getHasRightIn() {
         return hasRightIn;
+    }
+
+    public void setHasRightIn(Boolean hasRightIn) {
+        this.hasRightIn = hasRightIn;
     }
 
     public Boolean getHasRightOut() {
         return hasRightOut;
     }
 
+    public void setHasRightOut(Boolean hasRightOut) {
+        this.hasRightOut = hasRightOut;
+    }
+
     public Integer getLegacyCasingId() {
         return legacyCasingId;
     }
 
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
+    }
 }

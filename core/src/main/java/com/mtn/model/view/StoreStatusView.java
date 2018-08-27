@@ -15,6 +15,9 @@ public class StoreStatusView extends AuditingEntityView {
 	private Integer legacyLocationId;
 	private Integer legacyCasingId;
 
+	public StoreStatusView() {
+	}
+
 	public StoreStatusView(StoreStatus storeStatus) {
 		super(storeStatus);
 
@@ -29,19 +32,39 @@ public class StoreStatusView extends AuditingEntityView {
 		return store;
 	}
 
+	public void setStore(SimpleStoreView store) {
+		this.store = store;
+	}
+
 	public String getStatus() {
 		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public LocalDateTime getStatusStartDate() {
 		return statusStartDate;
 	}
 
+	public void setStatusStartDate(LocalDateTime statusStartDate) {
+		this.statusStartDate = statusStartDate;
+	}
+
 	public Integer getLegacyLocationId() {
 		return legacyLocationId;
 	}
 
+	public void setLegacyLocationId(Integer legacyLocationId) {
+		this.legacyLocationId = legacyLocationId;
+	}
+
 	public Integer getLegacyCasingId() {
 		return legacyCasingId;
+	}
+
+	public void setLegacyCasingId(Integer legacyCasingId) {
+		this.legacyCasingId = legacyCasingId;
 	}
 }

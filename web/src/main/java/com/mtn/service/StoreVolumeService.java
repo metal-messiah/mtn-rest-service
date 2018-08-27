@@ -33,7 +33,7 @@ public class StoreVolumeService extends StoreChildService<StoreVolume, StoreVolu
 
         volume.setStore(store);
 
-        return volume;
+        return this.repository.save(volume);
     }
 
     @Override
@@ -59,6 +59,6 @@ public class StoreVolumeService extends StoreChildService<StoreVolume, StoreVolu
 
     @Override
     public void handleAssociationsOnDeletion(StoreVolume existing) {
-        existing.setStore(null);
+        // Do Nothing
     }
 }

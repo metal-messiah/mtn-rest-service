@@ -3,12 +3,8 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ClientAccessKey;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * Created by Tyler on 2/14/2018.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientAccessKeyView extends AuditingEntityView {
 
@@ -18,6 +14,9 @@ public class ClientAccessKeyView extends AuditingEntityView {
 	private Boolean active;
 	private LocalDateTime lastVerified;
 
+	public ClientAccessKeyView() {
+	}
+
 	public ClientAccessKeyView(ClientAccessKey clientAccessKey) {
 		super(clientAccessKey);
 
@@ -26,6 +25,26 @@ public class ClientAccessKeyView extends AuditingEntityView {
 		this.clientUniqueIdentifier = clientAccessKey.getClientUniqueIdentifier();
 		this.active = clientAccessKey.getActive();
 		this.lastVerified = clientAccessKey.getLastVerified();
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public void setAccessKey(String accessKey) {
+		this.accessKey = accessKey;
+	}
+
+	public void setClientUniqueIdentifier(String clientUniqueIdentifier) {
+		this.clientUniqueIdentifier = clientUniqueIdentifier;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public void setLastVerified(LocalDateTime lastVerified) {
+		this.lastVerified = lastVerified;
 	}
 
 	public String getClientName() {

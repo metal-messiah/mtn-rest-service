@@ -12,6 +12,9 @@ public class SimpleStoreViewWithProjects extends SimpleStoreView {
 
 	private List<Integer> projectIds;
 
+	public SimpleStoreViewWithProjects() {
+	}
+
 	public SimpleStoreViewWithProjects(Store store) {
 		super(store);
 		this.projectIds = new ArrayList<>();

@@ -71,6 +71,6 @@ public class ShoppingCenterService extends EntityService<ShoppingCenter, Shoppin
 
     @Override
     public void handleAssociationsOnDeletion(ShoppingCenter existing) {
-        existing.getSites().forEach(site -> site.setShoppingCenter(null));
+        // Do Nothing
     }
 }

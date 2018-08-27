@@ -22,18 +22,15 @@ public class UserProfileValidator extends EntityValidator<UserProfile, UserProfi
 
 	@Override
 	protected void validateUpdateInsertBusinessRules(UserProfileView request) {
-		if (request.getId() == 1) {
+		if (request.getId() != null && request.getId() == 1) {
 			throw new IllegalArgumentException("This user may not be updated");
 		}
 		if (StringUtils.isBlank(request.getEmail())) {
 			throw new IllegalArgumentException("UserProfile email must be provided");
 		}
-		if (request.getEmail() == null || request.getEmail().isEmpty()) {
-			throw new IllegalArgumentException("User Profile email must be provided");
-		}
 
 		// If another UserProfile (different ID) with the same email already exists
-		List<UserProfile> usersWithEmail = userProfileRepository.findAllByEmailAndDeletedDateIsNull(request.getEmail().toLowerCase());
+		List<UserProfile> usersWithEmail = userProfileRepository.findAllByEmail(request.getEmail().toLowerCase());
 		if (usersWithEmail.stream()
 				.anyMatch(userProfile -> userProfile.getEmail().toLowerCase().equals(request.getEmail().toLowerCase()) &&
 						!userProfile.getId().equals(request.getId()))) {

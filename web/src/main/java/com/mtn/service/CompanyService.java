@@ -1,6 +1,7 @@
 package com.mtn.service;
 
 import com.mtn.model.domain.Company;
+import com.mtn.model.view.BannerView;
 import com.mtn.model.view.CompanyView;
 import com.mtn.repository.CompanyRepository;
 import com.mtn.repository.specification.CompanySpecifications;
@@ -18,11 +19,15 @@ import java.util.Set;
 @Service
 public class CompanyService extends EntityService<Company, CompanyView> {
 
+	private final BannerService bannerService;
+
 	@Autowired
 	public CompanyService(SecurityService securityService,
 						  CompanyRepository repository,
-						  CompanyValidator validator) {
+						  CompanyValidator validator,
+						  BannerService bannerService) {
 		super(securityService, repository, validator, Company::new);
+		this.bannerService = bannerService;
 	}
 
 	public Set<Company> findAllChildCompaniesRecursive(Company company) {
@@ -56,14 +61,27 @@ public class CompanyService extends EntityService<Company, CompanyView> {
 
 	@Override
 	public void handleAssociationsOnDeletion(Company company) {
-		company.getChildCompanies().forEach(child -> this.deleteOne(child.getId()));
-		company.getBanners().forEach(banner -> banner.setCompany(null));
+		company.getChildCompanies().forEach(child -> {
+			child.setParentCompany(null);
+			this.updateOne(new CompanyView(child));
+		});
+		company.getBanners().forEach(banner -> {
+			banner.setCompany(null);
+			this.bannerService.updateOne(new BannerView(banner));
+		});
 	}
 
 	@Override
 	protected void setEntityAttributesFromRequest(Company existing, CompanyView request) {
 		existing.setCompanyName(request.getCompanyName());
 		existing.setWebsiteUrl(request.getWebsiteUrl());
+
+		if (request.getParentCompany() != null) {
+			Company parent = this.findOneUsingSpecs(request.getParentCompany().getId());
+			existing.setParentCompany(parent);
+		} else {
+			existing.setParentCompany(null);
+		}
 	}
 
 }

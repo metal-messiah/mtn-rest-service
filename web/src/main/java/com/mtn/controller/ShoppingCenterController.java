@@ -36,7 +36,7 @@ public class ShoppingCenterController extends CrudController<ShoppingCenter, Sho
         this.casingService = casingService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity findAll(
             @RequestParam(value = "q", required = false) String q,
             @RequestParam(value = "name", required = false) String name,
@@ -57,19 +57,19 @@ public class ShoppingCenterController extends CrudController<ShoppingCenter, Sho
         return ResponseEntity.ok(domainModels.map(SimpleShoppingCenterView::new));
     }
 
-    @RequestMapping(value = "/{id}/shopping-center-casing", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}/shopping-center-casing")
     public ResponseEntity findAllShoppingCenterCasingsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
         List<ShoppingCenterCasing> domainModels = casingService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{id}/shopping-center-survey", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}/shopping-center-survey")
     public ResponseEntity findAllShoppingCenterSurveysForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
         List<ShoppingCenterSurvey> domainModels = surveyService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{id}/site", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}/site")
     public ResponseEntity findAllSitesForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
         List<Site> domainModels = siteService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));

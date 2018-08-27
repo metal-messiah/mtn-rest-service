@@ -42,8 +42,8 @@ public class ShoppingCenterTenantService extends EntityService<ShoppingCenterTen
 			ShoppingCenterTenant tenant = this.createNewEntityFromRequest(request);
 			tenant.setSurvey(survey);
 			tenant.setCreatedBy(currentUser);
-			tenant.setCreatedDate(LocalDateTime.now());
-			return tenant;
+			tenant.setUpdatedBy(currentUser);
+			return this.repository.save(tenant);
 		}).collect(Collectors.toList());
 	}
 
@@ -57,6 +57,6 @@ public class ShoppingCenterTenantService extends EntityService<ShoppingCenterTen
 
 	@Override
 	public void handleAssociationsOnDeletion(ShoppingCenterTenant existing) {
-		existing.setSurvey(null);
+		// Do Nothing
 	}
 }

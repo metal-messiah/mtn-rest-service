@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 5/4/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShoppingCenterSurveyView extends AuditingEntityView {
 
@@ -26,6 +23,9 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
 
     private List<ShoppingCenterAccessView> accesses = new ArrayList<>();
     private List<SimpleShoppingCenterTenantView> tenants = new ArrayList<>();
+
+    public ShoppingCenterSurveyView() {
+    }
 
     public ShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
         super(survey);
@@ -57,39 +57,79 @@ public class ShoppingCenterSurveyView extends AuditingEntityView {
         return surveyDate;
     }
 
+    public void setSurveyDate(LocalDateTime surveyDate) {
+        this.surveyDate = surveyDate;
+    }
+
     public String getNote() {
         return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Boolean getFlowHasOneWayAisles() {
         return flowHasOneWayAisles;
     }
 
+    public void setFlowHasOneWayAisles(Boolean flowHasOneWayAisles) {
+        this.flowHasOneWayAisles = flowHasOneWayAisles;
+    }
+
     public String getFlowRating() {
         return flowRating;
+    }
+
+    public void setFlowRating(String flowRating) {
+        this.flowRating = flowRating;
     }
 
     public Integer getTenantOccupiedCount() {
         return tenantOccupiedCount;
     }
 
+    public void setTenantOccupiedCount(Integer tenantOccupiedCount) {
+        this.tenantOccupiedCount = tenantOccupiedCount;
+    }
+
     public Integer getTenantVacantCount() {
         return tenantVacantCount;
+    }
+
+    public void setTenantVacantCount(Integer tenantVacantCount) {
+        this.tenantVacantCount = tenantVacantCount;
     }
 
     public Double getSqFtPercentOccupied() {
         return sqFtPercentOccupied;
     }
 
+    public void setSqFtPercentOccupied(Double sqFtPercentOccupied) {
+        this.sqFtPercentOccupied = sqFtPercentOccupied;
+    }
+
     public Integer getLegacyCasingId() {
         return legacyCasingId;
+    }
+
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
     }
 
     public List<ShoppingCenterAccessView> getAccesses() {
         return accesses;
     }
 
+    public void setAccesses(List<ShoppingCenterAccessView> accesses) {
+        this.accesses = accesses;
+    }
+
     public List<SimpleShoppingCenterTenantView> getTenants() {
         return tenants;
+    }
+
+    public void setTenants(List<SimpleShoppingCenterTenantView> tenants) {
+        this.tenants = tenants;
     }
 }

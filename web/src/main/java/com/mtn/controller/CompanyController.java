@@ -20,7 +20,7 @@ public class CompanyController extends CrudController<Company, CompanyView> {
 		super(companyService, CompanyView::new);
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public ResponseEntity findAllByCompanyName(@RequestParam(value = "name", required = false) String name, Pageable page) {
 		Page<Company> domainModels;
 		if (StringUtils.isNotBlank(name)) {
@@ -32,7 +32,7 @@ public class CompanyController extends CrudController<Company, CompanyView> {
 		return ResponseEntity.ok(domainModels.map(SimpleCompanyView::new));
 	}
 
-	@RequestMapping(value = "/{childId}/parent/{parentId}")
+	@RequestMapping("/{childId}/parent/{parentId}")
 	public ResponseEntity updateOneParentCompany(@PathVariable("childId") Integer childId, @PathVariable("parentId") Integer parentId) {
 		Company domainModel = ((CompanyService) this.entityService).setParentCompany(childId, parentId);
 		return ResponseEntity.ok(new CompanyView(domainModel));

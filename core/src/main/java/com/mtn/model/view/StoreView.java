@@ -38,10 +38,12 @@ public class StoreView extends AuditingEntityView {
 	private List<SimpleStoreVolumeView> storeVolumes;
 	private List<SimpleStoreStatusView> storeStatuses;
 
+	public StoreView() {
+	}
+
 	public StoreView(Store store) {
 		super(store);
 
-		this.id = store.getId();
 		this.storeName = store.getStoreName();
 		this.storeType = store.getStoreType();
 		this.dateOpened = store.getDateOpened();
@@ -91,59 +93,119 @@ public class StoreView extends AuditingEntityView {
 		return storeName;
 	}
 
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+
 	public StoreType getStoreType() {
 		return storeType;
+	}
+
+	public void setStoreType(StoreType storeType) {
+		this.storeType = storeType;
 	}
 
 	public LocalDateTime getDateOpened() {
 		return dateOpened;
 	}
 
+	public void setDateOpened(LocalDateTime dateOpened) {
+		this.dateOpened = dateOpened;
+	}
+
 	public LocalDateTime getDateClosed() {
 		return dateClosed;
+	}
+
+	public void setDateClosed(LocalDateTime dateClosed) {
+		this.dateClosed = dateClosed;
 	}
 
 	public String getStoreNumber() {
 		return storeNumber;
 	}
 
+	public void setStoreNumber(String storeNumber) {
+		this.storeNumber = storeNumber;
+	}
+
 	public Integer getLegacyLocationId() {
 		return legacyLocationId;
+	}
+
+	public void setLegacyLocationId(Integer legacyLocationId) {
+		this.legacyLocationId = legacyLocationId;
 	}
 
 	public Boolean getFloating() {
 		return floating;
 	}
 
+	public void setFloating(Boolean floating) {
+		this.floating = floating;
+	}
+
 	public SimpleStoreStatusView getCurrentStoreStatus() {
 		return currentStoreStatus;
+	}
+
+	public void setCurrentStoreStatus(SimpleStoreStatusView currentStoreStatus) {
+		this.currentStoreStatus = currentStoreStatus;
 	}
 
 	public SimpleStoreSurveyView getCurrentStoreSurvey() {
 		return currentStoreSurvey;
 	}
 
+	public void setCurrentStoreSurvey(SimpleStoreSurveyView currentStoreSurvey) {
+		this.currentStoreSurvey = currentStoreSurvey;
+	}
+
 	public SimpleSiteView getSite() {
 		return site;
+	}
+
+	public void setSite(SimpleSiteView site) {
+		this.site = site;
 	}
 
 	public SimpleBannerView getBanner() {
 		return banner;
 	}
 
+	public void setBanner(SimpleBannerView banner) {
+		this.banner = banner;
+	}
+
 	public List<SimpleStoreCasingView> getStoreCasings() {
 		return storeCasings;
+	}
+
+	public void setStoreCasings(List<SimpleStoreCasingView> storeCasings) {
+		this.storeCasings = storeCasings;
 	}
 
 	public List<SimpleStoreModelView> getStoreModels() {
 		return storeModels;
 	}
 
+	public void setStoreModels(List<SimpleStoreModelView> storeModels) {
+		this.storeModels = storeModels;
+	}
+
 	public List<SimpleStoreVolumeView> getStoreVolumes() {
 		return storeVolumes;
 	}
 
+	public void setStoreVolumes(List<SimpleStoreVolumeView> storeVolumes) {
+		this.storeVolumes = storeVolumes;
+	}
+
 	public List<SimpleStoreStatusView> getStoreStatuses() {
 		return storeStatuses;
+	}
+
+	public void setStoreStatuses(List<SimpleStoreStatusView> storeStatuses) {
+		this.storeStatuses = storeStatuses;
 	}
 }

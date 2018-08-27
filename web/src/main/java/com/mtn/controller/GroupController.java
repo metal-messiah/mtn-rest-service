@@ -29,13 +29,13 @@ public class GroupController extends CrudController<Group, GroupView> {
         this.userProfileService = userProfileService;
     }
 
-    @RequestMapping(value = "/{groupId}/member/{userId}", method = RequestMethod.POST)
+    @PostMapping(value = "/{groupId}/member/{userId}")
     public ResponseEntity addOneMemberToGroup(@PathVariable("groupId") Integer groupId, @PathVariable("userId") Integer userId) {
         Group domainModel = ((GroupService) this.entityService).addOneMemberToGroup(groupId, userId);
         return ResponseEntity.ok(new GroupView(domainModel));
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity findAllByDisplayName(@RequestParam(value = "displayName", required = false) String displayName, Pageable page) {
         Page<Group> domainModels;
         if (StringUtils.isNotBlank(displayName)) {
@@ -46,13 +46,13 @@ public class GroupController extends CrudController<Group, GroupView> {
         return ResponseEntity.ok(domainModels.map(SimpleGroupView::new));
     }
 
-    @RequestMapping(value = "/{id}/member", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}/member")
     public ResponseEntity findAllMembersForGroup(@PathVariable("id") Integer groupId) {
         List<UserProfile> domainModels = userProfileService.findAllByGroupIdUsingSpecs(groupId);
         return ResponseEntity.ok(domainModels.stream().map(SimpleUserProfileView::new).collect(Collectors.toList()));
     }
 
-    @RequestMapping(value = "/{groupId}/member/{userId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{groupId}/member/{userId}")
     public ResponseEntity removeOneMemberFromGroup(@PathVariable("groupId") Integer groupId, @PathVariable("userId") Integer userId) {
         Group domainModel = ((GroupService) this.entityService).removeOneMemberFromGroup(groupId, userId);
         return ResponseEntity.ok(new GroupView(domainModel));

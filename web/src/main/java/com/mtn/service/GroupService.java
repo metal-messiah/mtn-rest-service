@@ -3,6 +3,7 @@ package com.mtn.service;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.model.view.GroupView;
+import com.mtn.model.view.UserProfileView;
 import com.mtn.repository.GroupRepository;
 import com.mtn.repository.specification.GroupSpecifications;
 import com.mtn.validators.GroupValidator;
@@ -62,7 +63,10 @@ public class GroupService extends EntityService<Group, GroupView> {
 
     @Override
     public void handleAssociationsOnDeletion(Group existing) {
-        existing.getMembers().forEach(member -> member.setGroup(null));
+        existing.getMembers().forEach(member -> {
+            member.setGroup(null);
+            this.userProfileService.updateOne(new UserProfileView(member));
+        });
     }
 
 }

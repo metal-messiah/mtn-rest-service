@@ -7,9 +7,6 @@ import com.mtn.model.simpleView.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 4/23/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShoppingCenterView extends AuditingEntityView {
 
@@ -19,6 +16,9 @@ public class ShoppingCenterView extends AuditingEntityView {
     private Integer legacyLocationId;
     private List<SimpleShoppingCenterCasingView> shoppingCenterCasings;
     private List<SimpleSiteView> sites;
+
+    public ShoppingCenterView() {
+    }
 
     public ShoppingCenterView(ShoppingCenter shoppingCenter) {
         super(shoppingCenter);
@@ -39,23 +39,47 @@ public class ShoppingCenterView extends AuditingEntityView {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getOwner() {
         return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getCenterType() {
         return centerType;
     }
 
+    public void setCenterType(String centerType) {
+        this.centerType = centerType;
+    }
+
     public Integer getLegacyLocationId() {
         return legacyLocationId;
+    }
+
+    public void setLegacyLocationId(Integer legacyLocationId) {
+        this.legacyLocationId = legacyLocationId;
     }
 
     public List<SimpleShoppingCenterCasingView> getShoppingCenterCasings() {
         return shoppingCenterCasings;
     }
 
+    public void setShoppingCenterCasings(List<SimpleShoppingCenterCasingView> shoppingCenterCasings) {
+        this.shoppingCenterCasings = shoppingCenterCasings;
+    }
+
     public List<SimpleSiteView> getSites() {
         return sites;
+    }
+
+    public void setSites(List<SimpleSiteView> sites) {
+        this.sites = sites;
     }
 }

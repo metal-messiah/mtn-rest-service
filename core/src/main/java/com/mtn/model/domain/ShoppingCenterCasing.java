@@ -97,7 +97,7 @@ public class ShoppingCenterCasing extends AuditingEntity {
         this.legacyCasingId = legacyCasingId;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shopping_center_survey_id")
     public ShoppingCenterSurvey getShoppingCenterSurvey() {
         return shoppingCenterSurvey;

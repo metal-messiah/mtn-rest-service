@@ -62,7 +62,6 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 		return object;
 	}
 
-	@Transactional
 	public T addOne(V request) {
 		this.validator.validateForInsert(request);
 
@@ -72,7 +71,8 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 		newEntity.setCreatedBy(currentUser);
 		newEntity.setUpdatedBy(currentUser);
 
-		return newEntity;
+		// Must call save to attach to transaction
+		return this.repository.save(newEntity);
 	}
 
 	@Transactional

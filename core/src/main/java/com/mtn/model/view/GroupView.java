@@ -7,9 +7,6 @@ import com.mtn.model.simpleView.SimpleUserProfileView;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GroupView extends AuditingEntityView {
 
@@ -17,6 +14,9 @@ public class GroupView extends AuditingEntityView {
     private String description;
 
     private List<SimpleUserProfileView> members;
+
+    public GroupView() {
+    }
 
     public GroupView(Group group) {
         super(group);
@@ -33,12 +33,23 @@ public class GroupView extends AuditingEntityView {
         return displayName;
     }
 
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<SimpleUserProfileView> getMembers() {
         return members;
     }
 
+    public void setMembers(List<SimpleUserProfileView> members) {
+        this.members = members;
+    }
 }

@@ -7,26 +7,20 @@ import com.mtn.model.domain.StoreModel;
 import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleStoreModelView {
+public class SimpleStoreModelView extends SimpleAuditingEntityView {
 
-	private Integer id;
 	private Double fitAdjustedPower;
 	private ModelType modelType;
 	private LocalDateTime modelDate;
 
+	public SimpleStoreModelView() {
+	}
+
 	public SimpleStoreModelView(StoreModel model) {
-		this.id = model.getId();
+		super(model);
 		this.fitAdjustedPower = model.getFitAdjustedPower();
 		this.modelType = model.getModelType();
 		this.modelDate = model.getModelDate();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Double getFitAdjustedPower() {

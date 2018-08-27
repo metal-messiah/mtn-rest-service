@@ -1,6 +1,7 @@
 package com.mtn.service;
 
 import com.mtn.model.domain.*;
+import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.utils.StoreUtil;
 import com.mtn.model.view.StoreCasingView;
 import com.mtn.model.view.StoreStatusView;
@@ -66,14 +67,27 @@ public class StoreCasingService extends StoreChildService<StoreCasing, StoreCasi
 
 		casing.setStore(store);
 
-		StoreSurvey survey = storeSurveyService.getCloneOfLatestForStore(casing.getStore(), casing.getCasingDate());
+		// If store has no status or status is outdated, create a new store status to to match casing status
+		Optional<StoreStatus> current = StoreUtil.getLatestStatusAsOfDateTime(store, request.getCasingDate());
+		if (current.isPresent()) {
+			casing.setStoreStatus(current.get().getStatus());
+		} else {
+			casing.setStoreStatus("Open");
+			StoreStatus storeStatus = new StoreStatus();
+			storeStatus.setStatusStartDate(request.getCasingDate());
+			storeStatus.setStatus("Open");
+			storeStatus.setStore(casing.getStore());
+			storeStatusService.addOne(new StoreStatusView(storeStatus));
+		}
+
+		StoreSurvey survey = storeSurveyService.getCloneOfLatestForStore(store, casing.getCasingDate());
 		casing.setStoreSurvey(survey);
 
 		ShoppingCenterCasing scCasing = shoppingCenterCasingService
 				.createNewForShoppingCenter(store.getSite().getShoppingCenter(), casing.getCasingDate());
 		casing.setShoppingCenterCasing(scCasing);
 
-		return casing;
+		return this.repository.save(casing);
 	}
 
 	@Transactional
@@ -109,12 +123,12 @@ public class StoreCasingService extends StoreChildService<StoreCasing, StoreCasi
 
 		// If store has no status or status is outdated, create a new store status to to match casing status
 		Optional<StoreStatus> current = StoreUtil.getLatestStatusAsOfDateTime(casing.getStore(), request.getCasingDate());
-		if (!current.isPresent() || !current.get().getStatus().equals(request.getStoreStatus())) {
-			StoreStatus storeStatus = new StoreStatus();
+		if (request.getId() != null && (!current.isPresent() || !current.get().getStatus().equals(request.getStoreStatus()))) {
+			StoreStatusView storeStatus = new StoreStatusView();
 			storeStatus.setStatusStartDate(request.getCasingDate());
 			storeStatus.setStatus(request.getStoreStatus());
-			storeStatus.setStore(casing.getStore());
-			storeStatusService.addOne(new StoreStatusView(storeStatus));
+			storeStatus.setStore(new SimpleStoreView(casing.getStore()));
+			storeStatusService.addOneToStore(storeStatus, casing.getStore());
 		}
 	}
 

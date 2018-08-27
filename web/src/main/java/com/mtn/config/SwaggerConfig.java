@@ -19,7 +19,8 @@ public class SwaggerConfig {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("com.mtn.controller"))
-				.paths(PathSelectors.any())
+				.paths(PathSelectors.none())
+//				.paths(PathSelectors.any())
 				.build()
 				.apiInfo(apiInfo());
 	}

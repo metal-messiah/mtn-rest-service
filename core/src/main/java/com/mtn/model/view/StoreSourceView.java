@@ -23,7 +23,6 @@ public class StoreSourceView extends AuditingEntityView {
 	private SimpleStoreView store;
 
 	public StoreSourceView() {
-
 	}
 
 	public StoreSourceView(StoreSource storeSource) {
@@ -50,39 +49,79 @@ public class StoreSourceView extends AuditingEntityView {
 		return sourceName;
 	}
 
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
+	}
+
 	public String getSourceNativeId() {
 		return sourceNativeId;
+	}
+
+	public void setSourceNativeId(String sourceNativeId) {
+		this.sourceNativeId = sourceNativeId;
 	}
 
 	public String getSourceUrl() {
 		return sourceUrl;
 	}
 
+	public void setSourceUrl(String sourceUrl) {
+		this.sourceUrl = sourceUrl;
+	}
+
 	public Integer getLegacySourceId() {
 		return legacySourceId;
+	}
+
+	public void setLegacySourceId(Integer legacySourceId) {
+		this.legacySourceId = legacySourceId;
 	}
 
 	public LocalDateTime getValidatedDate() {
 		return validatedDate;
 	}
 
+	public void setValidatedDate(LocalDateTime validatedDate) {
+		this.validatedDate = validatedDate;
+	}
+
 	public String getSourceStoreName() {
 		return sourceStoreName;
+	}
+
+	public void setSourceStoreName(String sourceStoreName) {
+		this.sourceStoreName = sourceStoreName;
 	}
 
 	public LocalDateTime getSourceCreatedDate() {
 		return sourceCreatedDate;
 	}
 
+	public void setSourceCreatedDate(LocalDateTime sourceCreatedDate) {
+		this.sourceCreatedDate = sourceCreatedDate;
+	}
+
 	public LocalDateTime getSourceEditedDate() {
 		return sourceEditedDate;
+	}
+
+	public void setSourceEditedDate(LocalDateTime sourceEditedDate) {
+		this.sourceEditedDate = sourceEditedDate;
 	}
 
 	public SimpleUserProfileView getValidatedBy() {
 		return validatedBy;
 	}
 
+	public void setValidatedBy(SimpleUserProfileView validatedBy) {
+		this.validatedBy = validatedBy;
+	}
+
 	public SimpleStoreView getStore() {
 		return store;
+	}
+
+	public void setStore(SimpleStoreView store) {
+		this.store = store;
 	}
 }

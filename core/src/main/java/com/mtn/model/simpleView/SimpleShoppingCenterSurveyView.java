@@ -5,28 +5,19 @@ import com.mtn.model.domain.ShoppingCenterSurvey;
 
 import java.time.LocalDateTime;
 
-/**
- * Created by Allen on 5/4/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleShoppingCenterSurveyView {
+public class SimpleShoppingCenterSurveyView extends SimpleAuditingEntityView {
 
-	private Integer id;
 	private LocalDateTime surveyDate;
 	private String note;
 
+	public SimpleShoppingCenterSurveyView() {
+	}
+
 	public SimpleShoppingCenterSurveyView(ShoppingCenterSurvey survey) {
-		this.id = survey.getId();
+		super(survey);
 		this.surveyDate = survey.getSurveyDate();
 		this.note = survey.getNote();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public LocalDateTime getSurveyDate() {

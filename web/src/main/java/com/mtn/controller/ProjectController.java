@@ -29,7 +29,7 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 		this.storeCasingService = storeCasingService;
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public ResponseEntity findAll(Pageable page,
 								  @RequestParam(value = "query", required = false) String query,
 								  @RequestParam(value = "active", required = false) Boolean active,
@@ -43,7 +43,7 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 		return ResponseEntity.ok(domainModels.map(SimpleProjectView::new));
 	}
 
-	@RequestMapping(path = "/{id}/boundary", method = RequestMethod.GET)
+	@GetMapping(path = "/{id}/boundary")
 	public ResponseEntity findBoundaryFormProject(@PathVariable("id") Integer projectId) {
 		Project project = this.entityService.findOneUsingSpecs(projectId);
 		if (project.getBoundary() != null) {
@@ -66,13 +66,13 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
-	@RequestMapping(path = "/{id}/store", method = RequestMethod.GET)
+	@GetMapping(path = "/{id}/store")
 	public ResponseEntity findAllStoresForProject(@PathVariable("id") Integer projectId) {
 		List<Store> domainModels = storeService.findAllByProjectId(projectId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 	}
 
-	@RequestMapping(path = "/{id}/store-casing", method = RequestMethod.GET)
+	@GetMapping(path = "/{id}/store-casing")
 	public ResponseEntity findAllStoreCasingsForProject(@PathVariable("id") Integer projectId) {
 		List<StoreCasing> domainModels = storeCasingService.findAllByProjectId(projectId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));

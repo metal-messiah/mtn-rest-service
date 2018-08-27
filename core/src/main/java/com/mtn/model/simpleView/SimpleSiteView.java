@@ -9,13 +9,9 @@ import com.vividsolutions.jts.geom.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 4/24/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleSiteView {
+public class SimpleSiteView extends SimpleAuditingEntityView {
 
-    private Integer id;
     private Float latitude;
     private Float longitude;
     private String address1;
@@ -30,8 +26,11 @@ public class SimpleSiteView {
     private SimpleUserProfileView assignee;
     private Integer shoppingCenterId;
 
+    public SimpleSiteView() {
+    }
+
     public SimpleSiteView(Site site) {
-        this.id = site.getId();
+        super(site);
         this.latitude = site.getLatitude();
         this.longitude = site.getLongitude();
         this.address1 = site.getAddress1();
@@ -49,14 +48,6 @@ public class SimpleSiteView {
         if (site.getAssignee() != null) {
             this.assignee = new SimpleUserProfileView(site.getAssignee());
         }
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Float getLatitude() {

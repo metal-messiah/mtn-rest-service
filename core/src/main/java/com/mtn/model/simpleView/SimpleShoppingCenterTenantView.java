@@ -3,28 +3,19 @@ package com.mtn.model.simpleView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterTenant;
 
-/**
- * Created by Allen on 5/4/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleShoppingCenterTenantView {
+public class SimpleShoppingCenterTenantView extends SimpleAuditingEntityView {
 
-	private Integer id;
 	private String name;
 	private Boolean outparcel;
 
+	public SimpleShoppingCenterTenantView() {
+	}
+
 	public SimpleShoppingCenterTenantView(ShoppingCenterTenant tenant) {
-		this.id = tenant.getId();
+		super(tenant);
 		this.name = tenant.getName();
 		this.outparcel = tenant.getOutparcel();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getName() {

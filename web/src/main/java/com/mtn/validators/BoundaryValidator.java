@@ -13,4 +13,10 @@ public class BoundaryValidator extends EntityValidator<Boundary, BoundaryView> {
 	public BoundaryValidator(BoundaryRepository boundaryRepository) {
 		super(boundaryRepository);
 	}
+
+	protected void validateUpdateInsertBusinessRules(BoundaryView request) {
+		if (request.getGeojson() == null) {
+			throw new IllegalArgumentException("Boundary must have geojson");
+		}
+	}
 }

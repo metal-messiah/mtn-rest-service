@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GroupRepository extends EntityRepository<Group> {
 
-	List<Group> findAllByDisplayNameAndDeletedDateIsNull(String displayName);
+	List<Group> findAllByDisplayName(String displayName);
 
 }

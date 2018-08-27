@@ -37,6 +37,11 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 		StoreSurvey survey = StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now())
 				.map(StoreSurvey::new).orElseGet(StoreSurvey::new);
 		survey.setSurveyDate(dateTime);
+
+		UserProfile currentUser = securityService.getCurrentUser();
+		survey.setCreatedBy(currentUser);
+		survey.setUpdatedBy(currentUser);
+
 		return survey;
 	}
 
@@ -52,7 +57,7 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 
 		survey.setStore(store);
 
-		return survey;
+		return this.repository.save(survey);
 	}
 
 	@Override

@@ -56,76 +56,152 @@ public class PlannedGroceryUpdatable {
         return shoppingCenterId;
     }
 
+    public void setShoppingCenterId(Integer shoppingCenterId) {
+        this.shoppingCenterId = shoppingCenterId;
+    }
+
     public String getShoppingCenterName() {
         return shoppingCenterName;
+    }
+
+    public void setShoppingCenterName(String shoppingCenterName) {
+        this.shoppingCenterName = shoppingCenterName;
     }
 
     public Integer getSiteId() {
         return siteId;
     }
 
+    public void setSiteId(Integer siteId) {
+        this.siteId = siteId;
+    }
+
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getQuad() {
         return quad;
     }
 
+    public void setQuad(String quad) {
+        this.quad = quad;
+    }
+
     public String getIntersectionStreetPrimary() {
         return intersectionStreetPrimary;
+    }
+
+    public void setIntersectionStreetPrimary(String intersectionStreetPrimary) {
+        this.intersectionStreetPrimary = intersectionStreetPrimary;
     }
 
     public String getIntersectionStreetSecondary() {
         return intersectionStreetSecondary;
     }
 
+    public void setIntersectionStreetSecondary(String intersectionStreetSecondary) {
+        this.intersectionStreetSecondary = intersectionStreetSecondary;
+    }
+
     public String getCity() {
         return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getCounty() {
         return county;
     }
 
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
     public String getState() {
         return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getPostalCode() {
         return postalCode;
     }
 
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
     public Float getLatitude() {
         return latitude;
+    }
+
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
     }
 
     public Float getLongitude() {
         return longitude;
     }
 
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
+    }
+
     public Integer getStoreId() {
         return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
     }
 
     public String getStoreName() {
         return storeName;
     }
 
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
     public LocalDateTime getDateOpened() {
         return dateOpened;
+    }
+
+    public void setDateOpened(LocalDateTime dateOpened) {
+        this.dateOpened = dateOpened;
     }
 
     public List<SimpleStoreStatusView> getStoreStatuses() {
         return storeStatuses;
     }
 
+    public void setStoreStatuses(List<SimpleStoreStatusView> storeStatuses) {
+        this.storeStatuses = storeStatuses;
+    }
+
     public Integer getAreaTotal() {
         return areaTotal;
     }
 
+    public void setAreaTotal(Integer areaTotal) {
+        this.areaTotal = areaTotal;
+    }
+
     public StoreSourceView getStoreSource() {
         return storeSource;
+    }
+
+    public void setStoreSource(StoreSourceView storeSource) {
+        this.storeSource = storeSource;
     }
 
     private void setStoreData(Store store) {

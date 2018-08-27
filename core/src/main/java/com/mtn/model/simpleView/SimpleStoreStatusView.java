@@ -6,28 +6,18 @@ import com.mtn.model.domain.StoreStatus;
 import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleStoreStatusView {
+public class SimpleStoreStatusView extends SimpleAuditingEntityView {
 
-    private Integer id;
     private String status;
     private LocalDateTime statusStartDate;
 
     public SimpleStoreStatusView() {
-
     }
 
     public SimpleStoreStatusView(StoreStatus storeStatus) {
-        this.id = storeStatus.getId();
+        super(storeStatus);
         this.status = storeStatus.getStatus();
         this.statusStartDate = storeStatus.getStatusStartDate();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getStatus() {

@@ -107,7 +107,7 @@ public class StoreService extends EntityService<Store, StoreView> {
 
 		store.setSite(site);
 
-		return store;
+		return this.repository.save(store);
 	}
 
 	@Transactional

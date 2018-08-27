@@ -1,22 +1,18 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.ExtractionField;
 import com.mtn.model.domain.ExtractionFieldSet;
 
-import java.io.Serializable;
-
-/**
- * Created by Tyler on 7/9/2018.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExtractionFieldSetView extends AuditingEntityView {
 
     private String fieldSetName;
 
+    public ExtractionFieldSetView() {
+    }
+
     public ExtractionFieldSetView(ExtractionFieldSet extractionField) {
         super(extractionField);
-
         this.fieldSetName = extractionField.getFieldSetName();
     }
 
@@ -24,4 +20,7 @@ public class ExtractionFieldSetView extends AuditingEntityView {
         return fieldSetName;
     }
 
+    public void setFieldSetName(String fieldSetName) {
+        this.fieldSetName = fieldSetName;
+    }
 }

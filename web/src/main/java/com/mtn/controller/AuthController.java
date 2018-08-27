@@ -20,7 +20,7 @@ public class AuthController {
     /**
      * Returns the current user's profile
      */
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @GetMapping(value = "/user")
     public ResponseEntity getUserProfile() {
         UserProfile userProfile = securityService.getCurrentUser();
         if (userProfile != null) {

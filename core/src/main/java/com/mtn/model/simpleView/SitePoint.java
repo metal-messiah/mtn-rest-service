@@ -11,6 +11,9 @@ public class SitePoint {
 	private Float lng;
 	private Integer assigneeId;
 
+	public SitePoint() {
+	}
+
 	public SitePoint(Site site) {
 		this.id = site.getId();
 		this.lat = site.getLatitude();

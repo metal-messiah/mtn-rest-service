@@ -7,10 +7,7 @@ import com.mtn.service.ExtractionFieldSetService;
 import com.mtn.service.StoreCasingService;
 import com.mtn.util.csv.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.dozer.CsvDozerBeanWriter;
 import org.supercsv.io.dozer.ICsvDozerBeanWriter;
@@ -33,7 +30,7 @@ public class ExtractionController {
 		this.extractionFieldSetService = extractionFieldSetService;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, params = {"project-id", "field-set-id"})
+	@GetMapping(params = {"project-id", "field-set-id"})
 	public void findAll(HttpServletResponse response,
 						@RequestParam("project-id") Integer projectId,
 						@RequestParam("field-set-id") Integer fieldSetId) {

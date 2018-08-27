@@ -22,7 +22,7 @@ public class GroupValidator extends EntityValidator<Group, GroupView> {
 	@Override
 	protected void validateUpdateInsertBusinessRules(GroupView request) {
 		// If another Group (different ID) with the same display name already exists
-		List<Group> usersWithEmail = this.groupRepository.findAllByDisplayNameAndDeletedDateIsNull(request.getDisplayName().toLowerCase());
+		List<Group> usersWithEmail = this.groupRepository.findAllByDisplayName(request.getDisplayName().toLowerCase());
 		if (usersWithEmail.stream()
 				.anyMatch(group -> group.getDisplayName().toLowerCase().equals(request.getDisplayName().toLowerCase()) &&
 						!group.getId().equals(request.getId()))) {

@@ -16,7 +16,7 @@ public class RoleValidator extends EntityValidator<Role, RoleView> {
 
 	@Override
 	protected void validateUpdateInsertBusinessRules(RoleView request) {
-		if (request.getId() == 1) {
+		if (request.getId() != null && request.getId() == 1) {
 			throw new IllegalArgumentException("This role may not be updated");
 		}
 	}

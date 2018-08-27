@@ -19,7 +19,7 @@ public class BannerController extends CrudController<Banner, BannerView> {
         super(entityService, BannerView::new);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity findAll(Pageable page, @RequestParam(value = "query", required = false) String query) {
         Page<Banner> domainModels;
         if (query != null) {

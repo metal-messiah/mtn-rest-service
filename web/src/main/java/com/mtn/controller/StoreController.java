@@ -83,10 +83,15 @@ public class StoreController extends CrudController<Store, StoreView> {
 			throw new IllegalArgumentException("Do not include shopping center casing. Will be provided by web service");
 		}
 		Store store = this.entityService.findOneUsingSpecs(storeId);
-		// Add Casing to project(s)
+
+		// Create new Casing
 		StoreCasing storeCasing = storeCasingService.addOneCasingToStore(request, store);
-		request.getProjects().forEach(project -> projectService.addStoreCasingToProject(project.getId(), storeCasing));
-		storeStatusService.updateStoreStatusesFromCasing(storeCasing);
+
+		// Add project(s)
+		request.getProjects().forEach(project -> {
+			Project p = projectService.findOne(project.getId());
+			storeCasingService.addProject(storeCasing.getId(), p);
+		});
 
 		return ResponseEntity.ok(new StoreCasingView(storeCasing));
 	}
@@ -123,7 +128,7 @@ public class StoreController extends CrudController<Store, StoreView> {
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
-	@RequestMapping(value = "/{id}/store-statuses", method = RequestMethod.POST)
+	@PostMapping(value = "/{id}/store-statuses")
 	public ResponseEntity addOneStoreStatusToStore(@PathVariable("id") Integer storeId, @RequestBody StoreStatusView request) {
 		Store store = this.entityService.findOneUsingSpecs(storeId);
 		storeStatusService.addOneToStore(request, store);
@@ -138,27 +143,27 @@ public class StoreController extends CrudController<Store, StoreView> {
 		return ResponseEntity.ok(new SimpleStoreView(this.entityService.updateOne(request)));
 	}
 
-	@RequestMapping(value = "/{id}/store-statuses/{statusId}", method = RequestMethod.DELETE)
+	@DeleteMapping(value = "/{id}/store-statuses/{statusId}")
 	public ResponseEntity deleteStoreStatus(@PathVariable("id") Integer storeId, @PathVariable Integer statusId) {
 		storeStatusService.deleteOne(statusId);
 		Store domainModel = this.entityService.findOneUsingSpecs(storeId);
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
-	@RequestMapping(value = "/{id}/store-volumes", method = RequestMethod.GET)
+	@GetMapping(value = "/{id}/store-volumes")
 	public ResponseEntity findAllVolumesForStore(@PathVariable("id") Integer storeId) {
 		List<StoreVolume> domainModels = volumeService.findAllByStoreIdUsingSpecs(storeId);
 		return ResponseEntity.ok(domainModels.stream().map(StoreVolumeView::new).collect(Collectors.toList()));
 	}
 
-	@RequestMapping(value = "/{id}/store-volumes", method = RequestMethod.POST)
+	@PostMapping(value = "/{id}/store-volumes")
 	public ResponseEntity addOneStoreVolumeToStore(@PathVariable("id") Integer storeId, @RequestBody StoreVolumeView request) {
 		Store store = this.entityService.findOneUsingSpecs(storeId);
 		volumeService.addOneToStore(request, store);
 		return ResponseEntity.ok(new StoreView(store));
 	}
 
-	@RequestMapping(value = "/{id}/store-volumes/{volumeId}", method = RequestMethod.DELETE)
+	@DeleteMapping(value = "/{id}/store-volumes/{volumeId}")
 	public ResponseEntity deleteStoreVolume(@PathVariable("id") Integer storeId, @PathVariable Integer volumeId) {
 		volumeService.deleteOne(volumeId);
 		Store domainModel = this.entityService.findOneUsingSpecs(storeId);

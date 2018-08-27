@@ -39,7 +39,7 @@ public class Site extends AuditingEntity {
     private List<Store> stores = new ArrayList<>();
     private UserProfile assignee;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shopping_center_id")
     public ShoppingCenter getShoppingCenter() {
         return shoppingCenter;

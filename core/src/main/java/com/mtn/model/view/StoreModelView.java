@@ -20,6 +20,9 @@ public class StoreModelView extends AuditingEntityView {
     private Integer legacyCasingId;
     private SimpleProjectView project;
 
+    public StoreModelView() {
+    }
+
     public StoreModelView(StoreModel model) {
         super(model);
 
@@ -40,35 +43,71 @@ public class StoreModelView extends AuditingEntityView {
         return mapkey;
     }
 
+    public void setMapkey(String mapkey) {
+        this.mapkey = mapkey;
+    }
+
     public Double getCurve() {
         return curve;
+    }
+
+    public void setCurve(Double curve) {
+        this.curve = curve;
     }
 
     public Double getPwta() {
         return pwta;
     }
 
+    public void setPwta(Double pwta) {
+        this.pwta = pwta;
+    }
+
     public Double getPower() {
         return power;
+    }
+
+    public void setPower(Double power) {
+        this.power = power;
     }
 
     public Double getFitAdjustedPower() {
         return fitAdjustedPower;
     }
 
+    public void setFitAdjustedPower(Double fitAdjustedPower) {
+        this.fitAdjustedPower = fitAdjustedPower;
+    }
+
     public ModelType getModelType() {
         return modelType;
+    }
+
+    public void setModelType(ModelType modelType) {
+        this.modelType = modelType;
     }
 
     public LocalDateTime getModelDate() {
         return modelDate;
     }
 
+    public void setModelDate(LocalDateTime modelDate) {
+        this.modelDate = modelDate;
+    }
+
     public Integer getLegacyCasingId() {
         return legacyCasingId;
     }
 
+    public void setLegacyCasingId(Integer legacyCasingId) {
+        this.legacyCasingId = legacyCasingId;
+    }
+
     public SimpleProjectView getProject() {
         return project;
+    }
+
+    public void setProject(SimpleProjectView project) {
+        this.project = project;
     }
 }

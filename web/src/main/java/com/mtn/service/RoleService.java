@@ -1,9 +1,9 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Permission;
 import com.mtn.model.domain.Role;
 import com.mtn.model.view.RoleView;
+import com.mtn.repository.PermissionRepository;
 import com.mtn.repository.RoleRepository;
 import com.mtn.repository.specification.RoleSpecifications;
 import com.mtn.validators.RoleValidator;
@@ -11,18 +11,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 public class RoleService extends EntityService<Role, RoleView> {
 
+	private final PermissionRepository permissionRepository;
+
 	@Autowired
 	public RoleService(SecurityService securityService,
 					   RoleRepository repository,
-					   RoleValidator validator) {
+					   RoleValidator validator,
+					   PermissionRepository permissionRepository) {
 		super(securityService, repository, validator, Role::new);
+		this.permissionRepository = permissionRepository;
 	}
 
 	public Page<Role> findAllByNameUsingSpecs(String name, Pageable page) {
@@ -34,44 +40,16 @@ public class RoleService extends EntityService<Role, RoleView> {
 		);
 	}
 
-	@Transactional
-	public Role addOneMemberToRole(Integer roleId, UserProfile user) {
-		Role role = findOneUsingSpecs(roleId);
-		role.getMembers().add(user);
-		return role;
-	}
-
-	@Transactional
-	public Role addOnePermissionToRole(Integer roleId, Permission permission) {
-		Role role = findOneUsingSpecs(roleId);
-		role.getPermissions().add(permission);
-		return role;
-	}
-
-	@Transactional
-	public Role removeOneMemberFromRole(Integer roleId, Integer userId) {
-		Role role = findOneUsingSpecs(roleId);
-
-		role.getMembers().removeIf(member -> member.getId().equals(userId));
-		role.setUpdatedBy(securityService.getCurrentUser());
-
-		return role;
-	}
-
-	@Transactional
-	public Role removeOnePermissionFromRole(Integer roleId, Integer permissionId) {
-		Role role = findOneUsingSpecs(roleId);
-
-		role.getPermissions().removeIf(permission -> permission.getId().equals(permissionId));
-		role.setUpdatedBy(securityService.getCurrentUser());
-
-		return role;
-	}
-
 	@Override
-	protected void setEntityAttributesFromRequest(Role entity, RoleView request) {
-		entity.setDisplayName(request.getDisplayName());
-		entity.setDescription(request.getDescription());
+	protected void setEntityAttributesFromRequest(Role role, RoleView request) {
+		role.setDisplayName(request.getDisplayName());
+		role.setDescription(request.getDescription());
+
+		Set<Permission> permissions = request.getPermissions().stream()
+				.map(simplePermissionView -> this.permissionRepository.findOne(simplePermissionView.getId()))
+				.collect(Collectors.toSet());
+
+		role.setPermissions(permissions);
 	}
 
 	@Override

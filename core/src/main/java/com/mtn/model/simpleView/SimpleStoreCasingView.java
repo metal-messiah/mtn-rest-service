@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleStoreCasingView {
+public class SimpleStoreCasingView extends SimpleAuditingEntityView {
 
-    private Integer id;
     private LocalDateTime casingDate;
     private String note;
     private String storeStatus;
@@ -21,8 +20,11 @@ public class SimpleStoreCasingView {
     private SimpleShoppingCenterCasingView shoppingCenterCasing;
     private List<SimpleProjectView> projects = new ArrayList<>();
 
+    public SimpleStoreCasingView() {
+    }
+
     public SimpleStoreCasingView(StoreCasing casing) {
-        this.id = casing.getId();
+        super(casing);
         this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
         this.storeStatus = casing.getStoreStatus();
@@ -41,14 +43,6 @@ public class SimpleStoreCasingView {
         if (casing.getShoppingCenterCasing() != null) {
             this.shoppingCenterCasing = new SimpleShoppingCenterCasingView(casing.getShoppingCenterCasing());
         }
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public LocalDateTime getCasingDate() {

@@ -17,7 +17,7 @@ public class ClientAccessKeyController extends CrudController<ClientAccessKey, C
 	}
 
 	@Override
-	@RequestMapping(method = RequestMethod.PUT)
+	@PutMapping
 	public ResponseEntity updateOne(@RequestBody ClientAccessKeyView clientAccessKey) {
 		if (clientAccessKey.getAccessKey() == null || clientAccessKey.getClientUniqueIdentifier() == null) {
 			return ResponseEntity.badRequest().body("Body must contain 'accessKey' and 'clientUniqueIdentifier'");

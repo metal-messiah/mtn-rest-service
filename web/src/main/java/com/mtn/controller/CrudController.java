@@ -5,6 +5,7 @@ import com.mtn.model.view.AuditingEntityView;
 import com.mtn.service.EntityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.function.Function;
@@ -22,6 +23,7 @@ public abstract class CrudController<T extends AuditingEntity, V extends Auditin
 	@PostMapping
 	public ResponseEntity<V> addOne(@RequestBody V request) {
 		T domainModel = this.entityService.addOne(request);
+		Assert.notNull(domainModel.getId(), "Failed to save. ID is null");
 		return ResponseEntity.ok(this.getViewForEntity.apply(domainModel));
 	}
 

@@ -4,29 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenterCasing;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleShoppingCenterCasingView {
+public class SimpleShoppingCenterCasingView extends SimpleAuditingEntityView {
 
-	private Integer id;
 	private LocalDateTime casingDate;
 	private String note;
 
+	public SimpleShoppingCenterCasingView() {
+	}
+
 	public SimpleShoppingCenterCasingView(ShoppingCenterCasing casing) {
-		this.id = casing.getId();
+		super(casing);
 		this.casingDate = casing.getCasingDate();
 		this.note = casing.getNote();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public LocalDateTime getCasingDate() {

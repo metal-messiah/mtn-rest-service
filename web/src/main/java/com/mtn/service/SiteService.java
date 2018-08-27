@@ -89,7 +89,7 @@ public class SiteService extends EntityService<Site, SiteView> {
 		site.setCreatedBy(currentUser);
 		site.setUpdatedBy(currentUser);
 
-		return site;
+		return this.repository.save(site);
 	}
 
 	@Transactional
@@ -104,7 +104,7 @@ public class SiteService extends EntityService<Site, SiteView> {
 		site.setLatitude(latitude);
 		site.setLongitude(longitude);
 
-		return site;
+		return this.repository.save(site);
 	}
 
 	@Override
@@ -126,11 +126,17 @@ public class SiteService extends EntityService<Site, SiteView> {
 		site.setIntersectionStreetPrimary(request.getIntersectionStreetPrimary());
 		site.setIntersectionStreetSecondary(request.getIntersectionStreetSecondary());
 		site.setDuplicate(request.getDuplicate());
+
+		if (request.getAssignee() != null) {
+			UserProfile assignee = this.userProfileService.findOneUsingSpecs(request.getAssignee().getId());
+			site.setAssignee(assignee);
+		} else {
+			site.setAssignee(null);
+		}
 	}
 
 	@Override
 	public void handleAssociationsOnDeletion(Site existing) {
-		existing.setShoppingCenter(null);
 		existing.setAssignee(null);
 	}
 }

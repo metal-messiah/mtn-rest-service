@@ -43,45 +43,22 @@ public class SiteController extends CrudController<Site, SiteView> {
 		this.shoppingCenterService = shoppingCenterService;
 	}
 
-	@PostMapping(params = {"shopping-center-id"})
-	final public ResponseEntity addOne(@RequestBody SiteView request,
-									   @RequestParam(required = false, value = "shopping-center-id") Integer shoppingCenterId) {
-		ShoppingCenter sc;
-		if (shoppingCenterId != null) {
-			sc = shoppingCenterService.findOne(shoppingCenterId);
-		} else {
-			sc = shoppingCenterService.addOne(new ShoppingCenterView(new ShoppingCenter()));
-		}
-		Site domainModel = ((SiteService) this.entityService).addOne(request, sc);
-		return ResponseEntity.ok(new SiteView(domainModel));
-	}
-
-	@PostMapping(value = "/{id}/store")
-	public ResponseEntity addOneStoreToSite(
-			@PathVariable("id") Integer siteId,
-			@RequestParam(value = "overrideActiveStore", defaultValue = "false") Boolean overrideActiveStore,
-			@RequestBody StoreView request) {
-		Site site = this.entityService.findOne(siteId);
-		Store domainModel = storeService.createStoreForSiteFromRequest(request, site, overrideActiveStore);
-		return ResponseEntity.ok(new StoreView(domainModel));
-	}
-
-	@RequestMapping(value = "/{id}/store", method = RequestMethod.GET)
-	public ResponseEntity findAllStoresForSite(@PathVariable("id") Integer siteId) {
+	@GetMapping(value = "/{id}/store")
+	public ResponseEntity<List<SimpleStoreView>> findAllStoresForSite(@PathVariable("id") Integer siteId) {
 		List<Store> domainModels = storeService.findAllBySiteIdUsingSpecs(siteId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 	}
 
 	@PutMapping(value = "{siteId}", params = {"is-duplicate"})
-	public ResponseEntity updateIsDuplicate(@PathVariable("siteId") Integer siteId, @RequestParam("is-duplicate") Boolean isDuplicate) {
+	public ResponseEntity<SimpleSiteView> updateIsDuplicate(@PathVariable("siteId") Integer siteId, @RequestParam("is-duplicate") Boolean isDuplicate) {
 		Site site = this.entityService.findOne(siteId);
 		site.setDuplicate(isDuplicate);
 		SiteView request = new SiteView(site);
 		return ResponseEntity.ok(new SimpleSiteView(this.entityService.updateOne(request)));
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity findAll(@RequestParam(value = "north", required = false) Float north,
+	@GetMapping
+	public ResponseEntity<Page<SimpleSiteView>> findAll(@RequestParam(value = "north", required = false) Float north,
 								  @RequestParam(value = "south", required = false) Float south,
 								  @RequestParam(value = "east", required = false) Float east,
 								  @RequestParam(value = "west", required = false) Float west,
@@ -100,13 +77,13 @@ public class SiteController extends CrudController<Site, SiteView> {
 	}
 
 	@GetMapping(params = {"geojson"})
-	public ResponseEntity findAllWithinGeoJson(@RequestParam("geojson") String geoJson) {
+	public ResponseEntity<List<SimpleSiteView>> findAllWithinGeoJson(@RequestParam("geojson") String geoJson) {
 		List<Site> sites = ((SiteService) this.entityService).findAllInGeoJson(geoJson);
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
-	@RequestMapping(value = "/points", method = RequestMethod.GET, params = {"north", "south", "east", "west"})
-	public ResponseEntity findAllSitePointsWithinBounds(@RequestParam("north") Float north,
+	@GetMapping(value = "/points", params = {"north", "south", "east", "west"})
+	public ResponseEntity<List<SitePoint>> findAllSitePointsWithinBounds(@RequestParam("north") Float north,
 														@RequestParam("south") Float south,
 														@RequestParam("east") Float east,
 														@RequestParam("west") Float west) {
@@ -114,8 +91,8 @@ public class SiteController extends CrudController<Site, SiteView> {
 		return ResponseEntity.ok(domainModels.stream().map(SitePoint::new).collect(Collectors.toList()));
 	}
 
-	@RequestMapping(value = "/points", method = RequestMethod.GET, params = {"projectId"})
-	public ResponseEntity findAllSitesPointsWithinProjectBoundary(@RequestParam Integer projectId) {
+	@GetMapping(value = "/points", params = {"projectId"})
+	public ResponseEntity<List<SitePoint>> findAllSitesPointsWithinProjectBoundary(@RequestParam Integer projectId) {
 		Project project = this.projectService.findOne(projectId);
 		if (project.getBoundary() == null) {
 			throw new EntityNotFoundException(String.format("Project %s does not have a boundary", projectId));
@@ -124,9 +101,27 @@ public class SiteController extends CrudController<Site, SiteView> {
 		return ResponseEntity.ok(domainModels.stream().map(SitePoint::new).collect(Collectors.toList()));
 	}
 
-	@RequestMapping(value = "/assign-to-user", method = RequestMethod.POST)
-	public ResponseEntity assignToUser(@RequestBody Integer[] siteIds, @RequestParam(value = "user-id", required = false) Integer userId) {
+	@Override
+	@PostMapping
+	final public ResponseEntity<SiteView> addOne(@RequestBody SiteView request) {
+		ShoppingCenter sc = shoppingCenterService.addOne(new ShoppingCenterView());
+		Site domainModel = ((SiteService) this.entityService).addOne(request, sc);
+		return ResponseEntity.ok(new SiteView(domainModel));
+	}
+
+	@PostMapping(value = "/assign-to-user")
+	public ResponseEntity<List<SimpleSiteView>> assignToUser(@RequestBody Integer[] siteIds, @RequestParam(value = "user-id", required = false) Integer userId) {
 		List<Site> sites = ((SiteService) this.entityService).assignSitesToUser(siteIds, userId);
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
+	}
+
+	@PostMapping(value = "/{id}/store")
+	public ResponseEntity<StoreView> addOneStoreToSite(
+			@PathVariable("id") Integer siteId,
+			@RequestParam(value = "overrideActiveStore", defaultValue = "false") Boolean overrideActiveStore,
+			@RequestBody StoreView request) {
+		Site site = this.entityService.findOne(siteId);
+		Store domainModel = storeService.createStoreForSiteFromRequest(request, site, overrideActiveStore);
+		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 }

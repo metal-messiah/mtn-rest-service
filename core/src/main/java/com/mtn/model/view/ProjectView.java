@@ -25,6 +25,9 @@ public class ProjectView extends AuditingEntityView {
 
     private List<SimpleStoreModelView> models;
 
+    public ProjectView() {
+    }
+
     public ProjectView(Project project) {
         super(project);
 
@@ -46,48 +49,95 @@ public class ProjectView extends AuditingEntityView {
         return projectName;
     }
 
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
     public String getMetroArea() {
         return metroArea;
+    }
+
+    public void setMetroArea(String metroArea) {
+        this.metroArea = metroArea;
     }
 
     public String getClientName() {
         return clientName;
     }
 
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
     public Integer getProjectYear() {
         return projectYear;
+    }
+
+    public void setProjectYear(Integer projectYear) {
+        this.projectYear = projectYear;
     }
 
     public Integer getProjectMonth() {
         return projectMonth;
     }
 
+    public void setProjectMonth(Integer projectMonth) {
+        this.projectMonth = projectMonth;
+    }
+
     public Boolean getActive() {
         return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Boolean getPrimaryData() {
         return primaryData;
     }
 
+    public void setPrimaryData(Boolean primaryData) {
+        this.primaryData = primaryData;
+    }
+
     public LocalDateTime getDateStarted() {
         return dateStarted;
+    }
+
+    public void setDateStarted(LocalDateTime dateStarted) {
+        this.dateStarted = dateStarted;
     }
 
     public LocalDateTime getDateCompleted() {
         return dateCompleted;
     }
 
+    public void setDateCompleted(LocalDateTime dateCompleted) {
+        this.dateCompleted = dateCompleted;
+    }
+
     public String getSource() {
         return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public Integer getLegacyProjectId() {
         return legacyProjectId;
     }
 
+    public void setLegacyProjectId(Integer legacyProjectId) {
+        this.legacyProjectId = legacyProjectId;
+    }
+
     public List<SimpleStoreModelView> getModels() {
         return models;
     }
 
+    public void setModels(List<SimpleStoreModelView> models) {
+        this.models = models;
+    }
 }

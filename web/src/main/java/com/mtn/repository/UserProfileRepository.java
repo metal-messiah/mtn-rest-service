@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface UserProfileRepository extends EntityRepository<UserProfile> {
 
-	List<UserProfile> findAllByEmailAndDeletedDateIsNull(String email);
+	List<UserProfile> findAllByEmail(String email);
 
 }

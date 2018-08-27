@@ -49,7 +49,7 @@ public class StoreModelService extends StoreChildService<StoreModel, StoreModelV
 
         model.setStore(store);
 
-        return model;
+        return this.repository.save(model);
     }
 
     @Override

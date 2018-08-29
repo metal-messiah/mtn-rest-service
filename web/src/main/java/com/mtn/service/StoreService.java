@@ -5,6 +5,7 @@ import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.utils.SiteUtil;
 import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
@@ -32,8 +33,7 @@ public class StoreService extends EntityService<Store, StoreView> {
 	}
 
 	public Page<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west, List<StoreType> storeTypes, Pageable page) {
-		Integer assigneeId = securityService.getCurrentUser().getId();
-		Specifications<Store> spec = Specifications.where(StoreSpecifications.withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId));
+		Specifications<Store> spec = Specifications.where(StoreSpecifications.withinBoundingBox(north, south, east, west));
 
 		if (storeTypes != null && storeTypes.size() > 0) {
 			spec = spec.and(StoreSpecifications.ofTypes(storeTypes));
@@ -72,10 +72,9 @@ public class StoreService extends EntityService<Store, StoreView> {
 
 	@Transactional
 	public Store createNewStoreForSite(Site site) {
-		Store store = new Store();
-		store.setSite(site);
-		store.setStoreType(StoreType.ACTIVE);
-		return store;
+		StoreView request = new StoreView();
+		request.setStoreType(StoreType.ACTIVE);
+		return this.createStoreForSiteFromRequest(request, site, true);
 	}
 
 	@Transactional
@@ -119,16 +118,6 @@ public class StoreService extends EntityService<Store, StoreView> {
 
 	@Override
 	protected void setEntityAttributesFromRequest(Store store, StoreView request) {
-		//If the store is changing type to active, we have some special handling to do
-		if (request.getStoreType() == StoreType.ACTIVE && request.getStoreType() != store.getStoreType()) {
-			//Find any existing ACTIVE store for the site
-			Site site = store.getSite();
-			SiteUtil.getActiveStore(site).ifPresent(existingActiveStore -> {
-				existingActiveStore.setStoreType(StoreType.HISTORICAL);
-				existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
-			});
-		}
-
 		store.setStoreName(request.getStoreName());
 		store.setStoreNumber(request.getStoreNumber());
 		store.setStoreType(request.getStoreType());

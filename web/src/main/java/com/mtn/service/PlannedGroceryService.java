@@ -214,11 +214,10 @@ public class PlannedGroceryService {
 		store.setDateOpened(updatable.getDateOpened());
 		if (updatable.getStoreStatuses() != null) {
 			updatable.getStoreStatuses().stream().filter(status -> status.getId() == null).forEach(status -> {
-				StoreStatus newStoreStatus = new StoreStatus();
-				newStoreStatus.setStore(store);
-				newStoreStatus.setStatus(status.getStatus());
-				newStoreStatus.setStatusStartDate(status.getStatusStartDate());
-				storeStatusService.addOne(new StoreStatusView(newStoreStatus));
+				StoreStatusView newStoreStatusRequest = new StoreStatusView();
+				newStoreStatusRequest.setStatus(status.getStatus());
+				newStoreStatusRequest.setStatusStartDate(status.getStatusStartDate());
+				storeStatusService.addOneToStore(newStoreStatusRequest, store);
 			});
 		}
 		StoreSurvey storeSurvey = StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now()).orElseGet(() -> {

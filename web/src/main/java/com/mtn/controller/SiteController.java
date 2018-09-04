@@ -104,7 +104,8 @@ public class SiteController extends CrudController<Site, SiteView> {
 	@Override
 	@PostMapping
 	final public ResponseEntity<SiteView> addOne(@RequestBody SiteView request) {
-		ShoppingCenter sc = shoppingCenterService.addOne(new ShoppingCenterView());
+		ShoppingCenterView scRequest = new ShoppingCenterView();
+		ShoppingCenter sc = shoppingCenterService.addOne(scRequest);
 		Site domainModel = ((SiteService) this.entityService).addOne(request, sc);
 		return ResponseEntity.ok(new SiteView(domainModel));
 	}

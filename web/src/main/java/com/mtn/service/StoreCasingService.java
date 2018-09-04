@@ -73,11 +73,10 @@ public class StoreCasingService extends StoreChildService<StoreCasing, StoreCasi
 			casing.setStoreStatus(current.get().getStatus());
 		} else {
 			casing.setStoreStatus("Open");
-			StoreStatus storeStatus = new StoreStatus();
-			storeStatus.setStatusStartDate(request.getCasingDate());
-			storeStatus.setStatus("Open");
-			storeStatus.setStore(casing.getStore());
-			storeStatusService.addOne(new StoreStatusView(storeStatus));
+			StoreStatusView storeStatusRequest = new StoreStatusView();
+			storeStatusRequest.setStatusStartDate(request.getCasingDate());
+			storeStatusRequest.setStatus("Open");
+			storeStatusService.addOneToStore(storeStatusRequest, casing.getStore());
 		}
 
 		StoreSurvey survey = storeSurveyService.getCloneOfLatestForStore(store, casing.getCasingDate());

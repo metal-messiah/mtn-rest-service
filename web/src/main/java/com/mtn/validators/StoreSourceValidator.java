@@ -16,8 +16,6 @@ public class StoreSourceValidator extends EntityValidator<StoreSource, StoreSour
 
 	@Override
 	protected void validateUpdateInsertBusinessRules(StoreSourceView request) {
-		super.validateForInsert(request);
-
 		if (request.getSourceName() == null) {
 			throw new IllegalStateException("StoreSource must have a Source Name (ex. Planned Grocery)!");
 		}

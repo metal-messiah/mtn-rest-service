@@ -246,11 +246,11 @@ public class PlannedGroceryService {
 
 		// Check if source already exists
 		StoreSource source = this.storeSourceService.findOneBySourceNativeIdUsingSpecs("Planned Grocery", objectId).orElseGet(() -> {
-			StoreSource newSource = new StoreSource();
-			newSource.setSourceNativeId(objectId);
-			newSource.setSourceName("Planned Grocery");
-			newSource.setSourceCreatedDate(sourceCreateDate);
-			return newSource;
+			StoreSourceView newSourceRequest = new StoreSourceView();
+			newSourceRequest.setSourceNativeId(objectId);
+			newSourceRequest.setSourceName("Planned Grocery");
+			newSourceRequest.setSourceCreatedDate(sourceCreateDate);
+			return this.storeSourceService.addOne(newSourceRequest);
 		});
 
 		// Update relevant source data
@@ -267,11 +267,7 @@ public class PlannedGroceryService {
 			source.setValidatedDate(null);
 		}
 
-		if (source.getId() != null) {
-			this.storeSourceService.updateOne(new StoreSourceView(source));
-		} else {
-			this.storeSourceService.addOne(new StoreSourceView(source));
-		}
+		this.storeSourceService.updateOne(new StoreSourceView(source));
 	}
 
 	@Transactional
@@ -390,11 +386,10 @@ public class PlannedGroceryService {
 
 	@Transactional
 	protected void createNewStatusFromSource(Store store, String sourceStatus, LocalDateTime statusStartDate) {
-		StoreStatus newStatus = new StoreStatus();
-		newStatus.setStore(store);
-		newStatus.setStatus(sourceStatus);
-		newStatus.setStatusStartDate(statusStartDate);
-		storeStatusService.addOne(new StoreStatusView(newStatus));
+		StoreStatusView newStatusRequest = new StoreStatusView();
+		newStatusRequest.setStatus(sourceStatus);
+		newStatusRequest.setStatusStartDate(statusStartDate);
+		storeStatusService.addOneToStore(newStatusRequest, store);
 	}
 
 	private LocalDateTime epochMillisecondsToLocalDateTime(Long epochMilliseconds) {

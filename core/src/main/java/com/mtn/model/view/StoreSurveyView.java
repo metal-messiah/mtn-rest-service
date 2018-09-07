@@ -53,7 +53,6 @@ public class StoreSurveyView extends AuditingEntityView {
     private Boolean departmentWine;
     private Boolean accessibilityFarthestFromEntrance;
     private Boolean accessibilityMainIntersectionHasTrafficLight;
-    private Boolean accessibilityMainIntersectionNeedsTrafficLight;
     private Boolean accessibilityMultipleRetailersBeforeSite;
     private Boolean accessibilitySetBackTwiceParkingLength;
     private RatingType accessibilityRating;
@@ -137,7 +136,6 @@ public class StoreSurveyView extends AuditingEntityView {
         this.departmentWine = storeSurvey.getDepartmentWine();
         this.accessibilityFarthestFromEntrance = storeSurvey.getAccessibilityFarthestFromEntrance();
         this.accessibilityMainIntersectionHasTrafficLight = storeSurvey.getAccessibilityMainIntersectionHasTrafficLight();
-        this.accessibilityMainIntersectionNeedsTrafficLight = storeSurvey.getAccessibilityMainIntersectionNeedsTrafficLight();
         this.accessibilityMultipleRetailersBeforeSite = storeSurvey.getAccessibilityMultipleRetailersBeforeSite();
         this.accessibilitySetBackTwiceParkingLength = storeSurvey.getAccessibilitySetBackTwiceParkingLength();
         this.accessibilityRating = storeSurvey.getAccessibilityRating();
@@ -522,14 +520,6 @@ public class StoreSurveyView extends AuditingEntityView {
 
     public void setAccessibilityMainIntersectionHasTrafficLight(Boolean accessibilityMainIntersectionHasTrafficLight) {
         this.accessibilityMainIntersectionHasTrafficLight = accessibilityMainIntersectionHasTrafficLight;
-    }
-
-    public Boolean getAccessibilityMainIntersectionNeedsTrafficLight() {
-        return accessibilityMainIntersectionNeedsTrafficLight;
-    }
-
-    public void setAccessibilityMainIntersectionNeedsTrafficLight(Boolean accessibilityMainIntersectionNeedsTrafficLight) {
-        this.accessibilityMainIntersectionNeedsTrafficLight = accessibilityMainIntersectionNeedsTrafficLight;
     }
 
     public Boolean getAccessibilityMultipleRetailersBeforeSite() {

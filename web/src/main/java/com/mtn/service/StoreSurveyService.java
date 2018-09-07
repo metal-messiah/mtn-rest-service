@@ -106,7 +106,6 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 		survey.setDepartmentWine(request.getDepartmentWine());
 		survey.setAccessibilityFarthestFromEntrance(request.getAccessibilityFarthestFromEntrance());
 		survey.setAccessibilityMainIntersectionHasTrafficLight(request.getAccessibilityMainIntersectionHasTrafficLight());
-		survey.setAccessibilityMainIntersectionNeedsTrafficLight(request.getAccessibilityMainIntersectionNeedsTrafficLight());
 		survey.setAccessibilityMultipleRetailersBeforeSite(request.getAccessibilityMultipleRetailersBeforeSite());
 		survey.setAccessibilitySetBackTwiceParkingLength(request.getAccessibilitySetBackTwiceParkingLength());
 		survey.setAccessibilityRating(request.getAccessibilityRating());

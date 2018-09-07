@@ -70,6 +70,12 @@ public class StoreService extends EntityService<Store, StoreView> {
 		);
 	}
 
+	public List<Store> findAllByIdsUsingSpecs(List<Integer> storeIds) {
+		Specifications<Store> spec = where(StoreSpecifications.isNotDeleted());
+		spec = spec.and(StoreSpecifications.idIn(storeIds));
+		return this.repository.findAll(spec);
+	}
+
 	@Transactional
 	public Store createNewStoreForSite(Site site) {
 		StoreView request = new StoreView();

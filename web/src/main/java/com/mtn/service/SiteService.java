@@ -71,9 +71,9 @@ public class SiteService extends EntityService<Site, SiteView> {
 	}
 
 	@Transactional
-	public List<Site> assignSitesToUser(Integer[] siteIds, Integer userId) {
+	public List<Site> assignSitesToUser(List<Integer> siteIds, Integer userId) {
 		final UserProfile selectedUser = (userId != null) ? userProfileService.findOne(userId) : null;
-		List<Site> sites = this.repository.findAll(Specifications.where(SiteSpecifications.idIn(Arrays.asList(siteIds))));
+		List<Site> sites = this.repository.findAll(Specifications.where(SiteSpecifications.idIn(siteIds)));
 		sites.forEach(site -> site.setAssignee(selectedUser));
 		return sites;
 	}

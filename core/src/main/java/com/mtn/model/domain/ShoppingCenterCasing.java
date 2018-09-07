@@ -14,7 +14,6 @@ public class ShoppingCenterCasing extends AuditingEntity {
 
     private LocalDateTime casingDate;
     private String note;
-    private RatingType ratingParkingLot;
     private RatingType ratingBuildings;
     private RatingType ratingLighting;
     private RatingType ratingSynergy;
@@ -51,15 +50,6 @@ public class ShoppingCenterCasing extends AuditingEntity {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    @Enumerated(EnumType.STRING)
-    public RatingType getRatingParkingLot() {
-        return ratingParkingLot;
-    }
-
-    public void setRatingParkingLot(RatingType ratingParkingLot) {
-        this.ratingParkingLot = ratingParkingLot;
     }
 
     @Enumerated(EnumType.STRING)

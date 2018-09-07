@@ -57,7 +57,6 @@ public class ShoppingCenterCasingService extends EntityService<ShoppingCenterCas
     protected void setEntityAttributesFromRequest(ShoppingCenterCasing casing, ShoppingCenterCasingView request) {
         casing.setCasingDate(request.getCasingDate());
         casing.setNote(request.getNote());
-        casing.setRatingParkingLot(request.getRatingParkingLot());
         casing.setRatingBuildings(request.getRatingBuildings());
         casing.setRatingLighting(request.getRatingLighting());
         casing.setRatingSynergy(request.getRatingSynergy());

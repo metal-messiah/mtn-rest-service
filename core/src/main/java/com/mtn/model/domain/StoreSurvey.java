@@ -59,7 +59,6 @@ public class StoreSurvey extends AuditingEntity {
     private Boolean departmentWine = false;
     private Boolean accessibilityFarthestFromEntrance = false;
     private Boolean accessibilityMainIntersectionHasTrafficLight = false;
-    private Boolean accessibilityMainIntersectionNeedsTrafficLight = false;
     private Boolean accessibilityMultipleRetailersBeforeSite = false;
     private Boolean accessibilitySetBackTwiceParkingLength = false;
     private RatingType accessibilityRating;
@@ -144,7 +143,6 @@ public class StoreSurvey extends AuditingEntity {
         this.departmentWine = storeSurvey.departmentWine;
         this.accessibilityFarthestFromEntrance = storeSurvey.accessibilityFarthestFromEntrance;
         this.accessibilityMainIntersectionHasTrafficLight = storeSurvey.accessibilityMainIntersectionHasTrafficLight;
-        this.accessibilityMainIntersectionNeedsTrafficLight = storeSurvey.accessibilityMainIntersectionNeedsTrafficLight;
         this.accessibilityMultipleRetailersBeforeSite = storeSurvey.accessibilityMultipleRetailersBeforeSite;
         this.accessibilitySetBackTwiceParkingLength = storeSurvey.accessibilitySetBackTwiceParkingLength;
         this.accessibilityRating = storeSurvey.accessibilityRating;
@@ -536,14 +534,6 @@ public class StoreSurvey extends AuditingEntity {
 
     public void setAccessibilityMainIntersectionHasTrafficLight(Boolean accessibilityMainIntersectionHasTrafficLight) {
         this.accessibilityMainIntersectionHasTrafficLight = accessibilityMainIntersectionHasTrafficLight;
-    }
-
-    public Boolean getAccessibilityMainIntersectionNeedsTrafficLight() {
-        return accessibilityMainIntersectionNeedsTrafficLight;
-    }
-
-    public void setAccessibilityMainIntersectionNeedsTrafficLight(Boolean accessibilityMainIntersectionNeedsTrafficLight) {
-        this.accessibilityMainIntersectionNeedsTrafficLight = accessibilityMainIntersectionNeedsTrafficLight;
     }
 
     public Boolean getAccessibilityMultipleRetailersBeforeSite() {

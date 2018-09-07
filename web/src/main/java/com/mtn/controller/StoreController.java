@@ -26,6 +26,7 @@ public class StoreController extends CrudController<Store, StoreView> {
 	private final ProjectService projectService;
 	private final StoreStatusService storeStatusService;
 	private final BannerService bannerService;
+	private final SiteService siteService;
 
 	@Autowired
 	public StoreController(StoreService storeService,
@@ -36,7 +37,8 @@ public class StoreController extends CrudController<Store, StoreView> {
 						   StoreCasingService storeCasingService,
 						   ProjectService projectService,
 						   StoreStatusService storeStatusService,
-						   BannerService bannerService) {
+						   BannerService bannerService,
+						   SiteService siteService) {
 		super(storeService, StoreView::new);
 		this.storeSurveyService = surveyService;
 		this.volumeService = volumeService;
@@ -46,6 +48,7 @@ public class StoreController extends CrudController<Store, StoreView> {
 		this.projectService = projectService;
 		this.storeStatusService = storeStatusService;
 		this.bannerService = bannerService;
+		this.siteService = siteService;
 	}
 
 	@GetMapping(params = {"north", "south", "east", "west"})
@@ -65,8 +68,10 @@ public class StoreController extends CrudController<Store, StoreView> {
 		}
 	}
 
-	@GetMapping(params = {"geojson"})
-	public ResponseEntity findAllInGeoJson(@RequestParam("geojson") String geoJson) {
+	@GetMapping(params = {"geojson", "filter"})
+	public ResponseEntity findAllInGeoJson(@RequestParam("geojson") String geoJson,
+										   @RequestParam("filter") String filter) {
+		// TODO Add filter
 		List<Store> stores = ((StoreService) this.entityService).findAllInGeoJson(geoJson);
 		List<Integer> ids = stores.stream().map(AuditingEntity::getId).distinct().collect(Collectors.toList());
 		return ResponseEntity.ok(ids);
@@ -168,6 +173,15 @@ public class StoreController extends CrudController<Store, StoreView> {
 		volumeService.deleteOne(volumeId);
 		Store domainModel = this.entityService.findOneUsingSpecs(storeId);
 		return ResponseEntity.ok(new StoreView(domainModel));
+	}
+
+	@PutMapping("assign-to-user")
+	public ResponseEntity<List<SimpleSiteView>> assignToUser(@RequestBody List<Integer> storeIds,
+															  @RequestParam(value = "user-id", required = false) Integer userId) {
+		List<Store> stores = ((StoreService) this.entityService).findAllByIdsUsingSpecs(storeIds);
+		List<Integer> siteIds = stores.stream().map(store -> store.getSite().getId()).distinct().collect(Collectors.toList());
+		List<Site> sites = this.siteService.assignSitesToUser(siteIds, userId);
+		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
 }

@@ -15,7 +15,6 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
 
     private LocalDateTime casingDate;
     private String note;
-    private RatingType ratingParkingLot;
     private RatingType ratingBuildings;
     private RatingType ratingLighting;
     private RatingType ratingSynergy;
@@ -33,7 +32,6 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
         this.casingDate = casing.getCasingDate();
         this.note = casing.getNote();
         this.ratingBuildings = casing.getRatingBuildings();
-        this.ratingParkingLot = casing.getRatingParkingLot();
         this.ratingLighting = casing.getRatingLighting();
         this.ratingSynergy = casing.getRatingSynergy();
         this.legacyCasingId = casing.getLegacyCasingId();
@@ -63,14 +61,6 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public RatingType getRatingParkingLot() {
-        return ratingParkingLot;
-    }
-
-    public void setRatingParkingLot(RatingType ratingParkingLot) {
-        this.ratingParkingLot = ratingParkingLot;
     }
 
     public RatingType getRatingBuildings() {

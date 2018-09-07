@@ -111,7 +111,7 @@ public class SiteController extends CrudController<Site, SiteView> {
 	}
 
 	@PostMapping(value = "/assign-to-user")
-	public ResponseEntity<List<SimpleSiteView>> assignToUser(@RequestBody Integer[] siteIds, @RequestParam(value = "user-id", required = false) Integer userId) {
+	public ResponseEntity<List<SimpleSiteView>> assignToUser(@RequestBody List<Integer> siteIds, @RequestParam(value = "user-id", required = false) Integer userId) {
 		List<Site> sites = ((SiteService) this.entityService).assignSitesToUser(siteIds, userId);
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}

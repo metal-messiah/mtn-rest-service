@@ -22,15 +22,6 @@ public class SiteSpecifications extends AuditingEntitySpecifications {
 	private static final String DUPLICATE = "duplicate";
 	private static final String ASSIGNEE = "assignee";
 
-	public static Specification<Site> idIn(List<Integer> ids) {
-		return new Specification<Site>() {
-			@Override
-			public Predicate toPredicate(Root<Site> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				return root.get(ID).in(ids);
-			}
-		};
-	}
-
 	public static Specification<Site> isDuplicate() {
 		return new Specification<Site>() {
 			@Override

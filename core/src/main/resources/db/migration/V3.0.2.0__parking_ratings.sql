@@ -10,14 +10,3 @@ drop column rating_parking_lot;
 
 alter table store_survey
 drop column accessibility_main_intersection_needs_traffic_light;
-
-drop table ogden_shopping_center_accesses;
-drop table ogden_shopping_center_casings;
-drop table ogden_shopping_center_surveys;
-drop table ogden_shopping_center_tenants;
-drop table ogden_sites;
-drop table ogden_stores;
-drop table ogden_store_casings;
-drop table ogden_store_statuses;
-drop table ogden_store_surveys;
-drop table ogden_store_volumes;

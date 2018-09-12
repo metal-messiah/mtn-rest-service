@@ -5,7 +5,6 @@ import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.utils.SiteUtil;
 import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
@@ -43,8 +42,29 @@ public class StoreService extends EntityService<Store, StoreView> {
 		return this.repository.findAll(spec, page);
 	}
 
-	public List<Store> findAllInGeoJson(String geoJson) {
-		return ((StoreRepository) this.repository).findAllInGeoJson(geoJson);
+	public List<Store> findAllInGeoJson(String geoJson, boolean active, boolean future, boolean historical) {
+		List<StoreType> storeTypes = this.getStoreTypes(active, future, historical);
+		return ((StoreRepository) this.repository).findAllInGeoJson(geoJson, storeTypes);
+	}
+
+	public List<Store> findAllInRadius(Float latitude, Float longitude, Float radiusMeters,
+									   boolean active, boolean future, boolean historical) {
+		List<StoreType> storeTypes = this.getStoreTypes(active, future, historical);
+		return ((StoreRepository) this.repository).findAllInRadius(latitude, longitude, radiusMeters, storeTypes);
+	}
+
+	private List<StoreType> getStoreTypes(boolean active, boolean future, boolean historical) {
+		List<StoreType> storeTypes = new ArrayList<>();
+		if (active) {
+			storeTypes.add(StoreType.ACTIVE);
+		}
+		if (future) {
+			storeTypes.add(StoreType.FUTURE);
+		}
+		if (historical) {
+			storeTypes.add(StoreType.HISTORICAL);
+		}
+		return storeTypes;
 	}
 
 	public Page<Store> findAllAssignedTo(Integer assigneeId, List<StoreType> storeTypes, Pageable page) {

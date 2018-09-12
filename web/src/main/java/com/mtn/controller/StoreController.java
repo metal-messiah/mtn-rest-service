@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -68,13 +70,33 @@ public class StoreController extends CrudController<Store, StoreView> {
 		}
 	}
 
-	@GetMapping(params = {"geojson", "filter"})
-	public ResponseEntity findAllInGeoJson(@RequestParam("geojson") String geoJson,
-										   @RequestParam("filter") String filter) {
-		// TODO Add filter
-		List<Store> stores = ((StoreService) this.entityService).findAllInGeoJson(geoJson);
-		List<Integer> ids = stores.stream().map(AuditingEntity::getId).distinct().collect(Collectors.toList());
-		return ResponseEntity.ok(ids);
+	@GetMapping(params = {"latitude", "longitude", "radiusMeters"})
+	public ResponseEntity<Map<String, List<Integer>>> findAllIdsInRadius(@RequestParam("latitude") Float latitude,
+																		 @RequestParam("longitude") Float longitude,
+																		 @RequestParam("radiusMeters") Float radiusMeters,
+																		 @RequestParam("active") boolean active,
+																		 @RequestParam("future") boolean future,
+																		 @RequestParam("historical") boolean historical) {
+		List<Store> stores = ((StoreService) this.entityService).findAllInRadius(latitude, longitude, radiusMeters, active, future, historical);
+		return ResponseEntity.ok(getIdsFromStores(stores));
+	}
+
+	@GetMapping(params = {"geojson"})
+	public ResponseEntity<Map<String, List<Integer>>> findAllIdsInGeoJson(@RequestParam("geojson") String geoJson,
+																		  @RequestParam("active") boolean active,
+																		  @RequestParam("future") boolean future,
+																		  @RequestParam("historical") boolean historical) {
+		List<Store> stores = ((StoreService) this.entityService).findAllInGeoJson(geoJson, active, future, historical);
+		return ResponseEntity.ok(getIdsFromStores(stores));
+	}
+
+	private Map<String, List<Integer>> getIdsFromStores(List<Store> stores) {
+		List<Integer> storeIds = stores.stream().map(AuditingEntity::getId).distinct().collect(Collectors.toList());
+		List<Integer> siteIds = stores.stream().map(store -> store.getSite().getId()).distinct().collect(Collectors.toList());
+		Map<String, List<Integer>> ids = new HashMap<>();
+		ids.put("storeIds", storeIds);
+		ids.put("siteIds", siteIds);
+		return ids;
 	}
 
 	@PostMapping(value = "/{id}/store-casings")

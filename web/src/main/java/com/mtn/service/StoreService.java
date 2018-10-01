@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -157,5 +158,21 @@ public class StoreService extends EntityService<Store, StoreView> {
 		// Site is required
 		existing.setBanner(null);
 		// No need to disassociate casings, models, surveys, volumes, statuses
+	}
+
+	@Transactional
+	public Store validateStore(Integer storeId) {
+		Store store = this.findOne(storeId);
+		store.setValidatedDate(LocalDateTime.now());
+		store.setValidatedBy(this.securityService.getCurrentUser());
+		return store;
+	}
+
+	@Transactional
+	public Store invalidateStore(Integer storeId) {
+		Store store = this.findOne(storeId);
+		store.setValidatedDate(null);
+		store.setValidatedBy(null);
+		return store;
 	}
 }

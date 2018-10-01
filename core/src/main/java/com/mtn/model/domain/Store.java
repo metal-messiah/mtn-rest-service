@@ -7,9 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 4/26/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="store_id"))
@@ -22,6 +19,8 @@ public class Store extends AuditingEntity {
     private LocalDateTime dateClosed;
     private Boolean floating;
     private Integer legacyLocationId;
+    private UserProfile validatedBy;
+    private LocalDateTime validatedDate;
 
     private Site site;
     private Banner banner;
@@ -153,5 +152,23 @@ public class Store extends AuditingEntity {
 
     public void setFloating(Boolean floating) {
         this.floating = floating;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "validated_by")
+    public UserProfile getValidatedBy() {
+        return validatedBy;
+    }
+
+    public void setValidatedBy(UserProfile validatedBy) {
+        this.validatedBy = validatedBy;
+    }
+
+    public LocalDateTime getValidatedDate() {
+        return validatedDate;
+    }
+
+    public void setValidatedDate(LocalDateTime validatedDate) {
+        this.validatedDate = validatedDate;
     }
 }

@@ -16,6 +16,8 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 	private String currentStoreStatus;
 	private Boolean floating;
 	private StoreType storeType;
+	private SimpleUserProfileView validatedBy;
+	private LocalDateTime validatedDate;
 
 	private SimpleSiteView site;
 	private SimpleBannerView banner;
@@ -32,6 +34,10 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 				.ifPresent(storeStatus -> this.currentStoreStatus = storeStatus.getStatus());
 		this.floating = store.getFloating();
 		this.storeType = store.getStoreType();
+		if (store.getValidatedBy() != null) {
+			this.validatedBy = new SimpleUserProfileView(store.getValidatedBy());
+		}
+		this.validatedDate = store.getValidatedDate();
 
 		this.site = new SimpleSiteView(store.getSite());
 		this.banner = (store.getBanner() != null) ? new SimpleBannerView(store.getBanner()) : null;
@@ -101,5 +107,21 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 
 	public void setLatestStoreVolume(SimpleStoreVolumeView latestStoreVolume) {
 		this.latestStoreVolume = latestStoreVolume;
+	}
+
+	public SimpleUserProfileView getValidatedBy() {
+		return validatedBy;
+	}
+
+	public void setValidatedBy(SimpleUserProfileView validatedBy) {
+		this.validatedBy = validatedBy;
+	}
+
+	public LocalDateTime getValidatedDate() {
+		return validatedDate;
+	}
+
+	public void setValidatedDate(LocalDateTime validatedDate) {
+		this.validatedDate = validatedDate;
 	}
 }

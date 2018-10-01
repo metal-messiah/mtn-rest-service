@@ -3,19 +3,14 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Store;
-import com.mtn.model.domain.StoreStatus;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.simpleView.*;
 import com.mtn.model.utils.StoreUtil;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 4/26/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoreView extends AuditingEntityView {
 
@@ -26,6 +21,8 @@ public class StoreView extends AuditingEntityView {
 	private String storeNumber;
 	private Integer legacyLocationId;
 	private Boolean floating;
+	private SimpleUserProfileView validatedBy;
+	private LocalDateTime validatedDate;
 
 	private SimpleStoreStatusView currentStoreStatus;
 	private SimpleStoreSurveyView currentStoreSurvey;
@@ -51,6 +48,10 @@ public class StoreView extends AuditingEntityView {
 		this.legacyLocationId = store.getLegacyLocationId();
 		this.storeNumber = store.getStoreNumber();
 		this.floating = store.getFloating();
+		if (store.getValidatedBy() != null) {
+			this.validatedBy = new SimpleUserProfileView(store.getValidatedBy());
+		}
+		this.validatedDate = store.getValidatedDate();
 
 		this.site = new SimpleSiteView(store.getSite());
 
@@ -207,5 +208,21 @@ public class StoreView extends AuditingEntityView {
 
 	public void setStoreStatuses(List<SimpleStoreStatusView> storeStatuses) {
 		this.storeStatuses = storeStatuses;
+	}
+
+	public SimpleUserProfileView getValidatedBy() {
+		return validatedBy;
+	}
+
+	public void setValidatedBy(SimpleUserProfileView validatedBy) {
+		this.validatedBy = validatedBy;
+	}
+
+	public LocalDateTime getValidatedDate() {
+		return validatedDate;
+	}
+
+	public void setValidatedDate(LocalDateTime validatedDate) {
+		this.validatedDate = validatedDate;
 	}
 }

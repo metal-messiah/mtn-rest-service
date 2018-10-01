@@ -99,6 +99,18 @@ public class StoreController extends CrudController<Store, StoreView> {
 		return ids;
 	}
 
+	@PutMapping("/{id}/validate")
+	public ResponseEntity<SimpleStoreView> validate(@PathVariable("id") Integer storeId) {
+		Store store = ((StoreService) this.entityService).validateStore(storeId);
+		return ResponseEntity.ok(new SimpleStoreView(store));
+	}
+
+	@PutMapping("/{id}/invalidate")
+	public ResponseEntity<SimpleStoreView> invalidate(@PathVariable("id") Integer storeId) {
+		Store store = ((StoreService) this.entityService).invalidateStore(storeId);
+		return ResponseEntity.ok(new SimpleStoreView(store));
+	}
+
 	@PostMapping(value = "/{id}/store-casings")
 	public ResponseEntity createOneStoreCasingForStore(
 			@PathVariable("id") Integer storeId,

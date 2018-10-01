@@ -71,6 +71,10 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 		survey.setFuelIsOpen24(request.getFuelIsOpen24());
 		survey.setPharmacyIsOpen24(request.getPharmacyIsOpen24());
 		survey.setPharmacyHasDriveThrough(request.getPharmacyHasDriveThrough());
+		survey.setPharmacyScriptsWeekly(request.getPharmacyScriptsWeekly());
+		survey.setPharmacyAvgDollarsPerScript(request.getPharmacyAvgDollarsPerScript());
+		survey.setPharmacyPharmacistCount(request.getPharmacyPharmacistCount());
+		survey.setPharmacyTechnicianCount(request.getPharmacyTechnicianCount());
 		survey.setDepartmentBakery(request.getDepartmentBakery());
 		survey.setDepartmentBank(request.getDepartmentBank());
 		survey.setDepartmentBeer(request.getDepartmentBeer());

@@ -114,10 +114,6 @@ public class StoreCasingService extends StoreChildService<StoreCasing, StoreCasi
 		casing.setConditionShelvingGondolas(request.getConditionShelvingGondolas());
 		casing.setConditionWalls(request.getConditionWalls());
 		casing.setFuelGallonsWeekly(request.getFuelGallonsWeekly());
-		casing.setPharmacyScriptsWeekly(request.getPharmacyScriptsWeekly());
-		casing.setPharmacyAvgDollarsPerScript(request.getPharmacyAvgDollarsPerScript());
-		casing.setPharmacyPharmacistCount(request.getPharmacyPharmacistCount());
-		casing.setPharmacyTechnicianCount(request.getPharmacyTechnicianCount());
 		casing.setStoreStatus(request.getStoreStatus());
 
 		// If store has no status or status is outdated, create a new store status to to match casing status

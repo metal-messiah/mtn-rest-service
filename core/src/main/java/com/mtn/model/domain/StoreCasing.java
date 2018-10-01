@@ -21,10 +21,6 @@ public class StoreCasing extends AuditingEntity {
     private RatingType conditionShelvingGondolas;
     private RatingType conditionWalls;
     private Integer fuelGallonsWeekly;
-    private Integer pharmacyScriptsWeekly;
-    private Double pharmacyAvgDollarsPerScript;
-    private Integer pharmacyPharmacistCount;
-    private Integer pharmacyTechnicianCount;
     private Integer legacyCasingId;
     private String storeStatus;
 
@@ -131,38 +127,6 @@ public class StoreCasing extends AuditingEntity {
 
     public void setFuelGallonsWeekly(Integer fuelGallonsWeekly) {
         this.fuelGallonsWeekly = fuelGallonsWeekly;
-    }
-
-    public Integer getPharmacyScriptsWeekly() {
-        return pharmacyScriptsWeekly;
-    }
-
-    public void setPharmacyScriptsWeekly(Integer pharmacyScriptsWeekly) {
-        this.pharmacyScriptsWeekly = pharmacyScriptsWeekly;
-    }
-
-    public Double getPharmacyAvgDollarsPerScript() {
-        return pharmacyAvgDollarsPerScript;
-    }
-
-    public void setPharmacyAvgDollarsPerScript(Double pharmacyAvgDollarsPerScript) {
-        this.pharmacyAvgDollarsPerScript = pharmacyAvgDollarsPerScript;
-    }
-
-    public Integer getPharmacyPharmacistCount() {
-        return pharmacyPharmacistCount;
-    }
-
-    public void setPharmacyPharmacistCount(Integer pharmacyPharmacistCount) {
-        this.pharmacyPharmacistCount = pharmacyPharmacistCount;
-    }
-
-    public Integer getPharmacyTechnicianCount() {
-        return pharmacyTechnicianCount;
-    }
-
-    public void setPharmacyTechnicianCount(Integer pharmacyTechnicianCount) {
-        this.pharmacyTechnicianCount = pharmacyTechnicianCount;
     }
 
     public Integer getLegacyCasingId() {

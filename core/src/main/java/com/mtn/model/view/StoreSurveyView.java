@@ -18,6 +18,10 @@ public class StoreSurveyView extends AuditingEntityView {
     private Boolean fuelIsOpen24;
     private Boolean pharmacyIsOpen24;
     private Boolean pharmacyHasDriveThrough;
+    private Integer pharmacyScriptsWeekly;
+    private Double pharmacyAvgDollarsPerScript;
+    private Integer pharmacyPharmacistCount;
+    private Integer pharmacyTechnicianCount;
     private Boolean departmentBakery;
     private Boolean departmentBank;
     private Boolean departmentBeer;
@@ -93,6 +97,10 @@ public class StoreSurveyView extends AuditingEntityView {
         this.fuelIsOpen24 = storeSurvey.getFuelIsOpen24();
         this.pharmacyIsOpen24 = storeSurvey.getPharmacyIsOpen24();
         this.pharmacyHasDriveThrough = storeSurvey.getPharmacyHasDriveThrough();
+        this.pharmacyScriptsWeekly = storeSurvey.getPharmacyScriptsWeekly();
+        this.pharmacyAvgDollarsPerScript = storeSurvey.getPharmacyAvgDollarsPerScript();
+        this.pharmacyPharmacistCount = storeSurvey.getPharmacyPharmacistCount();
+        this.pharmacyTechnicianCount = storeSurvey.getPharmacyTechnicianCount();
         this.departmentBakery = storeSurvey.getDepartmentBakery();
         this.departmentBank = storeSurvey.getDepartmentBank();
         this.departmentBeer = storeSurvey.getDepartmentBeer();
@@ -224,6 +232,38 @@ public class StoreSurveyView extends AuditingEntityView {
 
     public void setPharmacyHasDriveThrough(Boolean pharmacyHasDriveThrough) {
         this.pharmacyHasDriveThrough = pharmacyHasDriveThrough;
+    }
+
+    public Integer getPharmacyScriptsWeekly() {
+        return pharmacyScriptsWeekly;
+    }
+
+    public void setPharmacyScriptsWeekly(Integer pharmacyScriptsWeekly) {
+        this.pharmacyScriptsWeekly = pharmacyScriptsWeekly;
+    }
+
+    public Double getPharmacyAvgDollarsPerScript() {
+        return pharmacyAvgDollarsPerScript;
+    }
+
+    public void setPharmacyAvgDollarsPerScript(Double pharmacyAvgDollarsPerScript) {
+        this.pharmacyAvgDollarsPerScript = pharmacyAvgDollarsPerScript;
+    }
+
+    public Integer getPharmacyPharmacistCount() {
+        return pharmacyPharmacistCount;
+    }
+
+    public void setPharmacyPharmacistCount(Integer pharmacyPharmacistCount) {
+        this.pharmacyPharmacistCount = pharmacyPharmacistCount;
+    }
+
+    public Integer getPharmacyTechnicianCount() {
+        return pharmacyTechnicianCount;
+    }
+
+    public void setPharmacyTechnicianCount(Integer pharmacyTechnicianCount) {
+        this.pharmacyTechnicianCount = pharmacyTechnicianCount;
     }
 
     public Boolean getDepartmentBakery() {

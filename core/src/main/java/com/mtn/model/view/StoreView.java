@@ -3,7 +3,6 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Store;
-import com.mtn.model.domain.UserProfile;
 import com.mtn.model.simpleView.*;
 import com.mtn.model.utils.StoreUtil;
 
@@ -18,6 +17,14 @@ public class StoreView extends AuditingEntityView {
 	private StoreType storeType;
 	private LocalDateTime dateOpened;
 	private LocalDateTime dateClosed;
+	private String fit;
+	private String format;
+	private Integer areaSales;
+	private Double areaSalesPercentOfTotal;
+	private Integer areaTotal;
+	private Boolean areaIsEstimate;
+	private Boolean storeIsOpen24;
+	private Boolean naturalFoodsAreIntegrated;
 	private String storeNumber;
 	private Integer legacyLocationId;
 	private Boolean floating;
@@ -45,6 +52,14 @@ public class StoreView extends AuditingEntityView {
 		this.storeType = store.getStoreType();
 		this.dateOpened = store.getDateOpened();
 		this.dateClosed = store.getDateClosed();
+		this.fit = store.getFit();
+		this.format = store.getFormat();
+		this.areaSales = store.getAreaSales();
+		this.areaSalesPercentOfTotal = store.getAreaSalesPercentOfTotal();
+		this.areaTotal = store.getAreaTotal();
+		this.areaIsEstimate = store.getAreaIsEstimate();
+		this.storeIsOpen24 = store.getStoreIsOpen24();
+		this.naturalFoodsAreIntegrated = store.getNaturalFoodsAreIntegrated();
 		this.legacyLocationId = store.getLegacyLocationId();
 		this.storeNumber = store.getStoreNumber();
 		this.floating = store.getFloating();
@@ -120,6 +135,70 @@ public class StoreView extends AuditingEntityView {
 
 	public void setDateClosed(LocalDateTime dateClosed) {
 		this.dateClosed = dateClosed;
+	}
+
+	public String getFit() {
+		return fit;
+	}
+
+	public void setFit(String fit) {
+		this.fit = fit;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public Integer getAreaSales() {
+		return areaSales;
+	}
+
+	public void setAreaSales(Integer areaSales) {
+		this.areaSales = areaSales;
+	}
+
+	public Double getAreaSalesPercentOfTotal() {
+		return areaSalesPercentOfTotal;
+	}
+
+	public void setAreaSalesPercentOfTotal(Double areaSalesPercentOfTotal) {
+		this.areaSalesPercentOfTotal = areaSalesPercentOfTotal;
+	}
+
+	public Integer getAreaTotal() {
+		return areaTotal;
+	}
+
+	public void setAreaTotal(Integer areaTotal) {
+		this.areaTotal = areaTotal;
+	}
+
+	public Boolean getAreaIsEstimate() {
+		return areaIsEstimate;
+	}
+
+	public void setAreaIsEstimate(Boolean areaIsEstimate) {
+		this.areaIsEstimate = areaIsEstimate;
+	}
+
+	public Boolean getStoreIsOpen24() {
+		return storeIsOpen24;
+	}
+
+	public void setStoreIsOpen24(Boolean storeIsOpen24) {
+		this.storeIsOpen24 = storeIsOpen24;
+	}
+
+	public Boolean getNaturalFoodsAreIntegrated() {
+		return naturalFoodsAreIntegrated;
+	}
+
+	public void setNaturalFoodsAreIntegrated(Boolean naturalFoodsAreIntegrated) {
+		this.naturalFoodsAreIntegrated = naturalFoodsAreIntegrated;
 	}
 
 	public String getStoreNumber() {

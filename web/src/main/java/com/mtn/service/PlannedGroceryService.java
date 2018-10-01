@@ -212,6 +212,7 @@ public class PlannedGroceryService {
 	protected void updateStoreFromUpdatable(PlannedGroceryUpdatable updatable, Store store) {
 		store.setStoreName(updatable.getStoreName());
 		store.setDateOpened(updatable.getDateOpened());
+		store.setAreaTotal(updatable.getAreaTotal());
 		if (updatable.getStoreStatuses() != null) {
 			updatable.getStoreStatuses().stream().filter(status -> status.getId() == null).forEach(status -> {
 				StoreStatusView newStoreStatusRequest = new StoreStatusView();
@@ -226,7 +227,6 @@ public class PlannedGroceryService {
 			newSurvey.setSurveyDate(LocalDateTime.now());
 			return storeSurveyService.addOne(newSurvey);
 		});
-		storeSurvey.setAreaTotal(updatable.getAreaTotal());
 		storeSurvey.setUpdatedBy(securityService.getCurrentUser());
 		storeService.updateOne(new StoreView(store));
 	}
@@ -307,14 +307,10 @@ public class PlannedGroceryService {
 			storeEdited = true;
 		}
 
-		if (attributesNode.hasNonNull("SIZESF")) {
-			StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now()).ifPresent(storeSurvey -> {
-				if (storeSurvey.getAreaTotal() == null) {
-					Integer siteSF = attributesNode.get("SIZESF").intValue();
-					storeSurvey.setAreaTotal(siteSF);
-					storeSurveyService.updateOne(new StoreSurveyView(storeSurvey));
-				}
-			});
+		if (attributesNode.hasNonNull("SIZESF") && store.getAreaTotal() == null) {
+			Integer siteSF = attributesNode.get("SIZESF").intValue();
+			store.setAreaTotal(siteSF);
+			storeEdited = true;
 		}
 
 		if (attributesNode.hasNonNull("STATUS")) {

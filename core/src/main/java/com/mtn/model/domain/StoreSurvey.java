@@ -7,9 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 6/7/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="store_survey_id"))
@@ -17,14 +14,6 @@ public class StoreSurvey extends AuditingEntity {
 
     private LocalDateTime surveyDate;
     private String note;
-    private String fit;
-    private String format;
-    private Integer areaSales;
-    private Double areaSalesPercentOfTotal;
-    private Integer areaTotal;
-    private Boolean areaIsEstimate = true;
-    private Boolean storeIsOpen24 = false;
-    private Boolean naturalFoodsAreIntegrated = false;
     private Integer registerCountNormal;
     private Integer registerCountExpress;
     private Integer registerCountSelfCheckout;
@@ -101,14 +90,6 @@ public class StoreSurvey extends AuditingEntity {
     public StoreSurvey(StoreSurvey storeSurvey) {
         this.surveyDate = storeSurvey.surveyDate;
         this.note = storeSurvey.note;
-        this.fit = storeSurvey.fit;
-        this.format = storeSurvey.format;
-        this.areaSales = storeSurvey.areaSales;
-        this.areaSalesPercentOfTotal = storeSurvey.areaSalesPercentOfTotal;
-        this.areaTotal = storeSurvey.areaTotal;
-        this.areaIsEstimate = storeSurvey.areaIsEstimate;
-        this.storeIsOpen24 = storeSurvey.storeIsOpen24;
-        this.naturalFoodsAreIntegrated = storeSurvey.naturalFoodsAreIntegrated;
         this.registerCountNormal = storeSurvey.registerCountNormal;
         this.registerCountExpress = storeSurvey.registerCountExpress;
         this.registerCountSelfCheckout = storeSurvey.registerCountSelfCheckout;
@@ -186,56 +167,6 @@ public class StoreSurvey extends AuditingEntity {
         this.store = store;
     }
 
-    @Column(name = "store_fit")
-    public String getFit() {
-        return fit;
-    }
-
-    public void setFit(String fit) {
-        this.fit = fit;
-    }
-
-    @Column(name = "store_format")
-    public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    public Integer getAreaSales() {
-        return areaSales;
-    }
-
-    public void setAreaSales(Integer areaSales) {
-        this.areaSales = areaSales;
-    }
-
-    public Double getAreaSalesPercentOfTotal() {
-        return areaSalesPercentOfTotal;
-    }
-
-    public void setAreaSalesPercentOfTotal(Double areaSalesPercentOfTotal) {
-        this.areaSalesPercentOfTotal = areaSalesPercentOfTotal;
-    }
-
-    public Integer getAreaTotal() {
-        return areaTotal;
-    }
-
-    public void setAreaTotal(Integer areaTotal) {
-        this.areaTotal = areaTotal;
-    }
-
-    public Boolean getAreaIsEstimate() {
-        return areaIsEstimate;
-    }
-
-    public void setAreaIsEstimate(Boolean areaIsEstimate) {
-        this.areaIsEstimate = areaIsEstimate;
-    }
-
     @Column(name = "store_survey_note")
     public String getNote() {
         return note;
@@ -243,23 +174,6 @@ public class StoreSurvey extends AuditingEntity {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    @Column(name = "store_is_open_24")
-    public Boolean getStoreIsOpen24() {
-        return storeIsOpen24;
-    }
-
-    public void setStoreIsOpen24(Boolean storeIsOpen24) {
-        this.storeIsOpen24 = storeIsOpen24;
-    }
-
-    public Boolean getNaturalFoodsAreIntegrated() {
-        return naturalFoodsAreIntegrated;
-    }
-
-    public void setNaturalFoodsAreIntegrated(Boolean naturalFoodsAreIntegrated) {
-        this.naturalFoodsAreIntegrated = naturalFoodsAreIntegrated;
     }
 
     public Integer getRegisterCountNormal() {

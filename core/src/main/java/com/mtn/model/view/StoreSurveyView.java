@@ -10,15 +10,7 @@ import java.time.LocalDateTime;
 public class StoreSurveyView extends AuditingEntityView {
 
     private LocalDateTime surveyDate;
-    private String fit;
-    private String format;
-    private Integer areaSales;
-    private Double areaSalesPercentOfTotal;
-    private Integer areaTotal;
-    private Boolean areaIsEstimate;
     private String note;
-    private Boolean storeIsOpen24;
-    private Boolean naturalFoodsAreIntegrated;
     private Integer registerCountNormal;
     private Integer registerCountExpress;
     private Integer registerCountSelfCheckout;
@@ -93,15 +85,7 @@ public class StoreSurveyView extends AuditingEntityView {
         super(storeSurvey);
 
         this.surveyDate = storeSurvey.getSurveyDate();
-        this.fit = storeSurvey.getFit();
-        this.format = storeSurvey.getFormat();
-        this.areaSales = storeSurvey.getAreaSales();
-        this.areaSalesPercentOfTotal = storeSurvey.getAreaSalesPercentOfTotal();
-        this.areaTotal = storeSurvey.getAreaTotal();
-        this.areaIsEstimate = storeSurvey.getAreaIsEstimate();
         this.note = storeSurvey.getNote();
-        this.storeIsOpen24 = storeSurvey.getStoreIsOpen24();
-        this.naturalFoodsAreIntegrated = storeSurvey.getNaturalFoodsAreIntegrated();
         this.registerCountNormal = storeSurvey.getRegisterCountNormal();
         this.registerCountExpress = storeSurvey.getRegisterCountExpress();
         this.registerCountSelfCheckout = storeSurvey.getRegisterCountSelfCheckout();
@@ -178,76 +162,12 @@ public class StoreSurveyView extends AuditingEntityView {
         this.surveyDate = surveyDate;
     }
 
-    public String getFit() {
-        return fit;
-    }
-
-    public void setFit(String fit) {
-        this.fit = fit;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    public Integer getAreaSales() {
-        return areaSales;
-    }
-
-    public void setAreaSales(Integer areaSales) {
-        this.areaSales = areaSales;
-    }
-
-    public Double getAreaSalesPercentOfTotal() {
-        return areaSalesPercentOfTotal;
-    }
-
-    public void setAreaSalesPercentOfTotal(Double areaSalesPercentOfTotal) {
-        this.areaSalesPercentOfTotal = areaSalesPercentOfTotal;
-    }
-
-    public Integer getAreaTotal() {
-        return areaTotal;
-    }
-
-    public void setAreaTotal(Integer areaTotal) {
-        this.areaTotal = areaTotal;
-    }
-
-    public Boolean getAreaIsEstimate() {
-        return areaIsEstimate;
-    }
-
-    public void setAreaIsEstimate(Boolean areaIsEstimate) {
-        this.areaIsEstimate = areaIsEstimate;
-    }
-
     public String getNote() {
         return note;
     }
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public Boolean getStoreIsOpen24() {
-        return storeIsOpen24;
-    }
-
-    public void setStoreIsOpen24(Boolean storeIsOpen24) {
-        this.storeIsOpen24 = storeIsOpen24;
-    }
-
-    public Boolean getNaturalFoodsAreIntegrated() {
-        return naturalFoodsAreIntegrated;
-    }
-
-    public void setNaturalFoodsAreIntegrated(Boolean naturalFoodsAreIntegrated) {
-        this.naturalFoodsAreIntegrated = naturalFoodsAreIntegrated;
     }
 
     public Integer getRegisterCountNormal() {

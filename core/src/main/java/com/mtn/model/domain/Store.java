@@ -17,6 +17,14 @@ public class Store extends AuditingEntity {
     private StoreType storeType;
     private LocalDateTime dateOpened;
     private LocalDateTime dateClosed;
+    private String fit;
+    private String format;
+    private Integer areaSales;
+    private Double areaSalesPercentOfTotal;
+    private Integer areaTotal;
+    private Boolean areaIsEstimate = true;
+    private Boolean storeIsOpen24 = false;
+    private Boolean naturalFoodsAreIntegrated = false;
     private Boolean floating;
     private Integer legacyLocationId;
     private UserProfile validatedBy;
@@ -72,6 +80,72 @@ public class Store extends AuditingEntity {
 
     public void setDateClosed(LocalDateTime dateClosed) {
         this.dateClosed = dateClosed;
+    }
+
+    @Column(name = "store_fit")
+    public String getFit() {
+        return fit;
+    }
+
+    public void setFit(String fit) {
+        this.fit = fit;
+    }
+
+    @Column(name = "store_format")
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public Integer getAreaSales() {
+        return areaSales;
+    }
+
+    public void setAreaSales(Integer areaSales) {
+        this.areaSales = areaSales;
+    }
+
+    public Double getAreaSalesPercentOfTotal() {
+        return areaSalesPercentOfTotal;
+    }
+
+    public void setAreaSalesPercentOfTotal(Double areaSalesPercentOfTotal) {
+        this.areaSalesPercentOfTotal = areaSalesPercentOfTotal;
+    }
+
+    public Integer getAreaTotal() {
+        return areaTotal;
+    }
+
+    public void setAreaTotal(Integer areaTotal) {
+        this.areaTotal = areaTotal;
+    }
+
+    public Boolean getAreaIsEstimate() {
+        return areaIsEstimate;
+    }
+
+    public void setAreaIsEstimate(Boolean areaIsEstimate) {
+        this.areaIsEstimate = areaIsEstimate;
+    }
+    @Column(name = "store_is_open_24")
+    public Boolean getStoreIsOpen24() {
+        return storeIsOpen24;
+    }
+
+    public void setStoreIsOpen24(Boolean storeIsOpen24) {
+        this.storeIsOpen24 = storeIsOpen24;
+    }
+
+    public Boolean getNaturalFoodsAreIntegrated() {
+        return naturalFoodsAreIntegrated;
+    }
+
+    public void setNaturalFoodsAreIntegrated(Boolean naturalFoodsAreIntegrated) {
+        this.naturalFoodsAreIntegrated = naturalFoodsAreIntegrated;
     }
 
     @OneToMany(mappedBy = "store")

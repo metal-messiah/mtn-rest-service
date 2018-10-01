@@ -150,6 +150,14 @@ public class StoreService extends EntityService<Store, StoreView> {
 		store.setStoreType(request.getStoreType());
 		store.setDateOpened(request.getDateOpened());
 		store.setDateClosed(request.getDateClosed());
+		store.setFit(request.getFit());
+		store.setFormat(request.getFormat());
+		store.setAreaSales(request.getAreaSales());
+		store.setAreaSalesPercentOfTotal(request.getAreaSalesPercentOfTotal());
+		store.setAreaTotal(request.getAreaTotal());
+		store.setAreaIsEstimate(request.getAreaIsEstimate());
+		store.setStoreIsOpen24(request.getStoreIsOpen24());
+		store.setNaturalFoodsAreIntegrated(request.getNaturalFoodsAreIntegrated());
 		store.setFloating((request.getFloating()));
 	}
 

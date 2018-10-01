@@ -64,14 +64,6 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 	protected void setEntityAttributesFromRequest(StoreSurvey survey, StoreSurveyView request) {
 		survey.setSurveyDate(request.getSurveyDate());
 		survey.setNote(request.getNote());
-		survey.setFit(request.getFit());
-		survey.setFormat(request.getFormat());
-		survey.setAreaSales(request.getAreaSales());
-		survey.setAreaSalesPercentOfTotal(request.getAreaSalesPercentOfTotal());
-		survey.setAreaTotal(request.getAreaTotal());
-		survey.setAreaIsEstimate(request.getAreaIsEstimate());
-		survey.setStoreIsOpen24(request.getStoreIsOpen24());
-		survey.setNaturalFoodsAreIntegrated(request.getNaturalFoodsAreIntegrated());
 		survey.setRegisterCountNormal(request.getRegisterCountNormal());
 		survey.setRegisterCountExpress(request.getRegisterCountExpress());
 		survey.setRegisterCountSelfCheckout(request.getRegisterCountSelfCheckout());

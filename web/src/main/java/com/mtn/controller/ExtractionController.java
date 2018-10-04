@@ -1,10 +1,9 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.ExtractionField;
-import com.mtn.model.domain.ExtractionFieldSet;
-import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.domain.*;
 import com.mtn.service.ExtractionFieldSetService;
 import com.mtn.service.StoreCasingService;
+import com.mtn.service.StoreService;
 import com.mtn.util.csv.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,10 @@ import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/extraction")
@@ -23,18 +25,40 @@ public class ExtractionController {
 
 	private final StoreCasingService storeCasingService;
 	private final ExtractionFieldSetService extractionFieldSetService;
+	private final StoreService storeService;
 
 	@Autowired
-	public ExtractionController(StoreCasingService storeCasingService, ExtractionFieldSetService extractionFieldSetService) {
+	public ExtractionController(StoreCasingService storeCasingService,
+								ExtractionFieldSetService extractionFieldSetService,
+								StoreService storeService) {
 		this.storeCasingService = storeCasingService;
 		this.extractionFieldSetService = extractionFieldSetService;
+		this.storeService = storeService;
+	}
+
+	@GetMapping(params = {"store-ids", "field-set-id"})
+	public void downloadLatestForStores(HttpServletResponse response,
+										@RequestParam("store-ids") List<Integer> storeIds,
+										@RequestParam("field-set-id") Integer fieldSetId) {
+		List<Store> stores = this.storeService.findAllByIdsUsingSpecs(storeIds);
+		List<StoreCasing> casings = stores.stream()
+				.map(store -> store.getCasings().stream()
+						.filter(storeCasing -> storeCasing.getDeletedDate() == null)
+						.max(Comparator.comparing(StoreCasing::getCasingDate)).orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+		download(response, casings, fieldSetId);
 	}
 
 	@GetMapping(params = {"project-id", "field-set-id"})
-	public void findAll(HttpServletResponse response,
-						@RequestParam("project-id") Integer projectId,
-						@RequestParam("field-set-id") Integer fieldSetId) {
+	public void downloadProjectCasingData(HttpServletResponse response,
+										  @RequestParam("project-id") Integer projectId,
+										  @RequestParam("field-set-id") Integer fieldSetId) {
+		List<StoreCasing> casings = storeCasingService.findAllByProjectId(projectId);
+		download(response, casings, fieldSetId);
+	}
 
+	private void download(HttpServletResponse response, List<StoreCasing> casings, Integer fieldSetId) {
 		String csvFileName = "extraction.csv";
 
 		response.setContentType("text/csv");
@@ -44,15 +68,13 @@ public class ExtractionController {
 		String headerValue = String.format("attachment; filename=\"%s\"", csvFileName);
 		response.setHeader(headerKey, headerValue);
 
-		List<StoreCasing> casings = storeCasingService.findAllByProjectId(projectId);
-
 		ExtractionFieldSet fieldSet = this.extractionFieldSetService.findOne(fieldSetId);
 		List<ExtractionField> extractionFields = fieldSet.getFields();
 
 		final CellProcessor[] processors = extractionFields.stream()
-				.map(ef -> {
-					if (ef.getExtractionDataType() != null) {
-						switch (ef.getExtractionDataType()) {
+				.map(field -> {
+					if (field.getExtractionDataType() != null) {
+						switch (field.getExtractionDataType()) {
 							case "DATE_TIME":
 								return new FmtLocalDateTime();
 							case "DATE":
@@ -81,6 +103,12 @@ public class ExtractionController {
 								return new FmtTenantOutparcelCount();
 							case "TENANT_OUTPARCEL_LIST":
 								return new FmtTenantOutparcelList();
+							case "LATEST_VOLUME_TOTAL":
+								return new GetLatestVolumeTotal();
+							case "LATEST_VOLUME_DATE":
+								return new GetLatestVolumeDate(new FmtLocalDate());
+							case "LATEST_VOLUME_TYPE":
+								return new GetLatestVolumeType();
 						}
 					}
 					return null;

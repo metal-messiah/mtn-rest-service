@@ -64,14 +64,6 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 	protected void setEntityAttributesFromRequest(StoreSurvey survey, StoreSurveyView request) {
 		survey.setSurveyDate(request.getSurveyDate());
 		survey.setNote(request.getNote());
-		survey.setFit(request.getFit());
-		survey.setFormat(request.getFormat());
-		survey.setAreaSales(request.getAreaSales());
-		survey.setAreaSalesPercentOfTotal(request.getAreaSalesPercentOfTotal());
-		survey.setAreaTotal(request.getAreaTotal());
-		survey.setAreaIsEstimate(request.getAreaIsEstimate());
-		survey.setStoreIsOpen24(request.getStoreIsOpen24());
-		survey.setNaturalFoodsAreIntegrated(request.getNaturalFoodsAreIntegrated());
 		survey.setRegisterCountNormal(request.getRegisterCountNormal());
 		survey.setRegisterCountExpress(request.getRegisterCountExpress());
 		survey.setRegisterCountSelfCheckout(request.getRegisterCountSelfCheckout());
@@ -79,6 +71,10 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 		survey.setFuelIsOpen24(request.getFuelIsOpen24());
 		survey.setPharmacyIsOpen24(request.getPharmacyIsOpen24());
 		survey.setPharmacyHasDriveThrough(request.getPharmacyHasDriveThrough());
+		survey.setPharmacyScriptsWeekly(request.getPharmacyScriptsWeekly());
+		survey.setPharmacyAvgDollarsPerScript(request.getPharmacyAvgDollarsPerScript());
+		survey.setPharmacyPharmacistCount(request.getPharmacyPharmacistCount());
+		survey.setPharmacyTechnicianCount(request.getPharmacyTechnicianCount());
 		survey.setDepartmentBakery(request.getDepartmentBakery());
 		survey.setDepartmentBank(request.getDepartmentBank());
 		survey.setDepartmentBeer(request.getDepartmentBeer());

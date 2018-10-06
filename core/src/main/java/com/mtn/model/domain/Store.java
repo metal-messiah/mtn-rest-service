@@ -7,9 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 4/26/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="store_id"))
@@ -20,8 +17,18 @@ public class Store extends AuditingEntity {
     private StoreType storeType;
     private LocalDateTime dateOpened;
     private LocalDateTime dateClosed;
+    private String fit;
+    private String format;
+    private Integer areaSales;
+    private Double areaSalesPercentOfTotal;
+    private Integer areaTotal;
+    private Boolean areaIsEstimate = true;
+    private Boolean storeIsOpen24 = false;
+    private Boolean naturalFoodsAreIntegrated = false;
     private Boolean floating;
     private Integer legacyLocationId;
+    private UserProfile validatedBy;
+    private LocalDateTime validatedDate;
 
     private Site site;
     private Banner banner;
@@ -73,6 +80,72 @@ public class Store extends AuditingEntity {
 
     public void setDateClosed(LocalDateTime dateClosed) {
         this.dateClosed = dateClosed;
+    }
+
+    @Column(name = "store_fit")
+    public String getFit() {
+        return fit;
+    }
+
+    public void setFit(String fit) {
+        this.fit = fit;
+    }
+
+    @Column(name = "store_format")
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public Integer getAreaSales() {
+        return areaSales;
+    }
+
+    public void setAreaSales(Integer areaSales) {
+        this.areaSales = areaSales;
+    }
+
+    public Double getAreaSalesPercentOfTotal() {
+        return areaSalesPercentOfTotal;
+    }
+
+    public void setAreaSalesPercentOfTotal(Double areaSalesPercentOfTotal) {
+        this.areaSalesPercentOfTotal = areaSalesPercentOfTotal;
+    }
+
+    public Integer getAreaTotal() {
+        return areaTotal;
+    }
+
+    public void setAreaTotal(Integer areaTotal) {
+        this.areaTotal = areaTotal;
+    }
+
+    public Boolean getAreaIsEstimate() {
+        return areaIsEstimate;
+    }
+
+    public void setAreaIsEstimate(Boolean areaIsEstimate) {
+        this.areaIsEstimate = areaIsEstimate;
+    }
+    @Column(name = "store_is_open_24")
+    public Boolean getStoreIsOpen24() {
+        return storeIsOpen24;
+    }
+
+    public void setStoreIsOpen24(Boolean storeIsOpen24) {
+        this.storeIsOpen24 = storeIsOpen24;
+    }
+
+    public Boolean getNaturalFoodsAreIntegrated() {
+        return naturalFoodsAreIntegrated;
+    }
+
+    public void setNaturalFoodsAreIntegrated(Boolean naturalFoodsAreIntegrated) {
+        this.naturalFoodsAreIntegrated = naturalFoodsAreIntegrated;
     }
 
     @OneToMany(mappedBy = "store")
@@ -153,5 +226,23 @@ public class Store extends AuditingEntity {
 
     public void setFloating(Boolean floating) {
         this.floating = floating;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "validated_by")
+    public UserProfile getValidatedBy() {
+        return validatedBy;
+    }
+
+    public void setValidatedBy(UserProfile validatedBy) {
+        this.validatedBy = validatedBy;
+    }
+
+    public LocalDateTime getValidatedDate() {
+        return validatedDate;
+    }
+
+    public void setValidatedDate(LocalDateTime validatedDate) {
+        this.validatedDate = validatedDate;
     }
 }

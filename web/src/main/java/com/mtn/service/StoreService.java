@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -149,6 +150,14 @@ public class StoreService extends EntityService<Store, StoreView> {
 		store.setStoreType(request.getStoreType());
 		store.setDateOpened(request.getDateOpened());
 		store.setDateClosed(request.getDateClosed());
+		store.setFit(request.getFit());
+		store.setFormat(request.getFormat());
+		store.setAreaSales(request.getAreaSales());
+		store.setAreaSalesPercentOfTotal(request.getAreaSalesPercentOfTotal());
+		store.setAreaTotal(request.getAreaTotal());
+		store.setAreaIsEstimate(request.getAreaIsEstimate());
+		store.setStoreIsOpen24(request.getStoreIsOpen24());
+		store.setNaturalFoodsAreIntegrated(request.getNaturalFoodsAreIntegrated());
 		store.setFloating((request.getFloating()));
 	}
 
@@ -157,5 +166,21 @@ public class StoreService extends EntityService<Store, StoreView> {
 		// Site is required
 		existing.setBanner(null);
 		// No need to disassociate casings, models, surveys, volumes, statuses
+	}
+
+	@Transactional
+	public Store validateStore(Integer storeId) {
+		Store store = this.findOne(storeId);
+		store.setValidatedDate(LocalDateTime.now());
+		store.setValidatedBy(this.securityService.getCurrentUser());
+		return store;
+	}
+
+	@Transactional
+	public Store invalidateStore(Integer storeId) {
+		Store store = this.findOne(storeId);
+		store.setValidatedDate(null);
+		store.setValidatedBy(null);
+		return store;
 	}
 }

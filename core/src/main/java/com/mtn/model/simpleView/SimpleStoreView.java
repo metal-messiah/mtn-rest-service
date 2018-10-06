@@ -16,6 +16,10 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 	private String currentStoreStatus;
 	private Boolean floating;
 	private StoreType storeType;
+	private SimpleUserProfileView validatedBy;
+	private LocalDateTime validatedDate;
+	private Integer areaSales;
+	private Integer areaTotal;
 
 	private SimpleSiteView site;
 	private SimpleBannerView banner;
@@ -28,10 +32,16 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 		super(store);
 		this.storeName = store.getStoreName();
 		this.storeNumber = store.getStoreNumber();
+		this.areaSales = store.getAreaSales();
+		this.areaTotal = store.getAreaTotal();
 		StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now())
 				.ifPresent(storeStatus -> this.currentStoreStatus = storeStatus.getStatus());
 		this.floating = store.getFloating();
 		this.storeType = store.getStoreType();
+		if (store.getValidatedBy() != null) {
+			this.validatedBy = new SimpleUserProfileView(store.getValidatedBy());
+		}
+		this.validatedDate = store.getValidatedDate();
 
 		this.site = new SimpleSiteView(store.getSite());
 		this.banner = (store.getBanner() != null) ? new SimpleBannerView(store.getBanner()) : null;
@@ -101,5 +111,37 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 
 	public void setLatestStoreVolume(SimpleStoreVolumeView latestStoreVolume) {
 		this.latestStoreVolume = latestStoreVolume;
+	}
+
+	public SimpleUserProfileView getValidatedBy() {
+		return validatedBy;
+	}
+
+	public void setValidatedBy(SimpleUserProfileView validatedBy) {
+		this.validatedBy = validatedBy;
+	}
+
+	public LocalDateTime getValidatedDate() {
+		return validatedDate;
+	}
+
+	public void setValidatedDate(LocalDateTime validatedDate) {
+		this.validatedDate = validatedDate;
+	}
+
+	public Integer getAreaSales() {
+		return areaSales;
+	}
+
+	public void setAreaSales(Integer areaSales) {
+		this.areaSales = areaSales;
+	}
+
+	public Integer getAreaTotal() {
+		return areaTotal;
+	}
+
+	public void setAreaTotal(Integer areaTotal) {
+		this.areaTotal = areaTotal;
 	}
 }

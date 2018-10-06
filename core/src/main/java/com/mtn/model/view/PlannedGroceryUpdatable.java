@@ -5,7 +5,6 @@ import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
 import com.mtn.model.simpleView.SimpleStoreStatusView;
-import com.mtn.model.utils.StoreUtil;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -209,9 +208,7 @@ public class PlannedGroceryUpdatable {
         this.storeName = store.getStoreName();
         this.dateOpened = store.getDateOpened();
         this.storeStatuses = store.getStatuses().stream().map(SimpleStoreStatusView::new).collect(Collectors.toList());
-
-        StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now())
-                .ifPresent(storeSurvey -> this.areaTotal = storeSurvey.getAreaTotal());
+        this.areaTotal = store.getAreaTotal();
 
         this.setSiteData(store.getSite());
     }

@@ -3,19 +3,13 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Store;
-import com.mtn.model.domain.StoreStatus;
 import com.mtn.model.simpleView.*;
 import com.mtn.model.utils.StoreUtil;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 4/26/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoreView extends AuditingEntityView {
 
@@ -23,9 +17,19 @@ public class StoreView extends AuditingEntityView {
 	private StoreType storeType;
 	private LocalDateTime dateOpened;
 	private LocalDateTime dateClosed;
+	private String fit;
+	private String format;
+	private Integer areaSales;
+	private Double areaSalesPercentOfTotal;
+	private Integer areaTotal;
+	private Boolean areaIsEstimate;
+	private Boolean storeIsOpen24;
+	private Boolean naturalFoodsAreIntegrated;
 	private String storeNumber;
 	private Integer legacyLocationId;
 	private Boolean floating;
+	private SimpleUserProfileView validatedBy;
+	private LocalDateTime validatedDate;
 
 	private SimpleStoreStatusView currentStoreStatus;
 	private SimpleStoreSurveyView currentStoreSurvey;
@@ -48,9 +52,21 @@ public class StoreView extends AuditingEntityView {
 		this.storeType = store.getStoreType();
 		this.dateOpened = store.getDateOpened();
 		this.dateClosed = store.getDateClosed();
+		this.fit = store.getFit();
+		this.format = store.getFormat();
+		this.areaSales = store.getAreaSales();
+		this.areaSalesPercentOfTotal = store.getAreaSalesPercentOfTotal();
+		this.areaTotal = store.getAreaTotal();
+		this.areaIsEstimate = store.getAreaIsEstimate();
+		this.storeIsOpen24 = store.getStoreIsOpen24();
+		this.naturalFoodsAreIntegrated = store.getNaturalFoodsAreIntegrated();
 		this.legacyLocationId = store.getLegacyLocationId();
 		this.storeNumber = store.getStoreNumber();
 		this.floating = store.getFloating();
+		if (store.getValidatedBy() != null) {
+			this.validatedBy = new SimpleUserProfileView(store.getValidatedBy());
+		}
+		this.validatedDate = store.getValidatedDate();
 
 		this.site = new SimpleSiteView(store.getSite());
 
@@ -119,6 +135,70 @@ public class StoreView extends AuditingEntityView {
 
 	public void setDateClosed(LocalDateTime dateClosed) {
 		this.dateClosed = dateClosed;
+	}
+
+	public String getFit() {
+		return fit;
+	}
+
+	public void setFit(String fit) {
+		this.fit = fit;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public Integer getAreaSales() {
+		return areaSales;
+	}
+
+	public void setAreaSales(Integer areaSales) {
+		this.areaSales = areaSales;
+	}
+
+	public Double getAreaSalesPercentOfTotal() {
+		return areaSalesPercentOfTotal;
+	}
+
+	public void setAreaSalesPercentOfTotal(Double areaSalesPercentOfTotal) {
+		this.areaSalesPercentOfTotal = areaSalesPercentOfTotal;
+	}
+
+	public Integer getAreaTotal() {
+		return areaTotal;
+	}
+
+	public void setAreaTotal(Integer areaTotal) {
+		this.areaTotal = areaTotal;
+	}
+
+	public Boolean getAreaIsEstimate() {
+		return areaIsEstimate;
+	}
+
+	public void setAreaIsEstimate(Boolean areaIsEstimate) {
+		this.areaIsEstimate = areaIsEstimate;
+	}
+
+	public Boolean getStoreIsOpen24() {
+		return storeIsOpen24;
+	}
+
+	public void setStoreIsOpen24(Boolean storeIsOpen24) {
+		this.storeIsOpen24 = storeIsOpen24;
+	}
+
+	public Boolean getNaturalFoodsAreIntegrated() {
+		return naturalFoodsAreIntegrated;
+	}
+
+	public void setNaturalFoodsAreIntegrated(Boolean naturalFoodsAreIntegrated) {
+		this.naturalFoodsAreIntegrated = naturalFoodsAreIntegrated;
 	}
 
 	public String getStoreNumber() {
@@ -207,5 +287,21 @@ public class StoreView extends AuditingEntityView {
 
 	public void setStoreStatuses(List<SimpleStoreStatusView> storeStatuses) {
 		this.storeStatuses = storeStatuses;
+	}
+
+	public SimpleUserProfileView getValidatedBy() {
+		return validatedBy;
+	}
+
+	public void setValidatedBy(SimpleUserProfileView validatedBy) {
+		this.validatedBy = validatedBy;
+	}
+
+	public LocalDateTime getValidatedDate() {
+		return validatedDate;
+	}
+
+	public void setValidatedDate(LocalDateTime validatedDate) {
+		this.validatedDate = validatedDate;
 	}
 }

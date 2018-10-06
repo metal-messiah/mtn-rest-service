@@ -53,6 +53,12 @@ public class StoreController extends CrudController<Store, StoreView> {
 		this.siteService = siteService;
 	}
 
+	@GetMapping(params = {"ids"})
+	public ResponseEntity findListByIds(@RequestParam(value = "ids") List<Integer> ids) {
+		List<Store> stores = ((StoreService) this.entityService).findAllByIdsUsingSpecs(ids);
+		return ResponseEntity.ok(stores.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
+	}
+
 	@GetMapping(params = {"north", "south", "east", "west"})
 	public ResponseEntity findAllInBounds(
 			@RequestParam("north") Float north,
@@ -97,6 +103,18 @@ public class StoreController extends CrudController<Store, StoreView> {
 		ids.put("storeIds", storeIds);
 		ids.put("siteIds", siteIds);
 		return ids;
+	}
+
+	@PutMapping("/{id}/validate")
+	public ResponseEntity<SimpleStoreView> validate(@PathVariable("id") Integer storeId) {
+		Store store = ((StoreService) this.entityService).validateStore(storeId);
+		return ResponseEntity.ok(new SimpleStoreView(store));
+	}
+
+	@PutMapping("/{id}/invalidate")
+	public ResponseEntity<SimpleStoreView> invalidate(@PathVariable("id") Integer storeId) {
+		Store store = ((StoreService) this.entityService).invalidateStore(storeId);
+		return ResponseEntity.ok(new SimpleStoreView(store));
 	}
 
 	@PostMapping(value = "/{id}/store-casings")

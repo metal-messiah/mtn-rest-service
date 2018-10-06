@@ -10,15 +10,7 @@ import java.time.LocalDateTime;
 public class StoreSurveyView extends AuditingEntityView {
 
     private LocalDateTime surveyDate;
-    private String fit;
-    private String format;
-    private Integer areaSales;
-    private Double areaSalesPercentOfTotal;
-    private Integer areaTotal;
-    private Boolean areaIsEstimate;
     private String note;
-    private Boolean storeIsOpen24;
-    private Boolean naturalFoodsAreIntegrated;
     private Integer registerCountNormal;
     private Integer registerCountExpress;
     private Integer registerCountSelfCheckout;
@@ -26,6 +18,10 @@ public class StoreSurveyView extends AuditingEntityView {
     private Boolean fuelIsOpen24;
     private Boolean pharmacyIsOpen24;
     private Boolean pharmacyHasDriveThrough;
+    private Integer pharmacyScriptsWeekly;
+    private Double pharmacyAvgDollarsPerScript;
+    private Integer pharmacyPharmacistCount;
+    private Integer pharmacyTechnicianCount;
     private Boolean departmentBakery;
     private Boolean departmentBank;
     private Boolean departmentBeer;
@@ -93,15 +89,7 @@ public class StoreSurveyView extends AuditingEntityView {
         super(storeSurvey);
 
         this.surveyDate = storeSurvey.getSurveyDate();
-        this.fit = storeSurvey.getFit();
-        this.format = storeSurvey.getFormat();
-        this.areaSales = storeSurvey.getAreaSales();
-        this.areaSalesPercentOfTotal = storeSurvey.getAreaSalesPercentOfTotal();
-        this.areaTotal = storeSurvey.getAreaTotal();
-        this.areaIsEstimate = storeSurvey.getAreaIsEstimate();
         this.note = storeSurvey.getNote();
-        this.storeIsOpen24 = storeSurvey.getStoreIsOpen24();
-        this.naturalFoodsAreIntegrated = storeSurvey.getNaturalFoodsAreIntegrated();
         this.registerCountNormal = storeSurvey.getRegisterCountNormal();
         this.registerCountExpress = storeSurvey.getRegisterCountExpress();
         this.registerCountSelfCheckout = storeSurvey.getRegisterCountSelfCheckout();
@@ -109,6 +97,10 @@ public class StoreSurveyView extends AuditingEntityView {
         this.fuelIsOpen24 = storeSurvey.getFuelIsOpen24();
         this.pharmacyIsOpen24 = storeSurvey.getPharmacyIsOpen24();
         this.pharmacyHasDriveThrough = storeSurvey.getPharmacyHasDriveThrough();
+        this.pharmacyScriptsWeekly = storeSurvey.getPharmacyScriptsWeekly();
+        this.pharmacyAvgDollarsPerScript = storeSurvey.getPharmacyAvgDollarsPerScript();
+        this.pharmacyPharmacistCount = storeSurvey.getPharmacyPharmacistCount();
+        this.pharmacyTechnicianCount = storeSurvey.getPharmacyTechnicianCount();
         this.departmentBakery = storeSurvey.getDepartmentBakery();
         this.departmentBank = storeSurvey.getDepartmentBank();
         this.departmentBeer = storeSurvey.getDepartmentBeer();
@@ -178,76 +170,12 @@ public class StoreSurveyView extends AuditingEntityView {
         this.surveyDate = surveyDate;
     }
 
-    public String getFit() {
-        return fit;
-    }
-
-    public void setFit(String fit) {
-        this.fit = fit;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    public Integer getAreaSales() {
-        return areaSales;
-    }
-
-    public void setAreaSales(Integer areaSales) {
-        this.areaSales = areaSales;
-    }
-
-    public Double getAreaSalesPercentOfTotal() {
-        return areaSalesPercentOfTotal;
-    }
-
-    public void setAreaSalesPercentOfTotal(Double areaSalesPercentOfTotal) {
-        this.areaSalesPercentOfTotal = areaSalesPercentOfTotal;
-    }
-
-    public Integer getAreaTotal() {
-        return areaTotal;
-    }
-
-    public void setAreaTotal(Integer areaTotal) {
-        this.areaTotal = areaTotal;
-    }
-
-    public Boolean getAreaIsEstimate() {
-        return areaIsEstimate;
-    }
-
-    public void setAreaIsEstimate(Boolean areaIsEstimate) {
-        this.areaIsEstimate = areaIsEstimate;
-    }
-
     public String getNote() {
         return note;
     }
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public Boolean getStoreIsOpen24() {
-        return storeIsOpen24;
-    }
-
-    public void setStoreIsOpen24(Boolean storeIsOpen24) {
-        this.storeIsOpen24 = storeIsOpen24;
-    }
-
-    public Boolean getNaturalFoodsAreIntegrated() {
-        return naturalFoodsAreIntegrated;
-    }
-
-    public void setNaturalFoodsAreIntegrated(Boolean naturalFoodsAreIntegrated) {
-        this.naturalFoodsAreIntegrated = naturalFoodsAreIntegrated;
     }
 
     public Integer getRegisterCountNormal() {
@@ -304,6 +232,38 @@ public class StoreSurveyView extends AuditingEntityView {
 
     public void setPharmacyHasDriveThrough(Boolean pharmacyHasDriveThrough) {
         this.pharmacyHasDriveThrough = pharmacyHasDriveThrough;
+    }
+
+    public Integer getPharmacyScriptsWeekly() {
+        return pharmacyScriptsWeekly;
+    }
+
+    public void setPharmacyScriptsWeekly(Integer pharmacyScriptsWeekly) {
+        this.pharmacyScriptsWeekly = pharmacyScriptsWeekly;
+    }
+
+    public Double getPharmacyAvgDollarsPerScript() {
+        return pharmacyAvgDollarsPerScript;
+    }
+
+    public void setPharmacyAvgDollarsPerScript(Double pharmacyAvgDollarsPerScript) {
+        this.pharmacyAvgDollarsPerScript = pharmacyAvgDollarsPerScript;
+    }
+
+    public Integer getPharmacyPharmacistCount() {
+        return pharmacyPharmacistCount;
+    }
+
+    public void setPharmacyPharmacistCount(Integer pharmacyPharmacistCount) {
+        this.pharmacyPharmacistCount = pharmacyPharmacistCount;
+    }
+
+    public Integer getPharmacyTechnicianCount() {
+        return pharmacyTechnicianCount;
+    }
+
+    public void setPharmacyTechnicianCount(Integer pharmacyTechnicianCount) {
+        this.pharmacyTechnicianCount = pharmacyTechnicianCount;
     }
 
     public Boolean getDepartmentBakery() {

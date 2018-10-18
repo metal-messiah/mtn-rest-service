@@ -12,9 +12,11 @@ public class UserProfile extends AuditingEntity {
 
     private String email;
     private String firstName;
-    private Group group;
     private String lastName;
+
+    private Group group;
     private Role role;
+    private Boundary restrictionBoundary;
 
     @PrePersist
     @PreUpdate
@@ -66,4 +68,13 @@ public class UserProfile extends AuditingEntity {
         this.group = group;
     }
 
+    @OneToOne
+    @JoinColumn(name = "restriction_boundary_id")
+    public Boundary getRestrictionBoundary() {
+        return restrictionBoundary;
+    }
+
+    public void setRestrictionBoundary(Boundary restrictionBoundary) {
+        this.restrictionBoundary = restrictionBoundary;
+    }
 }

@@ -6,8 +6,6 @@ import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,13 +64,12 @@ public class StoreController extends CrudController<Store, StoreView> {
 			@RequestParam("east") Float east,
 			@RequestParam("west") Float west,
 			@RequestParam("store_types") List<StoreType> storeTypes,
-			@RequestParam(value = "include_project_ids", required = false) boolean includeProjectIds,
-			Pageable page) {
-		Page<Store> domainModels = ((StoreService) this.entityService).findAllOfTypesInBounds(north, south, east, west, storeTypes, page);
+			@RequestParam(value = "include_project_ids", required = false) boolean includeProjectIds) {
+		List<Store> domainModels = ((StoreService) this.entityService).findAllOfTypesInBounds(north, south, east, west, storeTypes);
 		if (includeProjectIds) {
-			return ResponseEntity.ok(domainModels.map(SimpleStoreViewWithProjects::new));
+			return ResponseEntity.ok(domainModels.stream().map(SimpleStoreViewWithProjects::new).collect(Collectors.toList()));
 		} else {
-			return ResponseEntity.ok(domainModels.map(SimpleStoreView::new));
+			return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 		}
 	}
 

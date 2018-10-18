@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class AuditingEntitySpecifications {
 
-    private static final String DELETED_DATE = "deletedDate";
-    private static final String ID = "id";
+    protected static final String DELETED_DATE = "deletedDate";
+    protected static final String ID = "id";
 
     public static <T extends AuditingEntity> Specification<T> idIn(List<Integer> ids) {
         return new Specification<T>() {

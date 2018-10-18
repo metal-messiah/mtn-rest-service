@@ -15,7 +15,6 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -41,33 +40,32 @@ public class SiteService extends EntityService<Site, SiteView> {
 	}
 
 	public List<Site> findAllInGeoJson(String geoJson) {
-		return ((SiteRepository) this.repository).findWithinGeoJson(geoJson);
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		return ((SiteRepository) this.repository).findWithinGeoJson(geoJson, restriction);
 	}
 
-	public Page<Site> findAllDuplicatesUsingSpecs(Pageable page) {
+	public List<Site> findAllDuplicatesUsingSpecs() {
 		return this.repository.findAll(where(SiteSpecifications.isDuplicate())
-				.and(SiteSpecifications.isNotDeleted()), page);
+				.and(SiteSpecifications.isNotDeleted()));
 	}
 
 	public List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west) {
-		Integer assigneeId = securityService.getCurrentUser().getId();
-		return this.repository.findAll(
-				where(SiteSpecifications.withinBoundingBoxOrAssignedTo(north, south, east, west, assigneeId))
-						.and(SiteSpecifications.isNotDeleted()));
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		return ((SiteRepository) this.repository).findAllInBounds(restriction, north, south, east, west);
 	}
 
 	public List<Site> findAllInShape(Geometry shape) {
-		return ((SiteRepository) this.repository).findWithinGeometry(shape);
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		return ((SiteRepository) this.repository).findWithinGeometry(shape, restriction);
 	}
 
-	public Page<Site> findAllInBoundsWithoutStoresUsingSpecs(Float north, Float south, Float east, Float west, boolean noStores, Pageable page) {
-		Specifications<Site> spec = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
-		if (noStores) {
-			spec = spec.and(SiteSpecifications.hasNoStore());
-		}
-		spec = spec.and(SiteSpecifications.isNotDeleted());
-
-		return this.repository.findAll(spec, page);
+	public List<Site> findAllInBoundsWithoutStoresUsingSpecs(Float north, Float south, Float east, Float west, boolean noStores, Pageable page) {
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		return ((SiteRepository) this.repository).findAllInBoundsWithoutStores(restriction, north, south, east, west);
 	}
 
 	@Transactional

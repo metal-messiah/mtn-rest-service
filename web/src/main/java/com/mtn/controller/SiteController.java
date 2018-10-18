@@ -15,7 +15,6 @@ import com.mtn.service.ShoppingCenterService;
 import com.mtn.service.SiteService;
 import com.mtn.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,22 +57,22 @@ public class SiteController extends CrudController<Site, SiteView> {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<SimpleSiteView>> findAll(@RequestParam(value = "north", required = false) Float north,
+	public ResponseEntity<List<SimpleSiteView>> findAll(@RequestParam(value = "north", required = false) Float north,
 								  @RequestParam(value = "south", required = false) Float south,
 								  @RequestParam(value = "east", required = false) Float east,
 								  @RequestParam(value = "west", required = false) Float west,
 								  @RequestParam(value = "no_stores", required = false) boolean noStores,
 								  @RequestParam(value = "duplicate", required = false) boolean duplicate,
 								  Pageable page) {
-		Page<Site> domainModels;
+		List<Site> domainModels;
 		if (north != null && south != null && east != null && west != null) {
 			domainModels = ((SiteService) this.entityService).findAllInBoundsWithoutStoresUsingSpecs(north, south, east, west, noStores, page);
 		} else if (duplicate) {
-			domainModels = ((SiteService) this.entityService).findAllDuplicatesUsingSpecs(page);
+			domainModels = ((SiteService) this.entityService).findAllDuplicatesUsingSpecs();
 		} else {
-			domainModels = this.entityService.findAllUsingSpecs(page);
+			domainModels = this.entityService.findAllUsingSpecs();
 		}
-		return ResponseEntity.ok(domainModels.map(SimpleSiteView::new));
+		return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
 	@GetMapping(params = {"geojson"})

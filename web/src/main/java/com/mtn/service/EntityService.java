@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -35,6 +36,12 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 
 	public Page<T> findAll(Pageable page) {
 		return repository.findAll(page);
+	}
+
+	public List<T> findAllUsingSpecs() {
+		return this.repository.findAll(
+				where(AuditingEntitySpecifications.isNotDeleted())
+		);
 	}
 
 	public Page<T> findAllUsingSpecs(Pageable page) {

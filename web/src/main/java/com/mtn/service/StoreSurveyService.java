@@ -41,6 +41,7 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 		UserProfile currentUser = securityService.getCurrentUser();
 		survey.setCreatedBy(currentUser);
 		survey.setUpdatedBy(currentUser);
+		survey.setStore(store);
 
 		return survey;
 	}

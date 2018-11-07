@@ -160,6 +160,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll()
                 .antMatchers(HttpMethod.GET, "/webjars/springfox-swagger-ui/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/resource-quota/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/resource-quota/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/resource-quota/**").authenticated()
                 .anyRequest().denyAll();
     }
 

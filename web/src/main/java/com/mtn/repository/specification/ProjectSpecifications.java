@@ -43,6 +43,7 @@ public class ProjectSpecifications extends AuditingEntitySpecifications {
             public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 criteriaQuery.orderBy(criteriaBuilder.asc(root.get(PROJECT_NAME)));
                 return criteriaBuilder.like(root.get(PROJECT_NAME), nameQuery);
+
             }
         };
     }

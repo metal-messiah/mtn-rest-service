@@ -1,7 +1,5 @@
 package com.mtn.model.domain;
 
-import com.mtn.constant.ResourceQuotaType;
-
 import javax.persistence.*;
 
 import java.time.LocalDateTime;

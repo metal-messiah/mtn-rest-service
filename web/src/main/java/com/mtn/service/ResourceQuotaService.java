@@ -49,7 +49,7 @@ public class ResourceQuotaService extends EntityService<ResourceQuota, ResourceQ
 		rq.setCreatedBy(currentUser);
         rq.setUpdatedBy(currentUser);
 
-        rq.setPeriodStartDate(LocalDateTime.now());
+        // rq.setPeriodStartDate(LocalDateTime.now());
 
 		return this.repository.save(rq);
     }

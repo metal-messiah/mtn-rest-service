@@ -46,8 +46,8 @@ public class ResourceQuotaController extends CrudController<ResourceQuota, Resou
 		return ResponseEntity.ok(new ResourceQuotaView(domainModel));
     }
 
-    @PutMapping(value = "/{resourceQuotaId}")
-	public ResponseEntity updateOne(@PathVariable("resourceQuotaId") Integer resourceQuotaId, @RequestBody ResourceQuotaView request ) {
+    @PutMapping
+	public ResponseEntity updateOne(@RequestBody ResourceQuotaView request ) {
         
 		ResourceQuota domainModel = ((ResourceQuotaService) this.entityService).updateOne(request);
 		return ResponseEntity.ok(new ResourceQuotaView(domainModel));

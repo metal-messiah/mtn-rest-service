@@ -3,8 +3,6 @@ package com.mtn.model.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ResourceQuota;
 
-import com.mtn.constant.ResourceQuotaType;
-
 import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -23,8 +23,8 @@ import java.util.zip.ZipOutputStream;
 @RequestMapping("/api/report")
 public class ReportController {
 
-	private void addSovImage(ZipOutputStream zos, String jsonString) throws IOException {
-		URL url = new URL("http://localhost:3000/pdf/sov");
+	private void addTableImage(ZipOutputStream zos, String jsonString, String table) throws IOException {
+		URL url = new URL("http://localhost:3000/pdf/" + table);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setDoOutput(true);
 		con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
@@ -38,7 +38,7 @@ public class ReportController {
 		PDFRenderer pdfRenderer = new PDFRenderer(document);
 		BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
 
-		zos.putNextEntry(new ZipEntry("test.png"));
+		zos.putNextEntry(new ZipEntry(table + ".png"));
 		ImageIOUtil.writeImage(bim, "png", zos, 300);
 		zos.closeEntry();
 		document.close();
@@ -71,7 +71,8 @@ public class ReportController {
 			BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
 			ZipOutputStream zos = new ZipOutputStream(bos);
 
-			this.addSovImage(zos, json.get("sovData").toString());
+			this.addTableImage(zos, json.get("sovData").toString(), "sov");
+			this.addTableImage(zos, json.get("projections").toString(), "projections");
 			this.addNarrativeTextFile(zos, json.getString("narrativeData"));
 			this.addGoogleMapImage(zos, json.getString("mapUrl"));
 

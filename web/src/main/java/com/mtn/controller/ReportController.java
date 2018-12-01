@@ -74,6 +74,8 @@ public class ReportController {
 			this.addTableImage(zos, json.get("sovData").toString(), "sov");
 			this.addTableImage(zos, json.get("projections").toString(), "projections");
 			this.addTableImage(zos, json.get("ratings").toString(), "ratings");
+			this.addTableImage(zos, json.get("currentSummary").toString(), "currentSummary");
+			this.addTableImage(zos, json.get("projectedSummary").toString(), "projectedSummary");
 			this.addNarrativeTextFile(zos, json.getString("narrativeData"));
 			this.addGoogleMapImage(zos, json.getString("mapUrl"));
 

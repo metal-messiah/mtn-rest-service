@@ -3,6 +3,7 @@ package com.mtn.controller;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
@@ -16,6 +17,9 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -63,6 +67,28 @@ public class ReportController {
 
 	}
 
+	private void addCsvFile(ZipOutputStream zos, JSONObject json, String name) throws IOException {
+		final StringBuilder sb = new StringBuilder();
+
+		List<String> headers = json.getJSONArray(name + "Headers").toList().stream().map(String::valueOf).collect(Collectors.toList());
+		sb.append(String.join(",", headers));
+		sb.append("\r\n");
+
+		JSONArray sectors = json.getJSONArray(name);
+		for (int i = 0; i < sectors.length(); i++) {
+			JSONObject sector = sectors.getJSONObject(i);
+			String row = headers.stream()
+					.map(sector::get)
+					.map(String::valueOf)
+					.collect(Collectors.joining(",", "", "\r\n"));
+			sb.append(row);
+		}
+
+		zos.putNextEntry(new ZipEntry(name + ".csv"));
+		zos.write(sb.toString().getBytes());
+		zos.closeEntry();
+	}
+
 	@PostMapping(value="zip", produces = "application/zip")
 	public void getZip(HttpEntity<String> httpEntity, HttpServletResponse response) {
 		JSONObject json = new JSONObject(httpEntity.getBody());
@@ -78,6 +104,8 @@ public class ReportController {
 			this.addTableImage(zos, json.get("projectedSummary").toString(), "projectedSummary");
 			this.addNarrativeTextFile(zos, json.getString("narrativeData"));
 			this.addGoogleMapImage(zos, json.getString("mapUrl"));
+			this.addCsvFile(zos, json, "marketShareData");
+			this.addCsvFile(zos, json, "sovMapData");
 
 			zos.close();
 		} catch (IOException e) {

@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class StoreVolume extends AuditingEntity {
 
     private Integer volumeTotal;
+    private Integer volumeBoxTotal;
     private LocalDate volumeDate;
     private VolumeType volumeType;
     private String source;
@@ -188,5 +189,11 @@ public class StoreVolume extends AuditingEntity {
         this.volumeConfidence = volumeConfidence;
     }
 
+    public Integer getVolumeBoxTotal() {
+        return volumeBoxTotal;
+    }
 
+    public void setVolumeBoxTotal(Integer volumeBoxTotal) {
+        this.volumeBoxTotal = volumeBoxTotal;
+    }
 }

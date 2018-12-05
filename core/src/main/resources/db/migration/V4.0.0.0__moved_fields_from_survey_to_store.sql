@@ -8,8 +8,17 @@ ALTER TABLE `store`
 	ADD COLUMN `area_is_estimate` TINYINT(4) NULL DEFAULT NULL AFTER `area_total`,
 	ADD COLUMN `natural_foods_are_integrated` TINYINT(4) NULL DEFAULT NULL AFTER `area_is_estimate`;
 
+create temporary table temp_most_recent_store_survey
+SELECT s1.*
+FROM (`store_survey` `s1`
+LEFT JOIN `store_survey` `s2` ON(((`s1`.`store_id` = `s2`.`store_id`) AND ((`s1`.`store_survey_date` < `s2`.`store_survey_date`) OR ((`s1`.`store_survey_date` = `s2`.`store_survey_date`) AND (`s1`.`store_survey_id` < `s2`.`store_survey_id`))))))
+WHERE ISNULL(`s2`.`store_id`);
+
+ALTER TABLE temp_most_recent_store_survey	ADD INDEX store_survey_id (store_survey_id);
+
 update store st
-join most_recent_store_survey mrss on st.store_id = mrss.store_id
+join store_casing stc on stc.store_id = st.store_id
+join temp_most_recent_store_survey mrss on stc.store_survey_id = mrss.store_survey_id
 set st.store_fit = mrss.store_fit,
 	st.store_format = mrss.store_format,
 	st.store_is_open_24 = mrss.store_is_open_24,
@@ -19,6 +28,9 @@ set st.store_fit = mrss.store_fit,
 	st.area_is_estimate = mrss.area_is_estimate,
 	st.natural_foods_are_integrated = mrss.natural_foods_are_integrated
 where mrss.store_survey_id is not null;
+
+drop table temp_most_recent_store_survey;
+
 
 ALTER TABLE `store_survey`
 	DROP COLUMN `store_fit`,

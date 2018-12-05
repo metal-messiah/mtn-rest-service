@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class StoreVolumeView extends AuditingEntityView {
 
     private Integer volumeTotal;
+    private Integer volumeBoxTotal;
     private LocalDate volumeDate;
     private VolumeType volumeType;
     private String source;
@@ -36,6 +37,7 @@ public class StoreVolumeView extends AuditingEntityView {
         super(volume);
 
         this.volumeTotal = volume.getVolumeTotal();
+        this.volumeBoxTotal = volume.getVolumeBoxTotal();
         this.volumeDate = volume.getVolumeDate();
         this.volumeType = volume.getVolumeType();
         this.source = volume.getSource();
@@ -197,5 +199,13 @@ public class StoreVolumeView extends AuditingEntityView {
 
     public void setLegacyCasingId(Integer legacyCasingId) {
         this.legacyCasingId = legacyCasingId;
+    }
+
+    public Integer getVolumeBoxTotal() {
+        return volumeBoxTotal;
+    }
+
+    public void setVolumeBoxTotal(Integer volumeBoxTotal) {
+        this.volumeBoxTotal = volumeBoxTotal;
     }
 }

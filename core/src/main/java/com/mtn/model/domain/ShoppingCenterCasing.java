@@ -17,6 +17,7 @@ public class ShoppingCenterCasing extends AuditingEntity {
     private RatingType ratingBuildings;
     private RatingType ratingLighting;
     private RatingType ratingSynergy;
+    private RatingType ratingTenantBuildings;
     private Integer legacyCasingId;
 
     private ShoppingCenter shoppingCenter;
@@ -77,6 +78,15 @@ public class ShoppingCenterCasing extends AuditingEntity {
 
     public void setRatingSynergy(RatingType ratingSynergy) {
         this.ratingSynergy = ratingSynergy;
+    }
+
+    @Enumerated(EnumType.STRING)
+    public RatingType getRatingTenantBuildings() {
+        return ratingTenantBuildings;
+    }
+
+    public void setRatingTenantBuildings(RatingType ratingTenantBuildings) {
+        this.ratingTenantBuildings = ratingTenantBuildings;
     }
 
     public Integer getLegacyCasingId() {

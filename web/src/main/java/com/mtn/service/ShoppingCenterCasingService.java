@@ -60,6 +60,7 @@ public class ShoppingCenterCasingService extends EntityService<ShoppingCenterCas
         casing.setRatingBuildings(request.getRatingBuildings());
         casing.setRatingLighting(request.getRatingLighting());
         casing.setRatingSynergy(request.getRatingSynergy());
+        casing.setRatingTenantBuildings(request.getRatingTenantBuildings());
     }
 
     @Override

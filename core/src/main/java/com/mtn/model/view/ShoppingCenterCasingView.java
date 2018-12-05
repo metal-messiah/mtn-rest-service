@@ -18,6 +18,7 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
     private RatingType ratingBuildings;
     private RatingType ratingLighting;
     private RatingType ratingSynergy;
+    private RatingType ratingTenantBuildings;
     private Integer legacyCasingId;
 
     private List<SimpleProjectView> projects = new ArrayList<>();
@@ -34,6 +35,7 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
         this.ratingBuildings = casing.getRatingBuildings();
         this.ratingLighting = casing.getRatingLighting();
         this.ratingSynergy = casing.getRatingSynergy();
+        this.ratingTenantBuildings = casing.getRatingTenantBuildings();
         this.legacyCasingId = casing.getLegacyCasingId();
 
         if (casing.getShoppingCenterSurvey() != null) {
@@ -85,6 +87,14 @@ public class ShoppingCenterCasingView extends AuditingEntityView {
 
     public void setRatingSynergy(RatingType ratingSynergy) {
         this.ratingSynergy = ratingSynergy;
+    }
+
+    public RatingType getRatingTenantBuildings() {
+        return ratingTenantBuildings;
+    }
+
+    public void setRatingTenantBuildings(RatingType ratingTenantBuildings) {
+        this.ratingTenantBuildings = ratingTenantBuildings;
     }
 
     public Integer getLegacyCasingId() {

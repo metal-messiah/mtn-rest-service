@@ -39,6 +39,7 @@ public class StoreVolumeService extends StoreChildService<StoreVolume, StoreVolu
     @Override
     protected void setEntityAttributesFromRequest(StoreVolume volume, StoreVolumeView request) {
         volume.setVolumeTotal(request.getVolumeTotal());
+        volume.setVolumeBoxTotal(request.getVolumeBoxTotal());
         volume.setVolumeDate(request.getVolumeDate());
         volume.setVolumeType(request.getVolumeType());
         volume.setSource(request.getSource());

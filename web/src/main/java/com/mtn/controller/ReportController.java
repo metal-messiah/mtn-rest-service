@@ -5,6 +5,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -27,8 +27,11 @@ import java.util.zip.ZipOutputStream;
 @RequestMapping("/api/report")
 public class ReportController {
 
+	@Value("${report-generator.host}")
+	private String reportGeneratorHost;
+
 	private void addTableImage(ZipOutputStream zos, String jsonString, String table) throws IOException {
-		URL url = new URL("http://localhost:3000/pdf/" + table);
+		URL url = new URL(this.reportGeneratorHost + "/pdf/" + table);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setDoOutput(true);
 		con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");

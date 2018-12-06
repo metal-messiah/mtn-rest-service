@@ -44,11 +44,11 @@ public class ReportController {
 		PDDocument document = PDDocument.load(con.getInputStream());
 		PDFRenderer pdfRenderer = new PDFRenderer(document);
 		BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
+		document.close();
 
 		zos.putNextEntry(new ZipEntry(table + ".png"));
 		ImageIOUtil.writeImage(bim, "png", zos, 300);
 		zos.closeEntry();
-		document.close();
 	}
 
 	private void addNarrativeTextFile(ZipOutputStream zos, String narrativeTxt) throws IOException {

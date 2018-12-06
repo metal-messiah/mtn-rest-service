@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.mtn</groupId>
             <artifactId>core</artifactId>
-            <version>${mtn-core.version}</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>net.sf.supercsv</groupId>

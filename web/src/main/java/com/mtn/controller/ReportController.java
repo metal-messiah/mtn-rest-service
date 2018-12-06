@@ -41,14 +41,16 @@ public class ReportController {
 		os.write(jsonString.getBytes(StandardCharsets.UTF_8));
 		os.close();
 
-		PDDocument document = PDDocument.load(con.getInputStream());
-		PDFRenderer pdfRenderer = new PDFRenderer(document);
-		BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
+		// Try with resources ensures that document will be closed regardless of outcome
+		try (PDDocument document = PDDocument.load(con.getInputStream())) {
+			PDFRenderer pdfRenderer = new PDFRenderer(document);
+			BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
+			document.close();
 
-		zos.putNextEntry(new ZipEntry(table + ".png"));
-		ImageIOUtil.writeImage(bim, "png", zos, 300);
-		zos.closeEntry();
-		document.close();
+			zos.putNextEntry(new ZipEntry(table + ".png"));
+			ImageIOUtil.writeImage(bim, "png", zos, 300);
+			zos.closeEntry();
+		}
 	}
 
 	private void addNarrativeTextFile(ZipOutputStream zos, String narrativeTxt) throws IOException {

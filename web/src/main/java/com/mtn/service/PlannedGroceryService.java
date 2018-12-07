@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mtn.model.domain.*;
 import com.mtn.model.utils.StoreUtil;
 import com.mtn.model.view.*;
+import com.mtn.repository.StoreSourceRepository;
 import com.mtn.util.MtnLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -74,6 +76,7 @@ public class PlannedGroceryService {
 		return new RestTemplate().getForEntity(featureQueryUri.toUriString(), String.class);
 	}
 
+	@Async
 	public void addAndUpdateSourcesFromPlannedGrocery(UserProfile validator) {
 		MtnLogger.info("Running Planned Grocery update");
 		Date start = new Date();
@@ -131,6 +134,7 @@ public class PlannedGroceryService {
 
 		UserProfile currentUser = this.securityService.getCurrentUser();
 		StoreSource storeSource = this.storeSourceService.findOne(updatable.getStoreSource().getId());
+		storeSource.setStore(store);
 		storeSource.setValidatedBy(currentUser);
 		storeSource.setValidatedDate(LocalDateTime.now());
 
@@ -187,14 +191,12 @@ public class PlannedGroceryService {
 		return siteService.createOne(sc, latitude, longitude);
 	}
 
-	@Transactional
-	protected void updateShoppingCenterFromUpdatable(PlannedGroceryUpdatable updatable, ShoppingCenter shoppingCenter) {
+	private void updateShoppingCenterFromUpdatable(PlannedGroceryUpdatable updatable, ShoppingCenter shoppingCenter) {
 		shoppingCenter.setName(updatable.getShoppingCenterName());
-		shoppingCenterService.updateOne(new ShoppingCenterView(shoppingCenter));
+		shoppingCenterService.updateOne(shoppingCenter);
 	}
 
-	@Transactional
-	protected void updateSiteFromUpdatable(PlannedGroceryUpdatable updatable, Site site) {
+	private void updateSiteFromUpdatable(PlannedGroceryUpdatable updatable, Site site) {
 		site.setAddress1(updatable.getAddress());
 		site.setQuad(updatable.getQuad());
 		site.setIntersectionStreetPrimary(updatable.getIntersectionStreetPrimary());
@@ -205,11 +207,10 @@ public class PlannedGroceryService {
 		site.setPostalCode(updatable.getPostalCode());
 		site.setLatitude(updatable.getLatitude());
 		site.setLongitude(updatable.getLongitude());
-		siteService.updateOne(new SiteView(site));
+		siteService.updateOne(site);
 	}
 
-	@Transactional
-	protected void updateStoreFromUpdatable(PlannedGroceryUpdatable updatable, Store store) {
+	private void updateStoreFromUpdatable(PlannedGroceryUpdatable updatable, Store store) {
 		store.setStoreName(updatable.getStoreName());
 		store.setDateOpened(updatable.getDateOpened());
 		store.setAreaTotal(updatable.getAreaTotal());
@@ -228,11 +229,10 @@ public class PlannedGroceryService {
 			return storeSurveyService.addOne(newSurvey);
 		});
 		storeSurvey.setUpdatedBy(securityService.getCurrentUser());
-		storeService.updateOne(new StoreView(store));
+		storeService.updateOne(store);
 	}
 
-	@Transactional
-	protected void processFeatureNode(JsonNode featureNode, UserProfile validatingUser) {
+	private void processFeatureNode(JsonNode featureNode, UserProfile validatingUser) {
 		// Parse Node into values
 		JsonNode attributesNode = featureNode.path("attributes");
 
@@ -267,11 +267,10 @@ public class PlannedGroceryService {
 			source.setValidatedDate(null);
 		}
 
-		this.storeSourceService.updateOne(new StoreSourceView(source));
+		this.storeSourceService.updateOne(source);
 	}
 
-	@Transactional
-	protected boolean updateDatabaseRecords(JsonNode attributesNode, StoreSource source) {
+	private boolean updateDatabaseRecords(JsonNode attributesNode, StoreSource source) {
 		Store store = source.getStore();
 		if (store == null) {
 			return false; // Not yet matched
@@ -297,8 +296,7 @@ public class PlannedGroceryService {
 		}
 	}
 
-	@Transactional
-	protected void updateStoreFromJson(Store store, JsonNode attributesNode, LocalDateTime sourceEditedDate) throws Exception {
+	private void updateStoreFromJson(Store store, JsonNode attributesNode, LocalDateTime sourceEditedDate) throws Exception {
 		boolean storeEdited = false;
 		// TODO Get OPENDATEAPPROX and translate, use where OPENDATE is null
 		if (attributesNode.hasNonNull("OPENDATE") && store.getDateOpened() == null) {
@@ -333,12 +331,11 @@ public class PlannedGroceryService {
 			}
 		}
 		if (storeEdited) {
-			storeService.updateOne(new StoreView(store));
+			storeService.updateOne(store);
 		}
 	}
 
-	@Transactional
-	protected void updateSiteFromPGFeature(Site site, JsonNode attributesNode) {
+	private void updateSiteFromPGFeature(Site site, JsonNode attributesNode) {
 		boolean siteEdited = false;
 		if (attributesNode.hasNonNull("DESCLOCATION") && site.getAddress1() == null) {
 			String address = attributesNode.get("DESCLOCATION").textValue();
@@ -367,21 +364,20 @@ public class PlannedGroceryService {
 		}
 
 		if (siteEdited) {
-			siteService.updateOne(new SiteView(site));
+			site.setUpdatedBy(securityService.getCurrentUser());
+			siteService.updateOne(site);
 		}
 	}
 
-	@Transactional
-	protected void updateShoppingCenter(ShoppingCenter shoppingCenter, JsonNode attributesNode) {
+	private void updateShoppingCenter(ShoppingCenter shoppingCenter, JsonNode attributesNode) {
 		if (attributesNode.hasNonNull("NAMECENTER") && shoppingCenter != null && shoppingCenter.getName() == null) {
 			String nameCenter = attributesNode.get("NAMECENTER").textValue();
 			shoppingCenter.setName(nameCenter);
-			shoppingCenterService.updateOne(new ShoppingCenterView(shoppingCenter));
+			shoppingCenterService.updateOne(shoppingCenter);
 		}
 	}
 
-	@Transactional
-	protected void createNewStatusFromSource(Store store, String sourceStatus, LocalDateTime statusStartDate) {
+	private void createNewStatusFromSource(Store store, String sourceStatus, LocalDateTime statusStartDate) {
 		StoreStatusView newStatusRequest = new StoreStatusView();
 		newStatusRequest.setStatus(sourceStatus);
 		newStatusRequest.setStatusStartDate(statusStartDate);

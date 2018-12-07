@@ -94,14 +94,12 @@ public class StoreService extends EntityService<Store, StoreView> {
 		return this.repository.findAll(spec);
 	}
 
-	@Transactional
 	public Store createNewStoreForSite(Site site) {
 		StoreView request = new StoreView();
 		request.setStoreType(StoreType.ACTIVE);
 		return this.createStoreForSiteFromRequest(request, site, true);
 	}
 
-	@Transactional
 	public Store createStoreForSiteFromRequest(StoreView request, Site site, boolean overrideActiveStore) {
 		this.validator.validateForInsert(request);
 

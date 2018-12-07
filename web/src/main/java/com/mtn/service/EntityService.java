@@ -82,7 +82,6 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 		return this.repository.save(newEntity);
 	}
 
-	@Transactional
 	public T updateOne(V request) {
 		this.validator.validateForUpdate(request);
 
@@ -90,7 +89,12 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 		this.setEntityAttributesFromRequest(updatedEntity, request);
 		updatedEntity.setUpdatedBy(securityService.getCurrentUser());
 
-		return updatedEntity;
+		return repository.save(updatedEntity);
+	}
+
+	public T updateOne(T updatedEntity) {
+		updatedEntity.setUpdatedBy(securityService.getCurrentUser());
+		return this.repository.save(updatedEntity);
 	}
 
 	@Transactional

@@ -61,7 +61,7 @@ public class ReportService {
 	private void createZipFile(String reportName, Integer userId, JSONObject json) throws IOException {
 		String[] tables = {"sov", "projections", "ratings", "currentSummary", "projectedSummary"};
 		String reportFilePrefix = this.getTempFilePath() + "/" + userId + "-" + reportName;
-		try (FileOutputStream fos = new FileOutputStream(reportFilePrefix + ".zip")) {
+		try (FileOutputStream fos = new FileOutputStream(reportFilePrefix + "~.zip")) {
 			try (ZipOutputStream zos = new ZipOutputStream(fos)) {
 				for (String tableName : tables) {
 					zos.putNextEntry(new ZipEntry(tableName + ".png"));
@@ -85,6 +85,12 @@ public class ReportService {
 				this.addCsvFile(zos, json, "marketShareData");
 				this.addCsvFile(zos, json, "sovMapData");
 			}
+		}
+		File completedZip = new File(reportFilePrefix + "~.zip");
+		if (completedZip.renameTo(new File(reportFilePrefix + ".zip"))) {
+			MtnLogger.info("Zip report completed");
+		} {
+			MtnLogger.warn("Failed to finalize report zip!");
 		}
 	}
 

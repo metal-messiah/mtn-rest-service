@@ -89,7 +89,7 @@ public class ReportService {
 		File completedZip = new File(reportFilePrefix + "~.zip");
 		if (completedZip.renameTo(new File(reportFilePrefix + ".zip"))) {
 			MtnLogger.info("Zip report completed");
-		} {
+		} else {
 			MtnLogger.warn("Failed to finalize report zip!");
 		}
 	}

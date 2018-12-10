@@ -1,7 +1,7 @@
 package com.mtn.service;
 
 import com.mtn.util.MtnLogger;
-import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
@@ -18,6 +18,9 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -42,15 +45,31 @@ public class ReportService {
 
 		MtnLogger.info("Building Zip");
 		try {
-			this.createTableImage(reportName, json.get("sovData").toString(), "sov", userId);
-			this.createTableImage(reportName, json.get("projections").toString(), "projections", userId);
-			this.createTableImage(reportName, json.get("ratings").toString(), "ratings", userId);
-			this.createTableImage(reportName, json.get("currentSummary").toString(), "currentSummary", userId);
-			this.createTableImage(reportName, json.get("projectedSummary").toString(), "projectedSummary", userId);
+			Path reportDirPath = Paths.get(this.getTempFilePath() + "mtnReports" + File.separator + userId + "-" + reportName);
 
-			// create zip file from created files
-			this.createZipFile(reportName, userId, json);
+			// Clear out all previous attempts for this specific report
+			FileUtils.deleteDirectory(new File(reportDirPath.toString()));
 
+			// Create a fresh directory
+			Path reportPath = Files.createDirectories(reportDirPath);
+
+			// Build report
+			try {
+				Path pdfsPath = Files.createDirectories(Paths.get(reportPath + File.separator + "pdfs"));
+				String[] tables = {"sovData", "projections", "ratings", "currentSummary", "projectedSummary"};
+				for (String table : tables) {
+					this.fetchTablePdf(json, table, pdfsPath);
+				}
+
+				// create zip file from created files
+				this.createZipFile(reportName, reportPath, json, tables);
+			} catch (IOException e) {
+				File errorFile = new File(reportPath + File.separator + "err.txt");
+				try (PrintWriter out = new PrintWriter(errorFile)) {
+					e.printStackTrace(out);
+				}
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -58,43 +77,58 @@ public class ReportService {
 		return CompletableFuture.completedFuture(true);
 	}
 
-	private void createZipFile(String reportName, Integer userId, JSONObject json) throws IOException {
-		String[] tables = {"sov", "projections", "ratings", "currentSummary", "projectedSummary"};
-		String reportFilePrefix = this.getTempFilePath() + "/" + userId + "-" + reportName;
-		try (FileOutputStream fos = new FileOutputStream(reportFilePrefix + "~.zip")) {
+	private void createZipFile(String reportName, Path reportPath, JSONObject json, String[] tables) throws IOException {
+		File zipFile = new File(reportPath + File.separator + "~.zip");
+		try (FileOutputStream fos = new FileOutputStream(zipFile)) {
 			try (ZipOutputStream zos = new ZipOutputStream(fos)) {
+				// Convert all PDFs to images, add Images to ZIP, delete PDFs
 				for (String tableName : tables) {
-					zos.putNextEntry(new ZipEntry(tableName + ".png"));
-					String fileName = reportFilePrefix + "-" + tableName + ".pdf";
-					File pdf = new File(fileName);
-					try (PDDocument document = PDDocument.load(pdf)) {
-						PDFRenderer pdfRenderer = new PDFRenderer(document);
-						BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
-						ImageIOUtil.writeImage(bim, "png", zos, 300);
-					}
-					if (pdf.delete()) {
-						MtnLogger.info(pdf.getName() + " was deleted");
-					} else {
-						MtnLogger.warn(pdf.getName() + " could not be deleted!");
-					}
-					zos.closeEntry();
+					this.addImageToZip(reportPath, tableName, zos);
 				}
 
+				// Add other files to the ZIP
 				this.addNarrativeTextFile(zos, json.getString("narrativeData"));
 				this.addGoogleMapImage(zos, json.getString("mapUrl"));
 				this.addCsvFile(zos, json, "marketShareData");
 				this.addCsvFile(zos, json, "sovMapData");
 			}
 		}
-		File completedZip = new File(reportFilePrefix + "~.zip");
-		if (completedZip.renameTo(new File(reportFilePrefix + ".zip"))) {
-			MtnLogger.info("Zip report completed");
-		} else {
+
+		// Rename temp zip to finalized zip
+		if (!zipFile.renameTo(new File(reportPath + File.separator  + reportName + ".zip"))) {
 			MtnLogger.warn("Failed to finalize report zip!");
+		}
+		if (!new File(reportPath + File.separator + "pdfs").delete()) {
+			MtnLogger.info("Failed to delete pdfs dir for report: " + reportName);
 		}
 	}
 
-	private void createTableImage(String reportName, String jsonString, String table, Integer userId) throws IOException {
+	private void addImageToZip(Path reportPath, String tableName, ZipOutputStream zos) throws IOException {
+		// Get PDF file
+		String fileName = reportPath + File.separator + "pdfs" + File.separator + tableName + ".pdf";
+		File pdf = new File(fileName);
+
+		try (PDDocument document = PDDocument.load(pdf)) {
+			// Create Image from PDF
+			PDFRenderer pdfRenderer = new PDFRenderer(document);
+			BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
+
+			// Write to zip file
+			try {
+				zos.putNextEntry(new ZipEntry(tableName + ".png"));
+				ImageIOUtil.writeImage(bim, "png", zos, 300);
+			} finally {
+				zos.closeEntry();
+			}
+		}
+
+		// Delete the PDF file
+		if (!pdf.delete()) {
+			MtnLogger.warn("Failed to delete pdf: " + pdf.getName());
+		}
+	}
+
+	private void fetchTablePdf(JSONObject json, String table, Path reportPath) throws IOException {
 		URL url = new URL(this.reportGeneratorHost + "/pdf/" + table);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		try {
@@ -104,14 +138,14 @@ public class ReportService {
 
 			// Send Json Body
 			try (OutputStream os = con.getOutputStream()) {
-				os.write(jsonString.getBytes(StandardCharsets.UTF_8));
+				os.write(json.get(table).toString().getBytes(StandardCharsets.UTF_8));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 			// Try with resources ensures that document will be closed regardless of outcome
 			try (PDDocument document = PDDocument.load(con.getInputStream())) {
-				File tmpFile = new File(getTempFilePath() + "/" + userId + "-" + reportName + "-" + table + ".pdf");
+				File tmpFile = new File(reportPath + File.separator + table + ".pdf");
 				document.save(tmpFile);
 				con.disconnect();
 			}
@@ -153,6 +187,7 @@ public class ReportService {
 			String row = headers.stream()
 					.map(sector::get)
 					.map(String::valueOf)
+					.map(str -> str.equals("null") ? "" : str)
 					.collect(Collectors.joining(",", "", "\r\n"));
 			sb.append(row);
 		}
@@ -166,7 +201,7 @@ public class ReportService {
 		//create a temp file
 		File temp = File.createTempFile("temp-file-name", ".tmp");
 		String absolutePath = temp.getAbsolutePath();
-		return absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));
+		return absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)) + File.separator;
 	}
 
 }

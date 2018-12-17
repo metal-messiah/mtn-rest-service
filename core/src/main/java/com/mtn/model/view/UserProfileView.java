@@ -11,6 +11,7 @@ public class UserProfileView extends AuditingEntityView {
     private String email;
     private String firstName;
     private String lastName;
+    private String phoneNumber;
 
     private SimpleGroupView group;
     private SimpleRoleView role;
@@ -24,6 +25,7 @@ public class UserProfileView extends AuditingEntityView {
         this.email = userProfile.getEmail();
         this.firstName = userProfile.getFirstName();
         this.lastName = userProfile.getLastName();
+        this.phoneNumber = userProfile.getPhoneNumber();
 
         if (userProfile.getGroup() != null) {
             this.group = new SimpleGroupView(userProfile.getGroup());
@@ -72,5 +74,13 @@ public class UserProfileView extends AuditingEntityView {
 
     public void setRole(SimpleRoleView role) {
         this.role = role;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

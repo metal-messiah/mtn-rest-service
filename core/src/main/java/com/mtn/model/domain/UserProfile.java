@@ -13,6 +13,7 @@ public class UserProfile extends AuditingEntity {
     private String email;
     private String firstName;
     private String lastName;
+    private String phoneNumber;
 
     private Group group;
     private Role role;
@@ -76,5 +77,13 @@ public class UserProfile extends AuditingEntity {
 
     public void setRestrictionBoundary(Boundary restrictionBoundary) {
         this.restrictionBoundary = restrictionBoundary;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

@@ -87,7 +87,6 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 		survey.setDepartmentExtensivePreparedFoods(request.getDepartmentExtensivePreparedFoods());
 		survey.setDepartmentFloral(request.getDepartmentFloral());
 		survey.setDepartmentFuel(request.getDepartmentFuel());
-		survey.setDepartmentHotBar(request.getDepartmentHotBar());
 		survey.setDepartmentInStoreRestaurant(request.getDepartmentInStoreRestaurant());
 		survey.setDepartmentLiquor(request.getDepartmentLiquor());
 		survey.setDepartmentMeat(request.getDepartmentMeat());

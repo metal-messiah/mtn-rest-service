@@ -33,7 +33,6 @@ public class StoreSurveyView extends AuditingEntityView {
     private Boolean departmentExtensivePreparedFoods;
     private Boolean departmentFloral;
     private Boolean departmentFuel;
-    private Boolean departmentHotBar;
     private Boolean departmentInStoreRestaurant;
     private Boolean departmentLiquor;
     private Boolean departmentMeat;
@@ -112,7 +111,6 @@ public class StoreSurveyView extends AuditingEntityView {
         this.departmentExtensivePreparedFoods = storeSurvey.getDepartmentExtensivePreparedFoods();
         this.departmentFloral = storeSurvey.getDepartmentFloral();
         this.departmentFuel = storeSurvey.getDepartmentFuel();
-        this.departmentHotBar = storeSurvey.getDepartmentHotBar();
         this.departmentInStoreRestaurant = storeSurvey.getDepartmentInStoreRestaurant();
         this.departmentLiquor = storeSurvey.getDepartmentLiquor();
         this.departmentMeat = storeSurvey.getDepartmentMeat();
@@ -352,14 +350,6 @@ public class StoreSurveyView extends AuditingEntityView {
 
     public void setDepartmentFuel(Boolean departmentFuel) {
         this.departmentFuel = departmentFuel;
-    }
-
-    public Boolean getDepartmentHotBar() {
-        return departmentHotBar;
-    }
-
-    public void setDepartmentHotBar(Boolean departmentHotBar) {
-        this.departmentHotBar = departmentHotBar;
     }
 
     public Boolean getDepartmentInStoreRestaurant() {

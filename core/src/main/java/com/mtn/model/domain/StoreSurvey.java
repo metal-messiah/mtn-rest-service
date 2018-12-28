@@ -36,7 +36,6 @@ public class StoreSurvey extends AuditingEntity {
     private Boolean departmentExtensivePreparedFoods = false;
     private Boolean departmentFloral = false;
     private Boolean departmentFuel = false;
-    private Boolean departmentHotBar = false;
     private Boolean departmentInStoreRestaurant = false;
     private Boolean departmentLiquor = false;
     private Boolean departmentMeat = false;
@@ -116,7 +115,6 @@ public class StoreSurvey extends AuditingEntity {
         this.departmentExtensivePreparedFoods = storeSurvey.departmentExtensivePreparedFoods;
         this.departmentFloral = storeSurvey.departmentFloral;
         this.departmentFuel = storeSurvey.departmentFuel;
-        this.departmentHotBar = storeSurvey.departmentHotBar;
         this.departmentInStoreRestaurant = storeSurvey.departmentInStoreRestaurant;
         this.departmentLiquor = storeSurvey.departmentLiquor;
         this.departmentMeat = storeSurvey.departmentMeat;
@@ -360,14 +358,6 @@ public class StoreSurvey extends AuditingEntity {
 
     public void setDepartmentFuel(Boolean departmentFuel) {
         this.departmentFuel = departmentFuel;
-    }
-
-    public Boolean getDepartmentHotBar() {
-        return departmentHotBar;
-    }
-
-    public void setDepartmentHotBar(Boolean departmentHotBar) {
-        this.departmentHotBar = departmentHotBar;
     }
 
     public Boolean getDepartmentInStoreRestaurant() {

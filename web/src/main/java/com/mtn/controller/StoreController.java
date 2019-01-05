@@ -53,7 +53,7 @@ public class StoreController extends CrudController<Store, StoreView> {
 
 	@GetMapping(params = {"ids"})
 	public ResponseEntity findListByIds(@RequestParam(value = "ids") List<Integer> ids,
-										@RequestParam(value = "full-obj", required = false) Boolean full) {
+										@RequestParam(value = "full-obj", required = false, defaultValue = "false") Boolean full) {
 		List<Store> stores = ((StoreService) this.entityService).findAllByIdsUsingSpecs(ids);
 		if(full) {
 			return ResponseEntity.ok(stores.stream().map(StoreView::new).collect(Collectors.toList()));

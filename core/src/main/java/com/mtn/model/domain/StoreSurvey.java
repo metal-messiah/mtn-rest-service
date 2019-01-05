@@ -18,7 +18,6 @@ public class StoreSurvey extends AuditingEntity {
     private Integer registerCountExpress;
     private Integer registerCountSelfCheckout;
     private Integer fuelDispenserCount;
-    private Boolean fuelIsOpen24 = false;
     private Boolean pharmacyIsOpen24 = false;
     private Boolean pharmacyHasDriveThrough = false;
     private Integer pharmacyScriptsWeekly;
@@ -97,7 +96,6 @@ public class StoreSurvey extends AuditingEntity {
         this.registerCountExpress = storeSurvey.registerCountExpress;
         this.registerCountSelfCheckout = storeSurvey.registerCountSelfCheckout;
         this.fuelDispenserCount = storeSurvey.fuelDispenserCount;
-        this.fuelIsOpen24 = storeSurvey.fuelIsOpen24;
         this.pharmacyIsOpen24 = storeSurvey.pharmacyIsOpen24;
         this.pharmacyHasDriveThrough = storeSurvey.pharmacyHasDriveThrough;
         this.pharmacyScriptsWeekly = storeSurvey.pharmacyScriptsWeekly;
@@ -212,15 +210,6 @@ public class StoreSurvey extends AuditingEntity {
 
     public void setFuelDispenserCount(Integer fuelDispenserCount) {
         this.fuelDispenserCount = fuelDispenserCount;
-    }
-
-    @Column(name = "fuel_is_open_24")
-    public Boolean getFuelIsOpen24() {
-        return fuelIsOpen24;
-    }
-
-    public void setFuelIsOpen24(Boolean fuelIsOpen24) {
-        this.fuelIsOpen24 = fuelIsOpen24;
     }
 
     @Column(name = "pharmacy_is_open_24")

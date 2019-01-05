@@ -15,7 +15,6 @@ public class StoreSurveyView extends AuditingEntityView {
     private Integer registerCountExpress;
     private Integer registerCountSelfCheckout;
     private Integer fuelDispenserCount;
-    private Boolean fuelIsOpen24;
     private Boolean pharmacyIsOpen24;
     private Boolean pharmacyHasDriveThrough;
     private Integer pharmacyScriptsWeekly;
@@ -93,7 +92,6 @@ public class StoreSurveyView extends AuditingEntityView {
         this.registerCountExpress = storeSurvey.getRegisterCountExpress();
         this.registerCountSelfCheckout = storeSurvey.getRegisterCountSelfCheckout();
         this.fuelDispenserCount = storeSurvey.getFuelDispenserCount();
-        this.fuelIsOpen24 = storeSurvey.getFuelIsOpen24();
         this.pharmacyIsOpen24 = storeSurvey.getPharmacyIsOpen24();
         this.pharmacyHasDriveThrough = storeSurvey.getPharmacyHasDriveThrough();
         this.pharmacyScriptsWeekly = storeSurvey.getPharmacyScriptsWeekly();
@@ -206,14 +204,6 @@ public class StoreSurveyView extends AuditingEntityView {
 
     public void setFuelDispenserCount(Integer fuelDispenserCount) {
         this.fuelDispenserCount = fuelDispenserCount;
-    }
-
-    public Boolean getFuelIsOpen24() {
-        return fuelIsOpen24;
-    }
-
-    public void setFuelIsOpen24(Boolean fuelIsOpen24) {
-        this.fuelIsOpen24 = fuelIsOpen24;
     }
 
     public Boolean getPharmacyIsOpen24() {

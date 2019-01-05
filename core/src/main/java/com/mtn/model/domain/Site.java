@@ -19,7 +19,6 @@ public class Site extends AuditingEntity {
     private Float latitude;
     private Float longitude;
     private SiteType type;
-    private Integer footprintSqft;
     private String positionInCenter;
     private String address1;
     private String address2;
@@ -139,14 +138,6 @@ public class Site extends AuditingEntity {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public Integer getFootprintSqft() {
-        return footprintSqft;
-    }
-
-    public void setFootprintSqft(Integer footprintSqft) {
-        this.footprintSqft = footprintSqft;
     }
 
     public String getIntersectionStreetPrimary() {

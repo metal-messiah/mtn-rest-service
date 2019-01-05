@@ -110,7 +110,6 @@ public class SiteService extends EntityService<Site, SiteView> {
 		site.setLatitude(request.getLatitude());
 		site.setLongitude(request.getLongitude());
 		site.setType(request.getType());
-		site.setFootprintSqft(request.getFootprintSqft());
 		site.setPositionInCenter(request.getPositionInCenter());
 		site.setAddress1(request.getAddress1());
 		site.setAddress2(request.getAddress2());

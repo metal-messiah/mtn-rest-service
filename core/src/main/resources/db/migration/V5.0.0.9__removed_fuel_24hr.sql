@@ -1,1 +1,1 @@
-DELETE FROM `mtn_dev`.`extraction_field` WHERE  `extraction_field_id`=86;
+DELETE FROM `extraction_field` WHERE  `extraction_field_id`=86;

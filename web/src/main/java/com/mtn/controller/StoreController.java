@@ -168,6 +168,12 @@ public class StoreController extends CrudController<Store, StoreView> {
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
 	}
 
+	@DeleteMapping(value = "/{storeId}/banner")
+	public ResponseEntity removeBanner(@PathVariable("storeId") Integer storeId) {
+		Store domainModel = ((StoreService) this.entityService).updateOneBanner(storeId, null);
+		return ResponseEntity.ok(new StoreView(domainModel));
+	}
+
 	@PutMapping(value = "/{storeId}/banner/{bannerId}")
 	public ResponseEntity updateOneBanner(@PathVariable("storeId") Integer storeId, @PathVariable("bannerId") Integer bannerId) {
 		Banner banner = bannerService.findOneUsingSpecs(bannerId);

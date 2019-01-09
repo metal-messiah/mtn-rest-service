@@ -69,7 +69,6 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 		survey.setRegisterCountExpress(request.getRegisterCountExpress());
 		survey.setRegisterCountSelfCheckout(request.getRegisterCountSelfCheckout());
 		survey.setFuelDispenserCount(request.getFuelDispenserCount());
-		survey.setFuelIsOpen24(request.getFuelIsOpen24());
 		survey.setPharmacyIsOpen24(request.getPharmacyIsOpen24());
 		survey.setPharmacyHasDriveThrough(request.getPharmacyHasDriveThrough());
 		survey.setPharmacyScriptsWeekly(request.getPharmacyScriptsWeekly());
@@ -87,7 +86,6 @@ public class StoreSurveyService extends StoreChildService<StoreSurvey, StoreSurv
 		survey.setDepartmentExtensivePreparedFoods(request.getDepartmentExtensivePreparedFoods());
 		survey.setDepartmentFloral(request.getDepartmentFloral());
 		survey.setDepartmentFuel(request.getDepartmentFuel());
-		survey.setDepartmentHotBar(request.getDepartmentHotBar());
 		survey.setDepartmentInStoreRestaurant(request.getDepartmentInStoreRestaurant());
 		survey.setDepartmentLiquor(request.getDepartmentLiquor());
 		survey.setDepartmentMeat(request.getDepartmentMeat());

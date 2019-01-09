@@ -52,9 +52,14 @@ public class StoreController extends CrudController<Store, StoreView> {
 	}
 
 	@GetMapping(params = {"ids"})
-	public ResponseEntity findListByIds(@RequestParam(value = "ids") List<Integer> ids) {
+	public ResponseEntity findListByIds(@RequestParam(value = "ids") List<Integer> ids,
+										@RequestParam(value = "full-obj", required = false, defaultValue = "false") Boolean full) {
 		List<Store> stores = ((StoreService) this.entityService).findAllByIdsUsingSpecs(ids);
-		return ResponseEntity.ok(stores.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
+		if(full) {
+			return ResponseEntity.ok(stores.stream().map(StoreView::new).collect(Collectors.toList()));
+		} else {
+			return ResponseEntity.ok(stores.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
+		}
 	}
 
 	@GetMapping(params = {"north", "south", "east", "west"})
@@ -161,6 +166,12 @@ public class StoreController extends CrudController<Store, StoreView> {
 	public ResponseEntity findAllSurveysForStore(@PathVariable("id") Integer storeId) {
 		List<StoreSurvey> domainModels = storeSurveyService.findAllByStoreIdUsingSpecs(storeId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreSurveyView::new).collect(Collectors.toList()));
+	}
+
+	@DeleteMapping(value = "/{storeId}/banner")
+	public ResponseEntity removeBanner(@PathVariable("storeId") Integer storeId) {
+		Store domainModel = ((StoreService) this.entityService).updateOneBanner(storeId, null);
+		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
 	@PutMapping(value = "/{storeId}/banner/{bannerId}")

@@ -22,7 +22,6 @@ public class SiteView extends AuditingEntityView {
     private String postalCode;
     private String county;
     private String country;
-    private Integer footprintSqft;
     private String intersectionStreetPrimary;
     private String intersectionStreetSecondary;
     private String quad;
@@ -50,7 +49,6 @@ public class SiteView extends AuditingEntityView {
         this.postalCode = site.getPostalCode();
         this.county = site.getCounty();
         this.country = site.getCountry();
-        this.footprintSqft = site.getFootprintSqft();
         this.intersectionStreetPrimary = site.getIntersectionStreetPrimary();
         this.intersectionStreetSecondary = site.getIntersectionStreetSecondary();
         this.quad = site.getQuad();
@@ -157,14 +155,6 @@ public class SiteView extends AuditingEntityView {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public Integer getFootprintSqft() {
-        return footprintSqft;
-    }
-
-    public void setFootprintSqft(Integer footprintSqft) {
-        this.footprintSqft = footprintSqft;
     }
 
     public String getIntersectionStreetPrimary() {

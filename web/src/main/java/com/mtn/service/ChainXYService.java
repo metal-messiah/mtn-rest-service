@@ -58,14 +58,27 @@ public class ChainXYService {
 		try {
 			ArrayNode allChains = this.getChainXyChains();
 			MtnLogger.info("Chains: " + allChains.size());
+			this.updateBannerSources(allChains);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	private void updateBannerSources(ArrayNode allChains) {
+		// Retrieve all banner_sources where source_name = 'ChainXY'
+
+		// For each ChainXY chain,
+			// If not found by native_source_id
+				// create new banner_source record
+				// add all store_source records
+			// else if LastScrapeDate > banner_source.source_updated_date
+				// check for additions and deletions of store_source
+
+
+	}
+
 	private ArrayNode getChainXyChains() throws IOException {
 		// TODO get max scraped date, use as filter
-		// TODO Implement pagination
 
 		ArrayNode chains = null;
 
@@ -85,9 +98,9 @@ public class ChainXYService {
 
 		// IMPORTANT! JSON query object must be injected as a uri variable, because otherwise Spring interprets the
 		// curly braces as a variable placeholder (even if they are encoded)
-		vars.put("query", "{\"Categories\":{\"Id\":154}}");
+		vars.put("query", "{\"Categories\":{\"Id\":154}, \"Countries\":{\"Code\":\"US\"}}");
 
-		do {
+//		do {
 			vars.put("page", String.valueOf(currentPage));
 
 			ResponseEntity<String> response = this.getRestTemplate().getForEntity(request.toUriString(), String.class, vars);
@@ -103,7 +116,7 @@ public class ChainXYService {
 			} else {
 				chains.addAll(pageChains);
 			}
-		} while (++currentPage < totalPages);
+//		} while (++currentPage < totalPages);
 
 		return chains;
 	}

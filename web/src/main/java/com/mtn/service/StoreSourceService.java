@@ -21,6 +21,7 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 public class StoreSourceService extends StoreChildService<StoreSource, StoreSourceView> {
 
 	private final StoreService storeService;
+	private final BannerSourceService bannerSourceService;
 	private final UserProfileService userProfileService;
 
 	@Autowired
@@ -28,9 +29,11 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 							  StoreSourceRepository repository,
 							  StoreSourceValidator validator,
 							  StoreService storeService,
+							  BannerSourceService bannerSourceService,
 							  UserProfileService userProfileService) {
 		super(securityService, repository, validator, StoreSource::new);
 		this.storeService = storeService;
+		this.bannerSourceService = bannerSourceService;
 		this.userProfileService = userProfileService;
 	}
 
@@ -71,6 +74,7 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 		source.setSourceStoreName(request.getSourceStoreName());
 		source.setSourceCreatedDate(request.getSourceCreatedDate());
 		source.setSourceEditedDate(request.getSourceEditedDate());
+		source.setSourceDeletedDate(request.getSourceDeletedDate());
 
 		if (request.getValidatedBy() != null) {
 			UserProfile validator = userProfileService.findOneUsingSpecs(request.getValidatedBy().getId());
@@ -86,6 +90,13 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 			source.setStore(store);
 		} else {
 			source.setStore(null);
+		}
+
+		if (request.getBannerSource() != null) {
+			BannerSource bannerSource = bannerSourceService.findOneUsingSpecs(request.getBannerSource().getId());
+			source.setBannerSource(bannerSource);
+		} else {
+			source.setBannerSource(null);
 		}
 
 	}

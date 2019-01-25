@@ -18,9 +18,11 @@ public class StoreSourceView extends AuditingEntityView {
 	private String sourceStoreName;
 	private LocalDateTime sourceCreatedDate;
 	private LocalDateTime sourceEditedDate;
+	private LocalDateTime sourceDeletedDate;
 
 	private SimpleUserProfileView validatedBy;
 	private SimpleStoreView store;
+	private BannerSourceView bannerSource;
 
 	public StoreSourceView() {
 	}
@@ -36,12 +38,16 @@ public class StoreSourceView extends AuditingEntityView {
 		this.sourceStoreName = storeSource.getSourceStoreName();
 		this.sourceCreatedDate = storeSource.getSourceCreatedDate();
 		this.sourceEditedDate = storeSource.getSourceEditedDate();
+		this.sourceDeletedDate = storeSource.getSourceDeletedDate();
 
 		if (storeSource.getValidatedBy() != null) {
 			this.validatedBy = new SimpleUserProfileView(storeSource.getValidatedBy());
 		}
 		if (storeSource.getStore() != null) {
 			this.store = new SimpleStoreView(storeSource.getStore());
+		}
+		if (storeSource.getBannerSource() != null) {
+			this.bannerSource = new BannerSourceView(storeSource.getBannerSource());
 		}
 	}
 
@@ -109,6 +115,14 @@ public class StoreSourceView extends AuditingEntityView {
 		this.sourceEditedDate = sourceEditedDate;
 	}
 
+	public LocalDateTime getSourceDeletedDate() {
+		return sourceDeletedDate;
+	}
+
+	public void setSourceDeletedDate(LocalDateTime sourceDeletedDate) {
+		this.sourceDeletedDate = sourceDeletedDate;
+	}
+
 	public SimpleUserProfileView getValidatedBy() {
 		return validatedBy;
 	}
@@ -123,5 +137,13 @@ public class StoreSourceView extends AuditingEntityView {
 
 	public void setStore(SimpleStoreView store) {
 		this.store = store;
+	}
+
+	public BannerSourceView getBannerSource() {
+		return bannerSource;
+	}
+
+	public void setBannerSource(BannerSourceView bannerSource) {
+		this.bannerSource = bannerSource;
 	}
 }

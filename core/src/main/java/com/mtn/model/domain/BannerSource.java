@@ -2,6 +2,7 @@ package com.mtn.model.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table
@@ -20,6 +21,7 @@ public class BannerSource extends AuditingEntity {
     private UserProfile validatedBy;
 
     private Banner banner;
+    private List<StoreSource> storeSources;
 
     @ManyToOne
     @JoinColumn(name = "banner_id")
@@ -103,5 +105,14 @@ public class BannerSource extends AuditingEntity {
 
     public void setValidatedDate(LocalDateTime validatedDate) {
         this.validatedDate = validatedDate;
+    }
+
+    @OneToMany(mappedBy = "bannerSource")
+    public List<StoreSource> getStoreSources() {
+        return storeSources;
+    }
+
+    public void setStoreSources(List<StoreSource> storeSources) {
+        this.storeSources = storeSources;
     }
 }

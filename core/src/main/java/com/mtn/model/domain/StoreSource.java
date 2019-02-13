@@ -3,9 +3,6 @@ package com.mtn.model.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * Created by Allen on 4/26/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="source_id"))

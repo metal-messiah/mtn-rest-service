@@ -49,10 +49,18 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 		));
 	}
 
+	public List<StoreSource> findAllOfBannerSourceWhereNativeIdNotInSet(Integer bannerSourceId, Set<String> hashIds) {
+		return ((StoreSourceRepository) this.repository).findAllOfBannerSourceWhereNativeIdNotInSet(bannerSourceId, hashIds);
+	}
+
 	public Page<StoreSource> findAllByQuery(Map<String, String> queryMap, Pageable page) {
 		Specifications<StoreSource> specs = where(StoreSourceSpecifications.isNotDeleted());
 		if (queryMap.containsKey("source-name")) {
 			specs = specs.and(StoreSourceSpecifications.sourceNameEquals(queryMap.get("source-name")));
+		}
+		if (queryMap.containsKey("banner-source-id")) {
+			Integer bannerSourceId = Integer.parseInt(queryMap.get("banner-source-id"));
+			specs = specs.and(StoreSourceSpecifications.bannerSourceIdEquals(bannerSourceId));
 		}
 		if (queryMap.containsKey("validated")) {
 			boolean validated = parseBoolean(queryMap.get("validated"));

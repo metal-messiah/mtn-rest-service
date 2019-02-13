@@ -1,0 +1,14 @@
+CREATE TABLE `source` (
+	`source_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`source_name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`last_sync_date` TIMESTAMP NOT NULL DEFAULT '2000-01-01 00:00:00',
+	`created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`created_by` INT(11) NULL DEFAULT NULL,
+	`updated_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`updated_by` INT(11) NULL DEFAULT NULL,
+	`deleted_date` TIMESTAMP NULL DEFAULT NULL,
+	`deleted_by` INT(11) NULL DEFAULT NULL,
+	`version` INT(11) NOT NULL DEFAULT '1',
+	PRIMARY KEY (`source_id`),
+	INDEX `Index_2` (`source_name`)
+)

@@ -2,6 +2,8 @@ package com.mtn.repository;
 
 import com.mtn.model.domain.Site;
 import com.vividsolutions.jts.geom.Geometry;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -29,6 +31,20 @@ public interface SiteRepository extends EntityRepository<Site> {
 			"and si.longitude >= :west " +
 			"and si.deletedDate is null")
 	List<Site> findAllInBounds(@Param("restriction") Geometry restriction,
+							   @Param("north") Float north,
+							   @Param("south") Float south,
+							   @Param("east") Float east,
+							   @Param("west") Float west);
+
+	@Query(value = "Select si from Site si " +
+			"where (:restriction is null or ST_Within(si.location, :restriction) = true) " +
+			"and si.latitude <= :north " +
+			"and si.latitude >= :south " +
+			"and si.longitude <= :east " +
+			"and si.longitude >= :west " +
+			"and si.deletedDate is null")
+	Page<Site> findAllInBounds(Pageable page,
+							   @Param("restriction") Geometry restriction,
 							   @Param("north") Float north,
 							   @Param("south") Float south,
 							   @Param("east") Float east,

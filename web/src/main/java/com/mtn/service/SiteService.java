@@ -56,6 +56,12 @@ public class SiteService extends EntityService<Site, SiteView> {
 		return ((SiteRepository) this.repository).findAllInBounds(restriction, north, south, east, west);
 	}
 
+	public Page<Site> findAllInBoundsUsingSpecs(Pageable page, Float north, Float south, Float east, Float west) {
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		return ((SiteRepository) this.repository).findAllInBounds(page, restriction, north, south, east, west);
+	}
+
 	public List<Site> findAllInShape(Geometry shape) {
 		UserProfile currentUser = this.securityService.getCurrentUser();
 		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
@@ -74,6 +80,14 @@ public class SiteService extends EntityService<Site, SiteView> {
 		List<Site> sites = this.repository.findAll(Specifications.where(SiteSpecifications.idIn(siteIds)));
 		sites.forEach(site -> site.setAssignee(selectedUser));
 		return sites;
+	}
+
+	@Transactional
+	public Site assignSiteToUser(Integer siteId, Integer userId) {
+		final UserProfile selectedUser = (userId != null) ? userProfileService.findOne(userId) : null;
+		Site site = this.findOne(siteId);
+		site.setAssignee(selectedUser);
+		return this.repository.save(site);
 	}
 
 	@Transactional

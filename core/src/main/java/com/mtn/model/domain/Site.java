@@ -4,13 +4,9 @@ import com.mtn.constant.SiteType;
 import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 4/24/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="site_id"))
@@ -33,6 +29,7 @@ public class Site extends AuditingEntity {
     private String intersectionStreetSecondary;
     private Boolean duplicate;
     private Point location;
+    private Boolean backfilledNonGrocery;
 
     private ShoppingCenter shoppingCenter;
     private List<Store> stores = new ArrayList<>();
@@ -206,5 +203,13 @@ public class Site extends AuditingEntity {
 
     public void setLocation(Point location) {
         this.location = location;
+    }
+
+    public Boolean getBackfilledNonGrocery() {
+        return backfilledNonGrocery;
+    }
+
+    public void setBackfilledNonGrocery(Boolean backfilledNonGrocery) {
+        this.backfilledNonGrocery = backfilledNonGrocery;
     }
 }

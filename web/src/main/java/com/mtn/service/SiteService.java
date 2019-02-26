@@ -137,6 +137,7 @@ public class SiteService extends EntityService<Site, SiteView> {
 		site.setIntersectionStreetPrimary(request.getIntersectionStreetPrimary());
 		site.setIntersectionStreetSecondary(request.getIntersectionStreetSecondary());
 		site.setDuplicate(request.getDuplicate());
+		site.setBackfilledNonGrocery(request.getBackfilledNonGrocery());
 
 		if (request.getAssignee() != null) {
 			UserProfile assignee = this.userProfileService.findOneUsingSpecs(request.getAssignee().getId());

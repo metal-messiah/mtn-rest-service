@@ -13,6 +13,7 @@ public class StoreMarker {
 	private Boolean floating;
 	private String storeType;
 	private LocalDateTime validatedDate;
+	private LocalDateTime createdDate;
 	private String logoFileName;
 	private Integer bannerId;
 
@@ -22,6 +23,7 @@ public class StoreMarker {
 		this.floating = store.getFloating();
 		this.storeType = store.getStoreType().toString();
 		this.validatedDate = store.getValidatedDate();
+		this.createdDate = store.getCreatedDate();
 		if (store.getBanner() != null) {
 			this.logoFileName = store.getBanner().getLogoFileName();
 			this.bannerId = store.getBanner().getId();
@@ -82,5 +84,13 @@ public class StoreMarker {
 
 	public void setBannerId(Integer bannerId) {
 		this.bannerId = bannerId;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
 	}
 }

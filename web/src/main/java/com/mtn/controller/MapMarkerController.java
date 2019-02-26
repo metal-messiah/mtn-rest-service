@@ -30,4 +30,10 @@ public class MapMarkerController {
 		return ResponseEntity.ok(domainModels.map(SiteMarker::new));
 	}
 
+	@GetMapping(params = {"site-id"})
+	public ResponseEntity<SiteMarker> findAllSitePointsWithinBounds(@RequestParam("site-id") Integer siteId) {
+		Site site = this.siteService.findOneUsingSpecs(siteId);
+		return ResponseEntity.ok(new SiteMarker(site));
+	}
+
 }

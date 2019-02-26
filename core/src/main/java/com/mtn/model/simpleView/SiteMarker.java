@@ -3,6 +3,8 @@ package com.mtn.model.simpleView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Site;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,7 @@ public class SiteMarker {
 	private Integer assigneeId;
 	private Boolean duplicate;
 	private Boolean backfilledNonGrocery;
+	private LocalDateTime updatedDate;
 	private List<StoreMarker> stores;
 
 	public SiteMarker(Site site) {
@@ -26,7 +29,18 @@ public class SiteMarker {
 		}
 		this.duplicate = site.getDuplicate();
 		this.backfilledNonGrocery = site.getBackfilledNonGrocery();
-		this.stores = site.getStores().stream().map(StoreMarker::new).collect(Collectors.toList());
+
+		// Get the maximum updated date
+		this.updatedDate = site.getUpdatedDate();
+		site.getStores().forEach(store -> {
+			if (store.getUpdatedDate().isAfter(this.updatedDate)) {
+				this.updatedDate = store.getUpdatedDate();
+			}
+		});
+
+		this.stores = site.getStores().stream()
+				.filter(store -> store.getDeletedDate() == null)
+				.map(StoreMarker::new).collect(Collectors.toList());
 	}
 
 	public Integer getId() {
@@ -83,5 +97,13 @@ public class SiteMarker {
 
 	public void setStores(List<StoreMarker> stores) {
 		this.stores = stores;
+	}
+
+	public LocalDateTime getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(LocalDateTime updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 }

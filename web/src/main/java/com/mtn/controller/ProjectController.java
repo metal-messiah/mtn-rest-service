@@ -84,6 +84,7 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 	public List<Integer> findAllCasedStoreIds(@PathVariable("id") Integer projectId) {
 		Project project = this.entityService.findOne(projectId);
 		return project.getStoreCasings().stream()
+				.filter(storeCasing -> storeCasing.getDeletedDate() == null)
 				.map(storeCasing -> storeCasing.getStore().getId()).distinct().collect(Collectors.toList());
 	}
 

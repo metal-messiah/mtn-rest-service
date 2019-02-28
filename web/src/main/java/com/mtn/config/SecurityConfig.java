@@ -98,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/site/**").hasAuthority(PermissionType.SITES_READ)
                 .antMatchers(HttpMethod.PUT, "/api/site/**").hasAuthority(PermissionType.SITES_UPDATE)
                 .antMatchers(HttpMethod.DELETE, "/api/site/**").hasAuthority(PermissionType.SITES_DELETE)
+                .antMatchers(HttpMethod.GET, "/api/site-marker/**").hasAuthority(PermissionType.SITES_READ)
                 .antMatchers(HttpMethod.POST, "/api/store/**").hasAuthority(PermissionType.STORES_CREATE)
                 .antMatchers(HttpMethod.GET, "/api/store/**").hasAuthority(PermissionType.STORES_READ)
                 .antMatchers(HttpMethod.PUT, "/api/store/**").hasAuthority(PermissionType.STORES_UPDATE)

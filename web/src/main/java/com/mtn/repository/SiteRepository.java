@@ -17,11 +17,27 @@ public interface SiteRepository extends EntityRepository<Site> {
 			"and (:restriction is null or ST_Within(si.location, :restriction) = true)")
 	List<Site> findWithinGeometry(@Param("shape") Geometry shape, @Param("restriction") Geometry restriction);
 
+	@Query("SELECT si FROM Site si " +
+			"where ST_Distance_Sphere(si.location, ST_PointFromText(concat('Point(', :longitude, ' ', :latitude, ')'), 4326)) <= :radiusMeters " +
+			"and (:geometry is null or ST_Within(si.location, :geometry) = true) " +
+			"and si.deletedDate is null")
+	Page<Site> findAllInRadius(Pageable page,
+							   @Param("latitude") Float latitude,
+							   @Param("longitude") Float longitude,
+							   @Param("radiusMeters") Float radiusMeters,
+							   @Param("geometry") Geometry geometry);
+
 	@Query(value = "Select si from Site si " +
 			"where st_within(si.location, ST_GeomFromGeoJson(:geoJson, 1, 4326)) = true " +
 			"and si.deletedDate is null " +
 			"and (:restriction is null or ST_Within(si.location, :restriction) = true)")
 	List<Site> findWithinGeoJson(@Param("geoJson") String geoJson, @Param("restriction") Geometry restriction);
+
+	@Query(value = "Select si from Site si " +
+			"where st_within(si.location, ST_GeomFromGeoJson(:geoJson, 1, 4326)) = true " +
+			"and si.deletedDate is null " +
+			"and (:restriction is null or ST_Within(si.location, :restriction) = true)")
+	Page<Site> findWithinGeoJson(Pageable page, @Param("geoJson") String geoJson, @Param("restriction") Geometry restriction);
 
 	@Query(value = "Select si from Site si " +
 			"where (:restriction is null or ST_Within(si.location, :restriction) = true) " +
@@ -59,9 +75,9 @@ public interface SiteRepository extends EntityRepository<Site> {
 			"and si.longitude >= :west " +
 			"and si.deletedDate is null")
 	List<Site> findAllInBoundsWithoutStores(@Param("restriction") Geometry restriction,
-							   @Param("north") Float north,
-							   @Param("south") Float south,
-							   @Param("east") Float east,
-							   @Param("west") Float west);
+											@Param("north") Float north,
+											@Param("south") Float south,
+											@Param("east") Float east,
+											@Param("west") Float west);
 
 }

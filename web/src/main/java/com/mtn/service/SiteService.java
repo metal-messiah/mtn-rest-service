@@ -39,10 +39,22 @@ public class SiteService extends EntityService<Site, SiteView> {
 		);
 	}
 
+	public Page<Site> findAllInRadius(Pageable page, Float latitude, Float longitude, Float radiusMeters) {
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		Geometry geometry = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		return ((SiteRepository) this.repository).findAllInRadius(page, latitude, longitude, radiusMeters, geometry);
+	}
+
 	public List<Site> findAllInGeoJson(String geoJson) {
 		UserProfile currentUser = this.securityService.getCurrentUser();
 		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
 		return ((SiteRepository) this.repository).findWithinGeoJson(geoJson, restriction);
+	}
+
+	public Page<Site> findAllInGeoJson(Pageable page, String geoJson) {
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		return ((SiteRepository) this.repository).findWithinGeoJson(page, geoJson, restriction);
 	}
 
 	public List<Site> findAllDuplicatesUsingSpecs() {

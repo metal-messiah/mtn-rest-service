@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
+import com.mtn.model.simpleView.SimpleStoreSourceView;
 import com.mtn.model.simpleView.SimpleStoreStatusView;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlannedGroceryUpdatable {
+public class SourceUpdatable {
 
     private Integer shoppingCenterId;
     private String shoppingCenterName;
@@ -34,20 +35,20 @@ public class PlannedGroceryUpdatable {
     private List<SimpleStoreStatusView> storeStatuses;
     private Integer areaTotal;
 
-    private StoreSourceView storeSource;
+    private SimpleStoreSourceView storeSource;
 
-    public PlannedGroceryUpdatable() {
+    public SourceUpdatable() {
     }
 
-    public PlannedGroceryUpdatable(Store store) {
+    public SourceUpdatable(Store store) {
         this.setStoreData(store);
     }
 
-    public PlannedGroceryUpdatable(Site site) {
+    public SourceUpdatable(Site site) {
         this.setSiteData(site);
     }
 
-    public PlannedGroceryUpdatable(ShoppingCenter shoppingCenter) {
+    public SourceUpdatable(ShoppingCenter shoppingCenter) {
         this.setShoppingCenterData(shoppingCenter);
     }
 
@@ -195,11 +196,11 @@ public class PlannedGroceryUpdatable {
         this.areaTotal = areaTotal;
     }
 
-    public StoreSourceView getStoreSource() {
+    public SimpleStoreSourceView getStoreSource() {
         return storeSource;
     }
 
-    public void setStoreSource(StoreSourceView storeSource) {
+    public void setStoreSource(SimpleStoreSourceView storeSource) {
         this.storeSource = storeSource;
     }
 

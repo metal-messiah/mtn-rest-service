@@ -2,45 +2,45 @@ package com.mtn.model.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="source_id"))
-public class StoreSource extends AuditingEntity {
+public class BannerSource extends AuditingEntity {
 
     private String sourceName;
     private String sourceNativeId;
     private String sourceUrl;
-    private String sourceStoreName;
+    private String sourceBannerName;
     private LocalDateTime sourceCreatedDate;
     private LocalDateTime sourceEditedDate;
     private LocalDateTime sourceDeletedDate;
-    private Integer legacySourceId;
 
     private LocalDateTime validatedDate;
-
     private UserProfile validatedBy;
-    private Store store;
-    private BannerSource bannerSource;
+
+    private Banner banner;
+    private List<StoreSource> storeSources;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
-    public Store getStore() {
-        return store;
+    @JoinColumn(name = "banner_id")
+    public Banner getBanner() {
+        return banner;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public void setBanner(Banner banner) {
+        this.banner = banner;
     }
 
     @ManyToOne
-    @JoinColumn(name = "banner_source_id")
-    public BannerSource getBannerSource() {
-        return bannerSource;
+    @JoinColumn(name = "validated_by")
+    public UserProfile getValidatedBy() {
+        return validatedBy;
     }
 
-    public void setBannerSource(BannerSource bannerSource) {
-        this.bannerSource = bannerSource;
+    public void setValidatedBy(UserProfile validatedBy) {
+        this.validatedBy = validatedBy;
     }
 
     public String getSourceName() {
@@ -67,38 +67,12 @@ public class StoreSource extends AuditingEntity {
         this.sourceUrl = sourceUrl;
     }
 
-    public Integer getLegacySourceId() {
-        return legacySourceId;
+    public String getSourceBannerName() {
+        return sourceBannerName;
     }
 
-    public void setLegacySourceId(Integer legacySourceId) {
-        this.legacySourceId = legacySourceId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "validated_by")
-    public UserProfile getValidatedBy() {
-        return validatedBy;
-    }
-
-    public void setValidatedBy(UserProfile validatedBy) {
-        this.validatedBy = validatedBy;
-    }
-
-    public LocalDateTime getValidatedDate() {
-        return validatedDate;
-    }
-
-    public void setValidatedDate(LocalDateTime validatedDate) {
-        this.validatedDate = validatedDate;
-    }
-
-    public String getSourceStoreName() {
-        return sourceStoreName;
-    }
-
-    public void setSourceStoreName(String sourceStoreName) {
-        this.sourceStoreName = sourceStoreName;
+    public void setSourceBannerName(String sourceBannerName) {
+        this.sourceBannerName = sourceBannerName;
     }
 
     public LocalDateTime getSourceCreatedDate() {
@@ -123,5 +97,22 @@ public class StoreSource extends AuditingEntity {
 
     public void setSourceDeletedDate(LocalDateTime sourceDeletedDate) {
         this.sourceDeletedDate = sourceDeletedDate;
+    }
+
+    public LocalDateTime getValidatedDate() {
+        return validatedDate;
+    }
+
+    public void setValidatedDate(LocalDateTime validatedDate) {
+        this.validatedDate = validatedDate;
+    }
+
+    @OneToMany(mappedBy = "bannerSource")
+    public List<StoreSource> getStoreSources() {
+        return storeSources;
+    }
+
+    public void setStoreSources(List<StoreSource> storeSources) {
+        this.storeSources = storeSources;
     }
 }

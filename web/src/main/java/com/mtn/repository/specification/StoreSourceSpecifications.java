@@ -20,6 +20,15 @@ public class StoreSourceSpecifications extends StoreChildSpecifications {
 		};
 	}
 
+	public static Specification<StoreSource> bannerSourceIdEquals(Integer id) {
+		return new Specification<StoreSource>() {
+			@Override
+			public Predicate toPredicate(Root<StoreSource> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				return criteriaBuilder.equal(root.get("bannerSource").get("id"), id);
+			}
+		};
+	}
+
 	public static Specification<StoreSource> sourceNameEquals(String sourceName) {
 		return new Specification<StoreSource>() {
 			@Override

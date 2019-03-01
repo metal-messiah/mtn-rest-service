@@ -12,6 +12,7 @@ public class SimpleStoreSourceView extends SimpleAuditingEntityView {
 	private String sourceNativeId;
 	private String sourceUrl;
 	private String sourceStoreName;
+	private String sourceBannerName;
 	private LocalDateTime validatedDate;
 	private Integer storeId;
 
@@ -28,6 +29,9 @@ public class SimpleStoreSourceView extends SimpleAuditingEntityView {
 		this.sourceStoreName = storeSource.getSourceStoreName();
 		if (storeSource.getStore() != null) {
 			this.storeId = storeSource.getStore().getId();
+		}
+		if (storeSource.getBannerSource() != null) {
+			this.sourceBannerName = storeSource.getBannerSource().getSourceBannerName();
 		}
 	}
 
@@ -79,4 +83,11 @@ public class SimpleStoreSourceView extends SimpleAuditingEntityView {
 		this.storeId = storeId;
 	}
 
+	public String getSourceBannerName() {
+		return sourceBannerName;
+	}
+
+	public void setSourceBannerName(String sourceBannerName) {
+		this.sourceBannerName = sourceBannerName;
+	}
 }

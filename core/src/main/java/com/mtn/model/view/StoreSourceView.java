@@ -2,6 +2,7 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.StoreSource;
+import com.mtn.model.simpleView.SimpleBannerSourceView;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 
@@ -22,7 +23,7 @@ public class StoreSourceView extends AuditingEntityView {
 
 	private SimpleUserProfileView validatedBy;
 	private SimpleStoreView store;
-	private BannerSourceView bannerSource;
+	private SimpleBannerSourceView bannerSource;
 
 	public StoreSourceView() {
 	}
@@ -47,7 +48,7 @@ public class StoreSourceView extends AuditingEntityView {
 			this.store = new SimpleStoreView(storeSource.getStore());
 		}
 		if (storeSource.getBannerSource() != null) {
-			this.bannerSource = new BannerSourceView(storeSource.getBannerSource());
+			this.bannerSource = new SimpleBannerSourceView(storeSource.getBannerSource());
 		}
 	}
 
@@ -139,11 +140,11 @@ public class StoreSourceView extends AuditingEntityView {
 		this.store = store;
 	}
 
-	public BannerSourceView getBannerSource() {
+	public SimpleBannerSourceView getBannerSource() {
 		return bannerSource;
 	}
 
-	public void setBannerSource(BannerSourceView bannerSource) {
+	public void setBannerSource(SimpleBannerSourceView bannerSource) {
 		this.bannerSource = bannerSource;
 	}
 }

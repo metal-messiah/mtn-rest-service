@@ -116,6 +116,13 @@ public class SiteController extends CrudController<Site, SiteView> {
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
+	@PostMapping(value = "{siteId}/assign-to-user")
+	public ResponseEntity<SiteView> assignToUser(@PathVariable("siteId") Integer siteId,
+															 @RequestParam(value = "user-id", required = false) Integer userId) {
+		Site site = ((SiteService) this.entityService).assignSiteToUser(siteId, userId);
+		return ResponseEntity.ok(new SiteView(site));
+	}
+
 	@PostMapping(value = "/{id}/store")
 	public ResponseEntity<StoreView> addOneStoreToSite(
 			@PathVariable("id") Integer siteId,

@@ -1,5 +1,7 @@
 package com.mtn.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.mtn.model.domain.*;
 import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
@@ -66,7 +68,7 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
-	@GetMapping(path = "/{id}/store")
+	@GetMapping(path = "/{id}/stores")
 	public ResponseEntity findAllStoresForProject(@PathVariable("id") Integer projectId) {
 		List<Store> domainModels = storeService.findAllByProjectId(projectId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
@@ -76,6 +78,14 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 	public ResponseEntity findAllStoreCasingsForProject(@PathVariable("id") Integer projectId) {
 		List<StoreCasing> domainModels = storeCasingService.findAllByProjectId(projectId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
+	}
+
+	@GetMapping(path = "/{id}/cased-store-ids")
+	public List<Integer> findAllCasedStoreIds(@PathVariable("id") Integer projectId) {
+		Project project = this.entityService.findOne(projectId);
+		return project.getStoreCasings().stream()
+				.filter(storeCasing -> storeCasing.getDeletedDate() == null)
+				.map(storeCasing -> storeCasing.getStore().getId()).distinct().collect(Collectors.toList());
 	}
 
 }

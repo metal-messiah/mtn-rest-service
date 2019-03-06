@@ -27,6 +27,7 @@ public class SiteView extends AuditingEntityView {
     private String quad;
     private String positionInCenter;
     private Boolean duplicate;
+    private Boolean backfilledNonGrocery;
 
     private ShoppingCenterView shoppingCenter;
     private List<StoreView> stores;
@@ -54,6 +55,7 @@ public class SiteView extends AuditingEntityView {
         this.quad = site.getQuad();
         this.positionInCenter = site.getPositionInCenter();
         this.duplicate = site.getDuplicate();
+        this.backfilledNonGrocery = site.getBackfilledNonGrocery();
 
         if (site.getShoppingCenter() != null) {
             this.shoppingCenter = new ShoppingCenterView(site.getShoppingCenter());
@@ -219,5 +221,13 @@ public class SiteView extends AuditingEntityView {
 
     public void setAssignee(SimpleUserProfileView assignee) {
         this.assignee = assignee;
+    }
+
+    public Boolean getBackfilledNonGrocery() {
+        return backfilledNonGrocery;
+    }
+
+    public void setBackfilledNonGrocery(Boolean backfilledNonGrocery) {
+        this.backfilledNonGrocery = backfilledNonGrocery;
     }
 }

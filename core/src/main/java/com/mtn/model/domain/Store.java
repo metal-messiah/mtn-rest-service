@@ -256,8 +256,4 @@ public class Store extends AuditingEntity {
         this.validatedDate = validatedDate;
     }
 
-    public void addStoreCasing(StoreCasing storeCasing) {
-        storeCasing.setStore(this);
-        this.casings.add(storeCasing);
-    }
 }

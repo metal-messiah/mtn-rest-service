@@ -29,6 +29,7 @@ public class Site extends AuditingEntity {
     private String intersectionStreetSecondary;
     private Boolean duplicate;
     private Point location;
+    private Boolean backfilledNonGrocery;
 
     private ShoppingCenter shoppingCenter;
     private List<Store> stores = new ArrayList<>();
@@ -204,13 +205,17 @@ public class Site extends AuditingEntity {
         this.location = location;
     }
 
+    public Boolean getBackfilledNonGrocery() {
+        return backfilledNonGrocery;
+    }
+
+    public void setBackfilledNonGrocery(Boolean backfilledNonGrocery) {
+        this.backfilledNonGrocery = backfilledNonGrocery;
+    }
+
     public void addStore(Store store) {
         store.setSite(this);
         this.stores.add(store);
     }
 
-    public void removeStore(Store store) {
-        store.setSite(null);
-        this.stores.remove(store);
-    }
 }

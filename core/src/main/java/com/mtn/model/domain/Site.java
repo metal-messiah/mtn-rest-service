@@ -4,13 +4,9 @@ import com.mtn.constant.SiteType;
 import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 4/24/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="site_id"))
@@ -206,5 +202,15 @@ public class Site extends AuditingEntity {
 
     public void setLocation(Point location) {
         this.location = location;
+    }
+
+    public void addStore(Store store) {
+        store.setSite(this);
+        this.stores.add(store);
+    }
+
+    public void removeStore(Store store) {
+        store.setSite(null);
+        this.stores.remove(store);
     }
 }

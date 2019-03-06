@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mtn.model.domain.*;
 import com.mtn.model.utils.StoreUtil;
 import com.mtn.model.view.*;
-import com.mtn.repository.StoreSourceRepository;
 import com.mtn.util.MtnLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +26,6 @@ import java.util.*;
 public class PlannedGroceryService {
 
 	private final StoreSourceService storeSourceService;
-	private final StoreSurveyService storeSurveyService;
 	private final ShoppingCenterService shoppingCenterService;
 	private final StoreService storeService;
 	private final SiteService siteService;
@@ -43,11 +41,13 @@ public class PlannedGroceryService {
 	private Map<Integer, String> statusMap;
 
 	@Autowired
-	public PlannedGroceryService(StoreSourceService storeSourceService, StoreSurveyService storeSurveyService,
-								 ShoppingCenterService shoppingCenterService, StoreService storeService,
-								 SiteService siteService, StoreStatusService storeStatusService, SecurityService securityService) {
+	public PlannedGroceryService(StoreSourceService storeSourceService,
+								 ShoppingCenterService shoppingCenterService,
+								 StoreService storeService,
+								 SiteService siteService,
+								 StoreStatusService storeStatusService,
+								 SecurityService securityService) {
 		this.storeSourceService = storeSourceService;
-		this.storeSurveyService = storeSurveyService;
 		this.shoppingCenterService = shoppingCenterService;
 		this.storeService = storeService;
 		this.siteService = siteService;
@@ -96,52 +96,6 @@ public class PlannedGroceryService {
 		MtnLogger.info(String.format("Finished running Planned Grocery update in %d ms by %s", duration, validator.getEmail()));
 	}
 
-	public PlannedGroceryUpdatable getUpdatableByStoreId(Integer storeId) {
-		Store store = storeService.findOne(storeId);
-		return new PlannedGroceryUpdatable(store);
-	}
-
-	public PlannedGroceryUpdatable getUpdatableBySiteId(Integer siteId) {
-		Site site = siteService.findOne(siteId);
-		return new PlannedGroceryUpdatable(site);
-	}
-
-	public PlannedGroceryUpdatable getUpdatableByShoppingCenterId(Integer shoppingCenterId) {
-		ShoppingCenter shoppingCenter = shoppingCenterService.findOne(shoppingCenterId);
-		return new PlannedGroceryUpdatable(shoppingCenter);
-	}
-
-	@Transactional
-	public Store updateFromUpdatable(PlannedGroceryUpdatable updatable) {
-		Store store;
-		if (updatable.getShoppingCenterId() == null) {
-			ShoppingCenter sc = shoppingCenterService.createNew();
-			Site site = siteService.createOne(sc, updatable.getLatitude(), updatable.getLongitude());
-			store = this.storeService.createNewStoreForSite(site);
-		} else if (updatable.getSiteId() == null) {
-			ShoppingCenter sc = shoppingCenterService.findOne(updatable.getShoppingCenterId());
-			Site site = this.createNewSiteInShoppingCenter(sc, updatable.getLatitude(), updatable.getLongitude());
-			store = this.storeService.createNewStoreForSite(site);
-		} else if (updatable.getStoreId() == null) {
-			Site site = siteService.findOne(updatable.getSiteId());
-			store = this.storeService.createNewStoreForSite(site);
-		} else {
-			store = storeService.findOne(updatable.getStoreId());
-		}
-		this.updateStoreFromUpdatable(updatable, store);
-		this.updateSiteFromUpdatable(updatable, store.getSite());
-		this.updateShoppingCenterFromUpdatable(updatable, store.getSite().getShoppingCenter());
-
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		StoreSource storeSource = this.storeSourceService.findOne(updatable.getStoreSource().getId());
-		storeSource.setStore(store);
-		storeSource.setValidatedBy(currentUser);
-		storeSource.setValidatedDate(LocalDateTime.now());
-
-		return store;
-	}
-
-
 	private ResponseEntity<String> getAccessToken() {
 		UriComponents keyUri = UriComponentsBuilder.newInstance()
 				.scheme("https")
@@ -180,56 +134,6 @@ public class PlannedGroceryService {
 		ResponseEntity<String> response = new RestTemplate().getForEntity(featureQueryUri.toUriString(), String.class);
 		JsonNode root = mapper.readTree(response.getBody());
 		return root.get("features");
-	}
-
-	@Transactional
-	protected Site createNewSiteInShoppingCenter(ShoppingCenter sc, Float latitude, Float longitude) {
-		Site site = new Site();
-		site.setShoppingCenter(sc);
-		site.setLatitude(latitude);
-		site.setLongitude(longitude);
-		return siteService.createOne(sc, latitude, longitude);
-	}
-
-	private void updateShoppingCenterFromUpdatable(PlannedGroceryUpdatable updatable, ShoppingCenter shoppingCenter) {
-		shoppingCenter.setName(updatable.getShoppingCenterName());
-		shoppingCenterService.updateOne(shoppingCenter);
-	}
-
-	private void updateSiteFromUpdatable(PlannedGroceryUpdatable updatable, Site site) {
-		site.setAddress1(updatable.getAddress());
-		site.setQuad(updatable.getQuad());
-		site.setIntersectionStreetPrimary(updatable.getIntersectionStreetPrimary());
-		site.setIntersectionStreetSecondary(updatable.getIntersectionStreetSecondary());
-		site.setCity(updatable.getCity());
-		site.setCounty(updatable.getCounty());
-		site.setState(updatable.getState());
-		site.setPostalCode(updatable.getPostalCode());
-		site.setLatitude(updatable.getLatitude());
-		site.setLongitude(updatable.getLongitude());
-		siteService.updateOne(site);
-	}
-
-	private void updateStoreFromUpdatable(PlannedGroceryUpdatable updatable, Store store) {
-		store.setStoreName(updatable.getStoreName());
-		store.setDateOpened(updatable.getDateOpened());
-		store.setAreaTotal(updatable.getAreaTotal());
-		if (updatable.getStoreStatuses() != null) {
-			updatable.getStoreStatuses().stream().filter(status -> status.getId() == null).forEach(status -> {
-				StoreStatusView newStoreStatusRequest = new StoreStatusView();
-				newStoreStatusRequest.setStatus(status.getStatus());
-				newStoreStatusRequest.setStatusStartDate(status.getStatusStartDate());
-				storeStatusService.addOneToStore(newStoreStatusRequest, store);
-			});
-		}
-		StoreSurvey storeSurvey = StoreUtil.getLatestSurveyAsOfDateTime(store, LocalDateTime.now()).orElseGet(() -> {
-			StoreSurvey newSurvey = new StoreSurvey();
-			newSurvey.setStore(store);
-			newSurvey.setSurveyDate(LocalDateTime.now());
-			return storeSurveyService.addOne(newSurvey);
-		});
-		storeSurvey.setUpdatedBy(securityService.getCurrentUser());
-		storeService.updateOne(store);
 	}
 
 	private void processFeatureNode(JsonNode featureNode, UserProfile validatingUser) {

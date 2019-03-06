@@ -99,6 +99,20 @@ public class MergeService {
 					this.storeService.updateOne(store);
 				});
 
+		Iterator<StoreStatus> statusIterator = updatedStore.getStatuses().stream().iterator();
+		while (statusIterator.hasNext()) {
+			StoreStatus curr = statusIterator.next();
+			statusIterator.forEachRemaining(rem -> {
+				// If the status isn't already deleted
+				if (rem.getDeletedDate() == null) {
+					if (curr.getStatus().equals(rem.getStatus()) && curr.getStatusStartDate().toLocalDate().equals(rem.getStatusStartDate().toLocalDate())) {
+						rem.setDeletedBy(this.securityService.getCurrentUser());
+						rem.setDeletedDate(LocalDateTime.now());
+					}
+				}
+			});
+		}
+
 		return updatedStore;
 	}
 

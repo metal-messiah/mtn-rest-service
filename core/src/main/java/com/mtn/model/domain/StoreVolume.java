@@ -2,6 +2,7 @@ package com.mtn.model.domain;
 
 import com.mtn.constant.ConfidenceType;
 import com.mtn.constant.VolumeType;
+import com.mtn.model.StoreChild;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="store_volume_id"))
-public class StoreVolume extends AuditingEntity {
+public class StoreVolume extends AuditingEntity implements StoreChild {
 
     private Integer volumeTotal;
     private Integer volumeBoxTotal;

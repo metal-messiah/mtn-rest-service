@@ -8,12 +8,10 @@ import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.simpleView.SitePoint;
 import com.mtn.model.view.ShoppingCenterView;
+import com.mtn.model.view.SiteMergeRequest;
 import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
-import com.mtn.service.ProjectService;
-import com.mtn.service.ShoppingCenterService;
-import com.mtn.service.SiteService;
-import com.mtn.service.StoreService;
+import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +28,19 @@ public class SiteController extends CrudController<Site, SiteView> {
 	private final StoreService storeService;
 	private final ProjectService projectService;
 	private final ShoppingCenterService shoppingCenterService;
+	private final MergeService mergeService;
 
 	@Autowired
 	public SiteController(SiteService siteService,
 						  StoreService storeService,
 						  ProjectService projectService,
+						  MergeService mergeService,
 						  ShoppingCenterService shoppingCenterService) {
 		super(siteService, SiteView::new);
 		this.storeService = storeService;
 		this.projectService = projectService;
 		this.shoppingCenterService = shoppingCenterService;
+		this.mergeService = mergeService;
 	}
 
 	@GetMapping(value = "/{id}/store")
@@ -124,4 +125,11 @@ public class SiteController extends CrudController<Site, SiteView> {
 		Store domainModel = storeService.createStoreForSiteFromRequest(request, site, overrideActiveStore);
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
+
+	@PostMapping("merge")
+	public ResponseEntity<SiteView> mergeSites(@RequestBody SiteMergeRequest siteMergeRequest) {
+		Site mergedSite = this.mergeService.mergeSites(siteMergeRequest);
+		return ResponseEntity.ok(new SiteView(mergedSite));
+	}
+
 }

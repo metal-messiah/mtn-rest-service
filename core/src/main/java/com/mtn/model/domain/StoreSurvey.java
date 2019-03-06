@@ -1,6 +1,7 @@
 package com.mtn.model.domain;
 
 import com.mtn.constant.RatingType;
+import com.mtn.model.StoreChild;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import java.util.List;
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="store_survey_id"))
-public class StoreSurvey extends AuditingEntity {
+public class StoreSurvey extends AuditingEntity implements StoreChild {
 
     private LocalDateTime surveyDate;
     private String note;

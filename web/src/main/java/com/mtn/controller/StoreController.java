@@ -27,6 +27,7 @@ public class StoreController extends CrudController<Store, StoreView> {
 	private final StoreStatusService storeStatusService;
 	private final BannerService bannerService;
 	private final SiteService siteService;
+	private final MergeService mergeService;
 
 	@Autowired
 	public StoreController(StoreService storeService,
@@ -38,6 +39,7 @@ public class StoreController extends CrudController<Store, StoreView> {
 						   ProjectService projectService,
 						   StoreStatusService storeStatusService,
 						   BannerService bannerService,
+						   MergeService mergeService,
 						   SiteService siteService) {
 		super(storeService, StoreView::new);
 		this.storeSurveyService = surveyService;
@@ -49,6 +51,7 @@ public class StoreController extends CrudController<Store, StoreView> {
 		this.storeStatusService = storeStatusService;
 		this.bannerService = bannerService;
 		this.siteService = siteService;
+		this.mergeService = mergeService;
 	}
 
 	@GetMapping(params = {"ids"})
@@ -230,6 +233,12 @@ public class StoreController extends CrudController<Store, StoreView> {
 		List<Integer> siteIds = stores.stream().map(store -> store.getSite().getId()).distinct().collect(Collectors.toList());
 		List<Site> sites = this.siteService.assignSitesToUser(siteIds, userId);
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
+	}
+
+	@PostMapping("merge")
+	public ResponseEntity<StoreView> mergeStores(@RequestBody StoreMergeRequest storeMergeRequest) {
+		Store mergedStore = this.mergeService.mergeStores(storeMergeRequest);
+		return ResponseEntity.ok(new StoreView(mergedStore));
 	}
 
 }

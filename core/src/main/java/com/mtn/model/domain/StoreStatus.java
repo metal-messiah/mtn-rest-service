@@ -1,12 +1,14 @@
 package com.mtn.model.domain;
 
+import com.mtn.model.StoreChild;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="store_status_id"))
-public class StoreStatus extends AuditingEntity {
+public class StoreStatus extends AuditingEntity implements StoreChild {
 
     private String status;
     private LocalDateTime statusStartDate;

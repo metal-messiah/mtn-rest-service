@@ -13,7 +13,6 @@ import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,25 +54,6 @@ public class SiteController extends CrudController<Site, SiteView> {
 		site.setDuplicate(isDuplicate);
 		SiteView request = new SiteView(site);
 		return ResponseEntity.ok(new SimpleSiteView(this.entityService.updateOne(request)));
-	}
-
-	@GetMapping
-	public ResponseEntity<List<SimpleSiteView>> findAll(@RequestParam(value = "north", required = false) Float north,
-								  @RequestParam(value = "south", required = false) Float south,
-								  @RequestParam(value = "east", required = false) Float east,
-								  @RequestParam(value = "west", required = false) Float west,
-								  @RequestParam(value = "no_stores", required = false) boolean noStores,
-								  @RequestParam(value = "duplicate", required = false) boolean duplicate,
-								  Pageable page) {
-		List<Site> domainModels;
-		if (north != null && south != null && east != null && west != null) {
-			domainModels = ((SiteService) this.entityService).findAllInBoundsWithoutStoresUsingSpecs(north, south, east, west, noStores, page);
-		} else if (duplicate) {
-			domainModels = ((SiteService) this.entityService).findAllDuplicatesUsingSpecs();
-		} else {
-			domainModels = this.entityService.findAllUsingSpecs();
-		}
-		return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
 	@GetMapping(params = {"geojson"})

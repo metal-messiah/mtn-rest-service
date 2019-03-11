@@ -8,6 +8,9 @@ public class SimpleUserProfileView extends SimpleAuditingEntityView {
 
     private String email;
 
+    private Integer subscribedStoreListCount;
+    private Integer createdStoreListCount;
+
     public SimpleUserProfileView() {
     }
 
@@ -22,5 +25,21 @@ public class SimpleUserProfileView extends SimpleAuditingEntityView {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getSubscribedStoreListCount() {
+        return this.subscribedStoreListCount;
+    }
+
+    public void setSubscribedStoreListCount(UserProfile userProfile) {
+        this.subscribedStoreListCount = userProfile.getSubscribedStoreLists().size();
+    }
+
+    public Integer getCreatedStoreListCount() {
+        return this.createdStoreListCount;
+    }
+
+    public void setCreatedStoreListCount(UserProfile userProfile) {
+        this.subscribedStoreListCount = userProfile.getCreatedStoreLists().size();
     }
 }

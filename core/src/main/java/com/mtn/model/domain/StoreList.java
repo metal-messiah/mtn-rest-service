@@ -11,8 +11,8 @@ public class StoreList extends AuditingEntity {
 
     private String storeListName;
 
-    private List<StoreList> subscribedStoreLists = new ArrayList<>();
-    private List<StoreList> createdStoreLists = new ArrayList<>();
+    private List<Store> stores = new ArrayList<>();
+    private List<UserProfile> subscribers = new ArrayList<>();
 
     public String getStoreListName() {
         return storeListName;
@@ -24,7 +24,21 @@ public class StoreList extends AuditingEntity {
 
     @ManyToMany
     @JoinTable(name = "user_store_list_subscriptions", joinColumns = @JoinColumn(name = "store_list_id", referencedColumnName = "store_list_id"), inverseJoinColumns = @JoinColumn(name = "user_profile_id", referencedColumnName = "user_profile_id"))
-    public List<StoreList> getSubscribedStoreLists() {
-        return subscribedStoreLists;
+    public List<UserProfile> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(List<UserProfile> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "store_list_stores", joinColumns = @JoinColumn(name = "store_list_id", referencedColumnName = "store_list_id"), inverseJoinColumns = @JoinColumn(name = "store_id", referencedColumnName = "store_id"))
+    public List<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(List<Store> stores) {
+        this.stores = stores;
     }
 }

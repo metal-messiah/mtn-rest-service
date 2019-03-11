@@ -22,7 +22,7 @@ public class UserProfile extends AuditingEntity {
     private Boundary restrictionBoundary;
 
     private List<StoreList> subscribedStoreLists = new ArrayList<>();
-    private StoreList[] createdStoreLists;
+    private List<StoreList> createdStoreLists = new ArrayList<>();
 
     @PrePersist
     @PreUpdate
@@ -54,13 +54,22 @@ public class UserProfile extends AuditingEntity {
         this.lastName = lastName;
     }
 
-    @ManyToMany(mappedBy = "subscribedStoreLists")
+    @ManyToMany(mappedBy = "subscribers")
     public List<StoreList> getSubscribedStoreLists() {
         return subscribedStoreLists;
     }
 
     public void setSubscribedStoreLists(List<StoreList> subscribedStoreLists) {
         this.subscribedStoreLists = subscribedStoreLists;
+    }
+
+    @ManyToMany(mappedBy = "stores")
+    public List<StoreList> getCreatedStoreLists() {
+        return createdStoreLists;
+    }
+
+    public void setCreatedStoreLists(List<StoreList> createdStoreLists) {
+        this.createdStoreLists = createdStoreLists;
     }
 
     @ManyToOne(cascade = { CascadeType.MERGE })

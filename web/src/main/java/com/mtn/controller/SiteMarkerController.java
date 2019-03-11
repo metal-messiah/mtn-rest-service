@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,21 @@ public class SiteMarkerController {
 	@Autowired
 	public SiteMarkerController(SiteService siteService) {
 		this.siteService = siteService;
+	}
+
+	@GetMapping(params = {"north", "south", "east", "west",
+			"prev-north", "prev-south", "prev-east", "prev-west", "updated-at"})
+	public ResponseEntity<List<SiteMarker>> findAllForView(@RequestParam("north") Float north,
+														   @RequestParam("south") Float south,
+														   @RequestParam("east") Float east,
+														   @RequestParam("west") Float west,
+														   @RequestParam("prev-north") Float prevNorth,
+														   @RequestParam("prev-south") Float prevSouth,
+														   @RequestParam("prev-east") Float prevEast,
+														   @RequestParam("prev-west") Float prevWest,
+														   @RequestParam("updated-at") LocalDateTime updatedAt) {
+		List<Site> domainModels = this.siteService.findAllForView(north, south, east, west, prevNorth, prevSouth, prevEast, prevWest, updatedAt);
+		return ResponseEntity.ok(domainModels.stream().map(SiteMarker::new).collect(Collectors.toList()));
 	}
 
 	@GetMapping(params = {"north", "south", "east", "west"})

@@ -12,16 +12,9 @@ import javax.persistence.criteria.*;
 
 public class SiteSpecifications extends AuditingEntitySpecifications {
 
-	private static final String SHOPPING_CENTER = "shoppingCenter";
-	private static final String DUPLICATE = "duplicate";
-
-	public static Specification<Site> isDuplicate() {
-		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isTrue(root.get(DUPLICATE));
-	}
-
 	public static Specification<Site> shoppingCenterIdEquals(Integer id) {
 		return (root, criteriaQuery, criteriaBuilder) -> {
-			Join<Site, ShoppingCenter> siteShoppingCenterJoin = root.join(SHOPPING_CENTER);
+			Join<Site, ShoppingCenter> siteShoppingCenterJoin = root.join("shoppingCenter");
 			return criteriaBuilder.equal(siteShoppingCenterJoin.get(ID), id);
 		};
 	}

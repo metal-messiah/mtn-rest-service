@@ -15,7 +15,9 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -40,18 +42,10 @@ public class SiteService extends EntityService<Site, SiteView> {
 	}
 
 	public Page<Site> findAllInRadius(Pageable page, Float latitude, Float longitude, Float radiusMeters) {
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
-
 		Point circleCenter = new GeometryFactory(new PrecisionModel(100000), 4326)
 				.createPoint(new Coordinate(longitude, latitude));
 		Specifications<Site> specs = where(SiteSpecifications.withinSphericalDistance(circleCenter, radiusMeters));
-		specs = specs.and(SiteSpecifications.isNotDeleted());
-		if (restriction != null) {
-			specs = specs.and(SiteSpecifications.withinGeometry(restriction));
-		}
-
-		return this.repository.findAll(specs, page);
+		return this.repository.findAll(this.excludeRestrictedAndDeleted(specs), page);
 	}
 
 	public List<Site> findAllInGeoJson(String geoJson) {
@@ -62,49 +56,53 @@ public class SiteService extends EntityService<Site, SiteView> {
 		return this.repository.findAll(this.getSpecsForFindAllInGeoJson(geoJson), page);
 	}
 
-	private Specifications<Site> getSpecsForFindAllInGeoJson(String geoJson) {
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+	/**
+	 * Finds all sites that are in the new bounding box (that are not in the previous bounding box, PLUS all sites
+	 * that are in the intersection of the new and previous bounding boxes that have been updated since the provided
+	 * updatedAt LocalDateTime
+	 *
+	 * @param north boundary of new view
+	 * @param south boundary of new view
+	 * @param east boundary of new view
+	 * @param west boundary of new view
+	 * @param prevNorth boundary of previous view
+	 * @param prevSouth boundary of previous view
+	 * @param prevEast boundary of previous view
+	 * @param prevWest boundary of previous view
+	 * @param updatedAt date of previous pull
+	 * @return a list of sites including ones in new view and updated ones in old intersecting view
+	 */
+	public List<Site> findAllForView(Float north, Float south, Float east, Float west,
+									 Float prevNorth, Float prevSouth, Float prevEast, Float prevWest, LocalDateTime updatedAt) {
+		// Get sites in new area, excluding old area
+		Specifications<Site> newSiteSpecs = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
+		newSiteSpecs = newSiteSpecs.and(Specifications.not(SiteSpecifications.withinBoundingBox(prevNorth, prevSouth, prevEast, prevWest)));
+		List<Site> sites = this.repository.findAll(this.excludeRestrictedAndDeleted(newSiteSpecs));
 
-		Specifications<Site> specs = where(SiteSpecifications.withinGeoJson(geoJson));
-		specs = specs.and(SiteSpecifications.isNotDeleted());
-		if (restriction != null) {
-			specs = specs.and(SiteSpecifications.withinGeometry(restriction));
-		}
-		return specs;
-	}
+		// Where new area intersects old area, get only those that have been updated
+		Specifications<Site> updateSiteSpecs = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
+		updateSiteSpecs = updateSiteSpecs.and(SiteSpecifications.withinBoundingBox(prevNorth, prevSouth, prevEast, prevWest));
+		List<Site> updatedSites = this.repository.findAll(this.excludeRestrictedAndDeleted(updateSiteSpecs)).stream()
+				.filter(site -> site.getUpdatedDate().isAfter(updatedAt) ||
+							site.getStores().stream().anyMatch(store -> store.getUpdatedDate().isAfter(updatedAt)))
+				.collect(Collectors.toList());
 
-	public List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west) {
-		return this.repository.findAll(this.getSpecFindAllBoundaryBox(north, south, east, west));
+		sites.addAll(updatedSites);
+
+		return sites;
 	}
 
 	public Page<Site> findAllInBoundsUsingSpecs(Pageable page, Float north, Float south, Float east, Float west) {
 		return this.repository.findAll(this.getSpecFindAllBoundaryBox(north, south, east, west), page);
 	}
 
-	private Specifications<Site> getSpecFindAllBoundaryBox(Float north, Float south, Float east, Float west) {
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
-
-		Specifications<Site> specs = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
-		specs = specs.and(SiteSpecifications.isNotDeleted());
-		if (restriction != null) {
-			specs = specs.and(SiteSpecifications.withinGeometry(restriction));
-		}
-		return specs;
+	public List<Site> findAllInBoundsUsingSpecs(Float north, Float south, Float east, Float west) {
+		return this.repository.findAll(this.getSpecFindAllBoundaryBox(north, south, east, west));
 	}
 
 	public List<Site> findAllInShape(Geometry shape) {
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
-
 		Specifications<Site> specs = where(SiteSpecifications.withinGeometry(shape));
-		specs = specs.and(SiteSpecifications.isNotDeleted());
-		if (restriction != null) {
-			specs = specs.and(SiteSpecifications.withinGeometry(restriction));
-		}
-
-		return this.repository.findAll(specs);
+		return this.repository.findAll(this.excludeRestrictedAndDeleted(specs));
 	}
 
 	@Transactional
@@ -184,4 +182,30 @@ public class SiteService extends EntityService<Site, SiteView> {
 	public void handleAssociationsOnDeletion(Site existing) {
 		existing.setAssignee(null);
 	}
+
+	/**********************************
+	 * Private helper Methods
+	 **********************************/
+
+	private Specifications<Site> getSpecsForFindAllInGeoJson(String geoJson) {
+		Specifications<Site> specs = where(SiteSpecifications.withinGeoJson(geoJson));
+		return this.excludeRestrictedAndDeleted(specs);
+	}
+
+	private Specifications<Site> getSpecFindAllBoundaryBox(Float north, Float south, Float east, Float west) {
+		Specifications<Site> specs = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
+		return this.excludeRestrictedAndDeleted(specs);
+	}
+
+	private Specifications<Site> excludeRestrictedAndDeleted(Specifications<Site> specs) {
+		UserProfile currentUser = this.securityService.getCurrentUser();
+		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+
+		specs = specs.and(SiteSpecifications.isNotDeleted());
+		if (restriction != null) {
+			specs = specs.and(SiteSpecifications.withinGeometry(restriction));
+		}
+		return specs;
+	}
+
 }

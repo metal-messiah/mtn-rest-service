@@ -249,8 +249,7 @@ public class Store extends AuditingEntity {
         this.validatedDate = validatedDate;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "store_id")
+    @ManyToMany(mappedBy = "stores")
     public List<StoreList> getStoreLists() {
         return storeLists;
     }
@@ -258,5 +257,4 @@ public class Store extends AuditingEntity {
     public void setStoreLists(List<StoreList> storeLists) {
         this.storeLists = storeLists;
     }
-
 }

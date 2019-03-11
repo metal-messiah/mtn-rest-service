@@ -1,13 +1,15 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allen on 4/21/2017.
  */
 @Entity
 @Table
-@AttributeOverride(name="id", column=@Column(name="user_profile_id"))
+@AttributeOverride(name = "id", column = @Column(name = "user_profile_id"))
 public class UserProfile extends AuditingEntity {
 
     private String email;
@@ -18,6 +20,9 @@ public class UserProfile extends AuditingEntity {
     private Group group;
     private Role role;
     private Boundary restrictionBoundary;
+
+    private List<StoreList> subscribedStoreLists = new ArrayList<>();
+    private StoreList[] createdStoreLists;
 
     @PrePersist
     @PreUpdate
@@ -49,7 +54,16 @@ public class UserProfile extends AuditingEntity {
         this.lastName = lastName;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToMany(mappedBy = "subscribedStoreLists")
+    public List<StoreList> getSubscribedStoreLists() {
+        return subscribedStoreLists;
+    }
+
+    public void setSubscribedStoreLists(List<StoreList> subscribedStoreLists) {
+        this.subscribedStoreLists = subscribedStoreLists;
+    }
+
+    @ManyToOne(cascade = { CascadeType.MERGE })
     @JoinColumn(name = "auth_role_id")
     public Role getRole() {
         return role;
@@ -59,7 +73,7 @@ public class UserProfile extends AuditingEntity {
         this.role = role;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne(cascade = { CascadeType.MERGE })
     @JoinColumn(name = "auth_group_id")
     public Group getGroup() {
         return group;

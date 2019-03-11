@@ -25,6 +25,8 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 	private SimpleBannerView banner;
 	private SimpleStoreVolumeView latestStoreVolume;
 
+	private Integer storeListCount;
+
 	public SimpleStoreView() {
 	}
 
@@ -143,5 +145,14 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 
 	public void setAreaTotal(Integer areaTotal) {
 		this.areaTotal = areaTotal;
+	}
+
+	public Integer getStoreListCount(Store store) {
+		return this.storeListCount;
+
+	}
+
+	public void setStoreListCount(Store store) {
+		this.storeListCount = store.getStoreLists().size();
 	}
 }

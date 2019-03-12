@@ -18,6 +18,8 @@ public class SimpleStoreListView extends SimpleAuditingEntityView {
     public SimpleStoreListView(StoreList storeList) {
         super(storeList);
 
+        this.storeCount = storeList.getStores().size();
+        this.subscriberCount = storeList.getSubscribers().size();
     }
 
     public String getStoreListName() {
@@ -32,17 +34,17 @@ public class SimpleStoreListView extends SimpleAuditingEntityView {
         return this.storeCount;
     }
 
-    public void setStoreCount(StoreList storeList) {
-        this.storeCount = storeList.getStores().size();
-    }
+    // public void setStoreCount(StoreList storeList) {
+    // this.storeCount = storeList.getStores().size();
+    // }
 
     public Integer getSubscriberCount() {
         return this.subscriberCount;
     }
 
-    public void setSubscriberCount(StoreList storeList) {
-        this.subscriberCount = storeList.getSubscribers().size();
-    }
+    // public void setSubscriberCount(StoreList storeList) {
+    // this.subscriberCount = storeList.getSubscribers().size();
+    // }
 
     public Integer getCreatedById() {
         return this.createdById;

@@ -3,13 +3,9 @@ package com.mtn.service;
 import com.mtn.model.domain.Permission;
 import com.mtn.model.view.PermissionView;
 import com.mtn.repository.PermissionRepository;
-import com.mtn.repository.specification.PermissionSpecifications;
 import com.mtn.validators.PermissionValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PermissionService extends EntityService<Permission, PermissionView> {

@@ -1,27 +1,12 @@
 package com.mtn.repository.specification;
 
-import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.model.domain.ShoppingCenterSurvey;
+import com.mtn.model.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
-
-/**
- * Created by Allen on 4/23/2017.
- */
 public class ShoppingCenterSurveySpecifications extends AuditingEntitySpecifications {
 
-	private static final String ID = "id";
-	private static final String SHOPPING_CENTER = "shoppingCenter";
-
 	public static Specification<ShoppingCenterSurvey> shoppingCenterIdEquals(Integer id) {
-		return new Specification<ShoppingCenterSurvey>() {
-			@Override
-			public Predicate toPredicate(Root<ShoppingCenterSurvey> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				Join<ShoppingCenterSurvey, ShoppingCenter> shoppingCenterSurveyShoppingCenterJoin = root.join(SHOPPING_CENTER);
-				return criteriaBuilder.equal(shoppingCenterSurveyShoppingCenterJoin.get(ID), id);
-			}
-		};
+		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.join(ShoppingCenterSurvey_.shoppingCenter).get(ShoppingCenter_.id), id);
 	}
 
 }

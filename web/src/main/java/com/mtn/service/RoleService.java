@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.jpa.domain.Specifications.not;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
@@ -35,7 +36,7 @@ public class RoleService extends EntityService<Role, RoleView> {
 		return this.repository.findAll(
 				where(RoleSpecifications.displayNameContains(name))
 						.and(RoleSpecifications.isNotDeleted())
-						.and(RoleSpecifications.isNotAdmin())
+						.and(not(RoleSpecifications.isAdmin()))
 				, page
 		);
 	}

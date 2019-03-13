@@ -1,52 +1,24 @@
 package com.mtn.repository.specification;
 
 import com.mtn.model.domain.BannerSource;
+import com.mtn.model.domain.BannerSource_;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-public class BannerSourceSpecifications extends AuditingEntitySpecifications{
-
-	private static final String VALIDATED_DATE = "validatedDate";
-	private static final String SOURCE_NATIVE_ID = "sourceNativeId";
-	private static final String SOURCE_NAME = "sourceName";
+public class BannerSourceSpecifications extends AuditingEntitySpecifications {
 
 	public static Specification<BannerSource> sourceNativeIdEquals(String id) {
-		return new Specification<BannerSource>() {
-			@Override
-			public Predicate toPredicate(Root<BannerSource> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				return criteriaBuilder.equal(root.get(SOURCE_NATIVE_ID), id);
-			}
-		};
+		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(BannerSource_.sourceNativeId), id);
 	}
 
 	public static Specification<BannerSource> sourceNameEquals(String sourceName) {
-		return new Specification<BannerSource>() {
-			@Override
-			public Predicate toPredicate(Root<BannerSource> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				return criteriaBuilder.equal(root.get(SOURCE_NAME), sourceName);
-			}
-		};
+		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(BannerSource_.sourceName), sourceName);
 	}
 
 	public static Specification<BannerSource> isNotValidated() {
-		return new Specification<BannerSource>() {
-			@Override
-			public Predicate toPredicate(Root<BannerSource> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				return criteriaBuilder.isNull(root.get(VALIDATED_DATE));
-			}
-		};
+		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isNull(root.get(BannerSource_.validatedDate));
 	}
 
 	public static Specification<BannerSource> isValidated() {
-		return new Specification<BannerSource>() {
-			@Override
-			public Predicate toPredicate(Root<BannerSource> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				return criteriaBuilder.isNotNull(root.get(VALIDATED_DATE));
-			}
-		};
+		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isNotNull(root.get(BannerSource_.validatedDate));
 	}
 }

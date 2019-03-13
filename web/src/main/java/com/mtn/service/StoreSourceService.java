@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.lang.Boolean.parseBoolean;
+import static org.springframework.data.jpa.domain.Specifications.not;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
@@ -67,7 +68,7 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 			if (validated) {
 				specs = specs.and(StoreSourceSpecifications.isValidated());
 			} else {
-				specs = specs.and(StoreSourceSpecifications.isNotValidated());
+				specs = specs.and(not(StoreSourceSpecifications.isValidated()));
 			}
 		}
 

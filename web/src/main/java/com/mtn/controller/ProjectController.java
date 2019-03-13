@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 public class ProjectController extends CrudController<Project, ProjectView> {
 
 	private final BoundaryService boundaryService;
-	private final StoreService storeService;
 	private final StoreCasingService storeCasingService;
 
 	@Autowired
-	public ProjectController(ProjectService projectService, BoundaryService boundaryService, StoreService storeService, StoreCasingService storeCasingService) {
+	public ProjectController(ProjectService projectService,
+							 BoundaryService boundaryService,
+							 StoreCasingService storeCasingService) {
 		super(projectService, ProjectView::new);
 		this.boundaryService = boundaryService;
-		this.storeService = storeService;
 		this.storeCasingService = storeCasingService;
 	}
 
@@ -64,12 +64,6 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 	public ResponseEntity removeProjectBoundary(@PathVariable("id") Integer projectId) {
 		Project project = ((ProjectService) this.entityService).removeProjectBoundary(projectId);
 		return ResponseEntity.ok(new SimpleProjectView(project));
-	}
-
-	@GetMapping(path = "/{id}/store")
-	public ResponseEntity findAllStoresForProject(@PathVariable("id") Integer projectId) {
-		List<Store> domainModels = storeService.findAllByProjectId(projectId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 	}
 
 	@GetMapping(path = "/{id}/store-casing")

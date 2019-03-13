@@ -21,10 +21,6 @@ public class PermissionService extends EntityService<Permission, PermissionView>
         super(securityService, repository, validator, Permission::new);
     }
 
-    public List<Permission> findAllByRoleId(Integer roleId) {
-        return this.repository.findAll(Specifications.where(PermissionSpecifications.roleIdEquals(roleId)));
-    }
-
     @Override
     protected void setEntityAttributesFromRequest(Permission entity, PermissionView request) {
         entity.setSystemName(request.getSystemName());

@@ -66,10 +66,4 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
-	@GetMapping(path = "/{id}/store-casing")
-	public ResponseEntity findAllStoreCasingsForProject(@PathVariable("id") Integer projectId) {
-		List<StoreCasing> domainModels = storeCasingService.findAllByProjectId(projectId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
-	}
-
 }

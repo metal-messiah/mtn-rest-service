@@ -21,10 +21,6 @@ public abstract class StoreChildService<T extends AuditingEntity, V extends Audi
 		super(securityService, repository, validator, supplier);
 	}
 
-	public List<T> findAllByStoreId(Integer storeId) {
-		return this.repository.findAll(where(StoreChildSpecifications.storeIdEquals(storeId)));
-	}
-
 	public List<T> findAllByStoreIdUsingSpecs(Integer storeId) {
 		return this.repository.findAll(
 				where(StoreChildSpecifications.<T>storeIdEquals(storeId))

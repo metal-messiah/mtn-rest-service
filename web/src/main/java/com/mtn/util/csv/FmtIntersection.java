@@ -5,9 +5,6 @@ import org.supercsv.cellprocessor.CellProcessorAdaptor;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.util.CsvContext;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class FmtIntersection extends CellProcessorAdaptor {
 
 	public FmtIntersection() {

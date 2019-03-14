@@ -4,7 +4,6 @@ import com.mtn.constant.SiteType;
 import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

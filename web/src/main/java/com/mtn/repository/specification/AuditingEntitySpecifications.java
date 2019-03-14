@@ -1,13 +1,8 @@
 package com.mtn.repository.specification;
 
 import com.mtn.model.domain.AuditingEntity;
-import com.mtn.model.domain.Banner;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class AuditingEntitySpecifications {

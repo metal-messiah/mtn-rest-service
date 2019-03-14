@@ -1,12 +1,8 @@
 package com.mtn.repository.specification;
 
 import com.mtn.model.domain.UserProfile;
-import com.mtn.model.domain.Group;
-import com.mtn.model.domain.Role;
 import com.mtn.model.domain.UserProfile_;
 import org.springframework.data.jpa.domain.Specification;
-
-import javax.persistence.criteria.*;
 
 public class UserProfileSpecifications extends AuditingEntitySpecifications {
 

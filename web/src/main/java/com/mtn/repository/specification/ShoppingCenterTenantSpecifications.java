@@ -1,9 +1,9 @@
 package com.mtn.repository.specification;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.ShoppingCenterSurvey_;
+import com.mtn.model.domain.ShoppingCenterTenant;
+import com.mtn.model.domain.ShoppingCenterTenant_;
 import org.springframework.data.jpa.domain.Specification;
-
-import javax.persistence.criteria.*;
 
 public class ShoppingCenterTenantSpecifications extends AuditingEntitySpecifications {
 

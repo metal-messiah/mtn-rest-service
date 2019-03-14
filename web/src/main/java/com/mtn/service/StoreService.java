@@ -1,7 +1,10 @@
 package com.mtn.service;
 
 import com.mtn.constant.StoreType;
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.Banner;
+import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.utils.SiteUtil;
 import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
@@ -14,7 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 

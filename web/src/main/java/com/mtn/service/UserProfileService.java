@@ -72,6 +72,9 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 			throw new EntityNotFoundException("Store List not found");
 		}
 
+		userProfile.setSubscribedStoreLists(userProfile.getSubscribedStoreLists());
+		userProfile.setCreatedStoreLists(userProfile.getCreatedStoreLists());
+
 		return userProfile;
 	}
 
@@ -84,9 +87,15 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		}
 
 		StoreList storeList = this.storeListRepository.findOne(where(StoreListSpecifications.idEquals(storeListId)));
-		storeList.removeSubscriber(userProfile);
 
-		this.storeListRepository.save(storeList);
+		if (storeList != null) {
+			storeList.removeSubscriber(userProfile);
+
+			this.storeListRepository.save(storeList);
+		}
+
+		userProfile.setSubscribedStoreLists(userProfile.getSubscribedStoreLists());
+		userProfile.setCreatedStoreLists(userProfile.getCreatedStoreLists());
 
 		return userProfile;
 

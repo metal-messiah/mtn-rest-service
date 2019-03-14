@@ -7,9 +7,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 4/24/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="site_id"))

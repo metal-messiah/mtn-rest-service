@@ -6,9 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-/**
- * Created by Jordan on 10/25/18.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="resource_quota_id"))

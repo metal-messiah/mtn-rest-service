@@ -11,7 +11,6 @@ import java.util.Map;
  * as a service instead of just being a simple map in the AuthenticationProvider
  * for the sole purpose of being able to expand on its functionality later.
  * <p>
- * Created by Allen on 5/10/2017.
  */
 @Service
 public class AuthenticationCache {

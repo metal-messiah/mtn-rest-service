@@ -9,8 +9,6 @@ import java.util.Map;
 
 /**
  * This special wrapper for HttpServletRequests allows us to add custom headers to the request at runtime.
- * <p>
- * Created by Allen on 4/22/2017.
  */
 public class CustomHeadersEnabledServletRequest extends HttpServletRequestWrapper {
     private final Map<String, String> customHeaders = new HashMap<>();

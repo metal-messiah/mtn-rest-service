@@ -36,9 +36,6 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Collections;
 
-/**
- * Created by Allen on 5/10/2017.
- */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration

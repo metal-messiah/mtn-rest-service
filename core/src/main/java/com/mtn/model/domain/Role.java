@@ -5,9 +5,6 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @Entity
 @Table(name = "auth_role")
 @AttributeOverride(name="id", column=@Column(name="auth_role_id"))

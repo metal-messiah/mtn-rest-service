@@ -1,39 +1,26 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.model.domain.ShoppingCenterCasing;
-import com.mtn.model.domain.ShoppingCenterSurvey;
-import com.mtn.model.domain.Site;
-import com.mtn.model.simpleView.SimpleShoppingCenterCasingView;
-import com.mtn.model.simpleView.SimpleShoppingCenterSurveyView;
 import com.mtn.model.simpleView.SimpleShoppingCenterView;
-import com.mtn.model.simpleView.SimpleSiteView;
-import com.mtn.model.view.*;
-import com.mtn.service.*;
+import com.mtn.model.view.ShoppingCenterView;
+import com.mtn.service.ShoppingCenterService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/shopping-center")
 public class ShoppingCenterController extends CrudController<ShoppingCenter, ShoppingCenterView> {
 
-    private final SiteService siteService;
-    private final ShoppingCenterSurveyService surveyService;
-    private final ShoppingCenterCasingService casingService;
-
     @Autowired
-    public ShoppingCenterController(ShoppingCenterService shoppingCenterService, SiteService siteService, ShoppingCenterSurveyService surveyService, ShoppingCenterCasingService casingService) {
+    public ShoppingCenterController(ShoppingCenterService shoppingCenterService) {
         super(shoppingCenterService, ShoppingCenterView::new);
-        this.siteService = siteService;
-        this.surveyService = surveyService;
-        this.casingService = casingService;
     }
 
     @GetMapping
@@ -55,24 +42,6 @@ public class ShoppingCenterController extends CrudController<ShoppingCenter, Sho
         }
 
         return ResponseEntity.ok(domainModels.map(SimpleShoppingCenterView::new));
-    }
-
-    @GetMapping(value = "/{id}/shopping-center-casing")
-    public ResponseEntity findAllShoppingCenterCasingsForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
-        List<ShoppingCenterCasing> domainModels = casingService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterCasingView::new).collect(Collectors.toList()));
-    }
-
-    @GetMapping(value = "/{id}/shopping-center-survey")
-    public ResponseEntity findAllShoppingCenterSurveysForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
-        List<ShoppingCenterSurvey> domainModels = surveyService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleShoppingCenterSurveyView::new).collect(Collectors.toList()));
-    }
-
-    @GetMapping(value = "/{id}/site")
-    public ResponseEntity findAllSitesForShoppingCenter(@PathVariable("id") Integer shoppingCenterId) {
-        List<Site> domainModels = siteService.findAllByShoppingCenterIdUsingSpecs(shoppingCenterId);
-        return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
     }
 
 }

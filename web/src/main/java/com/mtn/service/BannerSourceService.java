@@ -1,6 +1,8 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.Banner;
+import com.mtn.model.domain.BannerSource;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.BannerSourceView;
 import com.mtn.repository.BannerSourceRepository;
 import com.mtn.repository.specification.BannerSourceSpecifications;

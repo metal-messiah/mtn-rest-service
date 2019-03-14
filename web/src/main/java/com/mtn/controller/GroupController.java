@@ -1,7 +1,7 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.simpleView.SimpleGroupView;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 import com.mtn.model.view.GroupView;

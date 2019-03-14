@@ -1,7 +1,8 @@
 package com.mtn.model.utils;
 
 import com.mtn.constant.StoreType;
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
 
 import java.util.Optional;
 

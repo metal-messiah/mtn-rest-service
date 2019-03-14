@@ -5,9 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/**
- * Created by Allen on 4/21/2017.
- */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = {"com.mtn.repository"})

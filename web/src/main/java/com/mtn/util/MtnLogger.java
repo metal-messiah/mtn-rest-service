@@ -10,9 +10,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by Allen on 4/22/2017.
- */
 public class MtnLogger {
 
     private static final Logger logger = LoggerFactory.getLogger(MtnLogger.class);

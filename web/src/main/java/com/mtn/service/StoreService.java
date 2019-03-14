@@ -1,7 +1,10 @@
 package com.mtn.service;
 
 import com.mtn.constant.StoreType;
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.Banner;
+import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.utils.SiteUtil;
 import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
@@ -9,14 +12,13 @@ import com.mtn.repository.specification.StoreSpecifications;
 import com.mtn.validators.StoreValidator;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -63,22 +65,6 @@ public class StoreService extends EntityService<Store, StoreView> {
 			storeTypes.add(StoreType.HISTORICAL);
 		}
 		return storeTypes;
-	}
-
-	public Page<Store> findAllAssignedTo(Integer assigneeId, List<StoreType> storeTypes, Pageable page) {
-		Specifications<Store> spec = Specifications.where(StoreSpecifications.assignedTo(assigneeId));
-
-		if (storeTypes != null && storeTypes.size() > 0) {
-			spec = spec.and(StoreSpecifications.ofTypes(storeTypes));
-		}
-		spec = spec.and(StoreSpecifications.isNotDeleted());
-
-		return this.repository.findAll(spec, page);
-	}
-
-	public List<Store> findAllByProjectId(Integer projectId) {
-		return this.repository.findAll(Specifications.where(StoreSpecifications.projectIdEquals(projectId))
-				.and(StoreSpecifications.isNotDeleted()));
 	}
 
 	public List<Store> findAllBySiteIdUsingSpecs(Integer siteId) {

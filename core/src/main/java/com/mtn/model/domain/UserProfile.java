@@ -2,9 +2,6 @@ package com.mtn.model.domain;
 
 import javax.persistence.*;
 
-/**
- * Created by Allen on 4/21/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="user_profile_id"))

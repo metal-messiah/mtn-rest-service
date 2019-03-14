@@ -1,6 +1,9 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.BannerSource;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreSource;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.StoreSourceView;
 import com.mtn.repository.StoreSourceRepository;
 import com.mtn.repository.specification.StoreSourceSpecifications;
@@ -12,9 +15,13 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.lang.Boolean.parseBoolean;
+import static org.springframework.data.jpa.domain.Specifications.not;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
@@ -67,7 +74,7 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 			if (validated) {
 				specs = specs.and(StoreSourceSpecifications.isValidated());
 			} else {
-				specs = specs.and(StoreSourceSpecifications.isNotValidated());
+				specs = specs.and(not(StoreSourceSpecifications.isValidated()));
 			}
 		}
 

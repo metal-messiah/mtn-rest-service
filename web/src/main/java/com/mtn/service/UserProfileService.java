@@ -1,8 +1,8 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.model.domain.Role;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.UserProfileView;
 import com.mtn.repository.GroupRepository;
 import com.mtn.repository.RoleRepository;

@@ -2,7 +2,8 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenter;
-import com.mtn.model.simpleView.*;
+import com.mtn.model.simpleView.SimpleShoppingCenterCasingView;
+import com.mtn.model.simpleView.SimpleSiteView;
 
 import java.util.List;
 import java.util.stream.Collectors;

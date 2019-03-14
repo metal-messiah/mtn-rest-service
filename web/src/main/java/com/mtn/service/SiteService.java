@@ -9,7 +9,6 @@ import com.mtn.repository.specification.SiteSpecifications;
 import com.mtn.validators.SiteValidator;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
@@ -30,13 +29,6 @@ public class SiteService extends EntityService<Site, SiteView> {
 					   SiteValidator validator, UserProfileService userProfileService) {
 		super(securityService, repository, validator, Site::new);
 		this.userProfileService = userProfileService;
-	}
-
-	public List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
-		return this.repository.findAll(
-				where(SiteSpecifications.shoppingCenterIdEquals(shoppingCenterId))
-						.and(SiteSpecifications.isNotDeleted())
-		);
 	}
 
 	public List<Site> findAllInGeoJson(String geoJson) {

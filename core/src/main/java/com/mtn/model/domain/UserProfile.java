@@ -63,6 +63,14 @@ public class UserProfile extends AuditingEntity {
         this.subscribedStoreLists = subscribedStoreLists;
     }
 
+    public void addSubscribedStoreList(StoreList storeList) {
+        this.getSubscribedStoreLists().add(storeList);
+    }
+
+    public void removeSubscribedStoreLists(StoreList storeList) {
+        this.getSubscribedStoreLists().removeIf(sl -> sl.getId().equals(storeList.getId()));
+    }
+
     @ManyToMany(mappedBy = "stores")
     public List<StoreList> getCreatedStoreLists() {
         return createdStoreLists;

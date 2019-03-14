@@ -32,6 +32,14 @@ public class StoreList extends AuditingEntity {
         this.subscribers = subscribers;
     }
 
+    public void addSubscriber(UserProfile userProfile) {
+        this.getSubscribers().add(userProfile);
+    }
+
+    public void removeSubscriber(UserProfile userProfile) {
+        this.getSubscribers().removeIf(subscriber -> subscriber.getId().equals(userProfile.getId()));
+    }
+
     @ManyToMany
     @JoinTable(name = "store_list_stores", joinColumns = @JoinColumn(name = "store_list_id", referencedColumnName = "store_list_id"), inverseJoinColumns = @JoinColumn(name = "store_id", referencedColumnName = "store_id"))
     public List<Store> getStores() {

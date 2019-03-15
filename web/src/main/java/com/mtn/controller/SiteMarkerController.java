@@ -40,6 +40,16 @@ public class SiteMarkerController {
 	}
 
 	@GetMapping(params = {"north", "south", "east", "west"})
+	public ResponseEntity<List<SiteMarker>> findAllInBounds(@RequestParam("north") Float north,
+															@RequestParam("south") Float south,
+															@RequestParam("east") Float east,
+															@RequestParam("west") Float west) {
+		List<Site> domainModels = this.siteService.findAllInBoundsUsingSpecs(north, south, east, west);
+		return ResponseEntity.ok(domainModels.stream().map(SiteMarker::new).collect(Collectors.toList()));
+	}
+
+
+	@GetMapping(params = {"north", "south", "east", "west", "page", "size"})
 	public ResponseEntity<Page<SiteMarker>> findAllInBounds(@RequestParam("north") Float north,
 															@RequestParam("south") Float south,
 															@RequestParam("east") Float east,

@@ -34,13 +34,6 @@ public class SiteService extends EntityService<Site, SiteView> {
 		this.userProfileService = userProfileService;
 	}
 
-	public List<Site> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
-		return this.repository.findAll(
-				where(SiteSpecifications.shoppingCenterIdEquals(shoppingCenterId))
-						.and(SiteSpecifications.isNotDeleted())
-		);
-	}
-
 	public Page<Site> findAllInRadius(Pageable page, Float latitude, Float longitude, Float radiusMeters) {
 		Point circleCenter = new GeometryFactory(new PrecisionModel(100000), 4326)
 				.createPoint(new Coordinate(longitude, latitude));

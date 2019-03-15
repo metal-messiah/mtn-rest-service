@@ -47,10 +47,6 @@ public class CompanyService extends EntityService<Company, CompanyView> {
 				.and(CompanySpecifications.isNotDeleted()), page);
 	}
 
-	public Company findOneByCompanyName(String name) {
-		return this.repository.findOne(Specifications.where(CompanySpecifications.companyNameEquals(name)));
-	}
-
 	@Transactional
 	public Company setParentCompany(Integer childCompanyId, Integer parentCompanyId) {
 		Company child = findOne(childCompanyId);

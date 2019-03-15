@@ -1,6 +1,7 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.ShoppingCenterView;
 import com.mtn.repository.ShoppingCenterRepository;
 import com.mtn.repository.specification.ShoppingCenterSpecifications;

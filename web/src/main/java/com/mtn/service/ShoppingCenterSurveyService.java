@@ -6,16 +6,12 @@ import com.mtn.model.domain.UserProfile;
 import com.mtn.model.utils.ShoppingCenterUtil;
 import com.mtn.model.view.ShoppingCenterSurveyView;
 import com.mtn.repository.ShoppingCenterSurveyRepository;
-import com.mtn.repository.specification.ShoppingCenterSurveySpecifications;
 import com.mtn.validators.ShoppingCenterSurveyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 public class ShoppingCenterSurveyService extends EntityService<ShoppingCenterSurvey, ShoppingCenterSurveyView> {
@@ -25,13 +21,6 @@ public class ShoppingCenterSurveyService extends EntityService<ShoppingCenterSur
                                        ShoppingCenterSurveyRepository repository,
                                        ShoppingCenterSurveyValidator validator) {
         super(securityService, repository, validator, ShoppingCenterSurvey::new);
-    }
-
-    public List<ShoppingCenterSurvey> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
-        return this.repository.findAll(
-                where(ShoppingCenterSurveySpecifications.shoppingCenterIdEquals(shoppingCenterId))
-                        .and(ShoppingCenterSurveySpecifications.isNotDeleted())
-        );
     }
 
     @Transactional

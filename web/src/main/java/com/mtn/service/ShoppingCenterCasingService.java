@@ -6,16 +6,12 @@ import com.mtn.model.domain.ShoppingCenterSurvey;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.ShoppingCenterCasingView;
 import com.mtn.repository.ShoppingCenterCasingRepository;
-import com.mtn.repository.specification.ShoppingCenterCasingSpecifications;
 import com.mtn.validators.ShoppingCenterCasingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 public class ShoppingCenterCasingService extends EntityService<ShoppingCenterCasing, ShoppingCenterCasingView> {
@@ -28,13 +24,6 @@ public class ShoppingCenterCasingService extends EntityService<ShoppingCenterCas
                                        ShoppingCenterCasingValidator validator, ShoppingCenterSurveyService shoppingCenterSurveyService) {
         super(securityService, repository, validator, ShoppingCenterCasing::new);
         this.shoppingCenterSurveyService = shoppingCenterSurveyService;
-    }
-
-    public List<ShoppingCenterCasing> findAllByShoppingCenterIdUsingSpecs(Integer shoppingCenterId) {
-        return this.repository.findAll(
-                where(ShoppingCenterCasingSpecifications.shoppingCenterIdEquals(shoppingCenterId))
-                        .and(ShoppingCenterCasingSpecifications.isNotDeleted())
-        );
     }
 
     @Transactional

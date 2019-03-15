@@ -1,11 +1,9 @@
 package com.mtn.model.domain;
 
-import javax.persistence.*;
 import com.mtn.constant.AccessType;
 
-/**
- * Created by Allen on 5/4/2017.
- */
+import javax.persistence.*;
+
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="shopping_center_access_id"))

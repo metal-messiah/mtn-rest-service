@@ -1,7 +1,7 @@
 package com.mtn.repository.specification;
 
-import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Site_;
 import com.mtn.repository.specification.predicate.*;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -11,13 +11,6 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.*;
 
 public class SiteSpecifications extends AuditingEntitySpecifications {
-
-	public static Specification<Site> shoppingCenterIdEquals(Integer id) {
-		return (root, criteriaQuery, criteriaBuilder) -> {
-			Join<Site, ShoppingCenter> siteShoppingCenterJoin = root.join("shoppingCenter");
-			return criteriaBuilder.equal(siteShoppingCenterJoin.get(ID), id);
-		};
-	}
 
 	public static Specification<Site> withinGeometry(Geometry geometry) {
 		return (root, criteriaQuery, criteriaBuilder) -> new WithinPredicate((CriteriaBuilderImpl) criteriaBuilder, root.get("location"), geometry);
@@ -33,10 +26,10 @@ public class SiteSpecifications extends AuditingEntitySpecifications {
 
 	public static Specification<Site> withinBoundingBox(Float north, Float south, Float east, Float west) {
 		return (root, criteriaQuery, criteriaBuilder) -> {
-			Predicate northBound = criteriaBuilder.le(root.get("latitude"), north);
-			Predicate southBound = criteriaBuilder.ge(root.get("latitude"), south);
-			Predicate eastBound = criteriaBuilder.le(root.get("longitude"), east);
-			Predicate westBound = criteriaBuilder.ge(root.get("longitude"), west);
+			Predicate northBound = criteriaBuilder.le(root.get(Site_.latitude), north);
+			Predicate southBound = criteriaBuilder.ge(root.get(Site_.latitude), south);
+			Predicate eastBound = criteriaBuilder.le(root.get(Site_.longitude), east);
+			Predicate westBound = criteriaBuilder.ge(root.get(Site_.longitude), west);
 			return criteriaBuilder.and(northBound, southBound, eastBound, westBound);
 		};
 	}

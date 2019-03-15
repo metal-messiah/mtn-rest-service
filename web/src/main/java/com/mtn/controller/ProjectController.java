@@ -1,34 +1,29 @@
 package com.mtn.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.mtn.model.domain.*;
-import com.mtn.model.simpleView.*;
-import com.mtn.model.view.*;
-import com.mtn.service.*;
+import com.mtn.model.domain.Boundary;
+import com.mtn.model.domain.Project;
+import com.mtn.model.simpleView.SimpleProjectView;
+import com.mtn.model.view.BoundaryView;
+import com.mtn.model.view.ProjectView;
+import com.mtn.service.BoundaryService;
+import com.mtn.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/api/project")
 public class ProjectController extends CrudController<Project, ProjectView> {
 
 	private final BoundaryService boundaryService;
-	private final StoreService storeService;
-	private final StoreCasingService storeCasingService;
 
 	@Autowired
-	public ProjectController(ProjectService projectService, BoundaryService boundaryService, StoreService storeService, StoreCasingService storeCasingService) {
+	public ProjectController(ProjectService projectService,
+							 BoundaryService boundaryService) {
 		super(projectService, ProjectView::new);
 		this.boundaryService = boundaryService;
-		this.storeService = storeService;
-		this.storeCasingService = storeCasingService;
 	}
 
 	@GetMapping
@@ -67,25 +62,4 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 		Project project = ((ProjectService) this.entityService).removeProjectBoundary(projectId);
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
-
-	@GetMapping(path = "/{id}/stores")
-	public ResponseEntity findAllStoresForProject(@PathVariable("id") Integer projectId) {
-		List<Store> domainModels = storeService.findAllByProjectId(projectId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
-	}
-
-	@GetMapping(path = "/{id}/store-casing")
-	public ResponseEntity findAllStoreCasingsForProject(@PathVariable("id") Integer projectId) {
-		List<StoreCasing> domainModels = storeCasingService.findAllByProjectId(projectId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
-	}
-
-	@GetMapping(path = "/{id}/cased-store-ids")
-	public List<Integer> findAllCasedStoreIds(@PathVariable("id") Integer projectId) {
-		Project project = this.entityService.findOne(projectId);
-		return project.getStoreCasings().stream()
-				.filter(storeCasing -> storeCasing.getDeletedDate() == null)
-				.map(storeCasing -> storeCasing.getStore().getId()).distinct().collect(Collectors.toList());
-	}
-
 }

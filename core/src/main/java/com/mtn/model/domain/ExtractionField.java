@@ -3,9 +3,6 @@ package com.mtn.model.domain;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by Tyler on 7/5/2018.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="extraction_field_id"))

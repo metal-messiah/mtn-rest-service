@@ -7,9 +7,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @Entity
 @Table(name = "auth_permission")
 @AttributeOverride(name="id", column=@Column(name="auth_permission_id"))

@@ -1,7 +1,10 @@
 package com.mtn.service;
 
 import com.mtn.constant.StoreType;
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.Banner;
+import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.utils.SiteUtil;
 import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
@@ -13,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -25,11 +28,6 @@ public class StoreService extends EntityService<Store, StoreView> {
 						StoreRepository repository,
 						StoreValidator validator) {
 		super(securityService, repository, validator, Store::new);
-	}
-
-	public List<Store> findAllByProjectId(Integer projectId) {
-		return this.repository.findAll(Specifications.where(StoreSpecifications.projectIdEquals(projectId))
-				.and(StoreSpecifications.isNotDeleted()));
 	}
 
 	public List<Store> findAllBySiteIdUsingSpecs(Integer siteId) {

@@ -2,7 +2,6 @@ package com.mtn.util.csv;
 
 import com.mtn.constant.AccessType;
 import com.mtn.model.domain.ShoppingCenterAccess;
-import com.mtn.model.domain.ShoppingCenterTenant;
 import org.supercsv.cellprocessor.CellProcessorAdaptor;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.util.CsvContext;

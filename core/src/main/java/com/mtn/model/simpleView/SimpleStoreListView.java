@@ -18,8 +18,12 @@ public class SimpleStoreListView extends SimpleAuditingEntityView {
     public SimpleStoreListView(StoreList storeList) {
         super(storeList);
 
+        this.storeListName = storeList.getStoreListName();
+
         this.storeCount = storeList.getStores().size();
         this.subscriberCount = storeList.getSubscribers().size();
+
+        this.createdById = storeList.getCreatedBy().getId();
     }
 
     public String getStoreListName() {

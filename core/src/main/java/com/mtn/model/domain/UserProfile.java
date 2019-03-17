@@ -67,11 +67,13 @@ public class UserProfile extends AuditingEntity {
         this.getSubscribedStoreLists().add(storeList);
     }
 
-    public void removeSubscribedStoreLists(StoreList storeList) {
+    public void removeSubscribedStoreList(StoreList storeList) {
         this.getSubscribedStoreLists().removeIf(sl -> sl.getId().equals(storeList.getId()));
     }
 
-    @ManyToMany(mappedBy = "stores")
+    // @ManyToMany(mappedBy = "stores")
+    @OneToMany
+    @JoinColumn(name = "created_by")
     public List<StoreList> getCreatedStoreLists() {
         return createdStoreLists;
     }

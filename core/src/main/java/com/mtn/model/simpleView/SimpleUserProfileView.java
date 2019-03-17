@@ -17,6 +17,8 @@ public class SimpleUserProfileView extends SimpleAuditingEntityView {
     public SimpleUserProfileView(UserProfile userProfile) {
         super(userProfile);
         this.email = userProfile.getEmail();
+        this.subscribedStoreListCount = userProfile.getSubscribedStoreLists().size();
+        this.createdStoreListCount = userProfile.getCreatedStoreLists().size();
     }
 
     public String getEmail() {

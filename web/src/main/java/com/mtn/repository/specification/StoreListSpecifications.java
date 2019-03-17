@@ -1,6 +1,7 @@
 package com.mtn.repository.specification;
 
 import com.mtn.model.domain.StoreList;
+import com.mtn.model.domain.StoreList_;
 import com.mtn.model.domain.UserProfile;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -26,5 +27,9 @@ public class StoreListSpecifications extends AuditingEntitySpecifications {
 				return criteriaBuilder.equal(storeListSubscriberJoin.get(ID), subscriberId);
 			}
 		};
+	}
+
+	public static Specification<StoreList> createdByEquals(Integer id) {
+		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(StoreList_.createdBy), id);
 	}
 }

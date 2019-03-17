@@ -4,7 +4,9 @@ import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.model.domain.Role;
 import com.mtn.model.domain.StoreList;
+import com.mtn.model.view.StoreListView;
 import com.mtn.model.view.UserProfileView;
+import com.mtn.service.StoreListService;
 import com.mtn.repository.GroupRepository;
 import com.mtn.repository.RoleRepository;
 import com.mtn.repository.StoreListRepository;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -32,15 +36,17 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 	private final GroupRepository groupRepository;
 	private final RoleRepository roleRepository;
 	private final StoreListRepository storeListRepository;
+	private final StoreListService storeListService;
 
 	@Autowired
 	public UserProfileService(SecurityService securityService, UserProfileRepository repository,
 			UserProfileValidator validator, GroupRepository groupRepository, RoleRepository roleRepository,
-			StoreListRepository storeListRepository) {
+			StoreListRepository storeListRepository, StoreListService storeListService) {
 		super(securityService, repository, validator, UserProfile::new);
 		this.groupRepository = groupRepository;
 		this.roleRepository = roleRepository;
 		this.storeListRepository = storeListRepository;
+		this.storeListService = storeListService;
 	}
 
 	public List<UserProfile> findAllByGroupIdUsingSpecs(Integer groupId) {
@@ -55,6 +61,11 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 				.and(UserProfileSpecifications.isNotDeleted()));
 	}
 
+	public boolean isAlreadySubscribed(final UserProfile userProfile, final Integer id) {
+		List<StoreList> list = userProfile.getSubscribedStoreLists();
+		return list.stream().filter(o -> o.getId().equals(id)).findFirst().isPresent();
+	}
+
 	public UserProfile subscribeToStoreListById(Integer userId, Integer storeListId) {
 
 		UserProfile userProfile = this.repository.findOne(where(UserProfileSpecifications.idEquals(userId)));
@@ -62,19 +73,21 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 			throw new EntityNotFoundException("User Profile not found");
 		}
 
-		StoreList storeList = this.storeListRepository.findOne(where(StoreListSpecifications.idEquals(storeListId)));
+		if (!this.isAlreadySubscribed(userProfile, storeListId)) {
 
-		if (storeList != null) {
-			storeList.addSubscriber(userProfile);
+			StoreList storeList = this.storeListRepository
+					.findOne(where(StoreListSpecifications.idEquals(storeListId)));
 
-			this.storeListRepository.save(storeList);
-		} else {
-			throw new EntityNotFoundException("Store List not found");
+			if (storeList != null) {
+				storeList.addSubscriber(userProfile);
+
+				this.storeListRepository.save(storeList);
+
+				userProfile.addSubscribedStoreList(storeList);
+			} else {
+				throw new EntityNotFoundException("Store List not found");
+			}
 		}
-
-		userProfile.setSubscribedStoreLists(userProfile.getSubscribedStoreLists());
-		userProfile.setCreatedStoreLists(userProfile.getCreatedStoreLists());
-
 		return userProfile;
 	}
 
@@ -86,16 +99,19 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 			throw new EntityNotFoundException("User Profile not found");
 		}
 
-		StoreList storeList = this.storeListRepository.findOne(where(StoreListSpecifications.idEquals(storeListId)));
+		if (this.isAlreadySubscribed(userProfile, storeListId)) {
 
-		if (storeList != null) {
-			storeList.removeSubscriber(userProfile);
+			StoreList storeList = this.storeListRepository
+					.findOne(where(StoreListSpecifications.idEquals(storeListId)));
 
-			this.storeListRepository.save(storeList);
+			if (storeList != null) {
+				storeList.removeSubscriber(userProfile);
+
+				this.storeListRepository.save(storeList);
+
+				userProfile.removeSubscribedStoreList(storeList);
+			}
 		}
-
-		userProfile.setSubscribedStoreLists(userProfile.getSubscribedStoreLists());
-		userProfile.setCreatedStoreLists(userProfile.getCreatedStoreLists());
 
 		return userProfile;
 
@@ -115,6 +131,12 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		if (userProfile == null) {
 			throw new EntityNotFoundException("User Profile not found");
 		}
+
+		Specification<StoreList> matches = where(StoreListSpecifications.createdByEquals(id));
+		List<StoreList> createdStoreLists = this.storeListRepository.findAll(matches);
+
+		userProfile.setCreatedStoreLists(createdStoreLists);
+
 		return userProfile;
 	}
 
@@ -130,11 +152,11 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		userProfile.setFirstName(request.getFirstName());
 		userProfile.setLastName(request.getLastName());
 
+		System.out.println("SET ENTITY ATTRIBUTES");
+
 		Group group = null;
 		if (request.getGroup() != null) {
-			group = groupRepository
-					.findOne(where(AuditingEntitySpecifications.<Group>idEquals(request.getGroup().getId()))
-							.and(AuditingEntitySpecifications.isNotDeleted()));
+
 		}
 		userProfile.setGroup(group);
 

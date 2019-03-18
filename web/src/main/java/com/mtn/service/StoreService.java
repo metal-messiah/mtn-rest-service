@@ -13,6 +13,8 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -22,31 +24,37 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 public class StoreService extends EntityService<Store, StoreView> {
 
 	@Autowired
-	public StoreService(SecurityService securityService,
-						StoreRepository repository,
-						StoreValidator validator) {
+	public StoreService(SecurityService securityService, StoreRepository repository, StoreValidator validator) {
 		super(securityService, repository, validator, Store::new);
 	}
 
-	public List<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west, List<StoreType> storeTypes) {
+	public List<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west,
+			List<StoreType> storeTypes) {
 		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry geometry = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		Geometry geometry = (currentUser.getRestrictionBoundary() != null)
+				? currentUser.getRestrictionBoundary().getBoundary()
+				: null;
 		return ((StoreRepository) this.repository).findAllInGeometry(geometry, north, south, east, west, storeTypes);
 	}
 
 	public List<Store> findAllInGeoJson(String geoJson, boolean active, boolean future, boolean historical) {
 		List<StoreType> storeTypes = this.getStoreTypes(active, future, historical);
 		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry geometry = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		Geometry geometry = (currentUser.getRestrictionBoundary() != null)
+				? currentUser.getRestrictionBoundary().getBoundary()
+				: null;
 		return ((StoreRepository) this.repository).findAllInGeoJson(geoJson, geometry, storeTypes);
 	}
 
-	public List<Store> findAllInRadius(Float latitude, Float longitude, Float radiusMeters,
-									   boolean active, boolean future, boolean historical) {
+	public List<Store> findAllInRadius(Float latitude, Float longitude, Float radiusMeters, boolean active,
+			boolean future, boolean historical) {
 		List<StoreType> storeTypes = this.getStoreTypes(active, future, historical);
 		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry geometry = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
-		return ((StoreRepository) this.repository).findAllInRadius(latitude, longitude, radiusMeters, geometry, storeTypes);
+		Geometry geometry = (currentUser.getRestrictionBoundary() != null)
+				? currentUser.getRestrictionBoundary().getBoundary()
+				: null;
+		return ((StoreRepository) this.repository).findAllInRadius(latitude, longitude, radiusMeters, geometry,
+				storeTypes);
 	}
 
 	private List<StoreType> getStoreTypes(boolean active, boolean future, boolean historical) {
@@ -64,10 +72,8 @@ public class StoreService extends EntityService<Store, StoreView> {
 	}
 
 	public List<Store> findAllBySiteIdUsingSpecs(Integer siteId) {
-		return this.repository.findAll(
-				where(StoreSpecifications.siteIdEquals(siteId))
-						.and(StoreSpecifications.isNotDeleted())
-		);
+		return this.repository
+				.findAll(where(StoreSpecifications.siteIdEquals(siteId)).and(StoreSpecifications.isNotDeleted()));
 	}
 
 	public List<Store> findAllByIdsUsingSpecs(List<Integer> storeIds) {
@@ -94,18 +100,19 @@ public class StoreService extends EntityService<Store, StoreView> {
 		// If the new store is ACTIVE, we have some special handling to do
 		if (store.getStoreType() == StoreType.ACTIVE) {
 			// Then, check for another existing ACTIVE store
-			SiteUtil.getActiveStore(site)
-					.ifPresent(existingActiveStore -> {
-						// If site already has ACTIVE store
-						if (!overrideActiveStore) {
-							// Throw an error (only one ACTIVE per site)
-							throw new IllegalArgumentException(String.format("A Site may only have one Active Store at a time. Store ID %d is currently set as this Site's Active Store.", existingActiveStore.getId()));
-						} else {
-							// Change old ACTIVE store to HISTORICAL
-							existingActiveStore.setStoreType(StoreType.HISTORICAL);
-							existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
-						}
-					});
+			SiteUtil.getActiveStore(site).ifPresent(existingActiveStore -> {
+				// If site already has ACTIVE store
+				if (!overrideActiveStore) {
+					// Throw an error (only one ACTIVE per site)
+					throw new IllegalArgumentException(String.format(
+							"A Site may only have one Active Store at a time. Store ID %d is currently set as this Site's Active Store.",
+							existingActiveStore.getId()));
+				} else {
+					// Change old ACTIVE store to HISTORICAL
+					existingActiveStore.setStoreType(StoreType.HISTORICAL);
+					existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
+				}
+			});
 		}
 
 		store.setSite(site);

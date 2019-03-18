@@ -67,22 +67,16 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 	}
 
 	public UserProfile subscribeToStoreListById(Integer userId, Integer storeListId) {
-
 		UserProfile userProfile = this.repository.findOne(where(UserProfileSpecifications.idEquals(userId)));
 		if (userProfile == null) {
 			throw new EntityNotFoundException("User Profile not found");
 		}
-
 		if (!this.isAlreadySubscribed(userProfile, storeListId)) {
-
 			StoreList storeList = this.storeListRepository
 					.findOne(where(StoreListSpecifications.idEquals(storeListId)));
-
 			if (storeList != null) {
 				storeList.addSubscriber(userProfile);
-
 				this.storeListRepository.save(storeList);
-
 				userProfile.addSubscribedStoreList(storeList);
 			} else {
 				throw new EntityNotFoundException("Store List not found");

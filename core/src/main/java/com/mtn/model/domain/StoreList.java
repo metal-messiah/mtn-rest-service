@@ -49,4 +49,16 @@ public class StoreList extends AuditingEntity {
     public void setStores(List<Store> stores) {
         this.stores = stores;
     }
+
+    public void addStore(Store store) {
+        this.getStores().add(store);
+    }
+
+    public void addStores(List<Store> stores) {
+        this.getStores().addAll(stores);
+    }
+
+    public void removeStore(Store store) {
+        this.getStores().removeIf(s -> s.getId().equals(s.getId()));
+    }
 }

@@ -1,7 +1,10 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.*;
-import com.mtn.model.simpleView.*;
+import com.mtn.model.simpleView.SimpleSiteView;
+import com.mtn.model.simpleView.SimpleStoreCasingView;
+import com.mtn.model.simpleView.SimpleStoreSurveyView;
+import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;

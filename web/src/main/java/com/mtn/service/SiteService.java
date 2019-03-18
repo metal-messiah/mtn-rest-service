@@ -16,8 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -66,7 +67,8 @@ public class SiteService extends EntityService<Site, SiteView> {
 	 * @return a list of sites including ones in new view and updated ones in old intersecting view
 	 */
 	public List<Site> findAllForView(Float north, Float south, Float east, Float west,
-									 Float prevNorth, Float prevSouth, Float prevEast, Float prevWest, LocalDateTime updatedAt) {
+									 Float prevNorth, Float prevSouth, Float prevEast, Float prevWest,
+									 ZonedDateTime updatedAt) {
 		// Get sites in new area, excluding old area
 		Specifications<Site> newSiteSpecs = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
 		newSiteSpecs = newSiteSpecs.and(Specifications.not(SiteSpecifications.withinBoundingBox(prevNorth, prevSouth, prevEast, prevWest)));
@@ -75,10 +77,10 @@ public class SiteService extends EntityService<Site, SiteView> {
 		// Where new area intersects old area, get only those that have been updated
 		Specifications<Site> updateSiteSpecs = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
 		updateSiteSpecs = updateSiteSpecs.and(SiteSpecifications.withinBoundingBox(prevNorth, prevSouth, prevEast, prevWest));
-		List<Site> updatedSites = this.repository.findAll(this.excludeRestrictedAndDeleted(updateSiteSpecs)).stream()
-				.filter(site -> site.getUpdatedDate().isAfter(updatedAt) ||
-							site.getStores().stream().anyMatch(store -> store.getUpdatedDate().isAfter(updatedAt)))
-				.collect(Collectors.toList());
+
+		LocalDateTime dt = updatedAt.withZoneSameInstant(OffsetDateTime.now().getOffset()).toLocalDateTime();
+		updateSiteSpecs = updateSiteSpecs.and(SiteSpecifications.updatedSince(dt));
+		List<Site> updatedSites = this.repository.findAll(this.excludeRestrictedAndDeleted(updateSiteSpecs));
 
 		sites.addAll(updatedSites);
 

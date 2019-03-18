@@ -2,13 +2,17 @@ package com.mtn.repository.specification;
 
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Site_;
-import com.mtn.repository.specification.predicate.*;
+import com.mtn.model.domain.Store_;
+import com.mtn.repository.specification.predicate.WithinGeoJson;
+import com.mtn.repository.specification.predicate.WithinPredicate;
+import com.mtn.repository.specification.predicate.WithinSphericalDistancePredicate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.Predicate;
+import java.time.LocalDateTime;
 
 public class SiteSpecifications extends AuditingEntitySpecifications {
 
@@ -31,6 +35,14 @@ public class SiteSpecifications extends AuditingEntitySpecifications {
 			Predicate eastBound = criteriaBuilder.le(root.get(Site_.longitude), east);
 			Predicate westBound = criteriaBuilder.ge(root.get(Site_.longitude), west);
 			return criteriaBuilder.and(northBound, southBound, eastBound, westBound);
+		};
+	}
+
+	public static Specification<Site> updatedSince(LocalDateTime updatedAt) {
+		return (root, criteriaQuery, criteriaBuilder) -> {
+			Predicate siteUpdated = criteriaBuilder.greaterThanOrEqualTo(root.get(Site_.updatedDate), updatedAt);
+			Predicate storesUpdated = criteriaBuilder.greaterThanOrEqualTo(root.join(Site_.stores).get(Store_.updatedDate), updatedAt);
+			return criteriaBuilder.or(siteUpdated, storesUpdated);
 		};
 	}
 

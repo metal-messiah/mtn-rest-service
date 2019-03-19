@@ -71,7 +71,6 @@ public class UserProfile extends AuditingEntity {
         this.getSubscribedStoreLists().removeIf(sl -> sl.getId().equals(storeList.getId()));
     }
 
-    // @ManyToMany(mappedBy = "stores")
     @OneToMany
     @JoinColumn(name = "created_by")
     public List<StoreList> getCreatedStoreLists() {

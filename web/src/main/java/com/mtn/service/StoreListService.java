@@ -7,6 +7,7 @@ import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreList;
 import com.mtn.model.view.ProjectView;
 import com.mtn.model.view.StoreListView;
+import com.mtn.model.simpleView.SimpleStoreListView;
 import com.mtn.repository.ProjectRepository;
 import com.mtn.repository.StoreListRepository;
 import com.mtn.repository.specification.ProjectSpecifications;
@@ -93,8 +94,6 @@ public class StoreListService extends EntityService<StoreList, StoreListView> {
 	@Override
 	protected void setEntityAttributesFromRequest(StoreList entity, StoreListView request) {
 		entity.setStoreListName(request.getStoreListName());
-		// entity.setStores(request.getStores());
-		// entity.setSubscribers(request.getSubscribers());
 	}
 
 	@Override

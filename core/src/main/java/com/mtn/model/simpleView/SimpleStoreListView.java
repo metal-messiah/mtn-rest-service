@@ -7,7 +7,6 @@ import com.mtn.model.domain.StoreList;
 public class SimpleStoreListView extends SimpleAuditingEntityView {
 
     private String storeListName;
-
     private Integer storeCount;
     private Integer subscriberCount;
     private Integer createdById;
@@ -19,10 +18,8 @@ public class SimpleStoreListView extends SimpleAuditingEntityView {
         super(storeList);
 
         this.storeListName = storeList.getStoreListName();
-
         this.storeCount = storeList.getStores().size();
         this.subscriberCount = storeList.getSubscribers().size();
-
         this.createdById = storeList.getCreatedBy().getId();
     }
 
@@ -38,17 +35,9 @@ public class SimpleStoreListView extends SimpleAuditingEntityView {
         return this.storeCount;
     }
 
-    // public void setStoreCount(StoreList storeList) {
-    // this.storeCount = storeList.getStores().size();
-    // }
-
     public Integer getSubscriberCount() {
         return this.subscriberCount;
     }
-
-    // public void setSubscriberCount(StoreList storeList) {
-    // this.subscriberCount = storeList.getSubscribers().size();
-    // }
 
     public Integer getCreatedById() {
         return this.createdById;

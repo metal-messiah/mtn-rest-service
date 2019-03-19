@@ -1,5 +1,6 @@
 package com.mtn.repository.specification;
 
+import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.StoreList_;
 import com.mtn.model.domain.UserProfile;
@@ -25,6 +26,17 @@ public class StoreListSpecifications extends AuditingEntitySpecifications {
 					CriteriaBuilder criteriaBuilder) {
 				Join<StoreList, UserProfile> storeListSubscriberJoin = root.join("subscribers");
 				return criteriaBuilder.equal(storeListSubscriberJoin.get(ID), subscriberId);
+			}
+		};
+	}
+
+	public static Specification<StoreList> storeIdEquals(Integer storeId) {
+		return new Specification<StoreList>() {
+			@Override
+			public Predicate toPredicate(Root<StoreList> root, CriteriaQuery<?> criteriaQuery,
+					CriteriaBuilder criteriaBuilder) {
+				Join<StoreList, Store> storeListStoreJoin = root.join("stores");
+				return criteriaBuilder.equal(storeListStoreJoin.get(ID), storeId);
 			}
 		};
 	}

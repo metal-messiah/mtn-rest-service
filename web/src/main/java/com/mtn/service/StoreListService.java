@@ -39,11 +39,15 @@ public class StoreListService extends EntityService<StoreList, StoreListView> {
 		this.storeService = storeService;
 	}
 
-	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, Integer subscriberId) {
+	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, Integer subscriberId, Integer storeId) {
 		Specifications<StoreList> spec = where(StoreListSpecifications.isNotDeleted());
 
 		if (subscriberId != null) {
 			spec = spec.and(StoreListSpecifications.subscriberIdEquals(subscriberId));
+		}
+
+		if (storeId != null) {
+			spec = spec.and(StoreListSpecifications.storeIdEquals(storeId));
 		}
 
 		return this.repository.findAll(spec, page);

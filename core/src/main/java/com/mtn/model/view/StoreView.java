@@ -42,6 +42,8 @@ public class StoreView extends AuditingEntityView {
 	private List<SimpleStoreVolumeView> storeVolumes;
 	private List<SimpleStoreStatusView> storeStatuses;
 
+	private List<SimpleStoreListView> storeLists;
+
 	public StoreView() {
 	}
 
@@ -80,28 +82,26 @@ public class StoreView extends AuditingEntityView {
 		}
 
 		if (store.getCasings() != null) {
-			this.storeCasings = store.getCasings().stream()
-					.filter(casing -> casing.getDeletedDate() == null)
-					.map(SimpleStoreCasingView::new)
-					.collect(Collectors.toList());
+			this.storeCasings = store.getCasings().stream().filter(casing -> casing.getDeletedDate() == null)
+					.map(SimpleStoreCasingView::new).collect(Collectors.toList());
 		}
 		if (store.getModels() != null) {
-			this.storeModels = store.getModels().stream()
-					.filter(model -> model.getDeletedDate() == null)
-					.map(SimpleStoreModelView::new)
-					.collect(Collectors.toList());
+			this.storeModels = store.getModels().stream().filter(model -> model.getDeletedDate() == null)
+					.map(SimpleStoreModelView::new).collect(Collectors.toList());
 		}
 		if (store.getVolumes() != null) {
-			this.storeVolumes = store.getVolumes().stream()
-					.filter(volume -> volume.getDeletedDate() == null)
-					.map(SimpleStoreVolumeView::new)
-					.collect(Collectors.toList());
+			this.storeVolumes = store.getVolumes().stream().filter(volume -> volume.getDeletedDate() == null)
+					.map(SimpleStoreVolumeView::new).collect(Collectors.toList());
 		}
 		if (store.getStatuses() != null) {
-			this.storeStatuses = store.getStatuses().stream()
-					.filter(status -> status.getDeletedDate() == null)
-					.map(SimpleStoreStatusView::new)
-					.collect(Collectors.toList());
+			this.storeStatuses = store.getStatuses().stream().filter(status -> status.getDeletedDate() == null)
+					.map(SimpleStoreStatusView::new).collect(Collectors.toList());
+		}
+
+		if (store.getStoreLists() != null) {
+			this.storeLists = store.getStoreLists().stream()
+					// .filter(storeList -> storeList.getDeletedDate() == null)
+					.map(SimpleStoreListView::new).collect(Collectors.toList());
 		}
 	}
 
@@ -303,5 +303,13 @@ public class StoreView extends AuditingEntityView {
 
 	public void setValidatedDate(LocalDateTime validatedDate) {
 		this.validatedDate = validatedDate;
+	}
+
+	public List<SimpleStoreListView> getStoreLists() {
+		return storeLists;
+	}
+
+	public void setStoreLists(List<SimpleStoreListView> storeLists) {
+		this.storeLists = storeLists;
 	}
 }

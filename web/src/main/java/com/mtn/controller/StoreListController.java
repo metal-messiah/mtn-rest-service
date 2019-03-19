@@ -37,18 +37,17 @@ public class StoreListController extends CrudController<StoreList, StoreListView
 		return ResponseEntity.ok(domainModels.map(SimpleStoreListView::new));
 	}
 
-	@PostMapping(path = "/{id}/addStores")
+	@PutMapping(path = "/{id}/add-stores")
 	public ResponseEntity addStoresToStoreList(@PathVariable("id") Integer storeListId,
 			@RequestBody List<Integer> request) {
 		StoreList storeList = ((StoreListService) this.entityService).addStoresToStoreList(storeListId, request);
 		return ResponseEntity.ok(new SimpleStoreListView(storeList));
 	}
 
-	@DeleteMapping(path = "/{id}/removeStores")
+	@PutMapping(path = "/{id}/remove-stores")
 	public ResponseEntity removeStoresFromStoreList(@PathVariable("id") Integer storeListId,
 			@RequestBody List<Integer> request) {
 		StoreList storeList = ((StoreListService) this.entityService).removeStoresFromStoreList(storeListId, request);
 		return ResponseEntity.ok(new SimpleStoreListView(storeList));
 	}
-
 }

@@ -2,6 +2,7 @@ package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Project;
+import com.mtn.model.simpleView.SimpleStoreListView;
 import com.mtn.model.simpleView.SimpleStoreModelView;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,8 @@ public class ProjectView extends AuditingEntityView {
 
     private List<SimpleStoreModelView> models;
 
+    private SimpleStoreListView updatedStores;
+
     public ProjectView() {
     }
 
@@ -42,7 +45,9 @@ public class ProjectView extends AuditingEntityView {
         this.dateCompleted = project.getDateCompleted();
         this.source = project.getSource();
         this.legacyProjectId = project.getLegacyProjectId();
-        this.models = project.getModels().stream().filter(model -> model.getDeletedDate() == null).map(SimpleStoreModelView::new).collect(Collectors.toList());
+        this.models = project.getModels().stream().filter(model -> model.getDeletedDate() == null)
+                .map(SimpleStoreModelView::new).collect(Collectors.toList());
+        this.updatedStores = new SimpleStoreListView(project.getUpdatedStores());
     }
 
     public String getProjectName() {
@@ -139,5 +144,13 @@ public class ProjectView extends AuditingEntityView {
 
     public void setModels(List<SimpleStoreModelView> models) {
         this.models = models;
+    }
+
+    public SimpleStoreListView getUpdatedStores() {
+        return updatedStores;
+    }
+
+    public void setUpdatedStores(SimpleStoreListView updatedStores) {
+        this.updatedStores = updatedStores;
     }
 }

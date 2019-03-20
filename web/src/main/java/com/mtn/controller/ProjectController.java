@@ -2,6 +2,7 @@ package com.mtn.controller;
 
 import com.mtn.model.domain.Boundary;
 import com.mtn.model.domain.Project;
+import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.view.BoundaryView;
 import com.mtn.model.view.ProjectView;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/project")
@@ -61,5 +65,15 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 	public ResponseEntity removeProjectBoundary(@PathVariable("id") Integer projectId) {
 		Project project = ((ProjectService) this.entityService).removeProjectBoundary(projectId);
 		return ResponseEntity.ok(new SimpleProjectView(project));
+	}
+
+	@GetMapping("/{id}/cased-store-ids")
+	public ResponseEntity<List<Integer>> casedStoreIds(@PathVariable("id") Integer projectId) {
+		Project project = this.entityService.findOne(projectId);
+		List<Integer> storeIds = project.getStoreCasings().stream()
+				.map(c -> c.getStore().getId())
+				.distinct()
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(storeIds);
 	}
 }

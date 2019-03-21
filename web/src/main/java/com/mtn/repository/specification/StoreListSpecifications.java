@@ -3,8 +3,17 @@ package com.mtn.repository.specification;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.StoreList_;
+import com.mtn.model.domain.Store_;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.service.StoreService;
+
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -39,6 +48,33 @@ public class StoreListSpecifications extends AuditingEntitySpecifications {
 				return criteriaBuilder.equal(storeListStoreJoin.get(ID), storeId);
 			}
 		};
+	}
+
+	public static Specification<StoreList> storeIdIn(List<Integer> ids) {
+		return (root, criteriaQuery, criteriaBuilder) -> {
+			criteriaQuery.distinct(true);
+			return root.join(StoreList_.stores).get(Store_.id).in(ids);
+		};
+	}
+
+	public static Specification<StoreList> storeIdNotIn(List<Integer> ids) {
+		return (root, criteriaQuery, criteriaBuilder) -> {
+			criteriaQuery.distinct(true);
+			return root.join(StoreList_.stores).get(Store_.id).in(ids).not();
+		};
+	}
+
+	public static Specification<StoreList> storeMemberOf(List<Store> includedStores) {
+		return (root, criteriaQuery, criteriaBuilder) -> includedStores.stream()
+				.map(store -> criteriaBuilder.isMember(store, root.get(StoreList_.stores))).reduce(criteriaBuilder::or)
+				.orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
+	}
+
+	public static Specification<StoreList> storeNotMemberOf(List<Store> excludedStores) {
+		return (root, criteriaQuery, criteriaBuilder) -> excludedStores.stream()
+				.map(store -> criteriaBuilder.isNotMember(store, root.get(StoreList_.stores)))
+				.reduce(criteriaBuilder::and).orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
+
 	}
 
 	public static Specification<StoreList> createdByEquals(Integer id) {

@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-
+import static org.springframework.data.jpa.domain.Specifications.not;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
@@ -39,15 +39,21 @@ public class StoreListService extends EntityService<StoreList, StoreListView> {
 		this.storeService = storeService;
 	}
 
-	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, Integer subscriberId, Integer storeId) {
+	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, Integer subscriberId,
+			List<Integer> includingStoreIds, List<Integer> excludingStoreIds) {
 		Specifications<StoreList> spec = where(StoreListSpecifications.isNotDeleted());
 
 		if (subscriberId != null) {
 			spec = spec.and(StoreListSpecifications.subscriberIdEquals(subscriberId));
 		}
 
-		if (storeId != null) {
-			spec = spec.and(StoreListSpecifications.storeIdEquals(storeId));
+		if (includingStoreIds != null) {
+			spec = spec.and(StoreListSpecifications.storeIdIn(includingStoreIds));
+		}
+
+		if (excludingStoreIds != null) {
+			List<Store> excludedStores = this.storeService.findAllByIdsUsingSpecs(excludingStoreIds);
+			spec = spec.and(StoreListSpecifications.storeNotMemberOf(excludedStores));
 		}
 
 		return this.repository.findAll(spec, page);

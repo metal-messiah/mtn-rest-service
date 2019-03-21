@@ -28,11 +28,12 @@ public class StoreListController extends CrudController<StoreList, StoreListView
 	@GetMapping
 	public ResponseEntity findAll(Pageable page,
 			@RequestParam(value = "subscriber-id", required = false) Integer subscriberId,
-			@RequestParam(value = "store-id", required = false) Integer storeId) {
+			@RequestParam(value = "including-store-ids", required = false) List<Integer> includingStoreIds,
+			@RequestParam(value = "excluding-store-ids", required = false) List<Integer> excludingStoreIds) {
 		Page<StoreList> domainModels;
-		if (subscriberId != null || storeId != null) {
+		if (subscriberId != null || includingStoreIds != null || excludingStoreIds != null) {
 			domainModels = ((StoreListService) this.entityService).findAllByQueryUsingSpecs(page, subscriberId,
-					storeId);
+					includingStoreIds, excludingStoreIds);
 		} else {
 			domainModels = this.entityService.findAllUsingSpecs(page);
 		}

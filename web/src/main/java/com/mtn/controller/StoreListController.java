@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.mtn.constant.StoreListSearchType;
+
 @RestController
 @RequestMapping("/api/store-list")
 public class StoreListController extends CrudController<StoreList, StoreListView> {
@@ -27,13 +29,14 @@ public class StoreListController extends CrudController<StoreList, StoreListView
 
 	@GetMapping
 	public ResponseEntity findAll(Pageable page,
-			@RequestParam(value = "subscriber-id", required = false) Integer subscriberId,
+			@RequestParam(value = "subscriber-ids", required = false) List<Integer> subscriberIds,
 			@RequestParam(value = "including-store-ids", required = false) List<Integer> includingStoreIds,
-			@RequestParam(value = "excluding-store-ids", required = false) List<Integer> excludingStoreIds) {
+			@RequestParam(value = "excluding-store-ids", required = false) List<Integer> excludingStoreIds,
+			@RequestParam(value = "search-type", required = false, defaultValue = "ANY") StoreListSearchType searchType) {
 		Page<StoreList> domainModels;
-		if (subscriberId != null || includingStoreIds != null || excludingStoreIds != null) {
-			domainModels = ((StoreListService) this.entityService).findAllByQueryUsingSpecs(page, subscriberId,
-					includingStoreIds, excludingStoreIds);
+		if (subscriberIds != null || includingStoreIds != null || excludingStoreIds != null) {
+			domainModels = ((StoreListService) this.entityService).findAllByQueryUsingSpecs(page, subscriberIds,
+					includingStoreIds, excludingStoreIds, searchType);
 		} else {
 			domainModels = this.entityService.findAllUsingSpecs(page);
 		}

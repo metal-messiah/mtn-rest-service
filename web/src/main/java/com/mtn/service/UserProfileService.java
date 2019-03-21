@@ -86,29 +86,21 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 	}
 
 	public UserProfile unsubscribeToStoreListById(Integer userId, Integer storeListId) {
-
 		UserProfile userProfile = this.repository.findOne(where(UserProfileSpecifications.isNotSystemAdministrator())
 				.and(UserProfileSpecifications.idEquals(userId)).and(UserProfileSpecifications.isNotDeleted()));
 		if (userProfile == null) {
 			throw new EntityNotFoundException("User Profile not found");
 		}
-
 		if (this.isAlreadySubscribed(userProfile, storeListId)) {
-
 			StoreList storeList = this.storeListRepository
 					.findOne(where(StoreListSpecifications.idEquals(storeListId)));
-
 			if (storeList != null) {
 				storeList.removeSubscriber(userProfile);
-
 				this.storeListRepository.save(storeList);
-
 				userProfile.removeSubscribedStoreList(storeList);
 			}
 		}
-
 		return userProfile;
-
 	}
 
 	@Override
@@ -116,6 +108,12 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		Specification<UserProfile> spec = where(UserProfileSpecifications.isNotSystemAdministrator())
 				.and(UserProfileSpecifications.isNotDeleted());
 		return this.repository.findAll(spec, page);
+	}
+
+	public List<UserProfile> findAllByIdsUsingSpecs(List<Integer> userProfileIds) {
+		Specifications<UserProfile> spec = where(UserProfileSpecifications.isNotDeleted());
+		spec = spec.and(UserProfileSpecifications.idIn(userProfileIds));
+		return this.repository.findAll(spec);
 	}
 
 	@Override

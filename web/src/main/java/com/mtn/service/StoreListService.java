@@ -5,6 +5,7 @@ import com.mtn.model.domain.Boundary;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreList;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.ProjectView;
 import com.mtn.model.view.StoreListView;
 import com.mtn.model.simpleView.SimpleStoreListView;
@@ -28,32 +29,51 @@ import java.util.List;
 import static org.springframework.data.jpa.domain.Specifications.not;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
+import com.mtn.constant.StoreListSearchType;
+
 @Service
 public class StoreListService extends EntityService<StoreList, StoreListView> {
 	StoreService storeService;
+	UserProfileService userProfileService;
 
 	@Autowired
 	public StoreListService(SecurityService securityService, StoreListRepository repository,
-			StoreListValidator validator, StoreService storeService) {
+			StoreListValidator validator, StoreService storeService, UserProfileService userProfileService) {
 		super(securityService, repository, validator, StoreList::new);
 		this.storeService = storeService;
+		this.userProfileService = userProfileService;
 	}
 
-	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, Integer subscriberId,
-			List<Integer> includingStoreIds, List<Integer> excludingStoreIds) {
+	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, List<Integer> subscriberIds,
+			List<Integer> includingStoreIds, List<Integer> excludingStoreIds, StoreListSearchType searchType) {
 		Specifications<StoreList> spec = where(StoreListSpecifications.isNotDeleted());
 
-		if (subscriberId != null) {
-			spec = spec.and(StoreListSpecifications.subscriberIdEquals(subscriberId));
+		if (subscriberIds != null) {
+			List<UserProfile> subscribers = this.userProfileService.findAllByIdsUsingSpecs(subscriberIds);
+			if (searchType == StoreListSearchType.ANY) {
+				spec = spec.and(StoreListSpecifications.getStoreListsWhereAnySubscriberIsMember(subscribers));
+			} else {
+				spec = spec.and(StoreListSpecifications.getStoreListsWhereAllSubscribersAreMembers(subscribers));
+			}
+			// spec = spec.and(StoreListSpecifications.subscriberIdEquals(subscriberId));
 		}
 
 		if (includingStoreIds != null) {
-			spec = spec.and(StoreListSpecifications.storeIdIn(includingStoreIds));
+			List<Store> includedStores = this.storeService.findAllByIdsUsingSpecs(includingStoreIds);
+			if (searchType == StoreListSearchType.ANY) {
+				spec = spec.and(StoreListSpecifications.getStoreListsWhereAnyStoreIsMember(includedStores));
+			} else {
+				spec = spec.and(StoreListSpecifications.getStoreListsWhereAllStoresAreMembers(includedStores));
+			}
 		}
 
 		if (excludingStoreIds != null) {
 			List<Store> excludedStores = this.storeService.findAllByIdsUsingSpecs(excludingStoreIds);
-			spec = spec.and(StoreListSpecifications.storeNotMemberOf(excludedStores));
+			if (searchType == StoreListSearchType.ANY) {
+				spec = spec.and(StoreListSpecifications.getStoreListsWhereAnyStoreIsNotMember(excludedStores));
+			} else {
+				spec = spec.and(StoreListSpecifications.getStoreListsWhereAllStoresAreNotMembers(excludedStores));
+			}
 		}
 
 		return this.repository.findAll(spec, page);

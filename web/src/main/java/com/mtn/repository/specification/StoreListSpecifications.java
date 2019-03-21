@@ -64,18 +64,6 @@ public class StoreListSpecifications extends AuditingEntitySpecifications {
 		};
 	}
 
-	public static Specification<StoreList> getStoreListsWhereAnySubscriberIsMember(List<UserProfile> subscribers) {
-		return (root, criteriaQuery, criteriaBuilder) -> subscribers.stream()
-				.map(sub -> criteriaBuilder.isMember(sub, root.get(StoreList_.subscribers))).reduce(criteriaBuilder::or)
-				.orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
-	}
-
-	public static Specification<StoreList> getStoreListsWhereAllSubscribersAreMembers(List<UserProfile> subscribers) {
-		return (root, criteriaQuery, criteriaBuilder) -> subscribers.stream()
-				.map(sub -> criteriaBuilder.isMember(sub, root.get(StoreList_.subscribers)))
-				.reduce(criteriaBuilder::and).orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
-	}
-
 	public static Specification<StoreList> getStoreListsWhereAnyStoreIsMember(List<Store> includedStores) {
 		return (root, criteriaQuery, criteriaBuilder) -> includedStores.stream()
 				.map(store -> criteriaBuilder.isMember(store, root.get(StoreList_.stores))).reduce(criteriaBuilder::or)
@@ -84,8 +72,8 @@ public class StoreListSpecifications extends AuditingEntitySpecifications {
 
 	public static Specification<StoreList> getStoreListsWhereAnyStoreIsNotMember(List<Store> includedStores) {
 		return (root, criteriaQuery, criteriaBuilder) -> includedStores.stream()
-				.map(store -> criteriaBuilder.isMember(store, root.get(StoreList_.stores))).reduce(criteriaBuilder::or)
-				.orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
+				.map(store -> criteriaBuilder.isNotMember(store, root.get(StoreList_.stores)))
+				.reduce(criteriaBuilder::or).orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
 	}
 
 	public static Specification<StoreList> getStoreListsWhereAllStoresAreMembers(List<Store> includedStores) {
@@ -96,8 +84,8 @@ public class StoreListSpecifications extends AuditingEntitySpecifications {
 
 	public static Specification<StoreList> getStoreListsWhereAllStoresAreNotMembers(List<Store> includedStores) {
 		return (root, criteriaQuery, criteriaBuilder) -> includedStores.stream()
-				.map(store -> criteriaBuilder.isMember(store, root.get(StoreList_.stores))).reduce(criteriaBuilder::and)
-				.orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
+				.map(store -> criteriaBuilder.isNotMember(store, root.get(StoreList_.stores)))
+				.reduce(criteriaBuilder::and).orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
 	}
 
 	public static Specification<StoreList> createdByEquals(Integer id) {

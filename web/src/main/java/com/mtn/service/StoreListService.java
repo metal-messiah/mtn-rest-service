@@ -5,7 +5,6 @@ import com.mtn.model.domain.Boundary;
 import com.mtn.model.domain.Project;
 import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreList;
-import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.ProjectView;
 import com.mtn.model.view.StoreListView;
 import com.mtn.model.simpleView.SimpleStoreListView;
@@ -34,28 +33,20 @@ import com.mtn.constant.StoreListSearchType;
 @Service
 public class StoreListService extends EntityService<StoreList, StoreListView> {
 	StoreService storeService;
-	UserProfileService userProfileService;
 
 	@Autowired
 	public StoreListService(SecurityService securityService, StoreListRepository repository,
-			StoreListValidator validator, StoreService storeService, UserProfileService userProfileService) {
+			StoreListValidator validator, StoreService storeService) {
 		super(securityService, repository, validator, StoreList::new);
 		this.storeService = storeService;
-		this.userProfileService = userProfileService;
 	}
 
-	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, List<Integer> subscriberIds,
+	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, Integer subscriberId,
 			List<Integer> includingStoreIds, List<Integer> excludingStoreIds, StoreListSearchType searchType) {
 		Specifications<StoreList> spec = where(StoreListSpecifications.isNotDeleted());
 
-		if (subscriberIds != null) {
-			List<UserProfile> subscribers = this.userProfileService.findAllByIdsUsingSpecs(subscriberIds);
-			if (searchType == StoreListSearchType.ANY) {
-				spec = spec.and(StoreListSpecifications.getStoreListsWhereAnySubscriberIsMember(subscribers));
-			} else {
-				spec = spec.and(StoreListSpecifications.getStoreListsWhereAllSubscribersAreMembers(subscribers));
-			}
-			// spec = spec.and(StoreListSpecifications.subscriberIdEquals(subscriberId));
+		if (subscriberId != null) {
+			spec = spec.and(StoreListSpecifications.subscriberIdEquals(subscriberId));
 		}
 
 		if (includingStoreIds != null) {

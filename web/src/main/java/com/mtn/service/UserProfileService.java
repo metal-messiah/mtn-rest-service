@@ -4,9 +4,7 @@ import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.model.domain.Role;
 import com.mtn.model.domain.StoreList;
-import com.mtn.model.view.StoreListView;
 import com.mtn.model.view.UserProfileView;
-import com.mtn.service.StoreListService;
 import com.mtn.repository.GroupRepository;
 import com.mtn.repository.RoleRepository;
 import com.mtn.repository.StoreListRepository;
@@ -36,17 +34,15 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 	private final GroupRepository groupRepository;
 	private final RoleRepository roleRepository;
 	private final StoreListRepository storeListRepository;
-	private final StoreListService storeListService;
 
 	@Autowired
 	public UserProfileService(SecurityService securityService, UserProfileRepository repository,
 			UserProfileValidator validator, GroupRepository groupRepository, RoleRepository roleRepository,
-			StoreListRepository storeListRepository, StoreListService storeListService) {
+			StoreListRepository storeListRepository) {
 		super(securityService, repository, validator, UserProfile::new);
 		this.groupRepository = groupRepository;
 		this.roleRepository = roleRepository;
 		this.storeListRepository = storeListRepository;
-		this.storeListService = storeListService;
 	}
 
 	public List<UserProfile> findAllByGroupIdUsingSpecs(Integer groupId) {

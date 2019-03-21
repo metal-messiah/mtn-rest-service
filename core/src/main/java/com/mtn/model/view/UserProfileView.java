@@ -19,8 +19,8 @@ public class UserProfileView extends AuditingEntityView {
     private String lastName;
     private String phoneNumber;
 
-    private List<SimpleStoreListView> subscribedStoreLists = new ArrayList<>();;
-    private List<SimpleStoreListView> createdStoreLists = new ArrayList<>();;
+    // private List<SimpleStoreListView> subscribedStoreLists = new ArrayList<>();;
+    // private List<SimpleStoreListView> createdStoreLists = new ArrayList<>();;
 
     private SimpleGroupView group;
     private SimpleRoleView role;
@@ -36,11 +36,6 @@ public class UserProfileView extends AuditingEntityView {
         this.lastName = userProfile.getLastName();
         this.phoneNumber = userProfile.getPhoneNumber();
 
-        // System.out.println(userProfile.getCreatedStoreLists());
-
-        userProfile.getSubscribedStoreLists().forEach(sl -> this.subscribedStoreLists.add(new SimpleStoreListView(sl)));
-        userProfile.getCreatedStoreLists().forEach(sl -> this.createdStoreLists.add(new SimpleStoreListView(sl)));
-
         if (userProfile.getGroup() != null) {
             this.group = new SimpleGroupView(userProfile.getGroup());
         }
@@ -49,34 +44,36 @@ public class UserProfileView extends AuditingEntityView {
             this.role = new SimpleRoleView(userProfile.getRole());
         }
 
-        if (userProfile.getSubscribedStoreLists() != null) {
-            this.subscribedStoreLists = userProfile.getSubscribedStoreLists().stream()
-                    .filter(sl -> sl.getDeletedDate() == null).map(SimpleStoreListView::new)
-                    .collect(Collectors.toList());
-        }
+        // if (userProfile.getSubscribedStoreLists() != null) {
+        // this.subscribedStoreLists = userProfile.getSubscribedStoreLists().stream()
+        // .filter(sl -> sl.getDeletedDate() == null).map(SimpleStoreListView::new)
+        // .collect(Collectors.toList());
+        // }
 
-        if (userProfile.getCreatedStoreLists() != null) {
-            this.createdStoreLists = userProfile.getCreatedStoreLists().stream()
-                    .filter(sl -> sl.getDeletedDate() == null).map(SimpleStoreListView::new)
-                    .collect(Collectors.toList());
-        }
+        // if (userProfile.getCreatedStoreLists() != null) {
+        // this.createdStoreLists = userProfile.getCreatedStoreLists().stream()
+        // .filter(sl -> sl.getDeletedDate() == null).map(SimpleStoreListView::new)
+        // .collect(Collectors.toList());
+        // }
     }
 
-    public List<SimpleStoreListView> getSubscribedStoreLists() {
-        return this.subscribedStoreLists;
-    }
+    // public List<SimpleStoreListView> getSubscribedStoreLists() {
+    // return this.subscribedStoreLists;
+    // }
 
-    public void setSubscribedStoreLists(List<SimpleStoreListView> subscribedStoreLists) {
-        this.subscribedStoreLists = subscribedStoreLists;
-    }
+    // public void setSubscribedStoreLists(List<SimpleStoreListView>
+    // subscribedStoreLists) {
+    // this.subscribedStoreLists = subscribedStoreLists;
+    // }
 
-    public List<SimpleStoreListView> getCreatedStoreLists() {
-        return this.createdStoreLists;
-    }
+    // public List<SimpleStoreListView> getCreatedStoreLists() {
+    // return this.createdStoreLists;
+    // }
 
-    public void setCreatedStoreLists(List<SimpleStoreListView> createdStoreLists) {
-        this.createdStoreLists = createdStoreLists;
-    }
+    // public void setCreatedStoreLists(List<SimpleStoreListView> createdStoreLists)
+    // {
+    // this.createdStoreLists = createdStoreLists;
+    // }
 
     public String getEmail() {
         return email;

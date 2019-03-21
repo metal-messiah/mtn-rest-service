@@ -5,6 +5,7 @@ import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.StoreList_;
 import com.mtn.model.domain.Store_;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.domain.UserProfile_;
 import com.mtn.service.StoreService;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -28,15 +29,17 @@ public class StoreListSpecifications extends AuditingEntitySpecifications {
 
 	private static final String ID = "id";
 
-	public static Specification<StoreList> subscriberIdEquals(Integer subscriberId) {
-		return new Specification<StoreList>() {
-			@Override
-			public Predicate toPredicate(Root<StoreList> root, CriteriaQuery<?> criteriaQuery,
-					CriteriaBuilder criteriaBuilder) {
-				Join<StoreList, UserProfile> storeListSubscriberJoin = root.join("subscribers");
-				return criteriaBuilder.equal(storeListSubscriberJoin.get(ID), subscriberId);
-			}
-		};
+	public static Specification<StoreList> getStoreListsWhereAnySubscriberIsMember(List<UserProfile> users) {
+		return (root, criteriaQuery, criteriaBuilder) -> users.stream()
+				.map(user -> criteriaBuilder.isMember(user, root.get(StoreList_.subscribers)))
+				.reduce(criteriaBuilder::or).orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
+
+	}
+
+	public static Specification<StoreList> getStoreListsWhereAllSubscribersAreMembers(List<UserProfile> users) {
+		return (root, criteriaQuery, criteriaBuilder) -> users.stream()
+				.map(user -> criteriaBuilder.isMember(user, root.get(StoreList_.subscribers)))
+				.reduce(criteriaBuilder::and).orElse(criteriaBuilder.isNotNull(root.get(StoreList_.id)));
 	}
 
 	public static Specification<StoreList> storeIdEquals(Integer storeId) {

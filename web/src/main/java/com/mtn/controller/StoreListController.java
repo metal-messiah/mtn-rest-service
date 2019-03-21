@@ -29,14 +29,15 @@ public class StoreListController extends CrudController<StoreList, StoreListView
 
 	@GetMapping
 	public ResponseEntity findAll(Pageable page,
-			@RequestParam(value = "subscriber-ids", required = false) Integer subscriberId,
+			@RequestParam(value = "created-by-id", required = false) Integer createdById,
+			@RequestParam(value = "subscriber-ids", required = false) List<Integer> subscriberIds,
 			@RequestParam(value = "including-store-ids", required = false) List<Integer> includingStoreIds,
 			@RequestParam(value = "excluding-store-ids", required = false) List<Integer> excludingStoreIds,
 			@RequestParam(value = "search-type", required = false, defaultValue = "ANY") StoreListSearchType searchType) {
 		Page<StoreList> domainModels;
-		if (subscriberId != null || includingStoreIds != null || excludingStoreIds != null) {
-			domainModels = ((StoreListService) this.entityService).findAllByQueryUsingSpecs(page, subscriberId,
-					includingStoreIds, excludingStoreIds, searchType);
+		if (subscriberIds != null || includingStoreIds != null || excludingStoreIds != null) {
+			domainModels = ((StoreListService) this.entityService).findAllByQueryUsingSpecs(page, createdById,
+					subscriberIds, includingStoreIds, excludingStoreIds, searchType);
 		} else {
 			domainModels = this.entityService.findAllUsingSpecs(page);
 		}

@@ -15,7 +15,7 @@ public class SimpleStoreListView extends SimpleAuditingEntityView {
     private Integer storeCount;
     private Integer subscriberCount;
     private List<SimpleUserProfileView> subscribers;
-    private Integer createdById;
+    private SimpleUserProfileView createdBy;
 
     public SimpleStoreListView() {
     }
@@ -28,7 +28,7 @@ public class SimpleStoreListView extends SimpleAuditingEntityView {
         this.subscriberCount = storeList.getSubscribers().size();
         this.subscribers = storeList.getSubscribers().stream().map(SimpleUserProfileView::new)
                 .collect(Collectors.toList());
-        this.createdById = storeList.getCreatedBy().getId();
+        this.createdBy = new SimpleUserProfileView(storeList.getCreatedBy());
     }
 
     public String getStoreListName() {
@@ -51,11 +51,8 @@ public class SimpleStoreListView extends SimpleAuditingEntityView {
         return this.subscribers;
     }
 
-    public Integer getCreatedById() {
-        return this.createdById;
+    public SimpleUserProfileView getCreatedBy() {
+        return this.createdBy;
     }
 
-    public void setCreatedById(StoreList storeList) {
-        this.createdById = storeList.getCreatedBy().getId();
-    }
 }

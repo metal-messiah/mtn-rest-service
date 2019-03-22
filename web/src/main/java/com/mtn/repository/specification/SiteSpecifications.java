@@ -11,6 +11,7 @@ import com.vividsolutions.jts.geom.Point;
 import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
 
@@ -41,7 +42,7 @@ public class SiteSpecifications extends AuditingEntitySpecifications {
 	public static Specification<Site> updatedSince(LocalDateTime updatedAt) {
 		return (root, criteriaQuery, criteriaBuilder) -> {
 			Predicate siteUpdated = criteriaBuilder.greaterThanOrEqualTo(root.get(Site_.updatedDate), updatedAt);
-			Predicate storesUpdated = criteriaBuilder.greaterThanOrEqualTo(root.join(Site_.stores).get(Store_.updatedDate), updatedAt);
+			Predicate storesUpdated = criteriaBuilder.greaterThanOrEqualTo(root.join(Site_.stores, JoinType.LEFT).get(Store_.updatedDate), updatedAt);
 			return criteriaBuilder.or(siteUpdated, storesUpdated);
 		};
 	}

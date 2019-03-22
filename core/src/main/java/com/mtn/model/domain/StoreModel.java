@@ -1,6 +1,7 @@
 package com.mtn.model.domain;
 
 import com.mtn.constant.ModelType;
+import com.mtn.model.StoreChild;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="store_model_id"))
-public class StoreModel extends AuditingEntity {
+public class StoreModel extends AuditingEntity implements StoreChild {
 
     private String mapkey;
     private Double curve;

@@ -78,4 +78,24 @@ public class ShoppingCenter extends AuditingEntity {
         this.casings = casings;
     }
 
+    public void addCasing(ShoppingCenterCasing shoppingCenterCasing) {
+        shoppingCenterCasing.setShoppingCenter(this);
+        this.casings.add(shoppingCenterCasing);
+    }
+
+    public void removeCasing(ShoppingCenterCasing shoppingCenterCasing) {
+        shoppingCenterCasing.setShoppingCenter(null);
+        this.casings.remove(shoppingCenterCasing);
+    }
+
+    public void addSurvey(ShoppingCenterSurvey shoppingCenterSurvey) {
+        shoppingCenterSurvey.setShoppingCenter(this);
+        this.surveys.add(shoppingCenterSurvey);
+    }
+
+    public void removeSurvey(ShoppingCenterSurvey shoppingCenterSurvey) {
+        shoppingCenterSurvey.setShoppingCenter(null);
+        this.surveys.remove(shoppingCenterSurvey);
+    }
+
 }

@@ -41,6 +41,7 @@ public class StoreView extends AuditingEntityView {
 	private List<SimpleStoreModelView> storeModels;
 	private List<SimpleStoreVolumeView> storeVolumes;
 	private List<SimpleStoreStatusView> storeStatuses;
+	private List<SimpleStoreSourceView> storeSources;
 
 	public StoreView() {
 	}
@@ -303,5 +304,13 @@ public class StoreView extends AuditingEntityView {
 
 	public void setValidatedDate(LocalDateTime validatedDate) {
 		this.validatedDate = validatedDate;
+	}
+
+	public List<SimpleStoreSourceView> getStoreSources() {
+		return storeSources;
+	}
+
+	public void setStoreSources(List<SimpleStoreSourceView> storeSources) {
+		this.storeSources = storeSources;
 	}
 }

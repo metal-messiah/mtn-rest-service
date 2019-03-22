@@ -1,17 +1,17 @@
 package com.mtn.controller;
 
-import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
-import com.mtn.model.simpleView.*;
+import com.mtn.model.simpleView.SimpleSiteView;
+import com.mtn.model.simpleView.SimpleStoreCasingView;
+import com.mtn.model.simpleView.SimpleStoreSurveyView;
+import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,34 +21,34 @@ public class StoreController extends CrudController<Store, StoreView> {
 	private final StoreSurveyService storeSurveyService;
 	private final StoreVolumeService volumeService;
 	private final StoreCasingService casingService;
-	private final StoreModelService modelService;
 	private final StoreCasingService storeCasingService;
 	private final ProjectService projectService;
 	private final StoreStatusService storeStatusService;
 	private final BannerService bannerService;
 	private final SiteService siteService;
+	private final MergeService mergeService;
 
 	@Autowired
 	public StoreController(StoreService storeService,
 						   StoreSurveyService surveyService,
 						   StoreVolumeService volumeService,
 						   StoreCasingService casingService,
-						   StoreModelService modelService,
 						   StoreCasingService storeCasingService,
 						   ProjectService projectService,
 						   StoreStatusService storeStatusService,
 						   BannerService bannerService,
+						   MergeService mergeService,
 						   SiteService siteService) {
 		super(storeService, StoreView::new);
 		this.storeSurveyService = surveyService;
 		this.volumeService = volumeService;
 		this.casingService = casingService;
-		this.modelService = modelService;
 		this.storeCasingService = storeCasingService;
 		this.projectService = projectService;
 		this.storeStatusService = storeStatusService;
 		this.bannerService = bannerService;
 		this.siteService = siteService;
+		this.mergeService = mergeService;
 	}
 
 	@GetMapping(params = {"ids"})
@@ -62,61 +62,16 @@ public class StoreController extends CrudController<Store, StoreView> {
 		}
 	}
 
-	@GetMapping(params = {"north", "south", "east", "west"})
-	public ResponseEntity findAllInBounds(
-			@RequestParam("north") Float north,
-			@RequestParam("south") Float south,
-			@RequestParam("east") Float east,
-			@RequestParam("west") Float west,
-			@RequestParam("store_types") List<StoreType> storeTypes,
-			@RequestParam(value = "include_project_ids", required = false) boolean includeProjectIds) {
-		List<Store> domainModels = ((StoreService) this.entityService).findAllOfTypesInBounds(north, south, east, west, storeTypes);
-		if (includeProjectIds) {
-			return ResponseEntity.ok(domainModels.stream().map(SimpleStoreViewWithProjects::new).collect(Collectors.toList()));
-		} else {
-			return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
-		}
-	}
-
-	@GetMapping(params = {"latitude", "longitude", "radiusMeters"})
-	public ResponseEntity<Map<String, List<Integer>>> findAllIdsInRadius(@RequestParam("latitude") Float latitude,
-																		 @RequestParam("longitude") Float longitude,
-																		 @RequestParam("radiusMeters") Float radiusMeters,
-																		 @RequestParam("active") boolean active,
-																		 @RequestParam("future") boolean future,
-																		 @RequestParam("historical") boolean historical) {
-		List<Store> stores = ((StoreService) this.entityService).findAllInRadius(latitude, longitude, radiusMeters, active, future, historical);
-		return ResponseEntity.ok(getIdsFromStores(stores));
-	}
-
-	@GetMapping(params = {"geojson"})
-	public ResponseEntity<Map<String, List<Integer>>> findAllIdsInGeoJson(@RequestParam("geojson") String geoJson,
-																		  @RequestParam("active") boolean active,
-																		  @RequestParam("future") boolean future,
-																		  @RequestParam("historical") boolean historical) {
-		List<Store> stores = ((StoreService) this.entityService).findAllInGeoJson(geoJson, active, future, historical);
-		return ResponseEntity.ok(getIdsFromStores(stores));
-	}
-
-	private Map<String, List<Integer>> getIdsFromStores(List<Store> stores) {
-		List<Integer> storeIds = stores.stream().map(AuditingEntity::getId).distinct().collect(Collectors.toList());
-		List<Integer> siteIds = stores.stream().map(store -> store.getSite().getId()).distinct().collect(Collectors.toList());
-		Map<String, List<Integer>> ids = new HashMap<>();
-		ids.put("storeIds", storeIds);
-		ids.put("siteIds", siteIds);
-		return ids;
-	}
-
 	@PutMapping("/{id}/validate")
-	public ResponseEntity<SimpleStoreView> validate(@PathVariable("id") Integer storeId) {
+	public ResponseEntity<StoreView> validate(@PathVariable("id") Integer storeId) {
 		Store store = ((StoreService) this.entityService).validateStore(storeId);
-		return ResponseEntity.ok(new SimpleStoreView(store));
+		return ResponseEntity.ok(new StoreView(store));
 	}
 
 	@PutMapping("/{id}/invalidate")
-	public ResponseEntity<SimpleStoreView> invalidate(@PathVariable("id") Integer storeId) {
+	public ResponseEntity<StoreView> invalidate(@PathVariable("id") Integer storeId) {
 		Store store = ((StoreService) this.entityService).invalidateStore(storeId);
-		return ResponseEntity.ok(new SimpleStoreView(store));
+		return ResponseEntity.ok(new StoreView(store));
 	}
 
 	@PostMapping(value = "/{id}/store-casings")
@@ -147,12 +102,6 @@ public class StoreController extends CrudController<Store, StoreView> {
 	public ResponseEntity findAllCasingsForStore(@PathVariable("id") Integer storeId) {
 		List<StoreCasing> domainModels = casingService.findAllByStoreIdUsingSpecs(storeId);
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
-	}
-
-	@GetMapping(value = "/{id}/store-model")
-	public ResponseEntity findAllModelsForStore(@PathVariable("id") Integer storeId) {
-		List<StoreModel> domainModels = modelService.findAllByStoreIdUsingSpecs(storeId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreModelView::new).collect(Collectors.toList()));
 	}
 
 	@PostMapping(value = "/{id}/store-surveys")
@@ -230,6 +179,12 @@ public class StoreController extends CrudController<Store, StoreView> {
 		List<Integer> siteIds = stores.stream().map(store -> store.getSite().getId()).distinct().collect(Collectors.toList());
 		List<Site> sites = this.siteService.assignSitesToUser(siteIds, userId);
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
+	}
+
+	@PostMapping("merge")
+	public ResponseEntity<StoreView> mergeStores(@RequestBody StoreMergeRequest storeMergeRequest) {
+		Store mergedStore = this.mergeService.mergeStores(storeMergeRequest);
+		return ResponseEntity.ok(new StoreView(mergedStore));
 	}
 
 }

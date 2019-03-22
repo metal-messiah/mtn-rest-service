@@ -10,14 +10,12 @@ import com.mtn.model.view.StoreView;
 import com.mtn.repository.StoreRepository;
 import com.mtn.repository.specification.StoreSpecifications;
 import com.mtn.validators.StoreValidator;
-import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -30,41 +28,6 @@ public class StoreService extends EntityService<Store, StoreView> {
 						StoreRepository repository,
 						StoreValidator validator) {
 		super(securityService, repository, validator, Store::new);
-	}
-
-	public List<Store> findAllOfTypesInBounds(Float north, Float south, Float east, Float west, List<StoreType> storeTypes) {
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry geometry = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
-		return ((StoreRepository) this.repository).findAllInGeometry(geometry, north, south, east, west, storeTypes);
-	}
-
-	public List<Store> findAllInGeoJson(String geoJson, boolean active, boolean future, boolean historical) {
-		List<StoreType> storeTypes = this.getStoreTypes(active, future, historical);
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry geometry = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
-		return ((StoreRepository) this.repository).findAllInGeoJson(geoJson, geometry, storeTypes);
-	}
-
-	public List<Store> findAllInRadius(Float latitude, Float longitude, Float radiusMeters,
-									   boolean active, boolean future, boolean historical) {
-		List<StoreType> storeTypes = this.getStoreTypes(active, future, historical);
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry geometry = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
-		return ((StoreRepository) this.repository).findAllInRadius(latitude, longitude, radiusMeters, geometry, storeTypes);
-	}
-
-	private List<StoreType> getStoreTypes(boolean active, boolean future, boolean historical) {
-		List<StoreType> storeTypes = new ArrayList<>();
-		if (active) {
-			storeTypes.add(StoreType.ACTIVE);
-		}
-		if (future) {
-			storeTypes.add(StoreType.FUTURE);
-		}
-		if (historical) {
-			storeTypes.add(StoreType.HISTORICAL);
-		}
-		return storeTypes;
 	}
 
 	public List<Store> findAllBySiteIdUsingSpecs(Integer siteId) {

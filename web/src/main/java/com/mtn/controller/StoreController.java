@@ -1,16 +1,15 @@
 package com.mtn.controller;
 
+import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
-import com.mtn.model.simpleView.SimpleSiteView;
-import com.mtn.model.simpleView.SimpleStoreCasingView;
-import com.mtn.model.simpleView.SimpleStoreSurveyView;
-import com.mtn.model.simpleView.SimpleStoreView;
+import com.mtn.model.simpleView.*;
 import com.mtn.model.view.*;
 import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,6 +58,30 @@ public class StoreController extends CrudController<Store, StoreView> {
 			return ResponseEntity.ok(stores.stream().map(StoreView::new).collect(Collectors.toList()));
 		} else {
 			return ResponseEntity.ok(stores.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
+		}
+	}
+
+	@GetMapping(params = {"north", "south", "east", "west"})
+	public ResponseEntity findAllInBounds(
+			@RequestParam("north") Float north,
+			@RequestParam("south") Float south,
+			@RequestParam("east") Float east,
+			@RequestParam("west") Float west,
+			@RequestParam("store_types") List<StoreType> storeTypes,
+			@RequestParam(value = "include_project_ids", required = false) boolean includeProjectIds) {
+		List<Site> sites = siteService.findAllInBoundsUsingSpecs(north, south, east, west);
+		List<Store> stores = sites.stream()
+				.map(Site::getStores)
+				.reduce((prev, curr) -> {
+					prev.addAll(curr);
+					return prev;
+				}).orElse(new ArrayList<>());
+		List<Store> domainModels = stores.stream().filter(store -> store.getDeletedDate() == null && storeTypes.contains(store.getStoreType())).collect(Collectors.toList());
+
+		if (includeProjectIds) {
+			return ResponseEntity.ok(domainModels.stream().map(SimpleStoreViewWithProjects::new).collect(Collectors.toList()));
+		} else {
+			return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 		}
 	}
 
@@ -174,7 +197,7 @@ public class StoreController extends CrudController<Store, StoreView> {
 
 	@PutMapping("assign-to-user")
 	public ResponseEntity<List<SimpleSiteView>> assignToUser(@RequestBody List<Integer> storeIds,
-															  @RequestParam(value = "user-id", required = false) Integer userId) {
+															 @RequestParam(value = "user-id", required = false) Integer userId) {
 		List<Store> stores = ((StoreService) this.entityService).findAllByIdsUsingSpecs(storeIds);
 		List<Integer> siteIds = stores.stream().map(store -> store.getSite().getId()).distinct().collect(Collectors.toList());
 		List<Site> sites = this.siteService.assignSitesToUser(siteIds, userId);

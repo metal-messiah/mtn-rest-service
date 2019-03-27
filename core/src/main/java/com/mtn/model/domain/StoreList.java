@@ -59,6 +59,6 @@ public class StoreList extends AuditingEntity {
     }
 
     public void removeStore(Store store) {
-        this.getStores().removeIf(s -> s.getId().equals(s.getId()));
+        this.getStores().removeIf(s -> s.getId().equals(store.getId()));
     }
 }

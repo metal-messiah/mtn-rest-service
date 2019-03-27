@@ -13,6 +13,9 @@ public class SiteMarker {
 	private Integer id;
 	private Float latitude;
 	private Float longitude;
+	private String address1;
+	private String city;
+	private String state;
 	private Integer assigneeId;
 	private Boolean duplicate;
 	private Boolean backfilledNonGrocery;
@@ -23,6 +26,9 @@ public class SiteMarker {
 		this.id = site.getId();
 		this.latitude = site.getLatitude();
 		this.longitude = site.getLongitude();
+		this.address1 = site.getAddress1();
+		this.city = site.getCity();
+		this.state = site.getState();
 		if (site.getAssignee() != null) {
 			this.assigneeId = site.getAssignee().getId();
 		}
@@ -64,6 +70,30 @@ public class SiteMarker {
 
 	public void setLongitude(Float longitude) {
 		this.longitude = longitude;
+	}
+
+	public String getAddress1() {
+		return address1;
+	}
+
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public Integer getAssigneeId() {

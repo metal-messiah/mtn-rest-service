@@ -4,9 +4,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 6/10/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="company_id"))

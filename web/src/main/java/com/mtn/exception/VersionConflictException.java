@@ -1,8 +1,5 @@
 package com.mtn.exception;
 
-/**
- * Created by Allen on 4/23/2017.
- */
 public class VersionConflictException extends RuntimeException {
 
     private Object object;

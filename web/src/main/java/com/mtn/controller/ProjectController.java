@@ -1,9 +1,13 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.*;
-import com.mtn.model.simpleView.*;
-import com.mtn.model.view.*;
-import com.mtn.service.*;
+import com.mtn.model.domain.Boundary;
+import com.mtn.model.domain.Project;
+import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.simpleView.SimpleProjectView;
+import com.mtn.model.view.BoundaryView;
+import com.mtn.model.view.ProjectView;
+import com.mtn.service.BoundaryService;
+import com.mtn.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,15 +22,12 @@ import java.util.stream.Collectors;
 public class ProjectController extends CrudController<Project, ProjectView> {
 
 	private final BoundaryService boundaryService;
-	private final StoreCasingService storeCasingService;
 
 	@Autowired
 	public ProjectController(ProjectService projectService,
-							 BoundaryService boundaryService,
-							 StoreCasingService storeCasingService) {
+							 BoundaryService boundaryService) {
 		super(projectService, ProjectView::new);
 		this.boundaryService = boundaryService;
-		this.storeCasingService = storeCasingService;
 	}
 
 	@GetMapping
@@ -66,10 +67,13 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
-	@GetMapping(path = "/{id}/store-casing")
-	public ResponseEntity findAllStoreCasingsForProject(@PathVariable("id") Integer projectId) {
-		List<StoreCasing> domainModels = storeCasingService.findAllByProjectId(projectId);
-		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreCasingView::new).collect(Collectors.toList()));
+	@GetMapping("/{id}/cased-store-ids")
+	public ResponseEntity<List<Integer>> casedStoreIds(@PathVariable("id") Integer projectId) {
+		Project project = this.entityService.findOne(projectId);
+		List<Integer> storeIds = project.getStoreCasings().stream()
+				.map(c -> c.getStore().getId())
+				.distinct()
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(storeIds);
 	}
-
 }

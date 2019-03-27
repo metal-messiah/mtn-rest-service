@@ -1,6 +1,8 @@
 package com.mtn.repository.specification;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.Site_;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.Store_;
 import org.springframework.data.jpa.domain.Specification;
 
 public class StoreSpecifications extends AuditingEntitySpecifications {

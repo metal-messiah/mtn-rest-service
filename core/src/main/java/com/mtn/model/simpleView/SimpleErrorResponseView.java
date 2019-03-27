@@ -3,9 +3,6 @@ package com.mtn.model.simpleView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.http.HttpStatus;
 
-/**
- * Created by Allen on 4/22/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleErrorResponseView {
 

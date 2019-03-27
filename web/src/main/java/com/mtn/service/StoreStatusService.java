@@ -1,6 +1,9 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.domain.StoreStatus;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.utils.StoreUtil;
 import com.mtn.model.view.StoreStatusView;
 import com.mtn.repository.StoreStatusRepository;

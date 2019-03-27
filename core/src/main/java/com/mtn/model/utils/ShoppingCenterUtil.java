@@ -1,8 +1,8 @@
 package com.mtn.model.utils;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.domain.ShoppingCenterSurvey;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Optional;

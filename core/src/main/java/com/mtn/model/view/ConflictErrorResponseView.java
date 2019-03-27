@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.simpleView.SimpleErrorResponseView;
 import org.springframework.http.HttpStatus;
 
-/**
- * Created by Allen on 4/23/2017.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConflictErrorResponseView extends SimpleErrorResponseView {
 

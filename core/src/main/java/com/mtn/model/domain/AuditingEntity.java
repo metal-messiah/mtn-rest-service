@@ -5,9 +5,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * Created by Allen on 4/22/2017.
- */
 @MappedSuperclass
 public abstract class AuditingEntity implements Serializable {
 

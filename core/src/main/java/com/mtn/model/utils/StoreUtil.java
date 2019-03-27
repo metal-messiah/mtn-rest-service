@@ -1,5 +1,6 @@
 package com.mtn.model.utils;
 
+import com.mtn.model.StoreChild;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreStatus;
 import com.mtn.model.domain.StoreSurvey;
@@ -8,6 +9,8 @@ import com.mtn.model.domain.StoreVolume;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 public interface StoreUtil {
@@ -37,5 +40,15 @@ public interface StoreUtil {
 		return store.getVolumes().stream()
 				.filter(s -> s.getDeletedDate() == null && s.getVolumeDate().isBefore(localDate.plusDays(1)))
 				.max(Comparator.comparing(StoreVolume::getVolumeDate));
+	}
+
+	static <T extends StoreChild> void transferChildren(List<T> source, List<T> destination, Store targetStore) {
+		Iterator<T> it = source.iterator();
+		while(it.hasNext()) {
+			T item = it.next();
+			it.remove();
+			item.setStore(targetStore);
+			destination.add(item);
+		}
 	}
 }

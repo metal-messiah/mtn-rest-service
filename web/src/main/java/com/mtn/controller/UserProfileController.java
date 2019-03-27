@@ -1,11 +1,9 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 import com.mtn.model.view.UserProfileView;
 import com.mtn.service.UserProfileService;
-import com.mtn.service.StoreListService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

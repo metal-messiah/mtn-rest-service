@@ -1,22 +1,20 @@
 package com.mtn.config;
 
-import com.mtn.constant.PermissionType;
-import com.mtn.model.domain.UserProfile;
-import com.mtn.security.CustomJwtAuthenticationProvider;
-import com.mtn.service.UserProfileService;
-import com.mtn.service.AuthCacheService;
-import com.mtn.security.MtnAuthentication;
-
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.exception.Auth0Exception;
 import com.auth0.json.auth.UserInfo;
 import com.auth0.jwk.JwkProvider;
 import com.auth0.jwk.JwkProviderBuilder;
 import com.auth0.net.Request;
+import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
 import com.auth0.spring.security.api.authentication.JwtAuthentication;
 import com.auth0.spring.security.api.authentication.PreAuthenticatedAuthenticationJsonWebToken;
-import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
-
+import com.mtn.constant.PermissionType;
+import com.mtn.model.domain.UserProfile;
+import com.mtn.security.CustomJwtAuthenticationProvider;
+import com.mtn.security.MtnAuthentication;
+import com.mtn.service.AuthCacheService;
+import com.mtn.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -38,9 +36,6 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Collections;
 
-/**
- * Created by Allen on 5/10/2017.
- */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
@@ -95,6 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/site/**").hasAuthority(PermissionType.SITES_READ)
                 .antMatchers(HttpMethod.PUT, "/api/site/**").hasAuthority(PermissionType.SITES_UPDATE)
                 .antMatchers(HttpMethod.DELETE, "/api/site/**").hasAuthority(PermissionType.SITES_DELETE)
+                .antMatchers(HttpMethod.GET, "/api/site-marker/**").hasAuthority(PermissionType.SITES_READ)
                 .antMatchers(HttpMethod.POST, "/api/store/**").hasAuthority(PermissionType.STORES_CREATE)
                 .antMatchers(HttpMethod.GET, "/api/store/**").hasAuthority(PermissionType.STORES_READ)
                 .antMatchers(HttpMethod.PUT, "/api/store/**").hasAuthority(PermissionType.STORES_UPDATE)

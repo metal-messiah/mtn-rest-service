@@ -4,9 +4,6 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Allen on 5/6/2017.
- */
 @Entity
 @Table(name = "auth_group")
 @AttributeOverride(name="id", column=@Column(name="auth_group_id"))

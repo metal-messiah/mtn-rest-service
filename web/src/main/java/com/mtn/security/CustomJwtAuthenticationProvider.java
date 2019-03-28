@@ -17,9 +17,6 @@ import org.springframework.security.core.AuthenticationException;
 
 import java.security.interfaces.RSAPublicKey;
 
-/**
- * Created by Allen on 5/11/2017.
- */
 public class CustomJwtAuthenticationProvider implements AuthenticationProvider {
     private static Logger logger = LoggerFactory.getLogger(JwtAuthenticationProvider.class);
     private final byte[] secret;

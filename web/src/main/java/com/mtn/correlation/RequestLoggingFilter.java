@@ -5,9 +5,6 @@ import com.mtn.util.MtnLogger;
 import javax.servlet.*;
 import java.io.IOException;
 
-/**
- * Created by Allen on 4/22/2017.
- */
 public class RequestLoggingFilter implements Filter {
 
     @Override

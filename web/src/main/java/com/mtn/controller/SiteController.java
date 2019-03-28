@@ -8,14 +8,11 @@ import com.mtn.model.simpleView.SimpleSiteView;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.simpleView.SitePoint;
 import com.mtn.model.view.ShoppingCenterView;
+import com.mtn.model.view.SiteMergeRequest;
 import com.mtn.model.view.SiteView;
 import com.mtn.model.view.StoreView;
-import com.mtn.service.ProjectService;
-import com.mtn.service.ShoppingCenterService;
-import com.mtn.service.SiteService;
-import com.mtn.service.StoreService;
+import com.mtn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,16 +27,19 @@ public class SiteController extends CrudController<Site, SiteView> {
 	private final StoreService storeService;
 	private final ProjectService projectService;
 	private final ShoppingCenterService shoppingCenterService;
+	private final MergeService mergeService;
 
 	@Autowired
 	public SiteController(SiteService siteService,
 						  StoreService storeService,
 						  ProjectService projectService,
+						  MergeService mergeService,
 						  ShoppingCenterService shoppingCenterService) {
 		super(siteService, SiteView::new);
 		this.storeService = storeService;
 		this.projectService = projectService;
 		this.shoppingCenterService = shoppingCenterService;
+		this.mergeService = mergeService;
 	}
 
 	@GetMapping(value = "/{id}/store")
@@ -54,25 +54,6 @@ public class SiteController extends CrudController<Site, SiteView> {
 		site.setDuplicate(isDuplicate);
 		SiteView request = new SiteView(site);
 		return ResponseEntity.ok(new SimpleSiteView(this.entityService.updateOne(request)));
-	}
-
-	@GetMapping
-	public ResponseEntity<List<SimpleSiteView>> findAll(@RequestParam(value = "north", required = false) Float north,
-								  @RequestParam(value = "south", required = false) Float south,
-								  @RequestParam(value = "east", required = false) Float east,
-								  @RequestParam(value = "west", required = false) Float west,
-								  @RequestParam(value = "no_stores", required = false) boolean noStores,
-								  @RequestParam(value = "duplicate", required = false) boolean duplicate,
-								  Pageable page) {
-		List<Site> domainModels;
-		if (north != null && south != null && east != null && west != null) {
-			domainModels = ((SiteService) this.entityService).findAllInBoundsWithoutStoresUsingSpecs(north, south, east, west, noStores, page);
-		} else if (duplicate) {
-			domainModels = ((SiteService) this.entityService).findAllDuplicatesUsingSpecs();
-		} else {
-			domainModels = this.entityService.findAllUsingSpecs();
-		}
-		return ResponseEntity.ok(domainModels.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
 	@GetMapping(params = {"geojson"})
@@ -115,6 +96,13 @@ public class SiteController extends CrudController<Site, SiteView> {
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
+	@PostMapping(value = "{siteId}/assign-to-user")
+	public ResponseEntity<SiteView> assignToUser(@PathVariable("siteId") Integer siteId,
+															 @RequestParam(value = "user-id", required = false) Integer userId) {
+		Site site = ((SiteService) this.entityService).assignSiteToUser(siteId, userId);
+		return ResponseEntity.ok(new SiteView(site));
+	}
+
 	@PostMapping(value = "/{id}/store")
 	public ResponseEntity<StoreView> addOneStoreToSite(
 			@PathVariable("id") Integer siteId,
@@ -124,4 +112,11 @@ public class SiteController extends CrudController<Site, SiteView> {
 		Store domainModel = storeService.createStoreForSiteFromRequest(request, site, overrideActiveStore);
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
+
+	@PostMapping("merge")
+	public ResponseEntity<SiteView> mergeSites(@RequestBody SiteMergeRequest siteMergeRequest) {
+		Site mergedSite = this.mergeService.mergeSites(siteMergeRequest);
+		return ResponseEntity.ok(new SiteView(mergedSite));
+	}
+
 }

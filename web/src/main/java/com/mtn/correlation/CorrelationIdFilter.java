@@ -11,8 +11,6 @@ import java.util.UUID;
 /**
  * This filter is meant to add a correlation ID to incoming requests that can be used
  * in logging, joining log statements together for a single given request.
- * <p>
- * Created by Allen on 4/22/2017.
  */
 
 public class CorrelationIdFilter implements Filter {

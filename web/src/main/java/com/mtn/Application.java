@@ -11,9 +11,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
-/**
- * Created by Allen on 4/20/2017.
- */
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync

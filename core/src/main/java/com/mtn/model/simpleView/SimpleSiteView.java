@@ -1,13 +1,7 @@
 package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.constant.StoreType;
 import com.mtn.model.domain.Site;
-import com.mtn.model.domain.Store;
-import com.vividsolutions.jts.geom.Point;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleSiteView extends SimpleAuditingEntityView {

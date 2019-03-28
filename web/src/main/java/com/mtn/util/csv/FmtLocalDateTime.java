@@ -1,7 +1,5 @@
 package com.mtn.util.csv;
 
-import com.mtn.model.domain.AuditingEntity;
-import com.mtn.model.domain.UserProfile;
 import org.supercsv.cellprocessor.CellProcessorAdaptor;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.util.CsvContext;

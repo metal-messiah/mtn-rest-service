@@ -41,6 +41,7 @@ public class StoreView extends AuditingEntityView {
 	private List<SimpleStoreModelView> storeModels;
 	private List<SimpleStoreVolumeView> storeVolumes;
 	private List<SimpleStoreStatusView> storeStatuses;
+	private List<SimpleStoreSourceView> storeSources;
 
 	private List<SimpleStoreListView> storeLists;
 
@@ -311,5 +312,13 @@ public class StoreView extends AuditingEntityView {
 
 	public void setStoreLists(List<SimpleStoreListView> storeLists) {
 		this.storeLists = storeLists;
+	}
+
+	public List<SimpleStoreSourceView> getStoreSources() {
+		return storeSources;
+	}
+
+	public void setStoreSources(List<SimpleStoreSourceView> storeSources) {
+		this.storeSources = storeSources;
 	}
 }

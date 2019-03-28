@@ -4,9 +4,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Allen on 4/23/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="shopping_center_id"))
@@ -79,6 +76,26 @@ public class ShoppingCenter extends AuditingEntity {
 
     public void setCasings(List<ShoppingCenterCasing> casings) {
         this.casings = casings;
+    }
+
+    public void addCasing(ShoppingCenterCasing shoppingCenterCasing) {
+        shoppingCenterCasing.setShoppingCenter(this);
+        this.casings.add(shoppingCenterCasing);
+    }
+
+    public void removeCasing(ShoppingCenterCasing shoppingCenterCasing) {
+        shoppingCenterCasing.setShoppingCenter(null);
+        this.casings.remove(shoppingCenterCasing);
+    }
+
+    public void addSurvey(ShoppingCenterSurvey shoppingCenterSurvey) {
+        shoppingCenterSurvey.setShoppingCenter(this);
+        this.surveys.add(shoppingCenterSurvey);
+    }
+
+    public void removeSurvey(ShoppingCenterSurvey shoppingCenterSurvey) {
+        shoppingCenterSurvey.setShoppingCenter(null);
+        this.surveys.remove(shoppingCenterSurvey);
     }
 
 }

@@ -1,9 +1,9 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.UserProfile;
 import com.mtn.model.domain.Group;
 import com.mtn.model.domain.Role;
 import com.mtn.model.domain.StoreList;
+import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.UserProfileView;
 import com.mtn.repository.GroupRepository;
 import com.mtn.repository.RoleRepository;
@@ -19,11 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -36,9 +34,12 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 	private final StoreListRepository storeListRepository;
 
 	@Autowired
-	public UserProfileService(SecurityService securityService, UserProfileRepository repository,
-			UserProfileValidator validator, GroupRepository groupRepository, RoleRepository roleRepository,
-			StoreListRepository storeListRepository) {
+	public UserProfileService(SecurityService securityService,
+							  UserProfileRepository repository,
+							  UserProfileValidator validator,
+							  GroupRepository groupRepository,
+							  RoleRepository roleRepository,
+							  StoreListRepository storeListRepository) {
 		super(securityService, repository, validator, UserProfile::new);
 		this.groupRepository = groupRepository;
 		this.roleRepository = roleRepository;
@@ -51,15 +52,9 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 				.and(UserProfileSpecifications.isNotDeleted()));
 	}
 
-	public List<UserProfile> findAllByRoleIdUsingSpecs(Integer roleId) {
-		return this.repository.findAll(where(UserProfileSpecifications.roleIdEquals(roleId))
-				.and(UserProfileSpecifications.isNotSystemAdministrator())
-				.and(UserProfileSpecifications.isNotDeleted()));
-	}
-
-	public boolean isAlreadySubscribed(final UserProfile userProfile, final Integer id) {
+	private boolean isAlreadySubscribed(final UserProfile userProfile, final Integer id) {
 		List<StoreList> list = userProfile.getSubscribedStoreLists();
-		return list.stream().filter(o -> o.getId().equals(id)).findFirst().isPresent();
+		return list.stream().anyMatch(o -> o.getId().equals(id));
 	}
 
 	public UserProfile subscribeToStoreListById(Integer userId, Integer storeListId) {
@@ -140,11 +135,10 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		userProfile.setFirstName(request.getFirstName());
 		userProfile.setLastName(request.getLastName());
 
-		System.out.println("SET ENTITY ATTRIBUTES");
-
 		Group group = null;
 		if (request.getGroup() != null) {
-
+			group = groupRepository.findOne(where(AuditingEntitySpecifications.<Group>idEquals(request.getGroup().getId()))
+					.and(AuditingEntitySpecifications.isNotDeleted()));
 		}
 		userProfile.setGroup(group);
 

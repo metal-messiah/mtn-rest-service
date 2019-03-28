@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Allen on 5/4/2017.
- */
 @Entity
 @Table
 @AttributeOverride(name="id", column=@Column(name="shopping_center_survey_id"))

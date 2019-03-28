@@ -13,9 +13,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-/**
- * Created by Allen on 4/22/2017.
- */
 @Service
 public abstract class EntityValidator<T extends AuditingEntity, V extends AuditingEntityView> {
 

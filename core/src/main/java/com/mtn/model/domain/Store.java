@@ -38,6 +38,7 @@ public class Store extends AuditingEntity {
     private List<StoreSurvey> surveys = new ArrayList<>();
     private List<StoreVolume> volumes = new ArrayList<>();
     private List<StoreStatus> statuses = new ArrayList<>();
+    private List<StoreSource> sources = new ArrayList<>();
 
     private List<StoreList> storeLists = new ArrayList<>();
 
@@ -220,6 +221,15 @@ public class Store extends AuditingEntity {
 
     public void setStatuses(List<StoreStatus> statuses) {
         this.statuses = statuses;
+    }
+
+    @OneToMany(mappedBy = "store")
+    public List<StoreSource> getSources() {
+        return sources;
+    }
+
+    public void setSources(List<StoreSource> sources) {
+        this.sources = sources;
     }
 
     @Column(name = "is_float")

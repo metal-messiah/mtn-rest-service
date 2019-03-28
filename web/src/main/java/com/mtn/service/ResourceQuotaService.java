@@ -10,11 +10,10 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-
-import static org.springframework.data.jpa.domain.Specifications.where;
-
 import java.util.Comparator;
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 public class ResourceQuotaService extends EntityService<ResourceQuota, ResourceQuotaView> {

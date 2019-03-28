@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Allen on 4/21/2017.
- */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

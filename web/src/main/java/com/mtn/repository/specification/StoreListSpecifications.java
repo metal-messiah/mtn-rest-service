@@ -47,8 +47,22 @@ public class StoreListSpecifications extends AuditingEntitySpecifications {
 			@Override
 			public Predicate toPredicate(Root<StoreList> root, CriteriaQuery<?> criteriaQuery,
 					CriteriaBuilder criteriaBuilder) {
+						
+				criteriaQuery.distinct(true);
 				Join<StoreList, Store> storeListStoreJoin = root.join("stores");
 				return criteriaBuilder.equal(storeListStoreJoin.get(ID), storeId);
+			}
+		};
+	}
+
+	public static Specification<StoreList> storeIdNotEquals(Integer storeId) {
+		return new Specification<StoreList>() {
+			@Override
+			public Predicate toPredicate(Root<StoreList> root, CriteriaQuery<?> criteriaQuery,
+					CriteriaBuilder criteriaBuilder) {
+				criteriaQuery.distinct(true);
+				Join<StoreList, Store> storeListStoreJoin = root.join("stores");
+				return criteriaBuilder.notEqual(storeListStoreJoin.get(ID), storeId);
 			}
 		};
 	}

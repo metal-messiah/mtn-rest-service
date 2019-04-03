@@ -14,10 +14,6 @@ public class BannerSourceSpecifications extends AuditingEntitySpecifications {
 		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(BannerSource_.sourceName), sourceName);
 	}
 
-	public static Specification<BannerSource> isNotValidated() {
-		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isNull(root.get(BannerSource_.validatedDate));
-	}
-
 	public static Specification<BannerSource> isValidated() {
 		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isNotNull(root.get(BannerSource_.validatedDate));
 	}

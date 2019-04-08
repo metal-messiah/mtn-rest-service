@@ -1,13 +1,18 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.ShoppingCenter;
+import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreStatus;
+import com.mtn.model.simpleView.SimpleStoreStatusView;
 import com.mtn.model.view.SourceUpdatable;
 import com.mtn.model.view.StoreStatusView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.Optional;
 
 @Service
 public class SourceUpdatableService {
@@ -16,23 +21,16 @@ public class SourceUpdatableService {
 	private final SiteService siteService;
 	private final StoreService storeService;
 	private final StoreStatusService storeStatusService;
-	private final StoreSourceService storeSourceService;
-
-	private final SecurityService securityService;
 
 	@Autowired
 	public SourceUpdatableService(ShoppingCenterService shoppingCenterService,
 								  SiteService siteService,
 								  StoreService storeService,
-								  StoreStatusService storeStatusService,
-								  StoreSourceService storeSourceService,
-								  SecurityService securityService) {
+								  StoreStatusService storeStatusService) {
 		this.shoppingCenterService = shoppingCenterService;
 		this.siteService = siteService;
 		this.storeService = storeService;
 		this.storeStatusService = storeStatusService;
-		this.storeSourceService = storeSourceService;
-		this.securityService = securityService;
 	}
 
 	public SourceUpdatable getUpdatableByStoreId(Integer storeId) {
@@ -71,12 +69,6 @@ public class SourceUpdatableService {
 		this.updateSiteFromUpdatable(updatable, store.getSite());
 		this.updateShoppingCenterFromUpdatable(updatable, store.getSite().getShoppingCenter());
 
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		StoreSource storeSource = this.storeSourceService.findOne(updatable.getStoreSource().getId());
-		storeSource.setStore(store);
-		storeSource.setValidatedBy(currentUser);
-		storeSource.setValidatedDate(LocalDateTime.now());
-
 		return store;
 	}
 
@@ -112,13 +104,18 @@ public class SourceUpdatableService {
 		store.setStoreName(updatable.getStoreName());
 		store.setDateOpened(updatable.getDateOpened());
 		store.setAreaTotal(updatable.getAreaTotal());
-		if (updatable.getStoreStatuses() != null) {
-			updatable.getStoreStatuses().stream().filter(status -> status.getId() == null).forEach(status -> {
+		SimpleStoreStatusView newStoreStatus = updatable.getStoreStatus();
+		if (newStoreStatus != null) {
+			Optional<StoreStatus> previousStatus = store.getStatuses().stream()
+					.filter(st -> st.getStatusStartDate().isBefore(newStoreStatus.getStatusStartDate()))
+					.max(Comparator.comparing(StoreStatus::getStatusStartDate));
+			// If no previous status is found, or the previous status is not the same, then add the new status
+			if (!previousStatus.isPresent() ||!previousStatus.get().getStatus().equals(newStoreStatus.getStatus()) ) {
 				StoreStatusView newStoreStatusRequest = new StoreStatusView();
-				newStoreStatusRequest.setStatus(status.getStatus());
-				newStoreStatusRequest.setStatusStartDate(status.getStatusStartDate());
+				newStoreStatusRequest.setStatus(newStoreStatus.getStatus());
+				newStoreStatusRequest.setStatusStartDate(newStoreStatus.getStatusStartDate());
 				storeStatusService.addOneToStore(newStoreStatusRequest, store);
-			});
+			}
 		}
 		storeService.updateOne(store);
 	}

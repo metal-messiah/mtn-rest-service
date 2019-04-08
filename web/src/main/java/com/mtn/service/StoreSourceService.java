@@ -90,30 +90,32 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 		source.setSourceCreatedDate(request.getSourceCreatedDate());
 		source.setSourceEditedDate(request.getSourceEditedDate());
 		source.setSourceDeletedDate(request.getSourceDeletedDate());
+	}
 
-		if (request.getValidatedBy() != null) {
-			UserProfile validator = userProfileService.findOneUsingSpecs(request.getValidatedBy().getId());
-			source.setValidatedBy(validator);
-			source.setValidatedDate(request.getValidatedDate());
-		} else {
-			source.setValidatedBy(null);
-			source.setValidatedDate(null);
-		}
+	public StoreSource setStore(Integer sourceId, Store store) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setStore(store);
+		return this.updateOne(storeSource);
+	}
 
-		if (request.getStore() != null) {
-			Store store = storeService.findOneUsingSpecs(request.getStore().getId());
-			source.setStore(store);
-		} else {
-			source.setStore(null);
-		}
+	public StoreSource setBannerSource(Integer sourceId, BannerSource bannerSource) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setBannerSource(bannerSource);
+		return this.updateOne(storeSource);
+	}
 
-		if (request.getBannerSource() != null) {
-			BannerSource bannerSource = bannerSourceService.findOneUsingSpecs(request.getBannerSource().getId());
-			source.setBannerSource(bannerSource);
-		} else {
-			source.setBannerSource(null);
-		}
+	public StoreSource validate(Integer sourceId) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setValidatedBy(this.securityService.getCurrentUser());
+		storeSource.setValidatedDate(LocalDateTime.now());
+		return this.updateOne(storeSource);
+	}
 
+	public StoreSource invalidate(Integer sourceId) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setValidatedBy(null);
+		storeSource.setValidatedDate(null);
+		return this.updateOne(storeSource);
 	}
 
 	@Override

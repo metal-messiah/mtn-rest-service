@@ -4,12 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
-import com.mtn.model.simpleView.SimpleStoreSourceView;
 import com.mtn.model.simpleView.SimpleStoreStatusView;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SourceUpdatable {
@@ -32,10 +29,9 @@ public class SourceUpdatable {
     private Integer storeId;
     private String storeName;
     private LocalDateTime dateOpened;
-    private List<SimpleStoreStatusView> storeStatuses;
     private Integer areaTotal;
 
-    private SimpleStoreSourceView storeSource;
+    private SimpleStoreStatusView storeStatus;
 
     public SourceUpdatable() {
     }
@@ -180,14 +176,6 @@ public class SourceUpdatable {
         this.dateOpened = dateOpened;
     }
 
-    public List<SimpleStoreStatusView> getStoreStatuses() {
-        return storeStatuses;
-    }
-
-    public void setStoreStatuses(List<SimpleStoreStatusView> storeStatuses) {
-        this.storeStatuses = storeStatuses;
-    }
-
     public Integer getAreaTotal() {
         return areaTotal;
     }
@@ -196,19 +184,18 @@ public class SourceUpdatable {
         this.areaTotal = areaTotal;
     }
 
-    public SimpleStoreSourceView getStoreSource() {
-        return storeSource;
+    public SimpleStoreStatusView getStoreStatus() {
+        return storeStatus;
     }
 
-    public void setStoreSource(SimpleStoreSourceView storeSource) {
-        this.storeSource = storeSource;
+    public void setStoreStatus(SimpleStoreStatusView storeStatus) {
+        this.storeStatus = storeStatus;
     }
 
     private void setStoreData(Store store) {
         this.storeId = store.getId();
         this.storeName = store.getStoreName();
         this.dateOpened = store.getDateOpened();
-        this.storeStatuses = store.getStatuses().stream().map(SimpleStoreStatusView::new).collect(Collectors.toList());
         this.areaTotal = store.getAreaTotal();
 
         this.setSiteData(store.getSite());

@@ -85,8 +85,6 @@ public class PlannedGroceryService {
 		ssd.setState(JsonNodeUtil.getNodeStringValue(attributes, "STATE"));
 		ssd.setPostalCode(JsonNodeUtil.getNodeStringValue(attributes, "ZIP"));
 
-		ssd.setStoreName(JsonNodeUtil.getNodeStringValue(attributes, "NAME"));
-
 		if (attributes.hasNonNull("OPENDATE")) {
 			Long epochMilli = attributes.get("OPENDATE").longValue();
 			LocalDate date = Instant.ofEpochMilli(epochMilli).atZone(ZoneId.systemDefault()).toLocalDate();

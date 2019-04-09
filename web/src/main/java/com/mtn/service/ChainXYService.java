@@ -69,8 +69,6 @@ public class ChainXYService {
 		ssd.setState(JsonNodeUtil.getNodeStringValue(root, "State"));
 		ssd.setPostalCode(JsonNodeUtil.getNodeStringValue(root, "PostalCode"));
 
-		ssd.setStoreName(JsonNodeUtil.getNodeStringValue(root, "StoreName"));
-
 		if (root.hasNonNull("FirstAppeared")) {
 			ssd.setDateOpened(root.get("FirstAppeared").textValue());
 		}

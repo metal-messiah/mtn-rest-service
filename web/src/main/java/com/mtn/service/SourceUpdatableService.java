@@ -104,16 +104,15 @@ public class SourceUpdatableService {
 		store.setStoreName(updatable.getStoreName());
 		store.setDateOpened(updatable.getDateOpened());
 		store.setAreaTotal(updatable.getAreaTotal());
-		SimpleStoreStatusView newStoreStatus = updatable.getStoreStatus();
-		if (newStoreStatus != null) {
+		if (updatable.getStoreStatus() != null && updatable.getStoreStatusStartDate() != null) {
 			Optional<StoreStatus> previousStatus = store.getStatuses().stream()
-					.filter(st -> st.getStatusStartDate().isBefore(newStoreStatus.getStatusStartDate()))
+					.filter(st -> st.getStatusStartDate().isBefore(updatable.getStoreStatusStartDate()))
 					.max(Comparator.comparing(StoreStatus::getStatusStartDate));
 			// If no previous status is found, or the previous status is not the same, then add the new status
-			if (!previousStatus.isPresent() ||!previousStatus.get().getStatus().equals(newStoreStatus.getStatus()) ) {
+			if (!previousStatus.isPresent() ||!previousStatus.get().getStatus().equals(updatable.getStoreStatus()) ) {
 				StoreStatusView newStoreStatusRequest = new StoreStatusView();
-				newStoreStatusRequest.setStatus(newStoreStatus.getStatus());
-				newStoreStatusRequest.setStatusStartDate(newStoreStatus.getStatusStartDate());
+				newStoreStatusRequest.setStatus(updatable.getStoreStatus());
+				newStoreStatusRequest.setStatusStartDate(updatable.getStoreStatusStartDate());
 				storeStatusService.addOneToStore(newStoreStatusRequest, store);
 			}
 		}

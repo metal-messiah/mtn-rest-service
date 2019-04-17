@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
 import com.mtn.model.domain.Store;
+import com.mtn.model.simpleView.SimpleBannerView;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +31,7 @@ public class SourceUpdatable {
 	private LocalDateTime dateOpened;
 	private Integer areaTotal;
 
-	private Integer bannerId;
+	private SimpleBannerView banner;
 
 	private String storeStatus;
 	private LocalDateTime storeStatusStartDate;
@@ -186,12 +187,12 @@ public class SourceUpdatable {
 		this.areaTotal = areaTotal;
 	}
 
-	public Integer getBannerId() {
-		return bannerId;
+	public SimpleBannerView getBanner() {
+		return banner;
 	}
 
-	public void setBannerId(Integer bannerId) {
-		this.bannerId = bannerId;
+	public void setBanner(SimpleBannerView banner) {
+		this.banner = banner;
 	}
 
 	public String getStoreStatus() {
@@ -216,7 +217,7 @@ public class SourceUpdatable {
 		this.dateOpened = store.getDateOpened();
 		this.areaTotal = store.getAreaTotal();
 		if (store.getBanner() != null) {
-			this.bannerId = store.getBanner().getId();
+			this.banner = new SimpleBannerView(store.getBanner());
 		}
 
 		this.setSiteData(store.getSite());

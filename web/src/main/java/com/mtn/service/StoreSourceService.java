@@ -92,9 +92,24 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 		source.setSourceDeletedDate(request.getSourceDeletedDate());
 	}
 
-	public StoreSource setStore(Integer sourceId, Store store) {
+	public StoreSource setStore(Integer sourceId, Store store, Boolean validate) {
 		StoreSource storeSource = this.findOne(sourceId);
 		storeSource.setStore(store);
+
+		if (validate) {
+			storeSource.setValidatedDate(LocalDateTime.now());
+			storeSource.setValidatedBy(this.securityService.getCurrentUser());
+		}
+		return this.updateOne(storeSource);
+	}
+
+	public StoreSource removeStore(Integer sourceId) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setStore(null);
+
+		storeSource.setValidatedDate(null);
+		storeSource.setValidatedBy(null);
+
 		return this.updateOne(storeSource);
 	}
 

@@ -67,23 +67,27 @@ public class StoreSourceController extends CrudController<StoreSource, StoreSour
 		return ResponseEntity.ok(new StoreSourceView(storeSource));
 	}
 
-	@PutMapping("/{id}/store/{storeId}")
+	@PutMapping(value = "/{id}/store/{storeId}", params = {"validate"})
 	public ResponseEntity setStore(@PathVariable("id") Integer id,
-								   @PathVariable("storeId") Integer storeId) {
+								   @PathVariable("storeId") Integer storeId,
+								   @RequestParam(name = "validate", required = false) Boolean validate) {
 		Store store = this.storeService.findOneUsingSpecs(storeId);
-		StoreSource storeSource = ((StoreSourceService) this.entityService).setStore(id, store);
+		if (validate == null) {
+			validate = false;
+		}
+		StoreSource storeSource = ((StoreSourceService) this.entityService).setStore(id, store, validate);
 		return ResponseEntity.ok(new StoreSourceView(storeSource));
 	}
 
 	@DeleteMapping("/{id}/store")
 	public ResponseEntity removeStore(@PathVariable("id") Integer id) {
-		StoreSource storeSource = ((StoreSourceService) this.entityService).setStore(id, null);
+		StoreSource storeSource = ((StoreSourceService) this.entityService).removeStore(id);
 		return ResponseEntity.ok(new StoreSourceView(storeSource));
 	}
 
 	@PutMapping("/{id}/banner-source/{bannerSourceId}")
 	public ResponseEntity setBannerSource(@PathVariable("id") Integer id,
-								   @PathVariable("bannerSourceId") Integer bannerSourceId) {
+										  @PathVariable("bannerSourceId") Integer bannerSourceId) {
 		BannerSource bannerSource = bannerSourceService.findOneUsingSpecs(bannerSourceId);
 		StoreSource storeSource = ((StoreSourceService) this.entityService).setBannerSource(id, bannerSource);
 		return ResponseEntity.ok(new StoreSourceView(storeSource));

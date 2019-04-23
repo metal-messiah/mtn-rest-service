@@ -25,13 +25,8 @@ public class RoleController extends CrudController<Role, RoleView> {
     }
 
     @GetMapping
-    public ResponseEntity findAll(@RequestParam(value = "displayName", required = false) String displayName, Pageable page) {
-        Page<Role> domainModels;
-        if (StringUtils.isNotBlank(displayName)) {
-            domainModels = ((RoleService) this.entityService).findAllByNameUsingSpecs(displayName, page);
-        } else {
-            domainModels = this.entityService.findAllUsingSpecs(page);
-        }
+    public ResponseEntity findAll(Pageable page) {
+        Page<Role> domainModels = this.entityService.findAllUsingSpecs(page);
         return ResponseEntity.ok(domainModels.map(SimpleRoleView::new));
     }
 

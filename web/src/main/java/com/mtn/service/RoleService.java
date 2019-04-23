@@ -32,13 +32,10 @@ public class RoleService extends EntityService<Role, RoleView> {
 		this.permissionRepository = permissionRepository;
 	}
 
-	public Page<Role> findAllByNameUsingSpecs(String name, Pageable page) {
-		return this.repository.findAll(
-				where(RoleSpecifications.displayNameContains(name))
-						.and(RoleSpecifications.isNotDeleted())
-						.and(not(RoleSpecifications.isAdmin()))
-				, page
-		);
+	@Override
+	public Page<Role> findAllUsingSpecs(Pageable page) {
+		return this.repository.findAll(where(not(RoleSpecifications.isAdmin()))
+						.and(RoleSpecifications.isNotDeleted()), page);
 	}
 
 	@Override

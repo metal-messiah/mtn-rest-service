@@ -153,10 +153,10 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 
 	public Integer getStoreListCount() {
 		return this.storeListCount;
-
 	}
 
-	public void setStoreListCount(Store store) {
-		this.storeListCount = store.getStoreLists().size();
+	public void setStoreListCount(Integer count) {
+		this.storeListCount = count;
 	}
+	
 }

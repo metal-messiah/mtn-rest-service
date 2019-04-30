@@ -21,52 +21,65 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({ResourceNotFoundException.class})
+    @ExceptionHandler({ ResourceNotFoundException.class })
     public ResponseEntity resourceNotFound(ResourceNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({EntityNotFoundException.class})
+    @ExceptionHandler({ EntityNotFoundException.class })
     public ResponseEntity entityNotFound(EntityNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({IllegalArgumentException.class})
+    @ExceptionHandler({ IllegalArgumentException.class })
     public ResponseEntity badRequest(IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, e.getMessage()));
+        e.printStackTrace();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, e.getMessage()));
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(PropertyReferenceException.class)
-//    public ResponseEntity badSortParameter(PropertyReferenceException e) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, String.format("'%s' is not a valid sort value", e.getPropertyName())));
-//    }
-//
-//    @ResponseStatus(HttpStatus.CONFLICT)
-//    @ExceptionHandler(VersionConflictException.class)
-//    public ResponseEntity conflict(VersionConflictException e) {
-//        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ConflictErrorResponseView(e.getObject()));
-//    }
-//
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    @ExceptionHandler({SecurityException.class, AccessDeniedException.class})
-//    public void notAuthorized() {
-//    }
+    // @ResponseStatus(HttpStatus.BAD_REQUEST)
+    // @ExceptionHandler(PropertyReferenceException.class)
+    // public ResponseEntity badSortParameter(PropertyReferenceException e) {
+    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new
+    // SimpleErrorResponseView(HttpStatus.BAD_REQUEST, String.format("'%s' is not a
+    // valid sort value", e.getPropertyName())));
+    // }
+    //
+    // @ResponseStatus(HttpStatus.CONFLICT)
+    // @ExceptionHandler(VersionConflictException.class)
+    // public ResponseEntity conflict(VersionConflictException e) {
+    // return ResponseEntity.status(HttpStatus.CONFLICT).body(new
+    // ConflictErrorResponseView(e.getObject()));
+    // }
+    //
+    // @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    // @ExceptionHandler({SecurityException.class, AccessDeniedException.class})
+    // public void notAuthorized() {
+    // }
 
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity internalServerError(HttpServletRequest req, Exception e) throws Exception {
-//        //Allow annotated exceptions to be handled by Spring
-//        if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
-//            throw e;
-//        }
-//
-//        logger.error(String.format("UNEXPECTED EXCEPTION - %s", getCorrelationId(req)), e);
-//
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new SimpleErrorResponseView(HttpStatus.INTERNAL_SERVER_ERROR, "An Unexpected Error Occurred"));
-//    }
+    // @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    // @ExceptionHandler(Exception.class)
+    // public ResponseEntity internalServerError(HttpServletRequest req, Exception
+    // e) throws Exception {
+    // //Allow annotated exceptions to be handled by Spring
+    // if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) !=
+    // null) {
+    // throw e;
+    // }
+    //
+    // logger.error(String.format("UNEXPECTED EXCEPTION - %s",
+    // getCorrelationId(req)), e);
+    //
+    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new
+    // SimpleErrorResponseView(HttpStatus.INTERNAL_SERVER_ERROR, "An Unexpected
+    // Error Occurred"));
+    // }
 
     ////////////////////////////////
 

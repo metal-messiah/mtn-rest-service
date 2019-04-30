@@ -2,7 +2,11 @@ package com.mtn.service;
 
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.simpleView.SiteMarker;
+import com.mtn.model.simpleView.StoreMarker;
 import com.mtn.model.view.SiteView;
 import com.mtn.repository.SiteRepository;
 import com.mtn.repository.specification.SiteSpecifications;
@@ -18,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -26,12 +32,14 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 public class SiteService extends EntityService<Site, SiteView> {
 
 	private final UserProfileService userProfileService;
+	private final StoreListService storeListService;
 
 	@Autowired
 	public SiteService(SecurityService securityService, SiteRepository repository, SiteValidator validator,
-			UserProfileService userProfileService) {
+			UserProfileService userProfileService, StoreListService storeListService) {
 		super(securityService, repository, validator, Site::new);
 		this.userProfileService = userProfileService;
+		this.storeListService = storeListService;
 	}
 
 	public Page<Site> findAllInRadius(Pageable page, Float latitude, Float longitude, Float radiusMeters) {

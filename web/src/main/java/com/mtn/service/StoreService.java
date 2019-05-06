@@ -84,7 +84,7 @@ public class StoreService extends EntityService<Store, StoreView> {
 	public Store updateOneBanner(Integer storeId, Banner banner) {
 		Store store = findOne(storeId);
 		store.setBanner(banner);
-		return store;
+		return repository.save(store);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class StoreService extends EntityService<Store, StoreView> {
 		store.setAreaIsEstimate(request.getAreaIsEstimate());
 		store.setStoreIsOpen24(request.getStoreIsOpen24());
 		store.setNaturalFoodsAreIntegrated(request.getNaturalFoodsAreIntegrated());
-		store.setFloating((request.getFloating()));
+		store.setFloating(request.getFloating());
 	}
 
 	@Override

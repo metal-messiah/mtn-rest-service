@@ -2,7 +2,9 @@ package com.mtn.controller;
 
 import com.mtn.correlation.CorrelationIdFilter;
 import com.mtn.correlation.CustomHeadersEnabledServletRequest;
+import com.mtn.exception.VersionConflictException;
 import com.mtn.model.simpleView.SimpleErrorResponseView;
+import com.mtn.model.view.ConflictErrorResponseView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.config.ResourceNotFoundException;
@@ -19,6 +21,12 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(VersionConflictException.class)
+    public ResponseEntity conflict(final VersionConflictException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ConflictErrorResponseView());
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({ResourceNotFoundException.class})
@@ -43,13 +51,7 @@ public class GlobalExceptionHandler {
 //    public ResponseEntity badSortParameter(PropertyReferenceException e) {
 //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, String.format("'%s' is not a valid sort value", e.getPropertyName())));
 //    }
-//
-//    @ResponseStatus(HttpStatus.CONFLICT)
-//    @ExceptionHandler(VersionConflictException.class)
-//    public ResponseEntity conflict(VersionConflictException e) {
-//        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ConflictErrorResponseView(e.getObject()));
-//    }
-//
+
 //    @ResponseStatus(HttpStatus.UNAUTHORIZED)
 //    @ExceptionHandler({SecurityException.class, AccessDeniedException.class})
 //    public void notAuthorized() {

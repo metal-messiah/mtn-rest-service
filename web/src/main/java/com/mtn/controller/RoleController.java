@@ -4,15 +4,14 @@ import com.mtn.model.domain.Role;
 import com.mtn.model.simpleView.SimpleRoleView;
 import com.mtn.model.view.RoleView;
 import com.mtn.service.RoleService;
-import org.apache.commons.lang3.StringUtils;
+import com.mtn.util.MtnLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -28,6 +27,14 @@ public class RoleController extends CrudController<Role, RoleView> {
     public ResponseEntity findAll(Pageable page) {
         Page<Role> domainModels = this.entityService.findAllUsingSpecs(page);
         return ResponseEntity.ok(domainModels.map(SimpleRoleView::new));
+    }
+
+    @PutMapping("/{roleId}/permissions")
+    public ResponseEntity<RoleView> updatePermissions(@PathVariable Integer roleId,
+                                                      @RequestBody List<Integer> permissionIds) {
+        Role role = ((RoleService) this.entityService).updatePermissions(roleId, permissionIds);
+        MtnLogger.info(permissionIds.toString());
+        return ResponseEntity.ok(new RoleView(role));
     }
 
 }

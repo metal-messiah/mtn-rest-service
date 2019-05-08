@@ -47,7 +47,9 @@ public class ProjectView extends AuditingEntityView {
         this.legacyProjectId = project.getLegacyProjectId();
         this.models = project.getModels().stream().filter(model -> model.getDeletedDate() == null)
                 .map(SimpleStoreModelView::new).collect(Collectors.toList());
-        this.updatedStores = new SimpleStoreListView(project.getUpdatedStores());
+        if (project.getUpdatedStores() != null) {
+            this.updatedStores = new SimpleStoreListView(project.getUpdatedStores());
+        }
     }
 
     public String getProjectName() {

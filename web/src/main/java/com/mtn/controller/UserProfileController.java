@@ -35,7 +35,6 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
     @PostMapping(path = "/{id}/subscribed-store-lists/{sId}")
     public ResponseEntity subscribeToStoreList(@PathVariable("id") Integer userId,
             @PathVariable("sId") Integer storeListId) {
-        // StoreList storeList = UserProfileService.addOne(request);
         UserProfile userProfile = ((UserProfileService) this.entityService).subscribeToStoreListById(userId,
                 storeListId);
         return ResponseEntity.ok(new SimpleUserProfileView(userProfile));
@@ -44,7 +43,6 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
     @DeleteMapping(path = "/{id}/subscribed-store-lists/{sId}")
     public ResponseEntity unsubscribeToStoreList(@PathVariable("id") Integer userId,
             @PathVariable("sId") Integer storeListId) {
-        // StoreList storeList = UserProfileService.addOne(request);
         UserProfile userProfile = ((UserProfileService) this.entityService).unsubscribeToStoreListById(userId,
                 storeListId);
         return ResponseEntity.ok(new SimpleUserProfileView(userProfile));

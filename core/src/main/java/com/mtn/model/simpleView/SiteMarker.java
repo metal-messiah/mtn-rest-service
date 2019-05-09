@@ -2,6 +2,7 @@ package com.mtn.model.simpleView;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mtn.model.domain.Site;
+import com.mtn.model.domain.UserProfile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +15,7 @@ public class SiteMarker {
 	private Float latitude;
 	private Float longitude;
 	private Integer assigneeId;
+	private String assigneeName;
 	private Boolean duplicate;
 	private Boolean backfilledNonGrocery;
 	private LocalDateTime updatedDate;
@@ -24,7 +26,9 @@ public class SiteMarker {
 		this.latitude = site.getLatitude();
 		this.longitude = site.getLongitude();
 		if (site.getAssignee() != null) {
-			this.assigneeId = site.getAssignee().getId();
+			UserProfile assignee = site.getAssignee();
+			this.assigneeId = assignee.getId();
+			this.assigneeName = assignee.getFirstName() + " " + assignee.getLastName();
 		}
 		this.duplicate = site.getDuplicate();
 		this.backfilledNonGrocery = site.getBackfilledNonGrocery();
@@ -37,9 +41,8 @@ public class SiteMarker {
 			}
 		});
 
-		this.stores = site.getStores().stream()
-				.filter(store -> store.getDeletedDate() == null)
-				.map(StoreMarker::new).collect(Collectors.toList());
+		this.stores = site.getStores().stream().filter(store -> store.getDeletedDate() == null).map(StoreMarker::new)
+				.collect(Collectors.toList());
 	}
 
 	public Integer getId() {
@@ -72,6 +75,14 @@ public class SiteMarker {
 
 	public void setAssigneeId(Integer assigneeId) {
 		this.assigneeId = assigneeId;
+	}
+
+	public String getAssigneeName() {
+		return assigneeName;
+	}
+
+	public void setAssigneeName(String assigneeName) {
+		this.assigneeName = assigneeName;
 	}
 
 	public Boolean getDuplicate() {

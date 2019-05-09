@@ -40,6 +40,7 @@ public class UserProfileView extends AuditingEntityView {
         if (userProfile.getRole() != null) {
             this.role = new SimpleRoleView(userProfile.getRole());
         }
+    }
 
     public String getEmail() {
         return email;

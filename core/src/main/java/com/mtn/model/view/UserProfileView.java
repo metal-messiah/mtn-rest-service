@@ -19,9 +19,6 @@ public class UserProfileView extends AuditingEntityView {
     private String lastName;
     private String phoneNumber;
 
-    // private List<SimpleStoreListView> subscribedStoreLists = new ArrayList<>();;
-    // private List<SimpleStoreListView> createdStoreLists = new ArrayList<>();;
-
     private SimpleGroupView group;
     private SimpleRoleView role;
 
@@ -43,37 +40,6 @@ public class UserProfileView extends AuditingEntityView {
         if (userProfile.getRole() != null) {
             this.role = new SimpleRoleView(userProfile.getRole());
         }
-
-        // if (userProfile.getSubscribedStoreLists() != null) {
-        // this.subscribedStoreLists = userProfile.getSubscribedStoreLists().stream()
-        // .filter(sl -> sl.getDeletedDate() == null).map(SimpleStoreListView::new)
-        // .collect(Collectors.toList());
-        // }
-
-        // if (userProfile.getCreatedStoreLists() != null) {
-        // this.createdStoreLists = userProfile.getCreatedStoreLists().stream()
-        // .filter(sl -> sl.getDeletedDate() == null).map(SimpleStoreListView::new)
-        // .collect(Collectors.toList());
-        // }
-    }
-
-    // public List<SimpleStoreListView> getSubscribedStoreLists() {
-    // return this.subscribedStoreLists;
-    // }
-
-    // public void setSubscribedStoreLists(List<SimpleStoreListView>
-    // subscribedStoreLists) {
-    // this.subscribedStoreLists = subscribedStoreLists;
-    // }
-
-    // public List<SimpleStoreListView> getCreatedStoreLists() {
-    // return this.createdStoreLists;
-    // }
-
-    // public void setCreatedStoreLists(List<SimpleStoreListView> createdStoreLists)
-    // {
-    // this.createdStoreLists = createdStoreLists;
-    // }
 
     public String getEmail() {
         return email;

@@ -169,6 +169,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/resource-quota/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/resource-quota/**").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/resource-quota/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/site-wise/**").authenticated()
                 .anyRequest().denyAll();
     }
 

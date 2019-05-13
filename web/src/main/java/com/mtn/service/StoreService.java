@@ -11,6 +11,8 @@ import com.mtn.repository.StoreRepository;
 import com.mtn.repository.specification.StoreSpecifications;
 import com.mtn.validators.StoreValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.data.jpa.domain.Specifications.not;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
@@ -41,6 +44,13 @@ public class StoreService extends EntityService<Store, StoreView> {
 		Specifications<Store> spec = where(StoreSpecifications.isNotDeleted());
 		spec = spec.and(StoreSpecifications.idIn(storeIds));
 		return this.repository.findAll(spec);
+	}
+
+	public Page<Store> findAllActiveAndFuture(Pageable pageable) {
+		Specifications<Store> spec = where(not(StoreSpecifications.storeTypeEquals(StoreType.HISTORICAL)));
+		spec = spec.and(StoreSpecifications.isNotDeleted());
+		spec = spec.and(not(StoreSpecifications.isFloat()));
+		return this.repository.findAll(spec, pageable);
 	}
 
 	public Store createNewStoreForSite(Site site) {

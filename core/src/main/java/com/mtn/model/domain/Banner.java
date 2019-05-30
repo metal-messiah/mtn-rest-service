@@ -6,11 +6,11 @@ import java.util.List;
 
 @Entity
 @Table
-@AttributeOverride(name="id", column=@Column(name="banner_id"))
+@AttributeOverride(name = "id", column = @Column(name = "banner_id"))
 public class Banner extends AuditingEntity {
 
     private String bannerName;
-    private Boolean isHistorical;
+    private Boolean historical;
     private String defaultStoreFit;
     private Integer defaultSalesArea;
     private String logoFileName;
@@ -39,11 +39,11 @@ public class Banner extends AuditingEntity {
 
     @Column(name = "is_historical")
     public Boolean getHistorical() {
-        return isHistorical;
+        return historical;
     }
 
     public void setHistorical(Boolean historical) {
-        isHistorical = historical;
+        this.historical = historical;
     }
 
     public String getDefaultStoreFit() {

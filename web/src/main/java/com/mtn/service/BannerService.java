@@ -20,10 +20,8 @@ public class BannerService extends EntityService<Banner, BannerView> {
 	private final StoreService storeService;
 
 	@Autowired
-	public BannerService(SecurityService securityService,
-						 BannerRepository repository,
-						 BannerValidator validator,
-						 StoreService storeService) {
+	public BannerService(SecurityService securityService, BannerRepository repository, BannerValidator validator,
+			StoreService storeService) {
 		super(securityService, repository, validator, Banner::new);
 		this.storeService = storeService;
 	}

@@ -50,23 +50,20 @@ public class StoreController extends CrudController<Store, StoreView> {
 		this.mergeService = mergeService;
 	}
 
-	@GetMapping(params = {"ids"})
+	@GetMapping(params = { "ids" })
 	public ResponseEntity findListByIds(@RequestParam(value = "ids") List<Integer> ids,
-										@RequestParam(value = "full-obj", required = false, defaultValue = "false") Boolean full) {
+			@RequestParam(value = "full-obj", required = false, defaultValue = "false") Boolean full) {
 		List<Store> stores = ((StoreService) this.entityService).findAllByIdsUsingSpecs(ids);
-		if(full) {
+		if (full) {
 			return ResponseEntity.ok(stores.stream().map(StoreView::new).collect(Collectors.toList()));
 		} else {
 			return ResponseEntity.ok(stores.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 		}
 	}
 
-	@GetMapping(params = {"north", "south", "east", "west"})
-	public ResponseEntity findAllInBounds(
-			@RequestParam("north") Float north,
-			@RequestParam("south") Float south,
-			@RequestParam("east") Float east,
-			@RequestParam("west") Float west,
+	@GetMapping(params = { "north", "south", "east", "west" })
+	public ResponseEntity findAllInBounds(@RequestParam("north") Float north, @RequestParam("south") Float south,
+			@RequestParam("east") Float east, @RequestParam("west") Float west,
 			@RequestParam("store_types") List<StoreType> storeTypes,
 			@RequestParam(value = "include_project_ids", required = false) boolean includeProjectIds) {
 		List<Site> sites = siteService.findAllInBoundsUsingSpecs(north, south, east, west);
@@ -79,7 +76,8 @@ public class StoreController extends CrudController<Store, StoreView> {
 		List<Store> domainModels = stores.stream().filter(store -> store.getDeletedDate() == null && storeTypes.contains(store.getStoreType())).collect(Collectors.toList());
 
 		if (includeProjectIds) {
-			return ResponseEntity.ok(domainModels.stream().map(SimpleStoreViewWithProjects::new).collect(Collectors.toList()));
+			return ResponseEntity
+					.ok(domainModels.stream().map(SimpleStoreViewWithProjects::new).collect(Collectors.toList()));
 		} else {
 			return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 		}
@@ -98,14 +96,14 @@ public class StoreController extends CrudController<Store, StoreView> {
 	}
 
 	@PostMapping(value = "/{id}/store-casings")
-	public ResponseEntity createOneStoreCasingForStore(
-			@PathVariable("id") Integer storeId,
+	public ResponseEntity createOneStoreCasingForStore(@PathVariable("id") Integer storeId,
 			@RequestBody StoreCasingView request) {
 		if (request.getStoreSurvey() != null) {
 			throw new IllegalArgumentException("Do not include store survey. Will be provided by web service");
 		}
 		if (request.getShoppingCenterCasing() != null) {
-			throw new IllegalArgumentException("Do not include shopping center casing. Will be provided by web service");
+			throw new IllegalArgumentException(
+					"Do not include shopping center casing. Will be provided by web service");
 		}
 		Store store = this.entityService.findOneUsingSpecs(storeId);
 
@@ -128,7 +126,8 @@ public class StoreController extends CrudController<Store, StoreView> {
 	}
 
 	@PostMapping(value = "/{id}/store-surveys")
-	public ResponseEntity addOneStoreSurveyToStore(@PathVariable("id") Integer storeId, @RequestBody StoreSurveyView request) {
+	public ResponseEntity addOneStoreSurveyToStore(@PathVariable("id") Integer storeId,
+			@RequestBody StoreSurveyView request) {
 		Store store = this.entityService.findOneUsingSpecs(storeId);
 		StoreSurvey survey = storeSurveyService.addOneToStore(request, store);
 		return ResponseEntity.ok(new StoreSurveyView(survey));
@@ -147,21 +146,24 @@ public class StoreController extends CrudController<Store, StoreView> {
 	}
 
 	@PutMapping(value = "/{storeId}/banner/{bannerId}")
-	public ResponseEntity updateOneBanner(@PathVariable("storeId") Integer storeId, @PathVariable("bannerId") Integer bannerId) {
+	public ResponseEntity updateOneBanner(@PathVariable("storeId") Integer storeId,
+			@PathVariable("bannerId") Integer bannerId) {
 		Banner banner = bannerService.findOneUsingSpecs(bannerId);
 		Store domainModel = ((StoreService) this.entityService).updateOneBanner(storeId, banner);
 		return ResponseEntity.ok(new StoreView(domainModel));
 	}
 
 	@PostMapping(value = "/{id}/store-statuses")
-	public ResponseEntity addOneStoreStatusToStore(@PathVariable("id") Integer storeId, @RequestBody StoreStatusView request) {
+	public ResponseEntity addOneStoreStatusToStore(@PathVariable("id") Integer storeId,
+			@RequestBody StoreStatusView request) {
 		Store store = this.entityService.findOneUsingSpecs(storeId);
 		storeStatusService.addOneToStore(request, store);
 		return ResponseEntity.ok(new StoreView(store));
 	}
 
-	@PutMapping(value = "{storeId}", params = {"is-float"})
-	public ResponseEntity updateIsDuplicate(@PathVariable("storeId") Integer storeId, @RequestParam("is-float") Boolean isFloat) {
+	@PutMapping(value = "{storeId}", params = { "is-float" })
+	public ResponseEntity updateIsDuplicate(@PathVariable("storeId") Integer storeId,
+			@RequestParam("is-float") Boolean isFloat) {
 		Store store = this.entityService.findOneUsingSpecs(storeId);
 		store.setFloating(isFloat);
 		StoreView request = new StoreView(store);
@@ -182,7 +184,8 @@ public class StoreController extends CrudController<Store, StoreView> {
 	}
 
 	@PostMapping(value = "/{id}/store-volumes")
-	public ResponseEntity addOneStoreVolumeToStore(@PathVariable("id") Integer storeId, @RequestBody StoreVolumeView request) {
+	public ResponseEntity addOneStoreVolumeToStore(@PathVariable("id") Integer storeId,
+			@RequestBody StoreVolumeView request) {
 		Store store = this.entityService.findOneUsingSpecs(storeId);
 		volumeService.addOneToStore(request, store);
 		return ResponseEntity.ok(new StoreView(store));
@@ -199,7 +202,8 @@ public class StoreController extends CrudController<Store, StoreView> {
 	public ResponseEntity<List<SimpleSiteView>> assignToUser(@RequestBody List<Integer> storeIds,
 															 @RequestParam(value = "user-id", required = false) Integer userId) {
 		List<Store> stores = ((StoreService) this.entityService).findAllByIdsUsingSpecs(storeIds);
-		List<Integer> siteIds = stores.stream().map(store -> store.getSite().getId()).distinct().collect(Collectors.toList());
+		List<Integer> siteIds = stores.stream().map(store -> store.getSite().getId()).distinct()
+				.collect(Collectors.toList());
 		List<Site> sites = this.siteService.assignSitesToUser(siteIds, userId);
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}

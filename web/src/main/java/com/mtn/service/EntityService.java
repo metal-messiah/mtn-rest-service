@@ -24,14 +24,13 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 	protected final EntityValidator<T, V> validator;
 	private final Supplier<T> supplier;
 
-	public EntityService(SecurityService securityService,
-						 EntityRepository<T> repository,
-						 EntityValidator<T, V> validator,
-						 Supplier<T> supplier) {
+	public EntityService(SecurityService securityService, EntityRepository<T> repository,
+			EntityValidator<T, V> validator, Supplier<T> supplier) {
 		this.securityService = securityService;
 		this.repository = repository;
 		this.validator = validator;
 		this.supplier = supplier;
+
 	}
 
 	public Page<T> findAll(Pageable page) {
@@ -39,16 +38,11 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 	}
 
 	public List<T> findAllUsingSpecs() {
-		return this.repository.findAll(
-				where(AuditingEntitySpecifications.isNotDeleted())
-		);
+		return this.repository.findAll(where(AuditingEntitySpecifications.isNotDeleted()));
 	}
 
 	public Page<T> findAllUsingSpecs(Pageable page) {
-		return this.repository.findAll(
-				where(AuditingEntitySpecifications.isNotDeleted()),
-				page
-		);
+		return this.repository.findAll(where(AuditingEntitySpecifications.isNotDeleted()), page);
 	}
 
 	public T findOne(Integer id) {
@@ -61,8 +55,7 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 
 	public T findOneUsingSpecs(Integer id) {
 		T object = this.repository.findOne(
-				where(AuditingEntitySpecifications.<T>idEquals(id))
-						.and(AuditingEntitySpecifications.isNotDeleted()));
+				where(AuditingEntitySpecifications.<T>idEquals(id)).and(AuditingEntitySpecifications.isNotDeleted()));
 		if (object == null) {
 			throw new EntityNotFoundException();
 		}
@@ -117,6 +110,5 @@ public abstract class EntityService<T extends AuditingEntity, V extends Auditing
 	protected abstract void setEntityAttributesFromRequest(T entity, V request);
 
 	protected abstract void handleAssociationsOnDeletion(T existing);
-
 
 }

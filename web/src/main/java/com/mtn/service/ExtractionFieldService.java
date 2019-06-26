@@ -11,9 +11,8 @@ import org.springframework.stereotype.Service;
 public class ExtractionFieldService extends EntityService<ExtractionField, ExtractionFieldView> {
 
 	@Autowired
-	public ExtractionFieldService(SecurityService securityService,
-								  ExtractionFieldRepository repository,
-								  ExtractionFieldValidator validator) {
+	public ExtractionFieldService(SecurityService securityService, ExtractionFieldRepository repository,
+			ExtractionFieldValidator validator) {
 		super(securityService, repository, validator, ExtractionField::new);
 	}
 
@@ -23,6 +22,7 @@ public class ExtractionFieldService extends EntityService<ExtractionField, Extra
 		entity.setFieldMapping(request.getFieldMapping());
 		entity.setHeader(request.getHeader());
 		entity.setExtractionDataType(request.getExtractionDataType());
+
 	}
 
 	@Override

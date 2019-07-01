@@ -19,14 +19,18 @@ public class FmtProjectList extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		List<Project> projects = (List<Project>) o;
-		List<String> projectNames = projects.stream()
-				.map(Project::getProjectName)
-				.sorted()
-				.collect(Collectors.toList());
-		if (projectNames.size() == 1) {
-			return projectNames.get(0);
+		if (o != null) {
+			List<Project> projects = (List<Project>) o;
+			List<String> projectNames = projects.stream()
+					.map(Project::getProjectName)
+					.sorted()
+					.collect(Collectors.toList());
+			if (projectNames.size() == 1) {
+				return projectNames.get(0);
+			}
+			return projectNames;
+		} else {
+			return null;
 		}
-		return projectNames;
 	}
 }

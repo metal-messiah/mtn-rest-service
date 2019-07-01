@@ -53,6 +53,14 @@ public class ExtractionController {
 						.max(Comparator.comparing(StoreCasing::getCasingDate)).orElse(null))
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
+
+		// Add a blank casing to allow Dozer to get necessary data
+		stores.stream().filter(st -> st.getCasings().size() == 0).forEach(st -> {
+			StoreCasing tempCasing = new StoreCasing();
+			tempCasing.setStore(st);
+			casings.add(tempCasing);
+		});
+
 		download(response, casings, fieldSetId);
 	}
 
@@ -69,7 +77,6 @@ public class ExtractionController {
 
 		response.setContentType("text/csv");
 
-		// creates mock data
 		String headerKey = "Content-Disposition";
 		String headerValue = String.format("attachment; filename=\"%s\"", csvFileName);
 		response.setHeader(headerKey, headerValue);

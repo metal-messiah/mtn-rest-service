@@ -20,16 +20,18 @@ public class SimpleBannerView extends SimpleAuditingEntityView {
         this.bannerName = banner.getBannerName();
         this.logoFileName = banner.getLogoFileName();
         Company company = banner.getCompany();
-        this.companyName = company.getCompanyName();
-        this.getHighestParentCompanyName(company);
+        if (company != null) {
+            this.companyName = company.getCompanyName();
+            this.parentCompanyName = this.getHighestParentCompanyName(company);
+        }
     }
 
-    private void getHighestParentCompanyName(Company company) {
+    private String getHighestParentCompanyName(Company company) {
         Company parentCompany = company.getParentCompany();
         if (parentCompany == null) {
-            this.parentCompanyName = company.getCompanyName();
+            return company.getCompanyName();
         } else {
-            this.getHighestParentCompanyName(parentCompany);
+            return this.getHighestParentCompanyName(parentCompany);
         }
     }
 

@@ -73,6 +73,7 @@ public class StoreService extends EntityService<Store, StoreView> {
 		}
 
 		store.setSite(site);
+
 		return this.repository.save(store);
 	}
 

@@ -14,4 +14,5 @@ public class RoleSpecifications extends AuditingEntitySpecifications {
 	public static Specification<Role> isAdmin() {
 		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(Role_.id), 1);
 	}
+
 }

@@ -1,65 +1,55 @@
 package com.mtn.service;
 
+import com.mtn.constant.StoreListSearchType;
 import com.mtn.model.domain.Store;
-import com.mtn.model.domain.Boundary;
-import com.mtn.model.domain.Project;
-import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.domain.StoreList;
-import com.mtn.model.domain.UserProfile;
-import com.mtn.model.view.ProjectView;
 import com.mtn.model.view.StoreListView;
-import com.mtn.model.simpleView.SimpleStoreListView;
-import com.mtn.repository.ProjectRepository;
 import com.mtn.repository.StoreListRepository;
-import com.mtn.repository.specification.ProjectSpecifications;
 import com.mtn.repository.specification.StoreListSpecifications;
-import com.mtn.validators.ProjectValidator;
 import com.mtn.validators.StoreListValidator;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import static org.springframework.data.jpa.domain.Specifications.not;
-import static org.springframework.data.jpa.domain.Specifications.where;
 
-import com.mtn.constant.StoreListSearchType;
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 public class StoreListService extends EntityService<StoreList, StoreListView> {
-	StoreService storeService;
-	UserProfileService userProfileService;
+
+	private final StoreService storeService;
 
 	@Autowired
-	public StoreListService(SecurityService securityService, StoreListRepository repository,
-			StoreListValidator validator, StoreService storeService, UserProfileService userProfileService) {
+	public StoreListService(SecurityService securityService,
+							StoreListRepository repository,
+							StoreListValidator validator,
+							StoreService storeService) {
 		super(securityService, repository, validator, StoreList::new);
 		this.storeService = storeService;
-		this.userProfileService = userProfileService;
 	}
 
-	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page, Integer createdById, List<Integer> subscriberIds,
-			List<Integer> includingStoreIds, List<Integer> excludingStoreIds, StoreListSearchType searchType) {
+	/**
+	 * Currently finds only those lists which belong to the current user and which are not deleted.
+	 * TODO Build in support for subscription to other user's lists
+	 *
+	 * @param page A pageable
+	 * @param includingStoreIds Returned lists will be those that include Any|All of these store ids according to the search type
+	 * @param excludingStoreIds Returned lists will be those that exclude Any|All of these store ids according to the search type
+	 * @param searchType Specifies criteria if ANY or ALL ids must be included/excluded
+	 * @return A page of store lists
+	 */
+	public Page<StoreList> findAllByQueryUsingSpecs(Pageable page,
+													List<Integer> includingStoreIds,
+													List<Integer> excludingStoreIds,
+													StoreListSearchType searchType) {
 		Specifications<StoreList> spec = where(StoreListSpecifications.isNotDeleted());
 
-		if (createdById != null) {
-			spec = spec.and(StoreListSpecifications.createdByEquals(createdById));
-		}
-
-		if (subscriberIds != null) {
-			List<UserProfile> users = this.userProfileService.findAllByIdsUsingSpecs(subscriberIds);
-			if (searchType == StoreListSearchType.ANY) {
-				spec = spec.and(StoreListSpecifications.getStoreListsWhereAnySubscriberIsMember(users));
-			} else {
-				spec = spec.and(StoreListSpecifications.getStoreListsWhereAllSubscribersAreMembers(users));
-			}
-		}
+		spec = spec.and(StoreListSpecifications.createdByEquals(securityService.getCurrentUser().getId()));
+		// TODO support subscriptions to other user's lists
 
 		if (includingStoreIds != null) {
 			List<Store> includedStores = this.storeService.findAllByIdsUsingSpecs(includingStoreIds);
@@ -91,9 +81,7 @@ public class StoreListService extends EntityService<StoreList, StoreListView> {
 		List<Store> storeListStores = storeList.getStores();
 		List<Store> stores = this.storeService.findAllByIdsUsingSpecs(storeIds);
 		stores.forEach(s -> {
-			if (storeListStores.contains(s)) {
-				// do nothing
-			} else {
+			if (!storeListStores.contains(s)) {
 				storeList.addStore(s);
 			}
 		});
@@ -114,8 +102,6 @@ public class StoreListService extends EntityService<StoreList, StoreListView> {
 		stores.forEach(s -> {
 			if (storeListStores.contains(s)) {
 				storeList.removeStore(s);
-			} else {
-				// do nothing
 			}
 		});
 

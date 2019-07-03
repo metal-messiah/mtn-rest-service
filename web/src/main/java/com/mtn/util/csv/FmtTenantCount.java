@@ -18,7 +18,11 @@ public class FmtTenantCount extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		List<ShoppingCenterTenant> tenants = (List<ShoppingCenterTenant>) o;
-		return tenants.size();
+		if (o != null) {
+			List<ShoppingCenterTenant> tenants = (List<ShoppingCenterTenant>) o;
+			return tenants.size();
+		} else {
+			return null;
+		}
 	}
 }

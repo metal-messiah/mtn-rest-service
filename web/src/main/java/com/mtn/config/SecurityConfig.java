@@ -54,10 +54,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private AuthAPI authApi;
 
+	private final AuthCacheService authCacheService;
+	private final UserProfileService userProfileService;
+
 	@Autowired
-	private AuthCacheService authCacheService;
-	@Autowired
-	private UserProfileService userProfileService;
+	public SecurityConfig(AuthCacheService authCacheService, UserProfileService userProfileService) {
+		this.authCacheService = authCacheService;
+		this.userProfileService = userProfileService;
+	}
 
 	@PostConstruct
 	private void init() {

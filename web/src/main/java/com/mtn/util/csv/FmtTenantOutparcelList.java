@@ -19,11 +19,15 @@ public class FmtTenantOutparcelList extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		List<ShoppingCenterTenant> tenants = (List<ShoppingCenterTenant>) o;
-		return tenants.stream()
-				.filter(ShoppingCenterTenant::getOutparcel)
-				.map(ShoppingCenterTenant::getName)
-				.sorted()
-				.collect(Collectors.toList());
+		if (o != null) {
+			List<ShoppingCenterTenant> tenants = (List<ShoppingCenterTenant>) o;
+			return tenants.stream()
+					.filter(ShoppingCenterTenant::getOutparcel)
+					.map(ShoppingCenterTenant::getName)
+					.sorted()
+					.collect(Collectors.toList());
+		} else {
+			return null;
+		}
 	}
 }

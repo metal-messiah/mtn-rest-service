@@ -18,9 +18,13 @@ public class FmtTenantOutparcelCount extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		List<ShoppingCenterTenant> tenants = (List<ShoppingCenterTenant>) o;
-		return tenants.stream()
-				.filter(ShoppingCenterTenant::getOutparcel)
-				.count();
+		if (o != null) {
+			List<ShoppingCenterTenant> tenants = (List<ShoppingCenterTenant>) o;
+			return tenants.stream()
+					.filter(ShoppingCenterTenant::getOutparcel)
+					.count();
+		} else {
+			return null;
+		}
 	}
 }

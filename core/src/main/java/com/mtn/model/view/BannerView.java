@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class BannerView extends AuditingEntityView {
 
     private String bannerName;
-    private Boolean isHistorical;
+    private Boolean historical;
     private String defaultStoreFit;
     private Integer defaultSalesArea;
     private String logoFileName;
@@ -27,7 +27,7 @@ public class BannerView extends AuditingEntityView {
         super(banner);
 
         this.bannerName = banner.getBannerName();
-        this.isHistorical = banner.getHistorical();
+        this.historical = banner.getHistorical();
         this.defaultStoreFit = banner.getDefaultStoreFit();
         this.defaultSalesArea = banner.getDefaultSalesArea();
         this.logoFileName = banner.getLogoFileName();
@@ -36,7 +36,8 @@ public class BannerView extends AuditingEntityView {
             this.company = new CompanyView(banner.getCompany());
         }
 
-        this.stores = banner.getStores().stream().filter(store -> store.getDeletedDate() == null).map(SimpleStoreView::new).collect(Collectors.toList());
+        this.stores = banner.getStores().stream().filter(store -> store.getDeletedDate() == null)
+                .map(SimpleStoreView::new).collect(Collectors.toList());
     }
 
     public String getBannerName() {
@@ -48,7 +49,7 @@ public class BannerView extends AuditingEntityView {
     }
 
     public Boolean getHistorical() {
-        return isHistorical;
+        return historical;
     }
 
     public String getDefaultStoreFit() {

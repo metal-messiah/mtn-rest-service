@@ -1,9 +1,15 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.simpleView.SimpleGroupView;
 import com.mtn.model.simpleView.SimpleRoleView;
+import com.mtn.model.simpleView.SimpleStoreListView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserProfileView extends AuditingEntityView {

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table
-@AttributeOverride(name="id", column=@Column(name="project_id"))
+@AttributeOverride(name = "id", column = @Column(name = "project_id"))
 public class Project extends AuditingEntity {
 
     private String projectName;
@@ -27,6 +27,8 @@ public class Project extends AuditingEntity {
     private List<StoreModel> models = new ArrayList<>();
     private List<StoreCasing> storeCasings = new ArrayList<>();
     private List<ShoppingCenterCasing> shoppingCenterCasings = new ArrayList<>();
+
+    private StoreList updatedStores;
 
     public String getProjectName() {
         return projectName;
@@ -153,5 +155,15 @@ public class Project extends AuditingEntity {
 
     public void setBoundary(Boundary boundary) {
         this.boundary = boundary;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "store_list_id")
+    public StoreList getUpdatedStores() {
+        return updatedStores;
+    }
+
+    public void setUpdatedStores(StoreList storeList) {
+        this.updatedStores = storeList;
     }
 }

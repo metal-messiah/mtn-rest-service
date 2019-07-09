@@ -20,10 +20,14 @@ public class GetLatestVolumeDate extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		Store store = (Store) o;
-		Optional<StoreVolume> volume = store.getVolumes().stream()
-				.filter(storeVolume -> storeVolume.getDeletedDate() == null)
-				.max(Comparator.comparing(StoreVolume::getVolumeDate));
-		return volume.map(StoreVolume::getVolumeDate).orElse(null);
+		if (o != null) {
+			Store store = (Store) o;
+			Optional<StoreVolume> volume = store.getVolumes().stream()
+					.filter(storeVolume -> storeVolume.getDeletedDate() == null)
+					.max(Comparator.comparing(StoreVolume::getVolumeDate));
+			return volume.map(StoreVolume::getVolumeDate).orElse(null);
+		} else {
+			return null;
+		}
 	}
 }

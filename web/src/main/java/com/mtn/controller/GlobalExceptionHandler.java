@@ -20,31 +20,36 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(VersionConflictException.class)
-    public ResponseEntity conflict(final VersionConflictException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ConflictErrorResponseView());
-    }
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler(VersionConflictException.class)
+	public ResponseEntity conflict(final VersionConflictException e) {
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(new ConflictErrorResponseView());
+	}
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({ResourceNotFoundException.class})
-    public ResponseEntity resourceNotFound(ResourceNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
-    }
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler({ResourceNotFoundException.class})
+	public ResponseEntity resourceNotFound(ResourceNotFoundException e) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
+	}
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({EntityNotFoundException.class})
-    public ResponseEntity entityNotFound(EntityNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
-    }
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler({EntityNotFoundException.class})
+	public ResponseEntity entityNotFound(EntityNotFoundException e) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new SimpleErrorResponseView(HttpStatus.NOT_FOUND, e.getMessage()));
+	}
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity badRequest(IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, e.getMessage()));
-    }
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({IllegalArgumentException.class})
+	public ResponseEntity badRequest(IllegalArgumentException e) {
+		e.printStackTrace();
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new SimpleErrorResponseView(HttpStatus.BAD_REQUEST, e.getMessage()));
+	}
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    @ExceptionHandler(PropertyReferenceException.class)
@@ -57,23 +62,29 @@ public class GlobalExceptionHandler {
 //    public void notAuthorized() {
 //    }
 
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity internalServerError(HttpServletRequest req, Exception e) throws Exception {
-//        //Allow annotated exceptions to be handled by Spring
-//        if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
-//            throw e;
-//        }
-//
-//        logger.error(String.format("UNEXPECTED EXCEPTION - %s", getCorrelationId(req)), e);
-//
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new SimpleErrorResponseView(HttpStatus.INTERNAL_SERVER_ERROR, "An Unexpected Error Occurred"));
-//    }
 
-    ////////////////////////////////
+	// @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	// @ExceptionHandler(Exception.class)
+	// public ResponseEntity internalServerError(HttpServletRequest req, Exception
+	// e) throws Exception {
+	// //Allow annotated exceptions to be handled by Spring
+	// if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) !=
+	// null) {
+	// throw e;
+	// }
+	//
+	// logger.error(String.format("UNEXPECTED EXCEPTION - %s",
+	// getCorrelationId(req)), e);
+	//
+	// return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new
+	// SimpleErrorResponseView(HttpStatus.INTERNAL_SERVER_ERROR, "An Unexpected
+	// Error Occurred"));
+	// }
 
-    private String getCorrelationId(HttpServletRequest httpServletRequest) {
-        CustomHeadersEnabledServletRequest enhancedRequest = (CustomHeadersEnabledServletRequest) httpServletRequest;
-        return enhancedRequest.getHeader(CorrelationIdFilter.MTN_CORRELATION_ID_HEADER);
-    }
+	////////////////////////////////
+
+	private String getCorrelationId(HttpServletRequest httpServletRequest) {
+		CustomHeadersEnabledServletRequest enhancedRequest = (CustomHeadersEnabledServletRequest) httpServletRequest;
+		return enhancedRequest.getHeader(CorrelationIdFilter.MTN_CORRELATION_ID_HEADER);
+	}
 }

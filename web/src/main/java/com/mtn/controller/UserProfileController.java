@@ -69,4 +69,19 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
         return ResponseEntity.ok(new UserProfileView(userProfile));
     }
 
+    @PostMapping(path = "/{id}/subscribed-store-lists/{sId}")
+    public ResponseEntity subscribeToStoreList(@PathVariable("id") Integer userId,
+            @PathVariable("sId") Integer storeListId) {
+        UserProfile userProfile = ((UserProfileService) this.entityService).subscribeToStoreListById(userId,
+                storeListId);
+        return ResponseEntity.ok(new SimpleUserProfileView(userProfile));
+    }
+
+    @DeleteMapping(path = "/{id}/subscribed-store-lists/{sId}")
+    public ResponseEntity unsubscribeToStoreList(@PathVariable("id") Integer userId,
+            @PathVariable("sId") Integer storeListId) {
+        UserProfile userProfile = ((UserProfileService) this.entityService).unsubscribeToStoreListById(userId,
+                storeListId);
+        return ResponseEntity.ok(new SimpleUserProfileView(userProfile));
+    }
 }

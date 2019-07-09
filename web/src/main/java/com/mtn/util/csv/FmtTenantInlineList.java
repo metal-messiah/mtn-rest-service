@@ -19,11 +19,15 @@ public class FmtTenantInlineList extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		List<ShoppingCenterTenant> tenants = (List<ShoppingCenterTenant>) o;
-		return tenants.stream()
-				.filter(t -> !t.getOutparcel())
-				.map(ShoppingCenterTenant::getName)
-				.sorted()
-				.collect(Collectors.toList());
+		if (o != null) {
+			List<ShoppingCenterTenant> tenants = (List<ShoppingCenterTenant>) o;
+			return tenants.stream()
+					.filter(t -> !t.getOutparcel())
+					.map(ShoppingCenterTenant::getName)
+					.sorted()
+					.collect(Collectors.toList());
+		} else {
+			return null;
+		}
 	}
 }

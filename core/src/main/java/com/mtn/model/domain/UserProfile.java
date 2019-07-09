@@ -1,10 +1,12 @@
 package com.mtn.model.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
-@AttributeOverride(name="id", column=@Column(name="user_profile_id"))
+@AttributeOverride(name = "id", column = @Column(name = "user_profile_id"))
 public class UserProfile extends AuditingEntity {
 
     private String email;
@@ -15,6 +17,9 @@ public class UserProfile extends AuditingEntity {
     private Group group;
     private Role role;
     private Boundary restrictionBoundary;
+
+    private List<StoreList> subscribedStoreLists = new ArrayList<>();
+    private List<StoreList> createdStoreLists = new ArrayList<>();
 
     @PrePersist
     @PreUpdate
@@ -46,7 +51,34 @@ public class UserProfile extends AuditingEntity {
         this.lastName = lastName;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToMany(mappedBy = "subscribers")
+    public List<StoreList> getSubscribedStoreLists() {
+        return subscribedStoreLists;
+    }
+
+    public void setSubscribedStoreLists(List<StoreList> subscribedStoreLists) {
+        this.subscribedStoreLists = subscribedStoreLists;
+    }
+
+    public void addSubscribedStoreList(StoreList storeList) {
+        this.getSubscribedStoreLists().add(storeList);
+    }
+
+    public void removeSubscribedStoreList(StoreList storeList) {
+        this.getSubscribedStoreLists().removeIf(sl -> sl.getId().equals(storeList.getId()));
+    }
+
+    @OneToMany
+    @JoinColumn(name = "created_by")
+    public List<StoreList> getCreatedStoreLists() {
+        return createdStoreLists;
+    }
+
+    public void setCreatedStoreLists(List<StoreList> createdStoreLists) {
+        this.createdStoreLists = createdStoreLists;
+    }
+
+    @ManyToOne(cascade = { CascadeType.MERGE })
     @JoinColumn(name = "auth_role_id")
     public Role getRole() {
         return role;
@@ -56,7 +88,7 @@ public class UserProfile extends AuditingEntity {
         this.role = role;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne(cascade = { CascadeType.MERGE })
     @JoinColumn(name = "auth_group_id")
     public Group getGroup() {
         return group;

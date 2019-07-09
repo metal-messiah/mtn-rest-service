@@ -19,9 +19,13 @@ public class FmtAccessFrontMainCount extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		List<ShoppingCenterAccess> accesses = (List<ShoppingCenterAccess>) o;
-		return accesses.stream()
-				.filter(t -> t.getAccessType().equals(AccessType.FRONT_MAIN))
-				.count();
+		if (o != null) {
+			List<ShoppingCenterAccess> accesses = (List<ShoppingCenterAccess>) o;
+			return accesses.stream()
+					.filter(t -> t.getAccessType().equals(AccessType.FRONT_MAIN))
+					.count();
+		} else {
+			return null;
+		}
 	}
 }

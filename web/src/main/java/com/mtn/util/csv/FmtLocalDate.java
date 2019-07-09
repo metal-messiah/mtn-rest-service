@@ -18,8 +18,8 @@ public class FmtLocalDate extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		LocalDate date = (LocalDate) o;
-		if (date != null) {
+		if (o != null) {
+			LocalDate date = (LocalDate) o;
 			return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		} else {
 			return null;

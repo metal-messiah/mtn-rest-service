@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table
-@AttributeOverride(name="id", column=@Column(name="store_id"))
+@AttributeOverride(name = "id", column = @Column(name = "store_id"))
 public class Store extends AuditingEntity {
 
     private String storeName;
@@ -39,6 +39,8 @@ public class Store extends AuditingEntity {
     private List<StoreVolume> volumes = new ArrayList<>();
     private List<StoreStatus> statuses = new ArrayList<>();
     private List<StoreSource> sources = new ArrayList<>();
+
+    private List<StoreList> storeLists = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "site_id")
@@ -132,6 +134,7 @@ public class Store extends AuditingEntity {
     public void setAreaIsEstimate(Boolean areaIsEstimate) {
         this.areaIsEstimate = areaIsEstimate;
     }
+
     @Column(name = "store_is_open_24")
     public Boolean getStoreIsOpen24() {
         return storeIsOpen24;
@@ -256,4 +259,12 @@ public class Store extends AuditingEntity {
         this.validatedDate = validatedDate;
     }
 
+    @ManyToMany(mappedBy = "stores")
+    public List<StoreList> getStoreLists() {
+        return storeLists;
+    }
+
+    public void setStoreLists(List<StoreList> storeLists) {
+        this.storeLists = storeLists;
+    }
 }

@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.mtn.service.PlannedGroceryService;
 import com.mtn.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,8 @@ public class PlannedGroceryController {
 	}
 
 	@GetMapping(value = "{objectId}")
-	public ResponseEntity<String> getFeatureByObjectId(@PathVariable("objectId") String objectId) {
-		try {
-			return plannedGroceryService.getFeatureByObjectId(objectId);
-		} catch (IOException e) {
-			return ResponseEntity.notFound().build();
-		}
+	public JsonNode getFeatureByObjectId(@PathVariable("objectId") String objectId) throws IOException {
+		return plannedGroceryService.getFeatureByObjectId(objectId);
 	}
 
 }

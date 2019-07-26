@@ -2,14 +2,18 @@ package com.mtn.service;
 
 import com.mtn.model.domain.Banner;
 import com.mtn.model.domain.BannerSource;
+import com.mtn.model.domain.BannerSourceSummary;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.BannerSourceView;
 import com.mtn.repository.BannerSourceRepository;
+import com.mtn.repository.BannerSourceSummaryRepository;
 import com.mtn.repository.specification.BannerSourceSpecifications;
+import com.mtn.repository.specification.BannerSourceSummarySpecifications;
 import com.mtn.validators.BannerSourceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.lang.Boolean.parseBoolean;
+import static org.springframework.data.jpa.domain.Specifications.not;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
@@ -25,20 +30,19 @@ public class BannerSourceService extends EntityService<BannerSource, BannerSourc
 
 	private final BannerService bannerService;
 	private final UserProfileService userProfileService;
+	private final BannerSourceSummaryRepository bannerSourceSummaryRepository;
 
 	@Autowired
 	public BannerSourceService(SecurityService securityService,
 							   BannerSourceRepository repository,
 							   BannerSourceValidator validator,
 							   BannerService bannerService,
+							   BannerSourceSummaryRepository bannerSourceSummaryRepository,
 							   UserProfileService userProfileService) {
 		super(securityService, repository, validator, BannerSource::new);
 		this.bannerService = bannerService;
+		this.bannerSourceSummaryRepository = bannerSourceSummaryRepository;
 		this.userProfileService = userProfileService;
-	}
-
-	public LocalDateTime getMaxSourceEditedDate(String sourceName) {
-		return ((BannerSourceRepository) this.repository).getMaxSourceEditedDate(sourceName);
 	}
 
 	public Optional<BannerSource> findOneBySourceNativeIdUsingSpecs(String sourceName, String id) {
@@ -49,21 +53,46 @@ public class BannerSourceService extends EntityService<BannerSource, BannerSourc
 		));
 	}
 
-	public Page<BannerSource> findAllByQuery(Map<String, String> queryMap, Pageable page) {
-		Specifications<BannerSource> specs = where(BannerSourceSpecifications.isNotDeleted());
+	public Page<BannerSourceSummary> findAllSummariesByQuery(Map<String, String> queryMap, Pageable page) {
+		Specifications<BannerSourceSummary> specs = where(not(BannerSourceSummarySpecifications.isDeleted()));
 		if (queryMap.containsKey("source-name")) {
-			specs = specs.and(BannerSourceSpecifications.sourceNameEquals(queryMap.get("source-name")));
+			specs = specs.and(BannerSourceSummarySpecifications.sourceNameEquals(queryMap.get("source-name")));
 		}
 		if (queryMap.containsKey("validated")) {
 			boolean validated = parseBoolean(queryMap.get("validated"));
 			if (validated) {
-				specs = specs.and(BannerSourceSpecifications.isValidated());
+				specs = specs.and(BannerSourceSummarySpecifications.isValidated());
 			} else {
-				specs = specs.and(BannerSourceSpecifications.isNotValidated());
+				specs = specs.and(BannerSourceSummarySpecifications.isNotValidated());
 			}
 		}
 
-		return this.repository.findAll(specs, page);
+		return this.bannerSourceSummaryRepository.findAll(specs, page);
+	}
+
+	public BannerSource assignBanner(Integer bannerSourceId, Integer bannerId) {
+		BannerSource bannerSource = this.findOne(bannerSourceId);
+
+		Banner banner = this.bannerService.findOne(bannerId);
+
+		bannerSource.setBanner(banner);
+
+		UserProfile validator = this.securityService.getCurrentUser();
+		bannerSource.setValidatedBy(validator);
+		bannerSource.setValidatedDate(LocalDateTime.now());
+
+		return this.updateOne(bannerSource);
+	}
+
+	public BannerSource unassignBanner(Integer bannerSourceId) {
+		BannerSource bannerSource = this.findOne(bannerSourceId);
+
+		bannerSource.setBanner(null);
+
+		bannerSource.setValidatedBy(null);
+		bannerSource.setValidatedDate(null);
+
+		return this.updateOne(bannerSource);
 	}
 
 	@Override
@@ -76,21 +105,7 @@ public class BannerSourceService extends EntityService<BannerSource, BannerSourc
 		source.setSourceEditedDate(request.getSourceEditedDate());
 		source.setSourceDeletedDate(request.getSourceDeletedDate());
 
-		if (request.getValidatedBy() != null) {
-			UserProfile validator = userProfileService.findOneUsingSpecs(request.getValidatedBy().getId());
-			source.setValidatedBy(validator);
-			source.setValidatedDate(request.getValidatedDate());
-		} else {
-			source.setValidatedBy(null);
-			source.setValidatedDate(null);
-		}
 
-		if (request.getBanner() != null) {
-			Banner banner= bannerService.findOneUsingSpecs(request.getBanner().getId());
-			source.setBanner(banner);
-		} else {
-			source.setBanner(null);
-		}
 
 	}
 

@@ -25,6 +25,8 @@ public class StoreSourceView extends AuditingEntityView {
 	private SimpleStoreView store;
 	private SimpleBannerSourceView bannerSource;
 
+	private StoreSourceData storeSourceData;
+
 	public StoreSourceView() {
 	}
 
@@ -146,5 +148,13 @@ public class StoreSourceView extends AuditingEntityView {
 
 	public void setBannerSource(SimpleBannerSourceView bannerSource) {
 		this.bannerSource = bannerSource;
+	}
+
+	public StoreSourceData getStoreSourceData() {
+		return storeSourceData;
+	}
+
+	public void setStoreSourceData(StoreSourceData storeSourceData) {
+		this.storeSourceData = storeSourceData;
 	}
 }

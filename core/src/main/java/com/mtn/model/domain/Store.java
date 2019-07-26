@@ -25,7 +25,7 @@ public class Store extends AuditingEntity {
     private Boolean areaIsEstimate = true;
     private Boolean storeIsOpen24 = false;
     private Boolean naturalFoodsAreIntegrated = false;
-    private Boolean floating;
+    private Boolean floating = false;
     private Integer legacyLocationId;
     private UserProfile validatedBy;
     private LocalDateTime validatedDate;

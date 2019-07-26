@@ -5,11 +5,8 @@ import com.mtn.model.domain.Role;
 import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.UserProfileView;
-import com.mtn.repository.GroupRepository;
-import com.mtn.repository.RoleRepository;
 import com.mtn.repository.StoreListRepository;
 import com.mtn.repository.UserProfileRepository;
-import com.mtn.repository.specification.AuditingEntitySpecifications;
 import com.mtn.repository.specification.StoreListSpecifications;
 import com.mtn.repository.specification.UserProfileSpecifications;
 import com.mtn.validators.UserProfileValidator;
@@ -21,7 +18,6 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -29,20 +25,14 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 @Service
 public class UserProfileService extends EntityService<UserProfile, UserProfileView> {
 
-	private final GroupRepository groupRepository;
-	private final RoleRepository roleRepository;
 	private final StoreListRepository storeListRepository;
 
 	@Autowired
 	public UserProfileService(SecurityService securityService,
 							  UserProfileRepository repository,
 							  UserProfileValidator validator,
-							  GroupRepository groupRepository,
-							  RoleRepository roleRepository,
 							  StoreListRepository storeListRepository) {
 		super(securityService, repository, validator, UserProfile::new);
-		this.groupRepository = groupRepository;
-		this.roleRepository = roleRepository;
 		this.storeListRepository = storeListRepository;
 	}
 
@@ -101,12 +91,6 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		return this.repository.findAll(spec, page);
 	}
 
-	public List<UserProfile> findAllByIdsUsingSpecs(List<Integer> userProfileIds) {
-		Specifications<UserProfile> spec = where(UserProfileSpecifications.isNotDeleted());
-		spec = spec.and(UserProfileSpecifications.idIn(userProfileIds));
-		return this.repository.findAll(spec);
-	}
-
 	@Override
 	public UserProfile findOneUsingSpecs(Integer id) {
 		UserProfile userProfile = this.repository.findOne(where(UserProfileSpecifications.isNotSystemAdministrator())
@@ -134,20 +118,6 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		userProfile.setEmail(request.getEmail().toLowerCase());
 		userProfile.setFirstName(request.getFirstName());
 		userProfile.setLastName(request.getLastName());
-
-		Group group = null;
-		if (request.getGroup() != null) {
-			group = groupRepository.findOne(where(AuditingEntitySpecifications.<Group>idEquals(request.getGroup().getId()))
-					.and(AuditingEntitySpecifications.isNotDeleted()));
-		}
-		userProfile.setGroup(group);
-
-		Role role = null;
-		if (request.getRole() != null) {
-			role = roleRepository.findOne(where(AuditingEntitySpecifications.<Role>idEquals(request.getRole().getId()))
-					.and(AuditingEntitySpecifications.isNotDeleted()));
-		}
-		userProfile.setRole(role);
 	}
 
 	public UserProfile findOneByEmailUsingSpecs(String email) {
@@ -161,6 +131,18 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 						.and(UserProfileSpecifications.isNotSystemAdministrator())
 						.and(UserProfileSpecifications.isNotDeleted()),
 				page);
+	}
+
+	public UserProfile setUserRole(Integer userId, Role role) {
+		UserProfile userProfile = this.findOneUsingSpecs(userId);
+		userProfile.setRole(role);
+		return this.updateOne(userProfile);
+	}
+
+	public UserProfile setUserGroup(Integer userId, Group group) {
+		UserProfile userProfile = this.findOneUsingSpecs(userId);
+		userProfile.setGroup(group);
+		return this.updateOne(userProfile);
 	}
 
 }

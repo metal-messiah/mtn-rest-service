@@ -24,9 +24,9 @@ public class ProjectValidator extends EntityValidator<Project, ProjectView> {
 		// If another Project (different ID) with the same name already exists
 		List<Project> projectsWithName = this.projectRepository.findAllByProjectNameAndDeletedDateIsNull(request.getProjectName().toLowerCase());
 		if (projectsWithName.stream()
-				.anyMatch(group -> group.getProjectName().toLowerCase().equals(request.getProjectName().toLowerCase()) &&
-						!group.getId().equals(request.getId()))) {
-			throw new IllegalArgumentException(String.format("Group with display name '%s' already exists!", request.getProjectName()));
+				.anyMatch(project -> project.getProjectName().toLowerCase().equals(request.getProjectName().toLowerCase()) &&
+						!project.getId().equals(request.getId()))) {
+			throw new IllegalArgumentException(String.format("Project with display name '%s' already exists!", request.getProjectName()));
 		}
 	}
 

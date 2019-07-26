@@ -1,15 +1,12 @@
 package com.mtn.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value= HttpStatus.CONFLICT, reason="Object version is not up-to-date")
 public class VersionConflictException extends RuntimeException {
 
-    private Object object;
-
     public VersionConflictException(Object object) {
-        super("Object version is not up-to-date");
-        this.object = object;
     }
 
-    public Object getObject() {
-        return object;
-    }
 }

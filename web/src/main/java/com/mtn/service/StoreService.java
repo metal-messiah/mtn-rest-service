@@ -99,7 +99,7 @@ public class StoreService extends EntityService<Store, StoreView> {
 		store.setAreaIsEstimate(request.getAreaIsEstimate());
 		store.setStoreIsOpen24(request.getStoreIsOpen24());
 		store.setNaturalFoodsAreIntegrated(request.getNaturalFoodsAreIntegrated());
-		store.setFloating(request.getFloating());
+		store.setFloating(request.getFloating() != null ? request.getFloating() : false);
 	}
 
 	@Override

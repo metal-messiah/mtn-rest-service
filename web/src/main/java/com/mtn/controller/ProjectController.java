@@ -1,6 +1,8 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.*;
+import com.mtn.model.domain.Boundary;
+import com.mtn.model.domain.Project;
+import com.mtn.model.domain.Site;
 import com.mtn.model.simpleView.ProjectSummary;
 import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.view.BoundaryView;
@@ -14,10 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController

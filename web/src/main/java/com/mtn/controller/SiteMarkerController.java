@@ -28,57 +28,48 @@ public class SiteMarkerController {
 		this.siteService = siteService;
 	}
 
-	@GetMapping(params = {"north", "south", "east", "west",
-			"prev-north", "prev-south", "prev-east", "prev-west", "updated-at"})
+	@GetMapping(params = { "north", "south", "east", "west", "prev-north", "prev-south", "prev-east", "prev-west",
+			"updated-at" })
 	public ResponseEntity<List<SiteMarker>> findAllForView(@RequestParam("north") Float north,
-														   @RequestParam("south") Float south,
-														   @RequestParam("east") Float east,
-														   @RequestParam("west") Float west,
-														   @RequestParam("prev-north") Float prevNorth,
-														   @RequestParam("prev-south") Float prevSouth,
-														   @RequestParam("prev-east") Float prevEast,
-														   @RequestParam("prev-west") Float prevWest,
-														   @RequestParam("updated-at") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime updatedAt) {
-		List<Site> domainModels = this.siteService.findAllForView(north, south, east, west, prevNorth, prevSouth, prevEast, prevWest, updatedAt);
+			@RequestParam("south") Float south, @RequestParam("east") Float east, @RequestParam("west") Float west,
+			@RequestParam("prev-north") Float prevNorth, @RequestParam("prev-south") Float prevSouth,
+			@RequestParam("prev-east") Float prevEast, @RequestParam("prev-west") Float prevWest,
+			@RequestParam("updated-at") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime updatedAt) {
+		List<Site> domainModels = this.siteService.findAllForView(north, south, east, west, prevNorth, prevSouth,
+				prevEast, prevWest, updatedAt);
 		return ResponseEntity.ok(domainModels.stream().map(SiteMarker::new).collect(Collectors.toList()));
 	}
 
-	@GetMapping(params = {"north", "south", "east", "west"})
+	@GetMapping(params = { "north", "south", "east", "west" })
 	public ResponseEntity<List<SiteMarker>> findAllInBounds(@RequestParam("north") Float north,
-															@RequestParam("south") Float south,
-															@RequestParam("east") Float east,
-															@RequestParam("west") Float west) {
+			@RequestParam("south") Float south, @RequestParam("east") Float east, @RequestParam("west") Float west) {
 		List<Site> domainModels = this.siteService.findAllInBoundsUsingSpecs(north, south, east, west);
 		return ResponseEntity.ok(domainModels.stream().map(SiteMarker::new).collect(Collectors.toList()));
+
 	}
 
-
-	@GetMapping(params = {"north", "south", "east", "west", "page", "size"})
+	@GetMapping(params = { "north", "south", "east", "west", "page", "size" })
 	public ResponseEntity<Page<SiteMarker>> findAllInBounds(@RequestParam("north") Float north,
-															@RequestParam("south") Float south,
-															@RequestParam("east") Float east,
-															@RequestParam("west") Float west,
-															Pageable page) {
+			@RequestParam("south") Float south, @RequestParam("east") Float east, @RequestParam("west") Float west,
+			Pageable page) {
 		Page<Site> domainModels = this.siteService.findAllInBoundsUsingSpecs(page, north, south, east, west);
 		return ResponseEntity.ok(domainModels.map(SiteMarker::new));
 	}
 
-	@GetMapping(params = {"latitude", "longitude", "radiusMeters"})
-	public ResponseEntity<Page<SiteMarker>> findAllInRadius(Pageable page,
-															@RequestParam("latitude") Float latitude,
-															@RequestParam("longitude") Float longitude,
-															@RequestParam("radiusMeters") Float radiusMeters) {
+	@GetMapping(params = { "latitude", "longitude", "radiusMeters" })
+	public ResponseEntity<Page<SiteMarker>> findAllInRadius(Pageable page, @RequestParam("latitude") Float latitude,
+			@RequestParam("longitude") Float longitude, @RequestParam("radiusMeters") Float radiusMeters) {
 		Page<Site> sites = siteService.findAllInRadius(page, latitude, longitude, radiusMeters);
 		return ResponseEntity.ok(sites.map(SiteMarker::new));
 	}
 
-	@GetMapping(params = {"geojson"})
+	@GetMapping(params = { "geojson" })
 	public ResponseEntity<Page<SiteMarker>> findAllInGeoJson(Pageable page, @RequestParam("geojson") String geoJson) {
 		Page<Site> sites = siteService.findAllInGeoJson(page, geoJson);
 		return ResponseEntity.ok(sites.map(SiteMarker::new));
 	}
 
-	@GetMapping(params = {"site-id"})
+	@GetMapping(params = { "site-id" })
 	public ResponseEntity<SiteMarker> findBySiteId(@RequestParam("site-id") Integer siteId) {
 		Site site = this.siteService.findOneUsingSpecs(siteId);
 		return ResponseEntity.ok(new SiteMarker(site));

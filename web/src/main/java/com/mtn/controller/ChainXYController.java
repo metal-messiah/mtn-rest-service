@@ -29,9 +29,4 @@ public class ChainXYController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("store-source-record/{storeSourceId}")
-	public JsonNode getFeatureByObjectId(@PathVariable("storeSourceId") Integer storeSourceId) throws IOException {
-		return chainXYService.getChainXyLocationForStoreSource(storeSourceId);
-	}
-
 }

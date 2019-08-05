@@ -25,6 +25,8 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 	private SimpleBannerView banner;
 	private SimpleStoreVolumeView latestStoreVolume;
 
+	private Integer storeListCount;
+
 	public SimpleStoreView() {
 	}
 
@@ -47,6 +49,10 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 		this.banner = (store.getBanner() != null) ? new SimpleBannerView(store.getBanner()) : null;
 		this.latestStoreVolume = StoreUtil.getLatestVolumeAsOfDateTime(store, LocalDate.now())
 				.map(SimpleStoreVolumeView::new).orElse(null);
+
+		if (store.getStoreLists() != null) {
+			this.storeListCount = store.getStoreLists().size();
+		}
 	}
 
 	public String getStoreName() {
@@ -144,4 +150,13 @@ public class SimpleStoreView extends SimpleAuditingEntityView {
 	public void setAreaTotal(Integer areaTotal) {
 		this.areaTotal = areaTotal;
 	}
+
+	public Integer getStoreListCount() {
+		return this.storeListCount;
+	}
+
+	public void setStoreListCount(Integer count) {
+		this.storeListCount = count;
+	}
+	
 }

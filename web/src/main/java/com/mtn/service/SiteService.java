@@ -2,7 +2,11 @@ package com.mtn.service;
 
 import com.mtn.model.domain.ShoppingCenter;
 import com.mtn.model.domain.Site;
+import com.mtn.model.domain.Store;
+import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.simpleView.SiteMarker;
+import com.mtn.model.simpleView.StoreMarker;
 import com.mtn.model.view.SiteView;
 import com.mtn.repository.SiteRepository;
 import com.mtn.repository.specification.SiteSpecifications;
@@ -18,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -26,13 +32,14 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 public class SiteService extends EntityService<Site, SiteView> {
 
 	private final UserProfileService userProfileService;
+	private final StoreListService storeListService;
 
 	@Autowired
-	public SiteService(SecurityService securityService,
-					   SiteRepository repository,
-					   SiteValidator validator, UserProfileService userProfileService) {
+	public SiteService(SecurityService securityService, SiteRepository repository, SiteValidator validator,
+			UserProfileService userProfileService, StoreListService storeListService) {
 		super(securityService, repository, validator, Site::new);
 		this.userProfileService = userProfileService;
+		this.storeListService = storeListService;
 	}
 
 	public Page<Site> findAllInRadius(Pageable page, Float latitude, Float longitude, Float radiusMeters) {
@@ -50,33 +57,42 @@ public class SiteService extends EntityService<Site, SiteView> {
 		return this.repository.findAll(this.getSpecsForFindAllInGeoJson(geoJson), page);
 	}
 
+	public List<Site> findAllByIdsUsingSpecs(List<Integer> siteIds) {
+		Specifications<Site> spec = where(SiteSpecifications.isNotDeleted());
+		spec = spec.and(SiteSpecifications.idIn(siteIds));
+		return this.repository.findAll(spec);
+	}
+
 	/**
-	 * Finds all sites that are in the new bounding box (that are not in the previous bounding box, PLUS all sites
-	 * that are in the intersection of the new and previous bounding boxes that have been updated since the provided
+	 * Finds all sites that are in the new bounding box (that are not in the
+	 * previous bounding box, PLUS all sites that are in the intersection of the new
+	 * and previous bounding boxes that have been updated since the provided
 	 * updatedAt LocalDateTime
 	 *
-	 * @param north boundary of new view
-	 * @param south boundary of new view
-	 * @param east boundary of new view
-	 * @param west boundary of new view
+	 * @param north     boundary of new view
+	 * @param south     boundary of new view
+	 * @param east      boundary of new view
+	 * @param west      boundary of new view
 	 * @param prevNorth boundary of previous view
 	 * @param prevSouth boundary of previous view
-	 * @param prevEast boundary of previous view
-	 * @param prevWest boundary of previous view
+	 * @param prevEast  boundary of previous view
+	 * @param prevWest  boundary of previous view
 	 * @param updatedAt date of previous pull
-	 * @return a list of sites including ones in new view and updated ones in old intersecting view
+	 * @return a list of sites including ones in new view and updated ones in old
+	 *         intersecting view
 	 */
-	public List<Site> findAllForView(Float north, Float south, Float east, Float west,
-									 Float prevNorth, Float prevSouth, Float prevEast, Float prevWest,
-									 ZonedDateTime updatedAt) {
+	public List<Site> findAllForView(Float north, Float south, Float east, Float west, Float prevNorth, Float prevSouth,
+			Float prevEast, Float prevWest, ZonedDateTime updatedAt) {
 		// Get sites in new area, excluding old area
 		Specifications<Site> newSiteSpecs = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
-		newSiteSpecs = newSiteSpecs.and(Specifications.not(SiteSpecifications.withinBoundingBox(prevNorth, prevSouth, prevEast, prevWest)));
+		newSiteSpecs = newSiteSpecs.and(
+				Specifications.not(SiteSpecifications.withinBoundingBox(prevNorth, prevSouth, prevEast, prevWest)));
 		List<Site> sites = this.repository.findAll(this.excludeRestrictedAndDeleted(newSiteSpecs));
 
 		// Where new area intersects old area, get only those that have been updated
 		Specifications<Site> updateSiteSpecs = where(SiteSpecifications.withinBoundingBox(north, south, east, west));
-		updateSiteSpecs = updateSiteSpecs.and(SiteSpecifications.withinBoundingBox(prevNorth, prevSouth, prevEast, prevWest));
+		updateSiteSpecs = updateSiteSpecs
+				.and(SiteSpecifications.withinBoundingBox(prevNorth, prevSouth, prevEast, prevWest));
 
 		LocalDateTime dt = updatedAt.withZoneSameInstant(OffsetDateTime.now().getOffset()).toLocalDateTime();
 		updateSiteSpecs = updateSiteSpecs.and(SiteSpecifications.updatedSince(dt));
@@ -194,7 +210,9 @@ public class SiteService extends EntityService<Site, SiteView> {
 
 	private Specifications<Site> excludeRestrictedAndDeleted(Specifications<Site> specs) {
 		UserProfile currentUser = this.securityService.getCurrentUser();
-		Geometry restriction = (currentUser.getRestrictionBoundary() != null) ? currentUser.getRestrictionBoundary().getBoundary() : null;
+		Geometry restriction = (currentUser.getRestrictionBoundary() != null)
+				? currentUser.getRestrictionBoundary().getBoundary()
+				: null;
 
 		specs = specs.and(SiteSpecifications.isNotDeleted());
 		if (restriction != null) {

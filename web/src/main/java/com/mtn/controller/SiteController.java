@@ -30,16 +30,24 @@ public class SiteController extends CrudController<Site, SiteView> {
 	private final MergeService mergeService;
 
 	@Autowired
-	public SiteController(SiteService siteService,
-						  StoreService storeService,
-						  ProjectService projectService,
-						  MergeService mergeService,
-						  ShoppingCenterService shoppingCenterService) {
+	public SiteController(SiteService siteService, StoreService storeService, ProjectService projectService,
+			MergeService mergeService, ShoppingCenterService shoppingCenterService) {
 		super(siteService, SiteView::new);
 		this.storeService = storeService;
 		this.projectService = projectService;
 		this.shoppingCenterService = shoppingCenterService;
 		this.mergeService = mergeService;
+	}
+
+	@GetMapping(params = { "ids" })
+	public ResponseEntity findListByIds(@RequestParam(value = "ids") List<Integer> ids,
+			@RequestParam(value = "full-obj", required = false, defaultValue = "false") Boolean full) {
+		List<Site> sites = ((SiteService) this.entityService).findAllByIdsUsingSpecs(ids);
+		if (full) {
+			return ResponseEntity.ok(sites.stream().map(SiteView::new).collect(Collectors.toList()));
+		} else {
+			return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
+		}
 	}
 
 	@GetMapping(value = "/{id}/store")
@@ -48,36 +56,37 @@ public class SiteController extends CrudController<Site, SiteView> {
 		return ResponseEntity.ok(domainModels.stream().map(SimpleStoreView::new).collect(Collectors.toList()));
 	}
 
-	@PutMapping(value = "{siteId}", params = {"is-duplicate"})
-	public ResponseEntity<SimpleSiteView> updateIsDuplicate(@PathVariable("siteId") Integer siteId, @RequestParam("is-duplicate") Boolean isDuplicate) {
+	@PutMapping(value = "{siteId}", params = { "is-duplicate" })
+	public ResponseEntity<SimpleSiteView> updateIsDuplicate(@PathVariable("siteId") Integer siteId,
+			@RequestParam("is-duplicate") Boolean isDuplicate) {
 		Site site = this.entityService.findOne(siteId);
 		site.setDuplicate(isDuplicate);
 		SiteView request = new SiteView(site);
 		return ResponseEntity.ok(new SimpleSiteView(this.entityService.updateOne(request)));
 	}
 
-	@GetMapping(params = {"geojson"})
+	@GetMapping(params = { "geojson" })
 	public ResponseEntity<List<SimpleSiteView>> findAllWithinGeoJson(@RequestParam("geojson") String geoJson) {
 		List<Site> sites = ((SiteService) this.entityService).findAllInGeoJson(geoJson);
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
-	@GetMapping(value = "/points", params = {"north", "south", "east", "west"})
+	@GetMapping(value = "/points", params = { "north", "south", "east", "west" })
 	public ResponseEntity<List<SitePoint>> findAllSitePointsWithinBounds(@RequestParam("north") Float north,
-														@RequestParam("south") Float south,
-														@RequestParam("east") Float east,
-														@RequestParam("west") Float west) {
-		List<Site> domainModels = ((SiteService) this.entityService).findAllInBoundsUsingSpecs(north, south, east, west);
+			@RequestParam("south") Float south, @RequestParam("east") Float east, @RequestParam("west") Float west) {
+		List<Site> domainModels = ((SiteService) this.entityService).findAllInBoundsUsingSpecs(north, south, east,
+				west);
 		return ResponseEntity.ok(domainModels.stream().map(SitePoint::new).collect(Collectors.toList()));
 	}
 
-	@GetMapping(value = "/points", params = {"projectId"})
+	@GetMapping(value = "/points", params = { "projectId" })
 	public ResponseEntity<List<SitePoint>> findAllSitesPointsWithinProjectBoundary(@RequestParam Integer projectId) {
 		Project project = this.projectService.findOne(projectId);
 		if (project.getBoundary() == null) {
 			throw new EntityNotFoundException(String.format("Project %s does not have a boundary", projectId));
 		}
-		List<Site> domainModels = ((SiteService) this.entityService).findAllInShape(project.getBoundary().getBoundary());
+		List<Site> domainModels = ((SiteService) this.entityService)
+				.findAllInShape(project.getBoundary().getBoundary());
 		return ResponseEntity.ok(domainModels.stream().map(SitePoint::new).collect(Collectors.toList()));
 	}
 
@@ -91,21 +100,21 @@ public class SiteController extends CrudController<Site, SiteView> {
 	}
 
 	@PostMapping(value = "/assign-to-user")
-	public ResponseEntity<List<SimpleSiteView>> assignToUser(@RequestBody List<Integer> siteIds, @RequestParam(value = "user-id", required = false) Integer userId) {
+	public ResponseEntity<List<SimpleSiteView>> assignToUser(@RequestBody List<Integer> siteIds,
+			@RequestParam(value = "user-id", required = false) Integer userId) {
 		List<Site> sites = ((SiteService) this.entityService).assignSitesToUser(siteIds, userId);
 		return ResponseEntity.ok(sites.stream().map(SimpleSiteView::new).collect(Collectors.toList()));
 	}
 
 	@PostMapping(value = "{siteId}/assign-to-user")
 	public ResponseEntity<SiteView> assignToUser(@PathVariable("siteId") Integer siteId,
-															 @RequestParam(value = "user-id", required = false) Integer userId) {
+			@RequestParam(value = "user-id", required = false) Integer userId) {
 		Site site = ((SiteService) this.entityService).assignSiteToUser(siteId, userId);
 		return ResponseEntity.ok(new SiteView(site));
 	}
 
 	@PostMapping(value = "/{id}/store")
-	public ResponseEntity<StoreView> addOneStoreToSite(
-			@PathVariable("id") Integer siteId,
+	public ResponseEntity<StoreView> addOneStoreToSite(@PathVariable("id") Integer siteId,
 			@RequestParam(value = "overrideActiveStore", defaultValue = "false") Boolean overrideActiveStore,
 			@RequestBody StoreView request) {
 		Site site = this.entityService.findOne(siteId);

@@ -17,20 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/banner")
 public class BannerController extends CrudController<Banner, BannerView> {
 
-    @Autowired
-    public BannerController(BannerService entityService) {
-        super(entityService, BannerView::new);
-    }
+	@Autowired
+	public BannerController(BannerService entityService) {
+		super(entityService, BannerView::new);
+	}
 
-    @GetMapping
-    public ResponseEntity findAll(Pageable page, @RequestParam(value = "query", required = false) String query) {
-        Page<Banner> domainModels;
-        if (query != null) {
-            domainModels = ((BannerService) this.entityService).findAllByQueryUsingSpecs(page, query);
-        } else {
-            domainModels = this.entityService.findAllUsingSpecs(page);
-        }
-        return ResponseEntity.ok(domainModels.map(SimpleBannerView::new));
-    }
-
+	@GetMapping
+	public ResponseEntity findAll(Pageable page, @RequestParam(value = "query", required = false) String query) {
+		Page<Banner> domainModels;
+		if (query != null) {
+			domainModels = ((BannerService) this.entityService).findAllByQueryUsingSpecs(page, query);
+		} else {
+			domainModels = this.entityService.findAllUsingSpecs(page);
+		}
+		return ResponseEntity.ok(domainModels.map(SimpleBannerView::new));
+	}
 }

@@ -18,7 +18,11 @@ public class FmtAccessCount extends CellProcessorAdaptor {
 
 	@Override
 	public Object execute(Object o, CsvContext csvContext) {
-		List<ShoppingCenterAccess> accesses = (List<ShoppingCenterAccess>) o;
-		return accesses.size();
+		if (o != null) {
+			List<ShoppingCenterAccess> accesses = (List<ShoppingCenterAccess>) o;
+			return accesses.size();
+		} else {
+			return null;
+		}
 	}
 }

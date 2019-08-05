@@ -27,17 +27,13 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 public class StoreService extends EntityService<Store, StoreView> {
 
 	@Autowired
-	public StoreService(SecurityService securityService,
-						StoreRepository repository,
-						StoreValidator validator) {
+	public StoreService(SecurityService securityService, StoreRepository repository, StoreValidator validator) {
 		super(securityService, repository, validator, Store::new);
 	}
 
 	public List<Store> findAllBySiteIdUsingSpecs(Integer siteId) {
-		return this.repository.findAll(
-				where(StoreSpecifications.siteIdEquals(siteId))
-						.and(StoreSpecifications.isNotDeleted())
-		);
+		return this.repository
+				.findAll(where(StoreSpecifications.siteIdEquals(siteId)).and(StoreSpecifications.isNotDeleted()));
 	}
 
 	public List<Store> findAllByIdsUsingSpecs(List<Integer> storeIds) {
@@ -71,18 +67,19 @@ public class StoreService extends EntityService<Store, StoreView> {
 		// If the new store is ACTIVE, we have some special handling to do
 		if (store.getStoreType() == StoreType.ACTIVE) {
 			// Then, check for another existing ACTIVE store
-			SiteUtil.getActiveStore(site)
-					.ifPresent(existingActiveStore -> {
-						// If site already has ACTIVE store
-						if (!overrideActiveStore) {
-							// Throw an error (only one ACTIVE per site)
-							throw new IllegalArgumentException(String.format("A Site may only have one Active Store at a time. Store ID %d is currently set as this Site's Active Store.", existingActiveStore.getId()));
-						} else {
-							// Change old ACTIVE store to HISTORICAL
-							existingActiveStore.setStoreType(StoreType.HISTORICAL);
-							existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
-						}
-					});
+			SiteUtil.getActiveStore(site).ifPresent(existingActiveStore -> {
+				// If site already has ACTIVE store
+				if (!overrideActiveStore) {
+					// Throw an error (only one ACTIVE per site)
+					throw new IllegalArgumentException(String.format(
+							"A Site may only have one Active Store at a time. Store ID %d is currently set as this Site's Active Store.",
+							existingActiveStore.getId()));
+				} else {
+					// Change old ACTIVE store to HISTORICAL
+					existingActiveStore.setStoreType(StoreType.HISTORICAL);
+					existingActiveStore.setUpdatedBy(securityService.getCurrentUser());
+				}
+			});
 		}
 
 		store.setSite(site);
@@ -94,7 +91,7 @@ public class StoreService extends EntityService<Store, StoreView> {
 	public Store updateOneBanner(Integer storeId, Banner banner) {
 		Store store = findOne(storeId);
 		store.setBanner(banner);
-		return store;
+		return repository.save(store);
 	}
 
 	@Override
@@ -112,7 +109,7 @@ public class StoreService extends EntityService<Store, StoreView> {
 		store.setAreaIsEstimate(request.getAreaIsEstimate());
 		store.setStoreIsOpen24(request.getStoreIsOpen24());
 		store.setNaturalFoodsAreIntegrated(request.getNaturalFoodsAreIntegrated());
-		store.setFloating((request.getFloating()));
+		store.setFloating(request.getFloating() != null ? request.getFloating() : false);
 	}
 
 	@Override

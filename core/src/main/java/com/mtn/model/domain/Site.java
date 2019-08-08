@@ -30,6 +30,7 @@ public class Site extends AuditingEntity {
     private Boolean duplicate;
     private Point location;
     private Boolean backfilledNonGrocery;
+    private Integer cbsaId;
 
     private ShoppingCenter shoppingCenter;
     private List<Store> stores = new ArrayList<>();
@@ -218,4 +219,11 @@ public class Site extends AuditingEntity {
         this.stores.add(store);
     }
 
+    public Integer getCbsaId() {
+        return cbsaId;
+    }
+
+    public void setCbsaId(Integer cbsaId) {
+        this.cbsaId = cbsaId;
+    }
 }

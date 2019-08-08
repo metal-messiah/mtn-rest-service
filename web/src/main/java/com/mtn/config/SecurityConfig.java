@@ -175,7 +175,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.POST, "/api/store-list/**").authenticated()
 				.antMatchers(HttpMethod.PUT, "/api/store-list/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/site-wise/**").authenticated()
-
 				.anyRequest().denyAll();
 	}
 

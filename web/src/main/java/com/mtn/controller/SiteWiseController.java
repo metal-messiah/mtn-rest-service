@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -46,7 +45,7 @@ public class SiteWiseController {
 					.contentLength(file.length())
 					.contentType(MediaType.parseMediaType("text/csv"))
 					.body(new FileSystemResource(file));
-		} catch (Exception e) {
+		} catch (IOException e) {
 			MtnLogger.warn("Failed", e);
 			return ResponseEntity.status(500).body(e.getMessage());
 		}

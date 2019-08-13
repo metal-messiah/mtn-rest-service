@@ -105,18 +105,20 @@ public class SiteWiseService {
 			if (a.getAreaSales() != null) {
 				return new Pair<>("DB", nearestThousand(a.getAreaSales()));
 			}
-			if (a.getBannerId() != null && a.getAreaTotal() != null) {
-				Optional<AvgSalesAreaPercentByBanner> abo = avgSalesAreaPercentByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
-				if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
-					Integer salesArea = nearestThousand(abo.get().getAvgSalesPercent() * a.getAreaTotal());
-					return new Pair<>("Calculated % of total avg by banner", salesArea);
+			if (a.getAreaTotal() != null) {
+				if (a.getBannerId() != null) {
+					Optional<AvgSalesAreaPercentByBanner> abo = avgSalesAreaPercentByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
+					if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
+						Integer salesArea = nearestThousand(abo.get().getAvgSalesPercent() * a.getAreaTotal());
+						return new Pair<>("Calculated from % of total avg by banner", salesArea);
+					}
 				}
-			}
-			if (a.getStoreFit() != null && a.getAreaTotal() != null) {
-				Optional<AvgSalesAreaPercentByFit> abo = avgSalesAreaPercentByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
-				if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
-					Integer salesArea = nearestThousand(abo.get().getAvgSalesPercent() * a.getAreaTotal());
-					return new Pair<>("Calculated % of total avg by fit", salesArea);
+				if (a.getStoreFit() != null) {
+					Optional<AvgSalesAreaPercentByFit> abo = avgSalesAreaPercentByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
+					if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
+						Integer salesArea = nearestThousand(abo.get().getAvgSalesPercent() * a.getAreaTotal());
+						return new Pair<>("Calculated from % of total avg by fit", salesArea);
+					}
 				}
 			}
 			if (a.getBannerId() != null) {
@@ -154,6 +156,143 @@ public class SiteWiseService {
 			}
 			return null;
 		};
+		Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaTotal = a -> {
+			if (a.getAreaTotal() != null) {
+				return new Pair<>("DB", nearestThousand(a.getAreaTotal()));
+			}
+			if (a.getAreaSales() != null) {
+				if (a.getBannerId() != null) {
+					Optional<AvgSalesAreaPercentByBanner> abo = avgSalesAreaPercentByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
+					if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
+						Integer totalArea = nearestThousand(a.getAreaSales() / abo.get().getAvgSalesPercent());
+						return new Pair<>("Calculated from % of total avg by banner", totalArea);
+					}
+				}
+				if (a.getStoreFit() != null) {
+					Optional<AvgSalesAreaPercentByFit> abo = avgSalesAreaPercentByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
+					if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
+						Integer totalArea = nearestThousand(a.getAreaSales() / abo.get().getAvgSalesPercent());
+						return new Pair<>("Calculated from % of total avg by fit", totalArea);
+					}
+				}
+			}
+			if (a.getBannerId() != null) {
+				Optional<AvgByBannerInCounty> abo = avgByBannerInCounty.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId()) && sameCounty(a, ab)).findAny();
+				if (abo.isPresent() && abo.get().getAreaTotal() != null) {
+					Integer totalArea = nearestThousand(abo.get().getAreaTotal());
+					return new Pair<>("Avg by Banner in County", totalArea);
+				}
+				Optional<AvgByBanner> abb = avgByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
+				if (abb.isPresent() && abb.get().getAreaTotal() != null) {
+					Integer totalArea = nearestThousand(abb.get().getAreaTotal());
+					return new Pair<>("Avg by Banner in Nation", totalArea);
+				}
+			}
+			if (a.getStoreFit() != null) {
+				Optional<AvgByFitInCounty> abo = avgByFitInCounty.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit()) && sameCounty(a, ab)).findAny();
+				if (abo.isPresent() && abo.get().getAreaTotal() != null) {
+					Integer totalArea = nearestThousand(abo.get().getAreaTotal());
+					return new Pair<>("Avg by Fit in County", totalArea);
+				}
+				Optional<AvgByFit> abf = avgByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
+				if (abf.isPresent() && abf.get().getAreaTotal() != null) {
+					Integer totalArea = nearestThousand(abf.get().getAreaTotal());
+					return new Pair<>("Avg by Fit in Nation", totalArea);
+				}
+			}
+			Optional<AvgByCounty> abo = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
+			if (abo.isPresent() && abo.get().getAreaTotal() != null) {
+				Integer totalArea = nearestThousand(abo.get().getAreaTotal());
+				return new Pair<>("Avg by County", totalArea);
+			}
+			return null;
+		};
+		Function<Pair<ActiveAndFutureStores, Pair<String, Integer>>, Pair<String, Integer>> getVolume = aa -> {
+			ActiveAndFutureStores a = aa.getKey();
+			Pair<String, Integer> salesArea = aa.getValue();
+
+			if (a.getVolumeTotal() != null) {
+				return new Pair<>(a.getVolumeChoice(), nearestThousand(a.getVolumeTotal()));
+			}
+			if (salesArea != null && salesArea.getValue() != null) {
+				Optional<AvgByBannerInCounty> abic = avgByBannerInCounty.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId()) && sameCounty(a, ab)).findAny();
+				if (abic.isPresent() && abic.get().getDpsf() != null) {
+					Integer volume = nearestThousand(abic.get().getDpsf() * salesArea.getValue());
+					return new Pair<>(salesArea.getKey() + " * (Avg Banner in County $/sqft)", volume);
+				}
+				Optional<AvgByBanner> abb = avgByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
+				if (abb.isPresent() && abb.get().getDpsf() != null) {
+					Integer volume = nearestThousand(abb.get().getDpsf() * salesArea.getValue());
+					return new Pair<>(salesArea.getKey() + " * (Avg Banner in Nation $/sqft)", volume);
+				}
+				Optional<AvgByFitInCounty> afic = avgByFitInCounty.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit()) && sameCounty(a, ab)).findAny();
+				if (afic.isPresent() && afic.get().getDpsf() != null) {
+					Integer volume = nearestThousand(afic.get().getDpsf() * salesArea.getValue());
+					return new Pair<>(salesArea.getKey() + " * (Avg Fit in County $/sqft)", volume);
+				}
+				Optional<AvgByFit> af = avgByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
+				if (af.isPresent() && af.get().getDpsf() != null) {
+					Integer volume = nearestThousand(af.get().getDpsf() * salesArea.getValue());
+					return new Pair<>(salesArea.getKey() + " * (Avg Fit in Nation $/sqft)", volume);
+				}
+				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab ->sameCounty(a, ab)).findAny();
+				if (ac.isPresent() && ac.get().getDpsf() != null) {
+					Integer volume = nearestThousand(ac.get().getDpsf() * salesArea.getValue());
+					return new Pair<>(salesArea.getKey() + " * (Avg County $/sqft)", volume);
+				}
+			} else {
+				Optional<AvgByBannerInCounty> abic = avgByBannerInCounty.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId()) && sameCounty(a, ab)).findAny();
+				if (abic.isPresent() && abic.get().getVolume() != null) {
+					Integer volume = nearestThousand(abic.get().getVolume());
+					return new Pair<>("Avg by Banner in County", volume);
+				}
+				Optional<AvgByBanner> abb = avgByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
+				if (abb.isPresent() && abb.get().getVolume() != null) {
+					Integer volume = nearestThousand(abb.get().getVolume());
+					return new Pair<>("Avg by Banner in Nation", volume);
+				}
+				Optional<AvgByFitInCounty> afic = avgByFitInCounty.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit()) && sameCounty(a, ab)).findAny();
+				if (afic.isPresent() && afic.get().getVolume() != null) {
+					Integer volume = nearestThousand(afic.get().getVolume());
+					return new Pair<>("Avg by Fit in County", volume);
+				}
+				Optional<AvgByFit> af = avgByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
+				if (af.isPresent() && af.get().getVolume() != null) {
+					Integer volume = nearestThousand(af.get().getVolume());
+					return new Pair<>("Avg by Fit in Nation", volume);
+				}
+				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab ->sameCounty(a, ab)).findAny();
+				if (ac.isPresent() && ac.get().getVolume() != null) {
+					Integer volume = nearestThousand(ac.get().getVolume());
+					return new Pair<>("Avg by County", volume);
+				}
+			}
+			return null;
+		};
+		Function<Pair<ActiveAndFutureStores, Float>, Integer> getPseudoPower = aa -> {
+			ActiveAndFutureStores a = aa.getKey();
+			Float dpsf = aa.getValue();
+			if (dpsf != null) {
+				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
+				if (ac.isPresent() && ac.get().getDpsf() != null && ac.get().getDpsfMin() != null && ac.get().getDpsfMax() != null) {
+					Float min = ac.get().getDpsfMin();
+					Float max = ac.get().getDpsfMax();
+					Float avg = ac.get().getDpsf();
+
+					Float range = min.equals(max) ? 1 : max - min;
+					Integer pseudoPower = Math.round((dpsf - avg) / range * 100f) + 100;
+
+					if (pseudoPower > 200) {
+						return 200;
+					} else if (pseudoPower < 0) {
+						return 0;
+					} else {
+						return pseudoPower;
+					}
+				}
+			}
+			return null;
+		};
 
 		MtnLogger.info("Building document: " + LocalDateTime.now());
 
@@ -177,8 +316,7 @@ public class SiteWiseService {
 			long pageRetrieved = System.currentTimeMillis();
 			MtnLogger.info("Page " + (page.getNumber() + 1) + "/" + page.getTotalPages() + " retrieved in  " + ((pageRetrieved - pageStart) / 1000L) + " seconds");
 
-//			page.forEach(store -> rows.add(this.getStoreRow(store, getStoreStrength)));
-			page.forEach(store -> rows.add(this.getRow(store, getAreaSales)));
+			page.forEach(store -> rows.add(this.getRow(store, getAreaSales, getAreaTotal, getVolume, getPseudoPower)));
 
 			long pageProcessed = System.currentTimeMillis();
 			MtnLogger.info("Page " + (page.getNumber() + 1) + "/" + page.getTotalPages() + " processed in  " + ((pageProcessed - pageRetrieved) / 1000L) + " seconds");
@@ -216,8 +354,14 @@ public class SiteWiseService {
 		row.add(value != null ? value.toString() : null);
 	}
 
-	private String[] getRow(ActiveAndFutureStores s, Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaSales) {
+	private String[] getRow(ActiveAndFutureStores s,
+							Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaSales,
+							Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaTotal,
+							Function<Pair<ActiveAndFutureStores, Pair<String, Integer>>, Pair<String, Integer>> getVolume,
+							Function<Pair<ActiveAndFutureStores, Float>, Integer> getPseudoPower) {
 		Pair<String, Integer> salesArea = getAreaSales.apply(s);
+		Pair<String, Integer> totalArea = getAreaTotal.apply(s);
+		Pair<String, Integer> volume = getVolume.apply(new Pair<>(s, salesArea));
 
 		List<String> row = new ArrayList<>();
 		row.add(s.getStoreId().toString());
@@ -236,8 +380,14 @@ public class SiteWiseService {
 		row.add(s.getStoreName());
 		row.add(s.getStoreNumber());
 		row.add(s.getStoreStatus());
-		row.add(String.valueOf(s.getStoreStrength()));
-		row.add(s.getStoreFit());
+		addFloatToRow(row, s.getStoreStrength());
+		if (s.getStoreFit() != null && s.getStoreFit().equals("Asian")) {
+			row.add("Conventional");
+		} else if (s.getStoreFit() != null && s.getStoreFit().equals("Natural Foods")) {
+			row.add("Natural/Organic");
+		} else {
+			row.add(s.getStoreFit());
+		}
 		row.add(s.getUsingDefaultFit());
 		this.addIntToRow(row, s.getBannerId());
 		row.add(s.getBannerName());
@@ -245,14 +395,30 @@ public class SiteWiseService {
 		row.add(s.getCompanyName());
 		this.addIntToRow(row, s.getParentCompanyId());
 		row.add(s.getParentCompanyName());
+
+		// Sales Area
 		if (salesArea != null) {
 			this.addIntToRow(row, salesArea.getValue());
 		} else {
 			row.add(null);
 		}
-		this.addIntToRow(row, s.getAreaTotal());
-		row.add(s.getVolumeChoice());
-		this.addIntToRow(row, s.getVolumeTotal());
+
+		// Total Area
+		if (totalArea != null) {
+			this.addIntToRow(row, totalArea.getValue());
+		} else {
+			row.add(null);
+		}
+
+		// Volume
+		if (volume != null) {
+			row.add(volume.getKey());
+			addIntToRow(row, volume.getValue());
+		} else {
+			row.add(null);
+			row.add(null);
+		}
+
 		this.addDateToRow(row, s.getVolumeDate());
 		this.addFloatToRow(row, s.getShoppingCenterFeatureScore());
 		row.add(s.getRatingSynergy());
@@ -267,150 +433,28 @@ public class SiteWiseService {
 		this.addDateToRow(row, s.getPowerDate());
 
 		if (salesArea != null) {
-			row.add(salesArea.getKey());    //		using_area_sales_from
+			row.add(salesArea.getKey());    //	using_area_sales_from
 		} else {
 			row.add(null);
 		}
-		row.add(null);    //		using_area_total_from
-		row.add(null);    //		pseudo_power
-		row.add(null);    //		dollars_per_sqft
+		if (totalArea != null) {
+			row.add(totalArea.getKey());	//	using_area_total_from
+		} else {
+			row.add(null);
+		}
+
+		// Pseudo_power && // Dollars per sqft
+		if (volume != null && volume.getValue() != null && salesArea != null && salesArea.getValue() != null && salesArea.getValue() != 0) {
+			float dpsf = volume.getValue().floatValue() / salesArea.getValue().floatValue();
+			Integer pseudoPower = getPseudoPower.apply(new Pair<>(s, dpsf));
+			addIntToRow(row, pseudoPower);
+			addFloatToRow(row, Math.round(dpsf * 100f) / 100f);
+		} else {
+			row.add(null);
+			row.add(null);
+		}
 
 		return row.toArray(new String[]{});
 	}
 
-//	private String[] getStoreRow(Store store, Function<Float, Float> getStoreStrength) {
-//		Banner banner = store.getBanner();
-//		StoreBestVolume bestVolume = this.bestVolumeRepository.findOneByStoreIdEquals(store.getId()).orElse(null);
-//
-//		Integer salesArea = null;
-//		if (store.getAreaSales() != null) {
-//			salesArea = store.getAreaSales();
-//		} else if (banner != null && banner.getDefaultSalesArea() != null) {
-//			salesArea = banner.getDefaultSalesArea();
-//		}
-//
-//		List<String> row = new ArrayList<>();
-//		row.add(store.getId().toString());
-//		row.add(String.valueOf(store.getSite().getLatitude()));
-//		row.add(String.valueOf(store.getSite().getLongitude()));
-//		row.add(store.getSite().getAddress1());
-//		row.add(store.getSite().getAddress2());
-//		row.add(store.getSite().getCity());
-//		row.add(store.getSite().getCounty());
-//		row.add(store.getSite().getState());
-//		row.add(store.getSite().getPostalCode());
-//		row.add(store.getSite().getQuad());
-//		row.add(store.getSite().getIntersectionStreetPrimary());
-//		row.add(store.getSite().getIntersectionStreetSecondary());
-//		row.add(store.getStoreType().name());
-//		row.add(store.getStoreName());
-//		row.add(store.getStoreNumber());
-//
-//		Optional<StoreStatus> storeStatus = StoreUtil.getLatestStatusAsOfDateTime(store, LocalDateTime.now());
-//		if (storeStatus.isPresent()) {
-//			row.add(storeStatus.get().getStatus());
-//		} else {
-//			row.add(null);
-//		}
-//
-//		// store_strength
-//		if (bestVolume != null && bestVolume.getVolumeTotal() != null && salesArea != null) {
-//			float dps = bestVolume.getVolumeTotal() / new Float(salesArea);
-//			float strength = getStoreStrength.apply(dps);
-//			row.add(String.valueOf(strength));
-//		} else {
-//			row.add(null);
-//		}
-//
-//		String fit = "Conventional";
-//		boolean usingDefaultFit = true;
-//		if (store.getFit() != null) {
-//			fit = store.getFit();
-//			usingDefaultFit = false;
-//		} else if (banner != null) {
-//			fit = banner.getDefaultStoreFit();
-//		}
-//		row.add(fit);
-//		row.add(String.valueOf(usingDefaultFit));
-//
-//		if (banner != null) {
-//			row.add(String.valueOf(banner.getId()));
-//			row.add(banner.getBannerName());
-//			Company company = banner.getCompany();
-//			if (company != null) {
-//				row.add(String.valueOf(company.getId()));
-//				row.add(company.getCompanyName());
-//				Company parentCompany = company.getParentCompany();
-//				if (parentCompany != null) {
-//					row.add(String.valueOf(parentCompany.getId()));
-//					row.add(parentCompany.getCompanyName());
-//				} else {
-//					IntStream.range(0, 2).forEach(i -> row.add(null));
-//				}
-//			} else {
-//				IntStream.range(0, 4).forEach(i -> row.add(null));
-//			}
-//		} else {
-//			IntStream.range(0, 6).forEach(i -> row.add(null));
-//		}
-//		this.addIntToRow(row, salesArea);
-//
-//		this.addIntToRow(row, store.getAreaTotal());
-//
-//		if (bestVolume != null) {
-//			row.add(bestVolume.getDecision());                      // volume_choice
-//			this.addIntToRow(row, bestVolume.getVolumeTotal());        // volume_total
-//			this.addDateToRow(row, bestVolume.getVolumeDate());        // volume_date
-//		} else {
-//			IntStream.range(0, 3).forEach(i -> row.add(null));
-//		}
-//
-//		ShoppingCenter sc = store.getSite().getShoppingCenter();
-//		if (sc != null) {
-//			Optional<ShoppingCenterCasing> optScCasing = sc.getCasings().stream().max(Comparator.comparing(ShoppingCenterCasing::getCasingDate));
-//			if (optScCasing.isPresent()) {
-//				ShoppingCenterCasing mostRecentScCasing = optScCasing.get();
-//				row.add(null);    //		shopping_center_feature_score
-//				RatingType synergy = mostRecentScCasing.getRatingSynergy();
-//				if (synergy != null) {
-//					row.add(mostRecentScCasing.getRatingSynergy().name());    //		rating_synergy
-//				} else {
-//					row.add(null);
-//				}
-//				this.addIntToRow(row, mostRecentScCasing.getShoppingCenterSurvey().getTenantVacantCount());  //		tenant_vacant_count
-//				this.addIntToRow(row, mostRecentScCasing.getShoppingCenterSurvey().getTenantOccupiedCount());  //		tenant_occupied_count
-//			} else {
-//				IntStream.range(0, 4).forEach(i -> row.add(null));
-//			}
-//		} else {
-//			IntStream.range(0, 4).forEach(i -> row.add(null));
-//		}
-//
-//		Optional<StoreCasing> optStoreCasing = store.getCasings().stream().max(Comparator.comparing(StoreCasing::getCasingDate));
-//		if (optStoreCasing.isPresent()) {
-//			this.addIntToRow(row, optStoreCasing.get().getStoreSurvey().getParkingSpaceCount());    //		parking_space_count
-//		} else {
-//			row.add(null);
-//		}
-//		this.addIntToRow(row, store.getLegacyLocationId());
-//		this.addIntToRow(row, store.getSite().getCbsaId());    //		cbsa_id
-//		row.add(null);    //		sc_condition_score
-//
-//		row.add(null);    //		volume_confidence *
-//
-//		Optional<StoreModel> optStoreModel = store.getModels().stream().max(Comparator.comparing(StoreModel::getModelDate));
-//		if (optStoreModel.isPresent()) {
-//			StoreModel storeModel = optStoreModel.get();
-//			this.addIntToRow(row, storeModel.getPower().intValue());    //		power
-//			row.add(storeModel.getModelDate().toString());              //		power_date
-//		} else {
-//			IntStream.range(0, 2).forEach(i -> row.add(null));
-//		}
-//		row.add(null);    //		using_area_sales_from
-//		row.add(null);    //		using_area_total_from
-//		row.add(null);    //		pseudo_power
-//		row.add(null);    //		dollars_per_sqft
-//
-//		return row.toArray(new String[]{});
-//	}
 }

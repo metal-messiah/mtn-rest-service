@@ -20,6 +20,8 @@ public class AvgByCounty implements AvgCounty {
 	private Integer areaSales;
 	private Integer areaTotal;
 	private Float dpsf;
+	private Float dpsfMin;
+	private Float dpsfMax;
 
 	public String getId() {
 		return id;
@@ -47,5 +49,13 @@ public class AvgByCounty implements AvgCounty {
 
 	public Float getDpsf() {
 		return dpsf;
+	}
+
+	public Float getDpsfMin() {
+		return dpsfMin;
+	}
+
+	public Float getDpsfMax() {
+		return dpsfMax;
 	}
 }

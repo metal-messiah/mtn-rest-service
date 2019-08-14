@@ -206,6 +206,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * This AuthenticationProvider merges Auth0's JWT token validation with our own
 	 * custom flow.
 	 */
+
 	private class MtnAuthenticationProvider implements AuthenticationProvider {
 
 		private final CustomJwtAuthenticationProvider jwtAuthenticationProvider;

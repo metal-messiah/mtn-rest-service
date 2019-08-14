@@ -1,6 +1,7 @@
 package com.mtn.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.mtn.model.domain.UserBoundary;
 import com.mtn.model.view.UserBoundaryView;
@@ -27,10 +28,11 @@ public class UserBoundaryController extends CrudController<UserBoundary, UserBou
     }
 
     @GetMapping
-    public ResponseEntity<List<UserBoundary>> findRecordsByUserId() {
+    public ResponseEntity<List<UserBoundaryView>> findRecordsByUserId() {
         Integer userId = securityService.getCurrentUser().getId();
-        List<UserBoundary> domainModel = ((UserBoundaryService) this.entityService).findRecordsByUserId(userId);
-        return ResponseEntity.ok(domainModel);
+        List<UserBoundary> domainModels = ((UserBoundaryService) this.entityService).findRecordsByUserId(userId);
+        return ResponseEntity.ok(domainModels.stream().filter(project -> project.getDeletedDate() == null)
+                .map(UserBoundaryView::new).collect(Collectors.toList()));
     }
 
 }

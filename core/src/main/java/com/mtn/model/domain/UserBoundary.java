@@ -8,11 +8,12 @@ import java.util.List;
 
 @Entity
 @Table
-@AttributeOverride(name = "id", column = @Column(name = "boundary_id"))
+@AttributeOverride(name = "id", column = @Column(name = "user_boundary_id"))
 public class UserBoundary extends AuditingEntity {
 
     private String geojson;
     private Geometry boundary;
+    private String boundaryName;
 
     public String getGeojson() {
         return geojson;
@@ -28,5 +29,13 @@ public class UserBoundary extends AuditingEntity {
 
     public void setBoundary(Geometry boundary) {
         this.boundary = boundary;
+    }
+
+    public String getBoundaryName() {
+        return boundaryName;
+    }
+
+    public void setBoundaryName(String boundaryName) {
+        this.boundaryName = boundaryName;
     }
 }

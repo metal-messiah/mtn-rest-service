@@ -3,7 +3,7 @@ package com.mtn.service;
 import com.mtn.model.domain.UserBoundary;
 import com.mtn.model.view.UserBoundaryView;
 import com.mtn.repository.UserBoundaryRepository;
-import com.mtn.repository.specification.UserBoundarySpecification;
+import com.mtn.repository.specification.UserBoundarySpecifications;
 import com.mtn.validators.UserBoundaryValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +25,24 @@ public class UserBoundaryService extends EntityService<UserBoundary, UserBoundar
         super(securityService, repository, validator, UserBoundary::new);
     }
 
-    public UserBoundary findRecordsByUserId(Integer userId) {
+    public List<UserBoundary> findRecordsByUserId(Integer userId) {
         Specifications<UserBoundary> spec = where(UserBoundarySpecifications.isNotDeleted());
 
         if (userId != null) {
             spec = spec.and(UserBoundarySpecifications.createdByEquals(userId));
         }
 
-        List<UserBoundary> domainObjects =  this.repository.findAll(spec);
-        return domainObjects
+        List<UserBoundary> domainObjects = this.repository.findAll(spec);
+        return domainObjects;
     }
 
     @Override
-    protected void setEntityAttributesFromRequest(ResourceQuota resourceQuota, ResourceQuotaView request) {
-        resourceQuota.setResourceName(request.getResourceName());
-        resourceQuota.setPeriodStartDate(request.getPeriodStartDate());
-        resourceQuota.setQueryCount(request.getQueryCount());
-        resourceQuota.setQuotaLimit(request.getQuotaLimit());
+    protected void setEntityAttributesFromRequest(UserBoundary userBoundary, UserBoundaryView request) {
+        userBoundary.setGeojson(request.getGeojson());
     }
 
     @Override
-    public void handleAssociationsOnDeletion(ResourceQuota existing) {
+    public void handleAssociationsOnDeletion(UserBoundary existing) {
         // do nothing for now
     }
 

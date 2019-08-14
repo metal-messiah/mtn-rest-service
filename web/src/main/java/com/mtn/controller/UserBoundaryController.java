@@ -1,5 +1,7 @@
 package com.mtn.controller;
 
+import java.util.List;
+
 import com.mtn.model.domain.UserBoundary;
 import com.mtn.model.view.UserBoundaryView;
 import com.mtn.service.SecurityService;
@@ -25,10 +27,10 @@ public class UserBoundaryController extends CrudController<UserBoundary, UserBou
     }
 
     @GetMapping
-    public ResponseEntity findRecordsByUserId() {
+    public ResponseEntity<List<UserBoundary>> findRecordsByUserId() {
         Integer userId = securityService.getCurrentUser().getId();
-        UserBoundary domainModel = ((UserBoundaryService) this.entityService).findRecordsByUserId(userId);
-        return ResponseEntity.ok(new UserBoundaryService(domainModel));
+        List<UserBoundary> domainModel = ((UserBoundaryService) this.entityService).findRecordsByUserId(userId);
+        return ResponseEntity.ok(domainModel);
     }
 
 }

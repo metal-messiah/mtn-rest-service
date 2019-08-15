@@ -15,6 +15,7 @@ public class UserBoundaryView extends AuditingEntityView {
 	public UserBoundaryView(UserBoundary boundary) {
 		super(boundary);
 		this.geojson = boundary.getGeojson();
+		this.boundaryName = boundary.getBoundaryName();
 	}
 
 	public String getGeojson() {

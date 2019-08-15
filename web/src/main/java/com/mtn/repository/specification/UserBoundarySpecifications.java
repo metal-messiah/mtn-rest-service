@@ -12,6 +12,6 @@ public class UserBoundarySpecifications extends AuditingEntitySpecifications {
 
 	public static Specification<UserBoundary> createdByEquals(Integer id) {
 		return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-				.equal(root.join(UserBoundary_.createdBy).get(UserProfile_.id), id);
+				.equal(root.get(UserBoundary_.createdBy).get(UserProfile_.id), id);
 	}
 }

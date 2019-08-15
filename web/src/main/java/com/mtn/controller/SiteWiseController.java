@@ -29,26 +29,38 @@ public class SiteWiseController {
 
 	@GetMapping()
 	public ResponseEntity submitFile() {
-		this.siteWiseService.buildAndTransmitExtraction();
+		this.siteWiseService.buildAndTransmitActiveAndFutureStoreData();
 		return ResponseEntity.ok("File Submitted");
 	}
 
 	@GetMapping("active-and-future")
-	public ResponseEntity downloadActiveAndEmpty() {
-		MtnLogger.info("Request Received: " + LocalDateTime.now());
+	public ResponseEntity downloadActiveAndFuture() {
 		try {
-			File file = this.siteWiseService.getCsvFile();
-			DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
-			String date = formatter.format(LocalDateTime.now().toLocalDate());
-			return ResponseEntity.ok()
-					.header("Content-Disposition", "attachment; filename=" + date + "_MTN_Locations.csv")
-					.contentLength(file.length())
-					.contentType(MediaType.parseMediaType("text/csv"))
-					.body(new FileSystemResource(file));
+			return getDownloadableResponseEntity(siteWiseService.getActiveAndFutureStoresFile(), "MTN_Locations");
 		} catch (IOException e) {
 			MtnLogger.warn("Failed", e);
 			return ResponseEntity.status(500).body(e.getMessage());
 		}
+	}
+
+	@GetMapping("empty-sites")
+	public ResponseEntity downloadEmptySites() {
+		try {
+			return this.getDownloadableResponseEntity(siteWiseService.getEmptySitesFile(), "Empty_Sites");
+		} catch (IOException e) {
+			MtnLogger.warn("Failed", e);
+			return ResponseEntity.status(500).body(e.getMessage());
+		}
+	}
+
+	private ResponseEntity getDownloadableResponseEntity(File file, String fileName) {
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+		String date = formatter.format(LocalDateTime.now().toLocalDate());
+		return ResponseEntity.ok()
+				.header("Content-Disposition", "attachment; filename=" + date + "_" + fileName + ".csv")
+				.contentLength(file.length())
+				.contentType(MediaType.parseMediaType("text/csv"))
+				.body(new FileSystemResource(file));
 	}
 
 }

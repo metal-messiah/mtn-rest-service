@@ -30,6 +30,7 @@ public class SiteWiseService {
 
 	private final SiteWiseSftpConfig.SiteWiseSftpGateway gateway;
 	private final ActiveAndFutureStoresRepository activeAndFutureStoresRepository;
+	private final EmptySitesRepository emptySitesRepository;
 	private final AvgByBannerInCountyRepository avgByBannerInCountyRepository;
 	private final AvgByBannerRepository avgByBannerRepository;
 	private final AvgByCountyRepository avgByCountyRepository;
@@ -41,6 +42,7 @@ public class SiteWiseService {
 	@Autowired
 	public SiteWiseService(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") SiteWiseSftpConfig.SiteWiseSftpGateway gateway,
 						   ActiveAndFutureStoresRepository activeAndFutureStoresRepository,
+						   EmptySitesRepository emptySitesRepository,
 						   AvgByBannerInCountyRepository avgByBannerInCountyRepository,
 						   AvgByBannerRepository avgByBannerRepository,
 						   AvgByCountyRepository avgByCountyRepository,
@@ -50,6 +52,7 @@ public class SiteWiseService {
 						   AvgSalesAreaPercentByFitRepository avgSalesAreaPercentByFitRepository) {
 		this.gateway = gateway;
 		this.activeAndFutureStoresRepository = activeAndFutureStoresRepository;
+		this.emptySitesRepository = emptySitesRepository;
 		this.avgByBannerInCountyRepository = avgByBannerInCountyRepository;
 		this.avgByBannerRepository = avgByBannerRepository;
 		this.avgByCountyRepository = avgByCountyRepository;
@@ -59,23 +62,28 @@ public class SiteWiseService {
 		this.avgSalesAreaPercentByFitRepository = avgSalesAreaPercentByFitRepository;
 	}
 
-	public File getCsvFile() throws IOException {
-		MtnLogger.info("Creating file: " + LocalDateTime.now());
+	public File getActiveAndFutureStoresFile() throws IOException {
+		return this.getFile("active-and-future-stores", getActiveAndFutureStoreData());
+	}
 
-		File temp = File.createTempFile("temp-file-name", ".tmp");
+	public File getEmptySitesFile() throws IOException {
+		return this.getFile("empty-sites", getEmptySitesData());
+	}
+
+	private File getFile(String fileName, List<String[]> data) throws IOException {
+		File temp = File.createTempFile(fileName, ".csv");
 
 		CSVWriter csvWriter = new CSVWriter(new FileWriter(temp));
-		getCsvData().forEach(csvWriter::writeNext);
+		data.forEach(csvWriter::writeNext);
 		csvWriter.close();
 		return temp;
 	}
 
 	@Async
 	@Transactional(readOnly = true)
-	public void buildAndTransmitExtraction() {
+	public void buildAndTransmitActiveAndFutureStoreData() {
 		try {
-			File temp = this.getCsvFile();
-			this.gateway.sendToSftp(temp);
+			this.gateway.sendToSftp(getActiveAndFutureStoresFile());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -92,7 +100,7 @@ public class SiteWiseService {
 		return Math.round(number / 1000f) * 1000;
 	}
 
-	private List<String[]> getCsvData() {
+	private List<String[]> getActiveAndFutureStoreData() {
 		List<AvgByBannerInCounty> avgByBannerInCounty = this.avgByBannerInCountyRepository.findAll();
 		List<AvgByBanner> avgByBanner = avgByBannerRepository.findAll();
 		List<AvgByCounty> avgByCounty = avgByCountyRepository.findAll();
@@ -235,7 +243,7 @@ public class SiteWiseService {
 					Integer volume = nearestThousand(af.get().getDpsf() * salesArea.getValue());
 					return new Pair<>(salesArea.getKey() + " * (Avg Fit in Nation $/sqft)", volume);
 				}
-				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab ->sameCounty(a, ab)).findAny();
+				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
 				if (ac.isPresent() && ac.get().getDpsf() != null) {
 					Integer volume = nearestThousand(ac.get().getDpsf() * salesArea.getValue());
 					return new Pair<>(salesArea.getKey() + " * (Avg County $/sqft)", volume);
@@ -261,7 +269,7 @@ public class SiteWiseService {
 					Integer volume = nearestThousand(af.get().getVolume());
 					return new Pair<>("Avg by Fit in Nation", volume);
 				}
-				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab ->sameCounty(a, ab)).findAny();
+				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
 				if (ac.isPresent() && ac.get().getVolume() != null) {
 					Integer volume = nearestThousand(ac.get().getVolume());
 					return new Pair<>("Avg by County", volume);
@@ -279,16 +287,11 @@ public class SiteWiseService {
 					Float max = ac.get().getDpsfMax();
 					Float avg = ac.get().getDpsf();
 
-					Float range = min.equals(max) ? 1 : max - min;
-					Integer pseudoPower = Math.round((dpsf - avg) / range * 100f) + 100;
+					float range = min.equals(max) ? 1 : max - min;
+					int pseudoPower = Math.round((dpsf - avg) / range * 100f) + 100;
 
-					if (pseudoPower > 200) {
-						return 200;
-					} else if (pseudoPower < 0) {
-						return 0;
-					} else {
-						return pseudoPower;
-					}
+					// Pseudo power is capped between 0 and 200 (100 should be avg)
+					return Math.min(200, Math.max(pseudoPower, 0));
 				}
 			}
 			return null;
@@ -301,7 +304,7 @@ public class SiteWiseService {
 		List<String[]> rows = new ArrayList<>();
 
 		// Add the header row to the document
-		rows.add(this.getHeaderRow());
+		rows.add(this.getActiveAndFutureStoresHeaderRow());
 
 		// Set page size
 		Pageable pageRequest = new PageRequest(0, 50000);
@@ -311,12 +314,12 @@ public class SiteWiseService {
 			long pageStart = System.currentTimeMillis();
 
 			// Gets a page of stores
-			page = this.getPage(pageRequest);
+			page = this.activeAndFutureStoresRepository.findAll(pageRequest);
 
 			long pageRetrieved = System.currentTimeMillis();
 			MtnLogger.info("Page " + (page.getNumber() + 1) + "/" + page.getTotalPages() + " retrieved in  " + ((pageRetrieved - pageStart) / 1000L) + " seconds");
 
-			page.forEach(store -> rows.add(this.getRow(store, getAreaSales, getAreaTotal, getVolume, getPseudoPower)));
+			page.forEach(store -> rows.add(this.getActiveAndFutureStoresRow(store, getAreaSales, getAreaTotal, getVolume, getPseudoPower)));
 
 			long pageProcessed = System.currentTimeMillis();
 			MtnLogger.info("Page " + (page.getNumber() + 1) + "/" + page.getTotalPages() + " processed in  " + ((pageProcessed - pageRetrieved) / 1000L) + " seconds");
@@ -334,12 +337,52 @@ public class SiteWiseService {
 		return rows;
 	}
 
-	private Page<ActiveAndFutureStores> getPage(Pageable pageable) {
-		return this.activeAndFutureStoresRepository.findAll(pageable);
+	private List<String[]> getEmptySitesData() {
+
+		long start = System.currentTimeMillis();
+
+		List<String[]> rows = new ArrayList<>();
+
+		// Add the header row to the document
+		rows.add(this.getEmptySitesHeaderRow());
+
+		// Set page size
+		Pageable pageRequest = new PageRequest(0, 50000);
+		Page<EmptySites> page;
+
+		while (true) {
+			long pageStart = System.currentTimeMillis();
+
+			// Gets a page of stores
+			page = this.emptySitesRepository.findAll(pageRequest);
+
+			long pageRetrieved = System.currentTimeMillis();
+			MtnLogger.info("Page " + (page.getNumber() + 1) + "/" + page.getTotalPages() + " retrieved in  " + ((pageRetrieved - pageStart) / 1000L) + " seconds");
+
+			page.forEach(store -> rows.add(this.getEmptySitesRow(store)));
+
+			long pageProcessed = System.currentTimeMillis();
+			MtnLogger.info("Page " + (page.getNumber() + 1) + "/" + page.getTotalPages() + " processed in  " + ((pageProcessed - pageRetrieved) / 1000L) + " seconds");
+
+			if (page.hasNext() && page.getNumber() < 1) {
+				pageRequest = page.nextPageable();
+			} else {
+				break;
+			}
+		}
+
+		long ellapsedSeconds = (System.currentTimeMillis() - start) / 1000L;
+		MtnLogger.info("Data collected after: " + ellapsedSeconds + " s");
+
+		return rows;
 	}
 
-	private String[] getHeaderRow() {
+	private String[] getActiveAndFutureStoresHeaderRow() {
 		return new String[]{"store_id", "latitude", "longitude", "address_1", "address_2", "city", "county", "state", "postal_code", "quad", "intersection_street_primary", "intersection_street_secondary", "store_type", "store_name", "store_number", "store_status", "store_strength", "store_fit", "using_default_fit", "banner_id", "banner_name", "company_id", "company_name", "parent_company_id", "parent_company_name", "area_sales", "area_total", "volume_choice", "volume_total", "volume_date", "shopping_center_feature_score", "rating_synergy", "tenant_vacant_count", "tenant_occupied_count", "parking_space_count", "legacy_location_id", "cbsa_id", "sc_condition_score", "volume_confidence", "power", "power_date", "using_area_sales_from", "using_area_total_from", "pseudo_power", "dollars_per_sqft"};
+	}
+
+	private String[] getEmptySitesHeaderRow() {
+		return new String[]{"site_id", "latitude", "longitude", "address", "city", "county", "state", "postal_code", "intersection_type", "quad", "primary_intersection_street", "secondary_intersection_street", "cbsa_id", "planned_store_id", "planned_store_name", "planned_store_opening_date", "planned_store_total_area"};
 	}
 
 	private void addIntToRow(List<String> row, Integer value) {
@@ -354,11 +397,11 @@ public class SiteWiseService {
 		row.add(value != null ? value.toString() : null);
 	}
 
-	private String[] getRow(ActiveAndFutureStores s,
-							Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaSales,
-							Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaTotal,
-							Function<Pair<ActiveAndFutureStores, Pair<String, Integer>>, Pair<String, Integer>> getVolume,
-							Function<Pair<ActiveAndFutureStores, Float>, Integer> getPseudoPower) {
+	private String[] getActiveAndFutureStoresRow(ActiveAndFutureStores s,
+												 Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaSales,
+												 Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaTotal,
+												 Function<Pair<ActiveAndFutureStores, Pair<String, Integer>>, Pair<String, Integer>> getVolume,
+												 Function<Pair<ActiveAndFutureStores, Float>, Integer> getPseudoPower) {
 		Pair<String, Integer> salesArea = getAreaSales.apply(s);
 		Pair<String, Integer> totalArea = getAreaTotal.apply(s);
 		Pair<String, Integer> volume = getVolume.apply(new Pair<>(s, salesArea));
@@ -438,7 +481,7 @@ public class SiteWiseService {
 			row.add(null);
 		}
 		if (totalArea != null) {
-			row.add(totalArea.getKey());	//	using_area_total_from
+			row.add(totalArea.getKey());    //	using_area_total_from
 		} else {
 			row.add(null);
 		}
@@ -453,6 +496,29 @@ public class SiteWiseService {
 			row.add(null);
 			row.add(null);
 		}
+
+		return row.toArray(new String[]{});
+	}
+
+	private String[] getEmptySitesRow(EmptySites s) {
+		List<String> row = new ArrayList<>();
+		addIntToRow(row, s.getSiteId());
+		addFloatToRow(row, s.getLatitude());
+		addFloatToRow(row, s.getLongitude());
+		row.add(s.getAddress());
+		row.add(s.getCity());
+		row.add(s.getCounty());
+		row.add(s.getState());
+		row.add(s.getPostalCode());
+		row.add(s.getIntersectionType());
+		row.add(s.getQuad());
+		row.add(s.getPrimaryIntersectionStreet());
+		row.add(s.getSecondaryIntersectionStreet());
+		addIntToRow(row, s.getCbsaId());
+		addIntToRow(row, s.getPlannedStoreId());
+		row.add(s.getPlannedStoreName());
+		addDateToRow(row, s.getPlannedStoreOpeningDate());
+		addIntToRow(row, s.getPlannedStoreTotalArea());
 
 		return row.toArray(new String[]{});
 	}

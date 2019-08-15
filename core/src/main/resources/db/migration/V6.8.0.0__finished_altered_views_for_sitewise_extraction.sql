@@ -21,3 +21,38 @@ CREATE OR REPLACE VIEW `avg_sales_area_percent_by_fit` AS select `st`.`store_fit
 CREATE OR REPLACE VIEW `dps_stats` AS select max((`sb`.`volume_total` / coalesce(`st`.`area_sales`,`b`.`default_sales_area`))) AS `dps_max`,min((`sb`.`volume_total` / coalesce(`st`.`area_sales`,`b`.`default_sales_area`))) AS `dps_min` from ((`store_best_volume` `sb` join `store` `st` on((`st`.`store_id` = `sb`.`store_id`))) left join `banner` `b` on((`b`.`banner_id` = `st`.`banner_id`))) where ((`sb`.`volume_total` is not null) and (`st`.`store_type` = 'ACTIVE') and (coalesce(`st`.`area_sales`,`b`.`default_sales_area`) is not null) and isnull(`st`.`deleted_date`));
 
 
+CREATE OR REPLACE VIEW empty_sites AS
+SELECT 
+	si.site_id AS site_id,
+	si.latitude,
+	si.longitude,
+	si.address_1 AS address,
+	si.city,
+	si.county,
+	si.state,
+	si.postal_code,
+	si.intersection_type,
+	si.quad,
+	si.intersection_street_primary AS primary_intersection_street,
+	si.intersection_street_secondary AS secondary_intersection_street,
+	si.cbsa_id,
+	f.store_id AS planned_store_id,
+	f.store_name AS planned_store_name,
+	f.date_opened AS planned_store_opening_date,
+	f.area_total AS planned_store_total_area
+FROM site si
+LEFT JOIN (
+	SELECT * 
+	FROM store st 
+	WHERE st.store_type = 'ACTIVE'
+	AND st.deleted_date IS null
+) a ON a.site_id = si.site_id
+LEFT JOIN (
+	SELECT * 
+	FROM store st 
+	WHERE st.store_type = 'FUTURE'
+	AND st.deleted_date IS null
+) f ON f.site_id = si.site_id
+WHERE (si.backfilled_non_grocery IS NULL OR si.backfilled_non_grocery = 0)
+AND si.deleted_date IS null
+AND a.store_id IS NULL;

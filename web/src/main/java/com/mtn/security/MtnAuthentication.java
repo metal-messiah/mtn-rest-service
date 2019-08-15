@@ -1,11 +1,9 @@
 package com.mtn.security;
 
-import com.mtn.model.domain.Role;
 import com.mtn.model.domain.UserProfile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class MtnAuthentication implements Authentication {
@@ -19,11 +17,7 @@ public class MtnAuthentication implements Authentication {
 
 	@Override
 	public Collection< ? extends GrantedAuthority > getAuthorities() {
-		Role userRole = userProfile.getRole();
-		if (userRole != null) {
-			return userProfile.getRole().getPermissions();
-		}
-		return new ArrayList<>();
+		return userProfile.getPermissions();
 	}
 
 	@Override

@@ -1,10 +1,8 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.Group;
-import com.mtn.model.domain.Role;
-import com.mtn.model.domain.StoreList;
-import com.mtn.model.domain.UserProfile;
+import com.mtn.model.domain.*;
 import com.mtn.model.view.UserProfileView;
+import com.mtn.repository.PermissionRepository;
 import com.mtn.repository.StoreListRepository;
 import com.mtn.repository.UserProfileRepository;
 import com.mtn.repository.specification.StoreListSpecifications;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
@@ -26,14 +25,17 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 public class UserProfileService extends EntityService<UserProfile, UserProfileView> {
 
 	private final StoreListRepository storeListRepository;
+	private final PermissionRepository permissionRepository;
 
 	@Autowired
 	public UserProfileService(SecurityService securityService,
 							  UserProfileRepository repository,
 							  UserProfileValidator validator,
-							  StoreListRepository storeListRepository) {
+							  StoreListRepository storeListRepository,
+							  PermissionRepository permissionRepository) {
 		super(securityService, repository, validator, UserProfile::new);
 		this.storeListRepository = storeListRepository;
+		this.permissionRepository = permissionRepository;
 	}
 
 	public List<UserProfile> findAllByGroupIdUsingSpecs(Integer groupId) {
@@ -142,6 +144,26 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 	public UserProfile setUserGroup(Integer userId, Group group) {
 		UserProfile userProfile = this.findOneUsingSpecs(userId);
 		userProfile.setGroup(group);
+		return this.updateOne(userProfile);
+	}
+
+	public UserProfile updatePermissions(Integer userProfileId, List<Integer> newPermissionIds) {
+		// Get the affected userProfile
+		UserProfile userProfile = this.findOneUsingSpecs(userProfileId);
+
+		// Remove any permissions not included in set
+		userProfile.getPermissions().removeIf(p -> !newPermissionIds.contains(p.getId()));
+
+		// get the list of permission ids remaining
+		List<Integer> remainingPermissionIds = userProfile.getPermissions().stream().map(AuditingEntity::getId).collect(Collectors.toList());
+
+		// Add permissions if not already present
+		newPermissionIds.stream().filter(pId -> !remainingPermissionIds.contains(pId)).forEach(pId -> {
+			Permission permission = this.permissionRepository.findOne(pId);
+			userProfile.getPermissions().add(permission);
+		});
+
+		// Save the changes
 		return this.updateOne(userProfile);
 	}
 

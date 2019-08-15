@@ -2,7 +2,9 @@ package com.mtn.model.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -20,6 +22,8 @@ public class UserProfile extends AuditingEntity {
 
     private List<StoreList> subscribedStoreLists = new ArrayList<>();
     private List<StoreList> createdStoreLists = new ArrayList<>();
+
+    private Set<Permission> permissions = new HashSet<>();
 
     @PrePersist
     @PreUpdate
@@ -114,5 +118,19 @@ public class UserProfile extends AuditingEntity {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_permission",
+            joinColumns = @JoinColumn(name = "user_profile_id", referencedColumnName = "user_profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "auth_permission_id", referencedColumnName = "auth_permission_id")
+    )
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 }

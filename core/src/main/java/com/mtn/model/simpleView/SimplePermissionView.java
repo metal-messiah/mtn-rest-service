@@ -7,7 +7,6 @@ import com.mtn.model.domain.Permission;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimplePermissionView extends SimpleAuditingEntityView {
 
-    private Integer id;
     private String systemName;
     private String displayName;
     private String description;
@@ -19,7 +18,6 @@ public class SimplePermissionView extends SimpleAuditingEntityView {
 
     public SimplePermissionView(Permission permission) {
         super(permission);
-        this.id = permission.getId();
         this.systemName = permission.getSystemName();
         this.displayName = permission.getDisplayName();
         this.description = permission.getDescription();

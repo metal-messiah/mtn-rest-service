@@ -151,6 +151,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/api/banner-source/**").hasAuthority(PermissionType.STORE_SOURCE_READ)
 				.antMatchers(HttpMethod.PUT, "/api/banner-source/**").hasAuthority(PermissionType.STORE_SOURCE_UPDATE)
 				.antMatchers(HttpMethod.DELETE, "/api/banner-source/**").hasAuthority(PermissionType.STORE_SOURCE_DELETE)
+				.antMatchers(HttpMethod.GET, "/api/site-wise/**").hasAuthority("SITE_WISE_READ")
 				.antMatchers(HttpMethod.GET, "/api/planned-grocery/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/planned-grocery/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/source-updatable/**").authenticated()
@@ -174,7 +175,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.DELETE, "/api/store-list/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/store-list/**").authenticated()
 				.antMatchers(HttpMethod.PUT, "/api/store-list/**").authenticated()
-				.antMatchers(HttpMethod.GET, "/api/site-wise/**").authenticated()
 				.anyRequest().denyAll();
 	}
 

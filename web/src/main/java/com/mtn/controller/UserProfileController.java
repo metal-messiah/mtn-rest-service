@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserProfileController extends CrudController<UserProfile, UserProfileView> {
@@ -84,4 +86,12 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
                 storeListId);
         return ResponseEntity.ok(new SimpleUserProfileView(userProfile));
     }
+
+    @PutMapping("/{userProfileId}/permissions")
+    public ResponseEntity<UserProfileView> updatePermissions(@PathVariable Integer userProfileId,
+                                                      @RequestBody List<Integer> permissionIds) {
+        UserProfile userProfile = ((UserProfileService) this.entityService).updatePermissions(userProfileId, permissionIds);
+        return ResponseEntity.ok(new UserProfileView(userProfile));
+    }
+
 }

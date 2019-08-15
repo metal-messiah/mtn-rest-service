@@ -33,7 +33,7 @@ public class SiteWiseController {
 		return ResponseEntity.ok("File Submitted");
 	}
 
-	@GetMapping("active-and-empty")
+	@GetMapping("active-and-future")
 	public ResponseEntity downloadActiveAndEmpty() {
 		MtnLogger.info("Request Received: " + LocalDateTime.now());
 		try {

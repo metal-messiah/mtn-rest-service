@@ -3,8 +3,6 @@ package com.mtn.model.domain;
 import com.vividsolutions.jts.geom.Geometry;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table
@@ -13,7 +11,7 @@ public class UserBoundary extends AuditingEntity {
 
     private String geojson;
     private Geometry boundary;
-    private String boundaryName;
+    private String name;
 
     public String getGeojson() {
         return geojson;
@@ -31,11 +29,11 @@ public class UserBoundary extends AuditingEntity {
         this.boundary = boundary;
     }
 
-    public String getBoundaryName() {
-        return boundaryName;
+    public String getName() {
+        return name;
     }
 
-    public void setBoundaryName(String boundaryName) {
-        this.boundaryName = boundaryName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

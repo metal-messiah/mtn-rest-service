@@ -15,6 +15,8 @@ import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
 import org.springframework.messaging.MessageHandler;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class SiteWiseSftpConfig {
@@ -50,7 +52,11 @@ public class SiteWiseSftpConfig {
 	public MessageHandler handler() {
 		SftpMessageHandler handler = new SftpMessageHandler(sftpSessionFactory());
 		handler.setRemoteDirectoryExpression(new LiteralExpression(sftpRemoteDirectory));
-		handler.setFileNameGenerator(message -> "MTN DB Extraction.csv");
+		handler.setFileNameGenerator(message -> {
+			DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+			String date = formatter.format(LocalDateTime.now().toLocalDate());
+			return date + " MTN DB Extraction.csv";
+		});
 		return handler;
 	}
 

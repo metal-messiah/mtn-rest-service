@@ -39,6 +39,8 @@ public class SiteWiseService {
 	private final AvgSalesAreaPercentByBannerRepository avgSalesAreaPercentByBannerRepository;
 	private final AvgSalesAreaPercentByFitRepository avgSalesAreaPercentByFitRepository;
 
+	private boolean sendingSftp = false;
+
 	@Autowired
 	public SiteWiseService(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") SiteWiseSftpConfig.SiteWiseSftpGateway gateway,
 						   ActiveAndFutureStoresRepository activeAndFutureStoresRepository,
@@ -63,7 +65,8 @@ public class SiteWiseService {
 	}
 
 	public File getActiveAndFutureStoresFile() throws IOException {
-		return this.getFile("active-and-future-stores", getActiveAndFutureStoreData());
+		List<String[]> data = getActiveAndFutureStoreData();
+		return this.getFile("active-and-future-stores", data);
 	}
 
 	public File getEmptySitesFile() throws IOException {
@@ -83,9 +86,16 @@ public class SiteWiseService {
 	@Transactional(readOnly = true)
 	public void buildAndTransmitActiveAndFutureStoreData() {
 		try {
-			this.gateway.sendToSftp(getActiveAndFutureStoresFile());
+			// Prevent multiple requests from being submitted at the same time
+			if (!this.sendingSftp) {
+				this.sendingSftp = true;
+				File file = getActiveAndFutureStoresFile();
+				this.gateway.sendToSftp(file);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			this.sendingSftp = false;
 		}
 	}
 

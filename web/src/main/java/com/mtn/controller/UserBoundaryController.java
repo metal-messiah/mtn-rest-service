@@ -28,12 +28,11 @@ public class UserBoundaryController extends CrudController<UserBoundary, UserBou
     }
 
     @GetMapping
-    public ResponseEntity<List<SimpleUserBoundaryView>> findRecordsByUserId() {
+    public ResponseEntity<List<UserBoundaryView>> findRecordsByUserId() {
         Integer userId = securityService.getCurrentUser().getId();
 
         List<UserBoundary> domainModels = ((UserBoundaryService) this.entityService).findRecordsByUserId(userId);
-        List<SimpleUserBoundaryView> views = domainModels.stream().map(SimpleUserBoundaryView::new)
-                .collect(Collectors.toList());
+        List<UserBoundaryView> views = domainModels.stream().map(UserBoundaryView::new).collect(Collectors.toList());
 
         return ResponseEntity.ok(views);
     }

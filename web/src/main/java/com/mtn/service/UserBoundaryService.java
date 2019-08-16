@@ -37,6 +37,7 @@ public class UserBoundaryService extends EntityService<UserBoundary, UserBoundar
     @Override
     protected void setEntityAttributesFromRequest(UserBoundary userBoundary, UserBoundaryView request) {
         userBoundary.setGeojson(request.getGeojson());
+        userBoundary.setName(request.getName());
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.mtn.model.domain.Role;
 import com.mtn.model.simpleView.SimpleRoleView;
 import com.mtn.model.view.RoleView;
 import com.mtn.service.RoleService;
-import com.mtn.util.MtnLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +32,6 @@ public class RoleController extends CrudController<Role, RoleView> {
     public ResponseEntity<RoleView> updatePermissions(@PathVariable Integer roleId,
                                                       @RequestBody List<Integer> permissionIds) {
         Role role = ((RoleService) this.entityService).updatePermissions(roleId, permissionIds);
-        MtnLogger.info(permissionIds.toString());
         return ResponseEntity.ok(new RoleView(role));
     }
 

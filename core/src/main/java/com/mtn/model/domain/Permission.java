@@ -19,6 +19,7 @@ public class Permission extends AuditingEntity implements GrantedAuthority {
     private CrudAction action;
 
     private List<Role> roles = new ArrayList<>();
+    private List<UserProfile> users = new ArrayList<>();
 
     public String getSystemName() {
         return systemName;
@@ -69,6 +70,15 @@ public class Permission extends AuditingEntity implements GrantedAuthority {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    @ManyToMany(mappedBy = "permissions", cascade = {CascadeType.MERGE})
+    public List<UserProfile> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserProfile> users) {
+        this.users = users;
     }
 
     @Override

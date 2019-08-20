@@ -2,16 +2,18 @@ package com.mtn.controller;
 
 import com.mtn.service.SiteWiseService;
 import com.mtn.util.MtnLogger;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -34,33 +36,47 @@ public class SiteWiseController {
 	}
 
 	@GetMapping("active-and-future")
-	public ResponseEntity downloadActiveAndFuture() {
+	public void downloadActiveAndFuture(HttpServletResponse response) {
 		try {
-			return getDownloadableResponseEntity(siteWiseService.getActiveAndFutureStoresFile(), "MTN_Locations");
+			File file = siteWiseService.getActiveAndFutureStoresFile();
+			respondWithFile(file, "MTN_Locations", response);
 		} catch (IOException e) {
-			MtnLogger.warn("Failed", e);
-			return ResponseEntity.status(500).body(e.getMessage());
+			MtnLogger.error("Failed", e);
+			response.setStatus(500);
 		}
 	}
 
 	@GetMapping("empty-sites")
-	public ResponseEntity downloadEmptySites() {
+	public void downloadEmptySites(HttpServletResponse response) {
 		try {
-			return this.getDownloadableResponseEntity(siteWiseService.getEmptySitesFile(), "Empty_Sites");
+			File file = siteWiseService.getEmptySitesFile();
+			respondWithFile(file, "Empty_Sites", response);
 		} catch (IOException e) {
-			MtnLogger.warn("Failed", e);
-			return ResponseEntity.status(500).body(e.getMessage());
+			MtnLogger.error("Failed", e);
+			response.setStatus(500);
 		}
 	}
 
-	private ResponseEntity getDownloadableResponseEntity(File file, String fileName) {
+	private void respondWithFile(File file, String fileName, HttpServletResponse response) {
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
 		String date = formatter.format(LocalDateTime.now().toLocalDate());
-		return ResponseEntity.ok()
-				.header("Content-Disposition", "attachment; filename=" + date + "_" + fileName + ".csv")
-				.contentLength(file.length())
-				.contentType(MediaType.parseMediaType("text/csv"))
-				.body(new FileSystemResource(file));
+
+		response.setContentType("text/csv");
+		response.setHeader("Content-disposition", "attachment; filename=" + date + "_" + fileName + ".csv");
+
+		try (OutputStream out = response.getOutputStream();
+			 FileInputStream in = new FileInputStream(file)) {
+			// copy from in to out
+			IOUtils.copy(in, out);
+		} catch (IOException e) {
+			response.setStatus(500);
+		}
+
+		if (file.delete()) {
+			MtnLogger.info("Successfully deleted temp file.");
+		} else {
+			MtnLogger.warn("Failed to delete temp file Empty Sites");
+		}
 	}
 
 }

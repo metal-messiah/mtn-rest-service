@@ -5,11 +5,18 @@ import com.mtn.model.domain.StoreVolume;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.StoreVolumeView;
 import com.mtn.repository.StoreVolumeRepository;
+import com.mtn.repository.specification.AuditingEntitySpecifications;
+import com.mtn.repository.specification.StoreVolumeSpecifications;
 import com.mtn.validators.StoreVolumeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 public class StoreVolumeService extends StoreChildService<StoreVolume, StoreVolumeView> {
@@ -19,6 +26,13 @@ public class StoreVolumeService extends StoreChildService<StoreVolume, StoreVolu
                               StoreVolumeRepository repository,
                               StoreVolumeValidator validator) {
         super(securityService, repository, validator, StoreVolume::new);
+    }
+
+    public List<StoreVolume> findAllBySourceAndDate(String source, LocalDate volumeDate) {
+        Specifications<StoreVolume> spec = where(AuditingEntitySpecifications.isNotDeleted());
+        spec = spec.and(StoreVolumeSpecifications.sourceEquals(source));
+        spec = spec.and(StoreVolumeSpecifications.volumeDateEquals(volumeDate));
+        return this.repository.findAll(spec);
     }
 
     @Transactional

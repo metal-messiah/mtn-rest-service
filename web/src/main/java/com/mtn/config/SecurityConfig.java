@@ -152,6 +152,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.PUT, "/api/banner-source/**").hasAuthority(PermissionType.STORE_SOURCE_UPDATE)
 				.antMatchers(HttpMethod.DELETE, "/api/banner-source/**").hasAuthority(PermissionType.STORE_SOURCE_DELETE)
 				.antMatchers(HttpMethod.GET, "/api/site-wise/**").hasAuthority("SITE_WISE_READ")
+				.antMatchers(HttpMethod.GET, "/api/commissary/**").hasAuthority("COMMISSARY_READ")
 				.antMatchers(HttpMethod.GET, "/api/planned-grocery/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/planned-grocery/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/source-updatable/**").authenticated()

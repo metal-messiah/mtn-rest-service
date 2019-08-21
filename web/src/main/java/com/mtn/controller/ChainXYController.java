@@ -1,13 +1,10 @@
 package com.mtn.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.mtn.service.ChainXYService;
 import com.mtn.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/chainxy")

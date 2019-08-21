@@ -3,7 +3,6 @@ package com.mtn.service;
 import com.mtn.model.domain.BannerSource;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreSource;
-import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.StoreSourceView;
 import com.mtn.repository.StoreSourceRepository;
 import com.mtn.repository.specification.StoreSourceSpecifications;
@@ -27,28 +26,18 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 @Service
 public class StoreSourceService extends StoreChildService<StoreSource, StoreSourceView> {
 
-	private final StoreService storeService;
-	private final BannerSourceService bannerSourceService;
-	private final UserProfileService userProfileService;
-
 	@Autowired
 	public StoreSourceService(SecurityService securityService,
 							  StoreSourceRepository repository,
-							  StoreSourceValidator validator,
-							  StoreService storeService,
-							  BannerSourceService bannerSourceService,
-							  UserProfileService userProfileService) {
+							  StoreSourceValidator validator) {
 		super(securityService, repository, validator, StoreSource::new);
-		this.storeService = storeService;
-		this.bannerSourceService = bannerSourceService;
-		this.userProfileService = userProfileService;
 	}
 
-	public LocalDateTime getMaxSourceEditedDate(String sourceName) {
+	LocalDateTime getMaxSourceEditedDate(String sourceName) {
 		return ((StoreSourceRepository) this.repository).getMaxSourceEditedDate(sourceName);
 	}
 
-	public Optional<StoreSource> findOneBySourceNativeIdUsingSpecs(String sourceName, String id) {
+	Optional<StoreSource> findOneBySourceNativeIdUsingSpecs(String sourceName, String id) {
 		return Optional.ofNullable(this.repository.findOne(
 				where(StoreSourceSpecifications.sourceNativeIdEquals(id))
 						.and(StoreSourceSpecifications.sourceNameEquals(sourceName))
@@ -56,7 +45,7 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 		));
 	}
 
-	public List<StoreSource> findAllOfBannerSourceWhereNativeIdNotInSet(Integer bannerSourceId, Set<String> hashIds) {
+	List<StoreSource> findAllOfBannerSourceWhereNativeIdNotInSet(Integer bannerSourceId, Set<String> hashIds) {
 		return ((StoreSourceRepository) this.repository).findAllOfBannerSourceWhereNativeIdNotInSet(bannerSourceId, hashIds);
 	}
 

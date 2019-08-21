@@ -91,6 +91,11 @@ public class SiteWiseService {
 				this.sendingSftp = true;
 				File file = getActiveAndFutureStoresFile();
 				this.gateway.sendToSftp(file);
+				if (file.delete()) {
+					MtnLogger.info("Successfully deleted temp file.");
+				} else {
+					MtnLogger.error("Failed to delete temp file - active_and_future");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

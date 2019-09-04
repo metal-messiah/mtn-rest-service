@@ -36,6 +36,10 @@ public class Site extends AuditingEntity {
     private List<Store> stores = new ArrayList<>();
     private UserProfile assignee;
 
+    private List<SiteIsochrone> siteIsochrones;
+    private List<BlockGroupPopulationCentroid> centroids;
+    private List<SiteBlockGroupDriveTime> driveTimes;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shopping_center_id")
     public ShoppingCenter getShoppingCenter() {
@@ -225,5 +229,37 @@ public class Site extends AuditingEntity {
 
     public void setCbsaId(Integer cbsaId) {
         this.cbsaId = cbsaId;
+    }
+
+    @OneToMany(mappedBy = "site")
+    public List<SiteIsochrone> getSiteIsochrones() {
+        return siteIsochrones;
+    }
+
+    public void setSiteIsochrones(List<SiteIsochrone> siteIsochrones) {
+        this.siteIsochrones = siteIsochrones;
+    }
+
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "site_block_group",
+            joinColumns = @JoinColumn(name = "site_id", referencedColumnName = "site_id"),
+            inverseJoinColumns = @JoinColumn(name = "fips", referencedColumnName = "fips")
+    )
+    public List<BlockGroupPopulationCentroid> getCentroids() {
+        return centroids;
+    }
+
+    public void setCentroids(List<BlockGroupPopulationCentroid> centroids) {
+        this.centroids = centroids;
+    }
+
+    @OneToMany(mappedBy = "site")
+    public List<SiteBlockGroupDriveTime> getDriveTimes() {
+        return driveTimes;
+    }
+
+    public void setDriveTimes(List<SiteBlockGroupDriveTime> driveTimes) {
+        this.driveTimes = driveTimes;
     }
 }

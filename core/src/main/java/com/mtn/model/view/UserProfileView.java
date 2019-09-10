@@ -1,16 +1,9 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mtn.model.domain.StoreList;
 import com.mtn.model.domain.UserProfile;
 import com.mtn.model.simpleView.SimpleGroupView;
-import com.mtn.model.simpleView.SimplePermissionView;
 import com.mtn.model.simpleView.SimpleRoleView;
-import com.mtn.model.simpleView.SimpleStoreListView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserProfileView extends AuditingEntityView {
@@ -22,8 +15,6 @@ public class UserProfileView extends AuditingEntityView {
 
     private SimpleGroupView group;
     private SimpleRoleView role;
-
-    private List<SimplePermissionView> permissions;
 
     public UserProfileView() {
     }
@@ -44,7 +35,6 @@ public class UserProfileView extends AuditingEntityView {
             this.role = new SimpleRoleView(userProfile.getRole());
         }
 
-        this.permissions = userProfile.getPermissions().stream().map(SimplePermissionView::new).collect(Collectors.toList());
     }
 
     public String getEmail() {
@@ -95,11 +85,4 @@ public class UserProfileView extends AuditingEntityView {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<SimplePermissionView> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<SimplePermissionView> permissions) {
-        this.permissions = permissions;
-    }
 }

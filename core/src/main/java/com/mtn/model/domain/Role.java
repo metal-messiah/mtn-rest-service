@@ -34,7 +34,7 @@ public class Role extends AuditingEntity {
         this.description = description;
     }
 
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "auth_role_auth_permission",
             joinColumns = @JoinColumn(name = "auth_role_id", referencedColumnName = "auth_role_id"),
@@ -48,7 +48,7 @@ public class Role extends AuditingEntity {
         this.permissions = permissions;
     }
 
-    @OneToMany(mappedBy = "role", cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "role", cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     public Set<UserProfile> getMembers() {
         return members;
     }

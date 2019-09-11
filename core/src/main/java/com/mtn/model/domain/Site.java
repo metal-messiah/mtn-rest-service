@@ -37,7 +37,6 @@ public class Site extends AuditingEntity {
     private UserProfile assignee;
 
     private List<SiteIsochrone> siteIsochrones;
-    private List<BlockGroupPopulationCentroid> centroids;
     private List<SiteBlockGroupDriveTime> driveTimes;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -240,21 +239,8 @@ public class Site extends AuditingEntity {
         this.siteIsochrones = siteIsochrones;
     }
 
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "site_block_group",
-            joinColumns = @JoinColumn(name = "site_id", referencedColumnName = "site_id"),
-            inverseJoinColumns = @JoinColumn(name = "fips", referencedColumnName = "fips")
-    )
-    public List<BlockGroupPopulationCentroid> getCentroids() {
-        return centroids;
-    }
 
-    public void setCentroids(List<BlockGroupPopulationCentroid> centroids) {
-        this.centroids = centroids;
-    }
-
-    @OneToMany(mappedBy = "site")
+    @OneToMany(mappedBy = "site", fetch = FetchType.LAZY)
     public List<SiteBlockGroupDriveTime> getDriveTimes() {
         return driveTimes;
     }

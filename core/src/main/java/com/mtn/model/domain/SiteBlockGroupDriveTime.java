@@ -12,7 +12,7 @@ public class SiteBlockGroupDriveTime {
 
     private Integer driveSeconds;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "site_id")
 	private Site site;
 

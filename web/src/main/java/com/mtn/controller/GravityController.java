@@ -1,8 +1,6 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.Project;
 import com.mtn.service.GravityService;
-import com.mtn.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,26 +9,62 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/gravity")
 public class GravityController {
 
-	final private ProjectService projectService;
 	final private GravityService gravityService;
 
 	@Autowired
-	public GravityController(GravityService gravityService,
-							 ProjectService projectService) {
-		this.projectService = projectService;
+	public GravityController(GravityService gravityService) {
 		this.gravityService = gravityService;
 	}
 
-	@GetMapping
-	public ResponseEntity getModelChoropleth(@RequestParam("project-id") Integer projectId,
-											 @RequestParam("store-id") Integer storeId) {
-		Project project = this.projectService.findOneUsingSpecs(projectId);
+	@GetMapping("scores")
+	public ResponseEntity getStoreScores(@RequestParam("project-id") Integer projectId,
+										 @RequestParam("site-id") Integer siteId,
+										 @RequestParam("banner-sister-factor") float bannerSisterFactor,
+										 @RequestParam("fit-sister-factor") float fitSisterFactor,
+										 @RequestParam(name = "market-share-threshold", defaultValue = "0.0") float marketShareThreshold) {
+		Map<String, Float> scores = this.gravityService.getStoreBlockGroupMarketShares(projectId, siteId, bannerSisterFactor, fitSisterFactor, marketShareThreshold);
+		return ResponseEntity.ok(scores);
+	}
+
+	@GetMapping("attraction-totals")
+	public ResponseEntity getAttractionTotalsForProject(@RequestParam("project-id") Integer projectId,
+														@RequestParam("banner-sister-factor") float bannerSisterFactor,
+														@RequestParam("fit-sister-factor") float fitSisterFactor) {
 		try {
-			String geoJson = this.gravityService.getModelChoropleth(project, storeId);
+			Map<String, Map<Integer, Float>> attractionTotals = this.gravityService.getCentroidAttractionTotalsForProject(projectId, bannerSisterFactor, fitSisterFactor);
+			return ResponseEntity.ok(attractionTotals);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@GetMapping("block-group-web")
+	public ResponseEntity getBlockGroupWeb(@RequestParam("fips") String fips,
+										   @RequestParam("project-id") Integer projectId,
+										   @RequestParam("banner-sister-factor") float bannerSisterFactor,
+										   @RequestParam("fit-sister-factor") float fitSisterFactor,
+										   @RequestParam(name = "market-share-threshold", defaultValue = "0.0") float marketShareThreshold
+	) {
+		try {
+			String geoJson = this.gravityService.getBlockGroupWeb(fips, projectId, bannerSisterFactor, fitSisterFactor, marketShareThreshold);
+			return ResponseEntity.ok(geoJson);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@GetMapping
+	public ResponseEntity getModelChoropleth(@RequestParam("project-id") Integer projectId) {
+		try {
+			String geoJson = this.gravityService.getBlockGroupGeoJsonForProject(projectId);
 			return ResponseEntity.ok(geoJson);
 		} catch (Exception e) {
 			e.printStackTrace();

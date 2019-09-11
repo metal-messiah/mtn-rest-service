@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.mtn.constant.StoreType;
 import com.mtn.model.domain.*;
+import com.mtn.repository.BlockGroupPopulationCentroidRepository;
 import com.mtn.repository.SiteBlockGroupDriveTimeRepository;
 import com.mtn.repository.SiteIsochroneRepository;
 import com.mtn.util.MtnLogger;
@@ -33,6 +34,7 @@ public class MapBoxService {
 	private final ProjectService projectService;
 	private final SiteIsochroneRepository siteIsochroneRepository;
 	private final SiteBlockGroupDriveTimeRepository siteBlockGroupDriveTimeRepository;
+	private final BlockGroupPopulationCentroidRepository blockGroupPopulationCentroidRepository;
 
 	private long driveTimeRequestStartTime = 0;
 	private int driveTimeRequestCount = 0;
@@ -41,11 +43,13 @@ public class MapBoxService {
 	public MapBoxService(SiteService siteService,
 						 ProjectService projectService,
 						 SiteIsochroneRepository siteIsochroneRepository,
-						 SiteBlockGroupDriveTimeRepository siteBlockGroupDriveTimeRepository) {
+						 SiteBlockGroupDriveTimeRepository siteBlockGroupDriveTimeRepository,
+						 BlockGroupPopulationCentroidRepository blockGroupPopulationCentroidRepository) {
 		this.siteService = siteService;
 		this.projectService = projectService;
 		this.siteIsochroneRepository = siteIsochroneRepository;
 		this.siteBlockGroupDriveTimeRepository = siteBlockGroupDriveTimeRepository;
+		this.blockGroupPopulationCentroidRepository = blockGroupPopulationCentroidRepository;
 	}
 
 	public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
@@ -131,7 +135,8 @@ public class MapBoxService {
 		Optional<SiteIsochrone> isochroneOptional = site.getSiteIsochrones().stream().filter(i -> i.getDriveMinutes() == 15).findFirst();
 		if (isochroneOptional.isPresent()) {
 			final String siteCoords = site.getLongitude() + "," + site.getLatitude();
-			List<BlockGroupPopulationCentroid> centroids = site.getCentroids();
+
+			List<BlockGroupPopulationCentroid> centroids = this.blockGroupPopulationCentroidRepository.findAllForSite(site.getId());
 			// TODO request matrix with site location as source and all centroids as destinations (map-reduce)
 			List<List<BlockGroupPopulationCentroid>> batches = Lists.partition(centroids, 24);
 			for (List<BlockGroupPopulationCentroid> batch : batches) {

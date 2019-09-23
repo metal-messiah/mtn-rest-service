@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.model.domain.Boundary;
 import com.mtn.model.domain.Group;
 import com.mtn.model.domain.Role;
 import com.mtn.model.domain.StoreList;
@@ -21,6 +22,7 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 import java.util.List;
 
@@ -34,12 +36,9 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 	private final StoreListRepository storeListRepository;
 
 	@Autowired
-	public UserProfileService(SecurityService securityService,
-							  UserProfileRepository repository,
-							  UserProfileValidator validator,
-							  GroupRepository groupRepository,
-							  RoleRepository roleRepository,
-							  StoreListRepository storeListRepository) {
+	public UserProfileService(SecurityService securityService, UserProfileRepository repository,
+			UserProfileValidator validator, GroupRepository groupRepository, RoleRepository roleRepository,
+			StoreListRepository storeListRepository) {
 		super(securityService, repository, validator, UserProfile::new);
 		this.groupRepository = groupRepository;
 		this.roleRepository = roleRepository;
@@ -50,6 +49,13 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		return this.repository.findAll(where(UserProfileSpecifications.groupIdEquals(groupId))
 				.and(UserProfileSpecifications.isNotSystemAdministrator())
 				.and(UserProfileSpecifications.isNotDeleted()));
+	}
+
+	@Transactional
+	public UserProfile setUserBoundary(Integer userID, Boundary boundary) {
+		UserProfile userProfile = this.findOne(userID);
+		userProfile.addBoundary(boundary);
+		return userProfile;
 	}
 
 	private boolean isAlreadySubscribed(final UserProfile userProfile, final Integer id) {
@@ -137,8 +143,9 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 
 		Group group = null;
 		if (request.getGroup() != null) {
-			group = groupRepository.findOne(where(AuditingEntitySpecifications.<Group>idEquals(request.getGroup().getId()))
-					.and(AuditingEntitySpecifications.isNotDeleted()));
+			group = groupRepository
+					.findOne(where(AuditingEntitySpecifications.<Group>idEquals(request.getGroup().getId()))
+							.and(AuditingEntitySpecifications.isNotDeleted()));
 		}
 		userProfile.setGroup(group);
 

@@ -18,6 +18,8 @@ public interface BlockGroupPopulationCentroidRepository extends JpaRepository<Bl
 	@Query(value = "SELECT DISTINCT c.* FROM block_group_population_centroid c JOIN site_block_group sb ON sb.fips = c.fips JOIN store st ON st.site_id = sb.site_id WHERE st.store_id IN ?1", nativeQuery = true)
 	List<BlockGroupPopulationCentroid> findAllForStores(List<Integer> storeIds);
 
+	List<BlockGroupPopulationCentroid> findAllByFipsIn(List<String> fips);
+
 	@Query(value = "SELECT DISTINCT c.* " +
 			"FROM block_group_population_centroid c " +
 			"JOIN site_block_group sb ON sb.fips = c.fips " +
@@ -25,6 +27,8 @@ public interface BlockGroupPopulationCentroidRepository extends JpaRepository<Bl
 			"join store_casing sc on st.store_id = sc.store_id " +
 			"join store_casing_project scp on scp.store_casing_id = sc.store_casing_id " +
 			"where scp.project_id = :projectId " +
+			"and (c.population is not null and c.population > 0) " +
+			"and (c.pcw is not null and c.pcw > 0) " +
 			"and sc.deleted_date is null " +
 			"and st.deleted_date is null", nativeQuery = true)
 	List<BlockGroupPopulationCentroid> findAllForProject(@Param("projectId") Integer projectId);

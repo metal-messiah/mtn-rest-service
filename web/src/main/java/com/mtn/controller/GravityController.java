@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,18 +33,34 @@ public class GravityController {
 		return ResponseEntity.ok(scores);
 	}
 
-	@GetMapping("attraction-totals")
-	public ResponseEntity getAttractionTotalsForProject(@RequestParam("project-id") Integer projectId,
+	@GetMapping("run-model")
+	public ResponseEntity runModel(@RequestParam("project-id") Integer projectId,
 														@RequestParam("banner-sister-factor") float bannerSisterFactor,
 														@RequestParam("fit-sister-factor") float fitSisterFactor) {
 		try {
-			Map<String, Map<Integer, Float>> attractionTotals = this.gravityService.getCentroidAttractionTotalsForProject(projectId, bannerSisterFactor, fitSisterFactor);
-			return ResponseEntity.ok(attractionTotals);
+			List modelData = this.gravityService.runModel(projectId, bannerSisterFactor, fitSisterFactor);
+			return ResponseEntity.ok(modelData);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
+
+
+	@GetMapping("attraction-totals")
+	public ResponseEntity getAttractionTotalsForProject(@RequestParam("project-id") Integer projectId,
+														@RequestParam("banner-sister-factor") float bannerSisterFactor,
+														@RequestParam("fit-sister-factor") float fitSisterFactor) {
+		try {
+			List<Map<String, Object>> modelData = this.gravityService.getCalculatedModelData(projectId, bannerSisterFactor, fitSisterFactor);
+			return ResponseEntity.ok(modelData);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+
 
 	@GetMapping("block-group-web")
 	public ResponseEntity getBlockGroupWeb(@RequestParam("fips") String fips,

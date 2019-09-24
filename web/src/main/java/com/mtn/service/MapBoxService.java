@@ -154,7 +154,7 @@ public class MapBoxService {
 						e.printStackTrace();
 					}
 				}
-				processDriveTimeBatch(batch, siteCoords, site.getId());
+				this.processDriveTimeBatch(batch, siteCoords, site.getId());
 			}
 		} else {
 			MtnLogger.warn("Site " + site.getId() + " has no isochrone!");

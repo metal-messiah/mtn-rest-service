@@ -34,7 +34,7 @@ public class StoreVolume extends AuditingEntity implements StoreChild {
 
     private Store store;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     public Store getStore() {
         return store;

@@ -15,6 +15,8 @@ public class BlockGroupPopulationCentroid {
 	private Float latitude;
 	private Float longitude;
 	private Point location;
+	private Integer population;
+	private Float pcw;
 
 	public String getFips() {
 		return fips;
@@ -48,4 +50,19 @@ public class BlockGroupPopulationCentroid {
 		this.location = location;
 	}
 
+	public Integer getPopulation() {
+		return population;
+	}
+
+	public void setPopulation(Integer population) {
+		this.population = population;
+	}
+
+	public Float getPcw() {
+		return pcw;
+	}
+
+	public void setPcw(Float pcw) {
+		this.pcw = pcw;
+	}
 }

@@ -8,6 +8,7 @@ public class BoundaryView extends AuditingEntityView {
 
 	private String geojson;
 	private String boundaryName;
+	private Integer legacyProjectId;
 
 	public BoundaryView() {
 	}
@@ -16,6 +17,7 @@ public class BoundaryView extends AuditingEntityView {
 		super(boundary);
 		this.geojson = boundary.getGeojson();
 		this.boundaryName = boundary.getBoundaryName();
+		this.legacyProjectId = boundary.getLegacyProjectId();
 	}
 
 	public String getGeojson() {
@@ -32,5 +34,13 @@ public class BoundaryView extends AuditingEntityView {
 
 	public void setBoundaryName(String boundaryName) {
 		this.boundaryName = boundaryName;
+	}
+
+	public Integer getLegacyProjectId() {
+		return legacyProjectId;
+	}
+
+	public void setLegacyProjectId(Integer legacyProjectId) {
+		this.legacyProjectId = legacyProjectId;
 	}
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BoundaryRepository extends EntityRepository<Boundary> {
     @Query(value = "select b.* " + "from boundary b join user_boundary ub on b.boundary_id = ub.boundary_id "
-            + "where ub.user_profile_id = :userId", nativeQuery = true)
+            + "where ub.user_profile_id = :userId AND b.deleted_by IS NULL", nativeQuery = true)
     List<Boundary> findUserBoundaries(@Param("userId") Integer userId);
 
 }

@@ -7,7 +7,6 @@ import com.mtn.model.domain.Boundary;
 public class SimpleBoundaryView extends SimpleAuditingEntityView {
 
 	private String geojson;
-	private String boundaryName;
 	private Integer legacyProjectId;
 
 	public SimpleBoundaryView() {
@@ -16,7 +15,6 @@ public class SimpleBoundaryView extends SimpleAuditingEntityView {
 	public SimpleBoundaryView(Boundary boundary) {
 		super(boundary);
 		this.geojson = boundary.getGeojson();
-		this.boundaryName = boundary.getBoundaryName();
 		this.legacyProjectId = boundary.getLegacyProjectId();
 	}
 
@@ -26,14 +24,6 @@ public class SimpleBoundaryView extends SimpleAuditingEntityView {
 
 	public void setGeojson(String geojson) {
 		this.geojson = geojson;
-	}
-
-	public String getBoundaryName() {
-		return boundaryName;
-	}
-
-	public void setBoundaryName(String boundaryName) {
-		this.boundaryName = boundaryName;
 	}
 
 	public Integer getLegacyProjectId() {

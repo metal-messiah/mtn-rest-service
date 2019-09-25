@@ -9,6 +9,7 @@ import javax.persistence.*;
 						targetClass = StoreGravityData.class,
 						columns = {
 								@ColumnResult(name = "store_id", type = Integer.class),
+								@ColumnResult(name = "store_name", type = String.class),
 								@ColumnResult(name = "site_id", type = Integer.class),
 								@ColumnResult(name = "latitude", type = Float.class),
 								@ColumnResult(name = "longitude", type = Float.class),
@@ -26,6 +27,7 @@ import javax.persistence.*;
 				name = "getStoreGravityDataForProjectBg",
 				query = "SELECT " +
 						"st.store_id, " +
+						"st.store_name, " +
 						"st.site_id, " +
 						"round(si.latitude, 6) AS latitude, " +
 						"round(si.longitude, 6) AS longitude, " +
@@ -55,6 +57,7 @@ public class StoreGravityData {
 
 	@Id
 	private Integer storeId;
+	private String storeName;
 	private Integer siteId;
 	private Float latitude;
 	private Float longitude;
@@ -67,8 +70,9 @@ public class StoreGravityData {
 
 	}
 
-	public StoreGravityData(Integer storeId, Integer siteId, Float latitude, Float longitude, Integer volume, Float salesArea, String storeFit, Integer bannerId) {
+	public StoreGravityData(Integer storeId, String storeName, Integer siteId, Float latitude, Float longitude, Integer volume, Float salesArea, String storeFit, Integer bannerId) {
 		this.storeId = storeId;
+		this.storeName = storeName;
 		this.siteId = siteId;
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -84,6 +88,14 @@ public class StoreGravityData {
 
 	public void setStoreId(Integer storeId) {
 		this.storeId = storeId;
+	}
+
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
 	}
 
 	public Integer getSiteId() {

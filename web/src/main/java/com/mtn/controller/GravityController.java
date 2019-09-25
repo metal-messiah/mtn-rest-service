@@ -35,10 +35,11 @@ public class GravityController {
 
 	@GetMapping("run-model")
 	public ResponseEntity runModel(@RequestParam("project-id") Integer projectId,
-														@RequestParam("banner-sister-factor") float bannerSisterFactor,
-														@RequestParam("fit-sister-factor") float fitSisterFactor) {
+								   @RequestParam("banner-sister-factor") float bannerSisterFactor,
+								   @RequestParam("fit-sister-factor") float fitSisterFactor,
+								   @RequestParam("distance-factor") float distanceFactor) {
 		try {
-			List modelData = this.gravityService.runModel(projectId, bannerSisterFactor, fitSisterFactor);
+			List modelData = this.gravityService.runModel(projectId, bannerSisterFactor, fitSisterFactor, distanceFactor);
 			return ResponseEntity.ok(modelData);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,7 +60,6 @@ public class GravityController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
-
 
 
 	@GetMapping("block-group-web")

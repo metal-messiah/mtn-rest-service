@@ -25,27 +25,21 @@ public class UserBoundaryController extends CrudController<UserBoundary, UserBou
 	private final EntityManager entityManager;
 
 	@Autowired
-	public UserBoundaryController(UserBoundaryService userBoundaryService,
-								  EntityManager entityManager) {
+	public UserBoundaryController(UserBoundaryService userBoundaryService, EntityManager entityManager) {
 		super(userBoundaryService, UserBoundaryView::new);
 		this.entityManager = entityManager;
 	}
 
 	@GetMapping
 	public ResponseEntity findAllForUser(@RequestParam("user-id") Integer userId) {
-//		Query query = this.entityManager.createNamedQuery("getAllUserBoundariesForUser")
-//				.setParameter("userProfileId", userId);
 
-		List<Tuple> resultList = this.entityManager.createNativeQuery("SELECT ub.user_boundary_id as id, " +
-				"ub.boundary_id as boundaryId, " +
-				"ub.boundary_name as boundaryName " +
-				"from user_boundary ub " +
-				"where ub.user_profile_id = :userProfileId " +
-				"and ub.deleted_date is null", Tuple.class)
-				.setParameter("userProfileId", userId)
-				.getResultList();
-
-
+		List<Tuple> resultList = this.entityManager
+				.createNativeQuery(
+						"SELECT ub.user_boundary_id as id, " + "ub.boundary_id as boundaryId, "
+								+ "ub.boundary_name as boundaryName " + "from user_boundary ub "
+								+ "where ub.user_profile_id = :userProfileId " + "and ub.deleted_date is null",
+						Tuple.class)
+				.setParameter("userProfileId", userId).getResultList();
 
 		return ResponseEntity.ok(TupleUtil.toListOfMaps(resultList));
 	}

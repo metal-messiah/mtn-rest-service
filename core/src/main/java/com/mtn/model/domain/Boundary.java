@@ -1,5 +1,6 @@
 package com.mtn.model.domain;
 
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import javax.persistence.*;
@@ -75,5 +76,4 @@ public class Boundary extends AuditingEntity {
     public void setBoundary(Geometry boundary) {
         this.boundary = boundary;
     }
-
 }

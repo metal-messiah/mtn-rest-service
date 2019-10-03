@@ -14,5 +14,6 @@ CREATE TABLE `user_boundary` (
     INDEX `user_id_index` (`user_profile_id`),
     INDEX `boundary_id_index` (`boundary_id`),
     INDEX `boundary_name_index` (`boundary_name`),
-    CONSTRAINT `FK_user_boundary_boundary` FOREIGN KEY (`boundary_id`) REFERENCES `boundary` (`boundary_id`) ON UPDATE CASCADE
+    CONSTRAINT `FK_user_boundary_boundary` FOREIGN KEY (`boundary_id`) REFERENCES `boundary` (`boundary_id`) ON UPDATE CASCADE,
+    CONSTRAINT `FK_user_boundary_user_profile` FOREIGN KEY (`user_profile_id`) REFERENCES `user_profile` (`user_profile_id`) ON UPDATE CASCADE
 );

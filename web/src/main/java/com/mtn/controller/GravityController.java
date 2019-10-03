@@ -39,7 +39,7 @@ public class GravityController {
 								   @RequestParam("fit-sister-factor") float fitSisterFactor,
 								   @RequestParam("distance-factor") float distanceFactor) {
 		try {
-			List modelData = this.gravityService.runModel(projectId, bannerSisterFactor, fitSisterFactor, distanceFactor);
+			Map modelData = this.gravityService.runModel(projectId, bannerSisterFactor, fitSisterFactor, distanceFactor);
 			return ResponseEntity.ok(modelData);
 		} catch (Exception e) {
 			e.printStackTrace();

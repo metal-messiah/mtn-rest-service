@@ -161,7 +161,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/api/site-wise/**").hasAuthority("SITE_WISE_READ")
 				.antMatchers(HttpMethod.GET, "/api/commissary/**").hasAuthority("COMMISSARY_READ")
 				.antMatchers(HttpMethod.GET, "/api/map-box/**").hasAuthority("MAP_BOX_READ")
-				.antMatchers(HttpMethod.GET, "/api/gravity/**").hasAuthority("GRAVITY_READ")
+				.antMatchers(HttpMethod.GET, "/api/gravity/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/planned-grocery/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/planned-grocery/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/source-updatable/**").authenticated()

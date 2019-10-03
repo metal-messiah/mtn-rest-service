@@ -182,7 +182,7 @@ public class GravityService {
 		}
 	}
 
-	public List runModel(Integer projectId, Float bannerSisterFactor, Float fitSisterFactor, Float distanceFactor) {
+	public Map<String, Object> runModel(Integer projectId, Float bannerSisterFactor, Float fitSisterFactor, Float distanceFactor) {
 		Query q = em.createNamedQuery("getStoreGravityDataForProjectBg")
 				.setParameter("projectId", projectId);
 		List<StoreGravityData> stores = q.getResultList();
@@ -209,66 +209,86 @@ public class GravityService {
 		}
 
 		double sumOfDollars = 0.0;
+		double[] modelStoreVolumes = new double[stores.size()];
 		double[][] dollarsMatrix = new double[blockGroups.size()][stores.size()];
 		for (int b = 0; b < blockGroups.size(); b++) {
 			for (int s = 0; s < stores.size(); s++) {
-				dollarsMatrix[b][s] = startingMarketShares[b][s] * adjustedBlockGroupDollars[b];
-				sumOfDollars += dollarsMatrix[b][s];
+				double dollars = startingMarketShares[b][s] * adjustedBlockGroupDollars[b];
+				modelStoreVolumes[s] += dollars;
+				dollarsMatrix[b][s] = dollars;
+				sumOfDollars += dollars;
 			}
 		}
 		MtnLogger.info("Sum of Volumes: " + NumberFormat.getNumberInstance(Locale.US).format(totalMarketStoreVolume));
 		MtnLogger.info("Sum of Dollars: " + NumberFormat.getNumberInstance(Locale.US).format(Math.round(sumOfDollars)));
 
-		double[][] balancedDollarsMatrix = this.balance(dollarsMatrix, adjustedBlockGroupDollars, storeVolumes, 1);
+//		double[][] balancedDollarsMatrix = this.balance(dollarsMatrix, adjustedBlockGroupDollars, storeVolumes, 1);
 
-		double[][] newMarketShares = new double[blockGroups.size()][stores.size()];
-		double[][] marketShareRatios = new double[blockGroups.size()][stores.size()];
-		double newMarketShareSum = 0.0;
-		for (int b = 0; b < blockGroups.size(); b++) {
-			double blockGroupSum = 0.0;
-			for (int s = 0; s < stores.size(); s++) {
-				blockGroupSum += balancedDollarsMatrix[b][s];
-			}
-			for (int s = 0; s < stores.size(); s++) {
-				double newMarketShare = balancedDollarsMatrix[b][s] / blockGroupSum;
-				newMarketShares[b][s] = newMarketShare;
-				newMarketShareSum += newMarketShare;
-				marketShareRatios[b][s] = newMarketShare / startingMarketShares[b][s];
-			}
-		}
+//		double[][] newMarketShares = new double[blockGroups.size()][stores.size()];
+//		double[][] marketShareRatios = new double[blockGroups.size()][stores.size()];
+//		double newMarketShareSum = 0.0;
+//		for (int b = 0; b < blockGroups.size(); b++) {
+//			double blockGroupSum = 0.0;
+//			for (int s = 0; s < stores.size(); s++) {
+//				blockGroupSum += balancedDollarsMatrix[b][s];
+//			}
+//			for (int s = 0; s < stores.size(); s++) {
+//				double storeDollars = balancedDollarsMatrix[b][s];
+//				double newMarketShare = storeDollars / blockGroupSum;
+//				newMarketShares[b][s] = newMarketShare;
+//				newMarketShareSum += newMarketShare;
+//				marketShareRatios[b][s] = newMarketShare / startingMarketShares[b][s];
+//			}
+//		}
 
-		double newAverageMarketShare = newMarketShareSum / (blockGroups.size() * stores.size());
-		MtnLogger.info("New Average Market Share: " + newAverageMarketShare);
+//		double newAverageMarketShare = newMarketShareSum / (blockGroups.size() * stores.size());
+//		MtnLogger.info("New Average Market Share: " + newAverageMarketShare);
 
-		double[] storePowers = new double[stores.size()];
-		for (int s = 0; s < stores.size(); s++) {
-			double sumOfRatios = 0.0;
-			for (int b = 0; b < blockGroups.size(); b++) {
-				sumOfRatios += marketShareRatios[b][s];
-			}
-			storePowers[s] = sumOfRatios / blockGroups.size();
-		}
+//		double[] storePowers = new double[stores.size()];
+//		for (int s = 0; s < stores.size(); s++) {
+//			double sumOfRatios = 0.0;
+//			for (int b = 0; b < blockGroups.size(); b++) {
+//				sumOfRatios += marketShareRatios[b][s];
+//			}
+//			storePowers[s] = sumOfRatios / blockGroups.size();
+//		}
 
 		double[] dpsfs = stores.stream().map(st -> st.getVolume() / st.getSalesArea()).mapToDouble(v -> (double) v).toArray();
 
-		LinearRegression powerRegression = new LinearRegression(storePowers, dpsfs);
-		MtnLogger.info("Power regression: " + powerRegression.toString());
+		double[] casedStoreVolumes = stores.stream().map(StoreGravityData::getVolume).mapToDouble(v -> ((double) v)).toArray();
+		LinearRegression volumeRegression = new LinearRegression(modelStoreVolumes, casedStoreVolumes);
+		MtnLogger.info("Volume regression: " + volumeRegression.toString());
 
-		List<Map<String, Object>> output = new ArrayList<>();
+//		LinearRegression powerRegression = new LinearRegression(dpsfs, storePowers);
+//		MtnLogger.info("Power regression: " + powerRegression.toString());
+
+		Map<String, Object> regressionData = new HashMap<>();
+		regressionData.put("slope", volumeRegression.slope());
+		regressionData.put("intercept", volumeRegression.intercept());
+		regressionData.put("R2", volumeRegression.R2());
+
+		List<Map<String, Object>> records = new ArrayList<>();
 		for (int s = 0; s < stores.size(); s++) {
 			Map<String, Object> values = new HashMap<>();
 			StoreGravityData store = stores.get(s);
 			values.put("storeId", store.getStoreId());
 			values.put("storeName", store.getStoreName());
 			values.put("dpsf", dpsfs[s]);
-			values.put("power", storePowers[s]);
+//			values.put("power", storePowers[s]);
 			values.put("bannerId", store.getBannerId());
 			values.put("fit", store.getStoreFit());
 			values.put("salesArea", store.getSalesArea());
-			output.add(values);
+			values.put("volumeCased", store.getVolume());
+			values.put("volumeModel", Math.round(modelStoreVolumes[s]));
+			records.add(values);
 		}
+		records.sort(Comparator.comparingDouble(a -> ((double) a.get("dpsf"))));
 
-		return output;
+		Map<String, Object> results = new HashMap<>();
+		results.put("regression", regressionData);
+		results.put("records", records);
+
+		return results;
 	}
 
 	public List<Map<String, Object>> getCalculatedModelData(Integer projectId, Float bannerSisterFactor, Float fitSisterFactor) {

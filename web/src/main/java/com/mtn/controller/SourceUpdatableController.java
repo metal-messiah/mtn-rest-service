@@ -1,5 +1,6 @@
 package com.mtn.controller;
 
+import com.mtn.model.domain.Store;
 import com.mtn.model.simpleView.SimpleStoreView;
 import com.mtn.model.view.SourceUpdatable;
 import com.mtn.service.SourceUpdatableService;
@@ -35,7 +36,8 @@ public class SourceUpdatableController {
 
 	@PostMapping(value = "updatable")
 	public ResponseEntity<SimpleStoreView> updateFromUpdatable(@RequestBody SourceUpdatable updatable) {
-		return ResponseEntity.ok(new SimpleStoreView(sourceUpdatableService.updateFromUpdatable(updatable)));
+		Store store = sourceUpdatableService.updateFromUpdatable(updatable);
+		return ResponseEntity.ok(new SimpleStoreView(store));
 	}
 
 }

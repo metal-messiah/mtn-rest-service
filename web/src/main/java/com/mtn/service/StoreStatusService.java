@@ -17,46 +17,52 @@ import java.util.Optional;
 @Service
 public class StoreStatusService extends StoreChildService<StoreStatus, StoreStatusView> {
 
-    @Autowired
-    public StoreStatusService(SecurityService securityService,
-                              StoreStatusRepository repository,
-                              StoreStatusValidator validator) {
-        super(securityService, repository, validator, StoreStatus::new);
-    }
+	@Autowired
+	public StoreStatusService(SecurityService securityService,
+							  StoreStatusRepository repository,
+							  StoreStatusValidator validator) {
+		super(securityService, repository, validator, StoreStatus::new);
+	}
 
-    public StoreStatus addOneToStore(StoreStatusView request, Store store) {
-        this.validator.validateForInsert(request);
+	public StoreStatus addOneToStore(StoreStatusView request, Store store) {
+		this.validator.validateForInsert(request);
 
-        UserProfile currentUser = this.securityService.getCurrentUser();
+		Optional<StoreStatus> any = store.getStatuses().stream().filter(status -> status.getStatusStartDate().equals(request.getStatusStartDate()) && status.getStatus().equals(request.getStatus()))
+				.findAny();
+		if (any.isPresent()) {
+			throw new IllegalArgumentException("Duplicate status on the same date!");
+		}
 
-        StoreStatus status = createNewEntityFromRequest(request);
-        status.setCreatedBy(currentUser);
-        status.setUpdatedBy(currentUser);
+		UserProfile currentUser = this.securityService.getCurrentUser();
 
-        status.setStore(store);
+		StoreStatus status = createNewEntityFromRequest(request);
+		status.setCreatedBy(currentUser);
+		status.setUpdatedBy(currentUser);
 
-        return this.repository.save(status);
-    }
+		status.setStore(store);
 
-    @Transactional
-    public void updateStoreStatusesFromCasing(StoreCasing casing) {
-        Optional<StoreStatus> storeStatus = StoreUtil.getLatestStatusAsOfDateTime(casing.getStore(), casing.getCasingDate());
-        if (!storeStatus.isPresent() || storeStatus.get().getStatus().equals(casing.getStoreStatus())) {
-            StoreStatus newStatus = new StoreStatus();
-            newStatus.setStatusStartDate(casing.getCasingDate());
-            newStatus.setStatus("Open");
-            newStatus.setStore(casing.getStore());
-        }
-    }
+		return this.repository.save(status);
+	}
 
-    @Override
-    protected void setEntityAttributesFromRequest(StoreStatus status, StoreStatusView request) {
-        status.setStatus(request.getStatus());
-        status.setStatusStartDate(request.getStatusStartDate());
-    }
+	@Transactional
+	public void updateStoreStatusesFromCasing(StoreCasing casing) {
+		Optional<StoreStatus> storeStatus = StoreUtil.getLatestStatusAsOfDateTime(casing.getStore(), casing.getCasingDate());
+		if (!storeStatus.isPresent() || storeStatus.get().getStatus().equals(casing.getStoreStatus())) {
+			StoreStatus newStatus = new StoreStatus();
+			newStatus.setStatusStartDate(casing.getCasingDate());
+			newStatus.setStatus("Open");
+			newStatus.setStore(casing.getStore());
+		}
+	}
 
-    @Override
-    public void handleAssociationsOnDeletion(StoreStatus existing) {
-        // Do Nothing
-    }
+	@Override
+	protected void setEntityAttributesFromRequest(StoreStatus status, StoreStatusView request) {
+		status.setStatus(request.getStatus());
+		status.setStatusStartDate(request.getStatusStartDate());
+	}
+
+	@Override
+	public void handleAssociationsOnDeletion(StoreStatus existing) {
+		// Do Nothing
+	}
 }

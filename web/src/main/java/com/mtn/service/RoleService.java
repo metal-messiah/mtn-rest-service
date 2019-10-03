@@ -1,5 +1,6 @@
 package com.mtn.service;
 
+import com.mtn.model.domain.AuditingEntity;
 import com.mtn.model.domain.Permission;
 import com.mtn.model.domain.Role;
 import com.mtn.model.view.RoleView;
@@ -12,7 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.not;
@@ -32,25 +33,36 @@ public class RoleService extends EntityService<Role, RoleView> {
 		this.permissionRepository = permissionRepository;
 	}
 
-	public Page<Role> findAllByNameUsingSpecs(String name, Pageable page) {
-		return this.repository.findAll(
-				where(RoleSpecifications.displayNameContains(name))
-						.and(RoleSpecifications.isNotDeleted())
-						.and(not(RoleSpecifications.isAdmin()))
-				, page
-		);
+	@Override
+	public Page<Role> findAllUsingSpecs(Pageable page) {
+		return this.repository.findAll(where(not(RoleSpecifications.isAdmin()))
+						.and(RoleSpecifications.isNotDeleted()), page);
+	}
+
+	public Role updatePermissions(Integer roleId, List<Integer> newPermissionIds) {
+		// Get the affected role
+		Role role = this.findOneUsingSpecs(roleId);
+
+		// Remove any permissions not included in set
+		role.getPermissions().removeIf(p -> !newPermissionIds.contains(p.getId()));
+
+		// get the list of permission ids remaining
+		List<Integer> remainingPermissionIds = role.getPermissions().stream().map(AuditingEntity::getId).collect(Collectors.toList());
+
+		// Add permissions if not already present
+		newPermissionIds.stream().filter(pId -> !remainingPermissionIds.contains(pId)).forEach(pId -> {
+			Permission permission = this.permissionRepository.findOne(pId);
+			role.getPermissions().add(permission);
+		});
+
+		// Save the changes
+		return this.updateOne(role);
 	}
 
 	@Override
 	protected void setEntityAttributesFromRequest(Role role, RoleView request) {
 		role.setDisplayName(request.getDisplayName());
 		role.setDescription(request.getDescription());
-
-		Set<Permission> permissions = request.getPermissions().stream()
-				.map(simplePermissionView -> this.permissionRepository.findOne(simplePermissionView.getId()))
-				.collect(Collectors.toSet());
-
-		role.setPermissions(permissions);
 	}
 
 	@Override

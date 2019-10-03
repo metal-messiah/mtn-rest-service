@@ -1,16 +1,10 @@
 package com.mtn.service;
 
-import com.mtn.model.domain.Boundary;
-import com.mtn.model.domain.Group;
-import com.mtn.model.domain.Role;
-import com.mtn.model.domain.StoreList;
-import com.mtn.model.domain.UserProfile;
+import com.mtn.model.domain.*;
 import com.mtn.model.view.UserProfileView;
-import com.mtn.repository.GroupRepository;
-import com.mtn.repository.RoleRepository;
+import com.mtn.repository.PermissionRepository;
 import com.mtn.repository.StoreListRepository;
 import com.mtn.repository.UserProfileRepository;
-import com.mtn.repository.specification.AuditingEntitySpecifications;
 import com.mtn.repository.specification.StoreListSpecifications;
 import com.mtn.repository.specification.UserProfileSpecifications;
 import com.mtn.validators.UserProfileValidator;
@@ -25,24 +19,25 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 public class UserProfileService extends EntityService<UserProfile, UserProfileView> {
 
-	private final GroupRepository groupRepository;
-	private final RoleRepository roleRepository;
 	private final StoreListRepository storeListRepository;
+	private final PermissionRepository permissionRepository;
 
 	@Autowired
-	public UserProfileService(SecurityService securityService, UserProfileRepository repository,
-			UserProfileValidator validator, GroupRepository groupRepository, RoleRepository roleRepository,
-			StoreListRepository storeListRepository) {
+	public UserProfileService(SecurityService securityService,
+							  UserProfileRepository repository,
+							  UserProfileValidator validator,
+							  StoreListRepository storeListRepository,
+							  PermissionRepository permissionRepository) {
 		super(securityService, repository, validator, UserProfile::new);
-		this.groupRepository = groupRepository;
-		this.roleRepository = roleRepository;
 		this.storeListRepository = storeListRepository;
+		this.permissionRepository = permissionRepository;
 	}
 
 	public List<UserProfile> findAllByGroupIdUsingSpecs(Integer groupId) {
@@ -107,12 +102,6 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		return this.repository.findAll(spec, page);
 	}
 
-	public List<UserProfile> findAllByIdsUsingSpecs(List<Integer> userProfileIds) {
-		Specifications<UserProfile> spec = where(UserProfileSpecifications.isNotDeleted());
-		spec = spec.and(UserProfileSpecifications.idIn(userProfileIds));
-		return this.repository.findAll(spec);
-	}
-
 	@Override
 	public UserProfile findOneUsingSpecs(Integer id) {
 		UserProfile userProfile = this.repository.findOne(where(UserProfileSpecifications.isNotSystemAdministrator())
@@ -140,21 +129,6 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		userProfile.setEmail(request.getEmail().toLowerCase());
 		userProfile.setFirstName(request.getFirstName());
 		userProfile.setLastName(request.getLastName());
-
-		Group group = null;
-		if (request.getGroup() != null) {
-			group = groupRepository
-					.findOne(where(AuditingEntitySpecifications.<Group>idEquals(request.getGroup().getId()))
-							.and(AuditingEntitySpecifications.isNotDeleted()));
-		}
-		userProfile.setGroup(group);
-
-		Role role = null;
-		if (request.getRole() != null) {
-			role = roleRepository.findOne(where(AuditingEntitySpecifications.<Role>idEquals(request.getRole().getId()))
-					.and(AuditingEntitySpecifications.isNotDeleted()));
-		}
-		userProfile.setRole(role);
 	}
 
 	public UserProfile findOneByEmailUsingSpecs(String email) {
@@ -168,6 +142,38 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 						.and(UserProfileSpecifications.isNotSystemAdministrator())
 						.and(UserProfileSpecifications.isNotDeleted()),
 				page);
+	}
+
+	public UserProfile setUserRole(Integer userId, Role role) {
+		UserProfile userProfile = this.findOneUsingSpecs(userId);
+		userProfile.setRole(role);
+		return this.updateOne(userProfile);
+	}
+
+	public UserProfile setUserGroup(Integer userId, Group group) {
+		UserProfile userProfile = this.findOneUsingSpecs(userId);
+		userProfile.setGroup(group);
+		return this.updateOne(userProfile);
+	}
+
+	public UserProfile updatePermissions(Integer userProfileId, List<Integer> newPermissionIds) {
+		// Get the affected userProfile
+		UserProfile userProfile = this.findOneUsingSpecs(userProfileId);
+
+		// Remove any permissions not included in set
+		userProfile.getPermissions().removeIf(p -> !newPermissionIds.contains(p.getId()));
+
+		// get the list of permission ids remaining
+		List<Integer> remainingPermissionIds = userProfile.getPermissions().stream().map(AuditingEntity::getId).collect(Collectors.toList());
+
+		// Add permissions if not already present
+		newPermissionIds.stream().filter(pId -> !remainingPermissionIds.contains(pId)).forEach(pId -> {
+			Permission permission = this.permissionRepository.findOne(pId);
+			userProfile.getPermissions().add(permission);
+		});
+
+		// Save the changes
+		return this.updateOne(userProfile);
 	}
 
 }

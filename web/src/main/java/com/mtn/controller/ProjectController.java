@@ -2,12 +2,14 @@ package com.mtn.controller;
 
 import com.mtn.model.domain.Boundary;
 import com.mtn.model.domain.Project;
-import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.domain.Site;
+import com.mtn.model.simpleView.ProjectSummary;
 import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.view.BoundaryView;
 import com.mtn.model.view.ProjectView;
 import com.mtn.service.BoundaryService;
 import com.mtn.service.ProjectService;
+import com.mtn.service.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +24,14 @@ import java.util.stream.Collectors;
 public class ProjectController extends CrudController<Project, ProjectView> {
 
 	private final BoundaryService boundaryService;
+	private final SiteService siteService;
 
 	@Autowired
-	public ProjectController(ProjectService projectService, BoundaryService boundaryService) {
+	public ProjectController(ProjectService projectService,
+							 SiteService siteService,
+							 BoundaryService boundaryService) {
 		super(projectService, ProjectView::new);
+		this.siteService = siteService;
 		this.boundaryService = boundaryService;
 	}
 
@@ -84,5 +90,18 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 		List<Integer> storeIds = project.getStoreCasings().stream().map(c -> c.getStore().getId()).distinct()
 				.collect(Collectors.toList());
 		return ResponseEntity.ok(storeIds);
+	}
+
+	@GetMapping("/{id}/summary")
+	public ResponseEntity getProjectSummary(@PathVariable("id") Integer projectId) {
+		Project project = this.entityService.findOne(projectId);
+		if (project.getBoundary() != null) {
+			List<Site> sitesInBounds = siteService.findAllInGeoJson(project.getBoundary().getGeojson());
+
+			ProjectSummary projectSummary = new ProjectSummary(project, sitesInBounds);
+			return ResponseEntity.ok(projectSummary);
+		} else {
+			return ResponseEntity.badRequest().body("Project does not have a boundary!");
+		}
 	}
 }

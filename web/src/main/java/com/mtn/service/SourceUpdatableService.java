@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.Optional;
 
 @Service
 public class SourceUpdatableService {
@@ -16,23 +17,19 @@ public class SourceUpdatableService {
 	private final SiteService siteService;
 	private final StoreService storeService;
 	private final StoreStatusService storeStatusService;
-	private final StoreSourceService storeSourceService;
-
-	private final SecurityService securityService;
+	private final BannerService bannerService;
 
 	@Autowired
 	public SourceUpdatableService(ShoppingCenterService shoppingCenterService,
 								  SiteService siteService,
 								  StoreService storeService,
-								  StoreStatusService storeStatusService,
-								  StoreSourceService storeSourceService,
-								  SecurityService securityService) {
+								  BannerService bannerService,
+								  StoreStatusService storeStatusService) {
 		this.shoppingCenterService = shoppingCenterService;
 		this.siteService = siteService;
 		this.storeService = storeService;
 		this.storeStatusService = storeStatusService;
-		this.storeSourceService = storeSourceService;
-		this.securityService = securityService;
+		this.bannerService = bannerService;
 	}
 
 	public SourceUpdatable getUpdatableByStoreId(Integer storeId) {
@@ -53,29 +50,27 @@ public class SourceUpdatableService {
 	@Transactional
 	public Store updateFromUpdatable(SourceUpdatable updatable) {
 		Store store;
+		// If no shopping center ID is provided, must create SC, Site, and Store
 		if (updatable.getShoppingCenterId() == null) {
 			ShoppingCenter sc = shoppingCenterService.createNew();
 			Site site = siteService.createOne(sc, updatable.getLatitude(), updatable.getLongitude());
 			store = this.storeService.createNewStoreForSite(site);
 		} else if (updatable.getSiteId() == null) {
+			// If SC ID but no site Id, then create a new site for the shopping center, with new store
 			ShoppingCenter sc = shoppingCenterService.findOne(updatable.getShoppingCenterId());
 			Site site = this.createNewSiteInShoppingCenter(sc, updatable.getLatitude(), updatable.getLongitude());
 			store = this.storeService.createNewStoreForSite(site);
 		} else if (updatable.getStoreId() == null) {
+			// If site ID is provided, create a new store at that site
 			Site site = siteService.findOne(updatable.getSiteId());
 			store = this.storeService.createNewStoreForSite(site);
 		} else {
+			// If store ID is provided, update existing store
 			store = storeService.findOne(updatable.getStoreId());
 		}
 		this.updateStoreFromUpdatable(updatable, store);
 		this.updateSiteFromUpdatable(updatable, store.getSite());
 		this.updateShoppingCenterFromUpdatable(updatable, store.getSite().getShoppingCenter());
-
-		UserProfile currentUser = this.securityService.getCurrentUser();
-		StoreSource storeSource = this.storeSourceService.findOne(updatable.getStoreSource().getId());
-		storeSource.setStore(store);
-		storeSource.setValidatedBy(currentUser);
-		storeSource.setValidatedDate(LocalDateTime.now());
 
 		return store;
 	}
@@ -112,13 +107,24 @@ public class SourceUpdatableService {
 		store.setStoreName(updatable.getStoreName());
 		store.setDateOpened(updatable.getDateOpened());
 		store.setAreaTotal(updatable.getAreaTotal());
-		if (updatable.getStoreStatuses() != null) {
-			updatable.getStoreStatuses().stream().filter(status -> status.getId() == null).forEach(status -> {
+		// If a banner was provided and either the store doesn't already have one or it is different
+		if (updatable.getBanner() != null && (store.getBanner() == null || !store.getBanner().getId().equals(updatable.getBanner().getId()))) {
+			Banner banner = this.bannerService.findOne(updatable.getBanner().getId());
+			store.setBanner(banner);
+		} else if (updatable.getBanner() == null && store.getBanner() != null) { // If no banner was provided and the store previously had one
+			store.setBanner(null);
+		}
+		if (updatable.getStoreStatus() != null && updatable.getStoreStatusStartDate() != null) {
+			Optional<StoreStatus> previousStatus = store.getStatuses().stream()
+					.filter(st -> st.getStatusStartDate().isBefore(updatable.getStoreStatusStartDate()))
+					.max(Comparator.comparing(StoreStatus::getStatusStartDate));
+			// If no previous status is found, or the previous status is not the same, then add the new status
+			if (!previousStatus.isPresent() || !previousStatus.get().getStatus().equals(updatable.getStoreStatus())) {
 				StoreStatusView newStoreStatusRequest = new StoreStatusView();
-				newStoreStatusRequest.setStatus(status.getStatus());
-				newStoreStatusRequest.setStatusStartDate(status.getStatusStartDate());
+				newStoreStatusRequest.setStatus(updatable.getStoreStatus());
+				newStoreStatusRequest.setStatusStartDate(updatable.getStoreStatusStartDate());
 				storeStatusService.addOneToStore(newStoreStatusRequest, store);
-			});
+			}
 		}
 		storeService.updateOne(store);
 	}

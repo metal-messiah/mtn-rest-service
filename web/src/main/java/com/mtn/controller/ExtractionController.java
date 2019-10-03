@@ -1,9 +1,6 @@
 package com.mtn.controller;
 
-import com.mtn.model.domain.ExtractionField;
-import com.mtn.model.domain.ExtractionFieldSet;
-import com.mtn.model.domain.Store;
-import com.mtn.model.domain.StoreCasing;
+import com.mtn.model.domain.*;
 import com.mtn.service.ExtractionFieldSetService;
 import com.mtn.service.StoreCasingService;
 import com.mtn.service.StoreService;
@@ -20,9 +17,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -63,6 +58,31 @@ public class ExtractionController {
 
 		download(response, casings, fieldSetId);
 	}
+
+	@GetMapping(value = "all-casings", params = {"store-ids", "field-set-id"})
+	public void downloadAllCasingsForStores(HttpServletResponse response,
+											@RequestParam("store-ids") List<Integer> storeIds,
+											@RequestParam("field-set-id") Integer fieldSetId,
+											@RequestParam("primary-only") Boolean primaryOnly) {
+		List<Store> stores = this.storeService.findAllByIdsUsingSpecs(storeIds);
+		List<StoreCasing> casings = stores.stream()
+				.map(Store::getCasings)
+				.reduce((prev, curr) -> {
+					prev.addAll(curr);
+					return prev;
+				}).orElse(new ArrayList<>()).stream()
+				.filter(casing -> casing.getDeletedDate() == null)
+				.collect(Collectors.toList());
+
+		// If user requests primary data only, filter to only those casings associated to primary data projects
+		if (primaryOnly) {
+			casings = casings.stream().filter(casing -> casing.getProjects().stream().anyMatch(Project::getPrimaryData))
+					.collect(Collectors.toList());
+		}
+
+		download(response, casings, fieldSetId);
+	}
+
 
 	@GetMapping(params = {"project-id", "field-set-id"})
 	public void downloadProjectCasingData(HttpServletResponse response,

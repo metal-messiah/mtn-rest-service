@@ -8,7 +8,9 @@ import com.mtn.model.domain.BannerSource;
 import com.mtn.model.domain.Source;
 import com.mtn.model.domain.StoreSource;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.utils.JsonNodeUtil;
 import com.mtn.model.view.BannerSourceView;
+import com.mtn.model.view.StoreSourceData;
 import com.mtn.model.view.StoreSourceView;
 import com.mtn.repository.SourceRepository;
 import com.mtn.util.MtnLogger;
@@ -49,35 +51,58 @@ public class ChainXYService {
 		this.sourceRepository = sourceRepository;
 	}
 
-	public JsonNode getChainXyLocationForStoreSource(Integer storeSourceId) throws IOException {
+
+	public StoreSourceData getStoreDataForSource(StoreSource storeSource) throws Exception {
+		if (!storeSource.getSourceName().equals("ChainXY")) {
+			throw new Exception("StoreSource must be from ChainXY");
+		}
+
+		StoreSourceData ssd = new StoreSourceData();
+
+		JsonNode root = this.getChainXyLocationForNativeId(storeSource.getSourceNativeId());
+
+		ssd.setLatitude(root.get("Latitude").floatValue());
+		ssd.setLongitude(root.get("Longitude").floatValue());
+
+		ssd.setAddress(JsonNodeUtil.getNodeStringValue(root, "Address"));
+		ssd.setCity(JsonNodeUtil.getNodeStringValue(root, "City"));
+		ssd.setState(JsonNodeUtil.getNodeStringValue(root, "State"));
+		ssd.setPostalCode(JsonNodeUtil.getNodeStringValue(root, "PostalCode"));
+
+		if (root.hasNonNull("FirstAppeared")) {
+			ssd.setDateOpened(root.get("FirstAppeared").textValue());
+		}
+
+		if (root.hasNonNull("Closed") && root.get("Closed").booleanValue()) {
+			ssd.setStoreStatus("Closed");
+		}
+
+		return ssd;
+	}
+
+	/**
+	 * Retrieves one location record from the ChainXY API by id
+	 * */
+	private JsonNode getChainXyLocationForStoreSource(Integer storeSourceId) throws IOException {
 		StoreSource storeSource = this.storeSourceService.findOne(storeSourceId);
 
+		return getChainXyLocationForNativeId(storeSource.getSourceNativeId());
+
+	}
+
+	private JsonNode getChainXyLocationForNativeId(String nativeId) throws IOException{
 		UriComponents request = UriComponentsBuilder.newInstance()
 				.scheme("https")
 				.host("location.chainxy.com")
-				.path("/api/ChainLocations/" + storeSource.getSourceNativeId())
+				.path("/api/ChainLocations/" + nativeId)
 				.build();
 
+		// API Key is added as header in getRestTemplate()
 		ResponseEntity<String> response = getRestTemplate().getForEntity(request.toUriString(), String.class);
 
 		JsonNode jsonRoot = new ObjectMapper().readTree(response.getBody());
 
 		return jsonRoot.get("Record");
-	}
-
-	/*
-	Retrieves one location record from the ChainXY API by id
-	 */
-	public ResponseEntity<String> getChainXyLocationById(String id) throws IOException {
-		// TODO Add API key as header, Build query
-		UriComponents featureQueryUri = UriComponentsBuilder.newInstance()
-				.scheme("https")
-				.host("location.chainxy.com")
-				.path("/api/Locations")
-				.queryParam("query", "{id: " + id + "}")
-				.build();
-
-		return new RestTemplate().getForEntity(featureQueryUri.toUriString(), String.class);
 	}
 
 	@Async
@@ -234,7 +259,7 @@ public class ChainXYService {
 		return new ChainXyPagedRequest(request, vars);
 	}
 
-	public List<Integer> getIdsOfChainsScrapedSince(LocalDateTime dateTime) throws IOException {
+	private List<Integer> getIdsOfChainsScrapedSince(LocalDateTime dateTime) throws IOException {
 
 		UriComponents request = UriComponentsBuilder.newInstance()
 				.scheme("https")
@@ -314,12 +339,12 @@ public class ChainXYService {
 		private UriComponents requestComponents;
 		private Map<String, String> vars;
 
-		public ChainXyPagedRequest(UriComponents requestComponents, Map<String, String> vars) {
+		ChainXyPagedRequest(UriComponents requestComponents, Map<String, String> vars) {
 			this.requestComponents = requestComponents;
 			this.vars = vars;
 		}
 
-		public boolean hasNext() {
+		boolean hasNext() {
 			return this.currentPageIndex < totalPages;
 		}
 
@@ -343,37 +368,6 @@ public class ChainXYService {
 			// Extract the records from the JSON object
 			return (ArrayNode) jsonRoot.path("Records");
 		}
-	}
-
-	private ArrayNode getRecords(UriComponents request, Map<String, String> vars) throws IOException {
-		ArrayNode records = null;
-
-		int currentPage = 0;
-		int totalPages = 1;
-		do {
-			// Set the page to GET
-			vars.put("page", String.valueOf(currentPage));
-
-			// Submit GET request
-			ResponseEntity<String> response = this.getRestTemplate().getForEntity(request.toUriString(), String.class, vars);
-
-			// Read response body into a JSON object
-			JsonNode jsonRoot = new ObjectMapper().readTree(response.getBody());
-
-			// Set the total number of pages for further requests
-			totalPages = jsonRoot.get("Pages").intValue();
-
-			// Extract the records from the JSON object
-			ArrayNode pageElements = (ArrayNode) jsonRoot.path("Records");
-
-			// If this is the first page, save as initial ArrayNode, else add this page's records to the others
-			if (records == null) {
-				records = pageElements;
-			} else {
-				records.addAll(pageElements);
-			}
-		} while (++currentPage < totalPages);
-		return records;
 	}
 
 	private RestTemplate getRestTemplate() {

@@ -34,7 +34,7 @@ public abstract class CrudController<T extends AuditingEntity, V extends Auditin
 	}
 
 	@GetMapping(value = "/{id}")
-	final public ResponseEntity<V> findOne(@PathVariable("id") Integer id) {
+	public ResponseEntity<V> findOne(@PathVariable("id") Integer id) throws Exception {
 		T domainModel = this.entityService.findOneUsingSpecs(id);
 		if (domainModel == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

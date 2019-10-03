@@ -3,7 +3,6 @@ package com.mtn.service;
 import com.mtn.model.domain.BannerSource;
 import com.mtn.model.domain.Store;
 import com.mtn.model.domain.StoreSource;
-import com.mtn.model.domain.UserProfile;
 import com.mtn.model.view.StoreSourceView;
 import com.mtn.repository.StoreSourceRepository;
 import com.mtn.repository.specification.StoreSourceSpecifications;
@@ -27,28 +26,18 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 @Service
 public class StoreSourceService extends StoreChildService<StoreSource, StoreSourceView> {
 
-	private final StoreService storeService;
-	private final BannerSourceService bannerSourceService;
-	private final UserProfileService userProfileService;
-
 	@Autowired
 	public StoreSourceService(SecurityService securityService,
 							  StoreSourceRepository repository,
-							  StoreSourceValidator validator,
-							  StoreService storeService,
-							  BannerSourceService bannerSourceService,
-							  UserProfileService userProfileService) {
+							  StoreSourceValidator validator) {
 		super(securityService, repository, validator, StoreSource::new);
-		this.storeService = storeService;
-		this.bannerSourceService = bannerSourceService;
-		this.userProfileService = userProfileService;
 	}
 
-	public LocalDateTime getMaxSourceEditedDate(String sourceName) {
+	LocalDateTime getMaxSourceEditedDate(String sourceName) {
 		return ((StoreSourceRepository) this.repository).getMaxSourceEditedDate(sourceName);
 	}
 
-	public Optional<StoreSource> findOneBySourceNativeIdUsingSpecs(String sourceName, String id) {
+	Optional<StoreSource> findOneBySourceNativeIdUsingSpecs(String sourceName, String id) {
 		return Optional.ofNullable(this.repository.findOne(
 				where(StoreSourceSpecifications.sourceNativeIdEquals(id))
 						.and(StoreSourceSpecifications.sourceNameEquals(sourceName))
@@ -56,7 +45,7 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 		));
 	}
 
-	public List<StoreSource> findAllOfBannerSourceWhereNativeIdNotInSet(Integer bannerSourceId, Set<String> hashIds) {
+	List<StoreSource> findAllOfBannerSourceWhereNativeIdNotInSet(Integer bannerSourceId, Set<String> hashIds) {
 		return ((StoreSourceRepository) this.repository).findAllOfBannerSourceWhereNativeIdNotInSet(bannerSourceId, hashIds);
 	}
 
@@ -90,30 +79,47 @@ public class StoreSourceService extends StoreChildService<StoreSource, StoreSour
 		source.setSourceCreatedDate(request.getSourceCreatedDate());
 		source.setSourceEditedDate(request.getSourceEditedDate());
 		source.setSourceDeletedDate(request.getSourceDeletedDate());
+	}
 
-		if (request.getValidatedBy() != null) {
-			UserProfile validator = userProfileService.findOneUsingSpecs(request.getValidatedBy().getId());
-			source.setValidatedBy(validator);
-			source.setValidatedDate(request.getValidatedDate());
-		} else {
-			source.setValidatedBy(null);
-			source.setValidatedDate(null);
+	public StoreSource setStore(Integer sourceId, Store store, Boolean validate) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setStore(store);
+
+		if (validate) {
+			storeSource.setValidatedDate(LocalDateTime.now());
+			storeSource.setValidatedBy(this.securityService.getCurrentUser());
 		}
+		return this.updateOne(storeSource);
+	}
 
-		if (request.getStore() != null) {
-			Store store = storeService.findOneUsingSpecs(request.getStore().getId());
-			source.setStore(store);
-		} else {
-			source.setStore(null);
-		}
+	public StoreSource removeStore(Integer sourceId) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setStore(null);
 
-		if (request.getBannerSource() != null) {
-			BannerSource bannerSource = bannerSourceService.findOneUsingSpecs(request.getBannerSource().getId());
-			source.setBannerSource(bannerSource);
-		} else {
-			source.setBannerSource(null);
-		}
+		storeSource.setValidatedDate(null);
+		storeSource.setValidatedBy(null);
 
+		return this.updateOne(storeSource);
+	}
+
+	public StoreSource setBannerSource(Integer sourceId, BannerSource bannerSource) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setBannerSource(bannerSource);
+		return this.updateOne(storeSource);
+	}
+
+	public StoreSource validate(Integer sourceId) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setValidatedBy(this.securityService.getCurrentUser());
+		storeSource.setValidatedDate(LocalDateTime.now());
+		return this.updateOne(storeSource);
+	}
+
+	public StoreSource invalidate(Integer sourceId) {
+		StoreSource storeSource = this.findOne(sourceId);
+		storeSource.setValidatedBy(null);
+		storeSource.setValidatedDate(null);
+		return this.updateOne(storeSource);
 	}
 
 	@Override

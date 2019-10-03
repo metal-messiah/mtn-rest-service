@@ -3,7 +3,9 @@ package com.mtn.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mtn.model.domain.*;
+import com.mtn.model.utils.JsonNodeUtil;
 import com.mtn.model.utils.StoreUtil;
+import com.mtn.model.view.StoreSourceData;
 import com.mtn.model.view.StoreSourceView;
 import com.mtn.model.view.StoreStatusView;
 import com.mtn.util.MtnLogger;
@@ -16,13 +18,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -41,8 +44,6 @@ public class PlannedGroceryService {
 	@Value("${planned-grocery.client_secret}")
 	private String pgClientSecret;
 
-	private Map<Integer, String> statusMap;
-
 	@Autowired
 	public PlannedGroceryService(StoreSourceService storeSourceService,
 								 ShoppingCenterService shoppingCenterService,
@@ -58,7 +59,62 @@ public class PlannedGroceryService {
 		this.securityService = securityService;
 	}
 
-	public ResponseEntity<String> getFeatureByObjectId(String objectId) throws IOException {
+	public StoreSourceData getStoreDataForSource(StoreSource storeSource) throws Exception {
+		if (!storeSource.getSourceName().equals("Planned Grocery")) {
+			throw new Exception("StoreSource must be from Planned Grocery");
+		}
+
+		StoreSourceData ssd = new StoreSourceData();
+
+		JsonNode root = this.getFeatureByObjectId(storeSource.getSourceNativeId());
+		JsonNode features = root.get("features");
+		if (features == null || !features.isArray() || features.size() != 1) {
+			throw new EntityNotFoundException("Original Planned Grocery source not found!");
+		}
+		JsonNode pgRecord = features.get(0);
+
+		JsonNode geometry = pgRecord.get("geometry");
+		ssd.setLatitude(geometry.get("y").floatValue());
+		ssd.setLongitude(geometry.get("x").floatValue());
+
+		JsonNode attributes = pgRecord.get("attributes");
+		ssd.setShoppingCenterName(JsonNodeUtil.getNodeStringValue(attributes, "NAMECENTER"));
+		ssd.setAddress(JsonNodeUtil.getNodeStringValue(attributes, "DESCLOCATION"));
+		ssd.setCity(JsonNodeUtil.getNodeStringValue(attributes, "CITY"));
+		ssd.setCounty(JsonNodeUtil.getNodeStringValue(attributes, "county"));
+		ssd.setState(JsonNodeUtil.getNodeStringValue(attributes, "STATE"));
+		ssd.setPostalCode(JsonNodeUtil.getNodeStringValue(attributes, "ZIP"));
+
+		if (attributes.hasNonNull("OPENDATE")) {
+			Long epochMilli = attributes.get("OPENDATE").longValue();
+			LocalDate date = Instant.ofEpochMilli(epochMilli).atZone(ZoneId.systemDefault()).toLocalDate();
+			ssd.setDateOpened(date.format(DateTimeFormatter.BASIC_ISO_DATE));
+		} else if (attributes.hasNonNull("OPENDATEAPPROX")) {
+			ssd.setDateOpened(attributes.get("OPENDATEAPPROX").textValue());
+		}
+
+		if (attributes.hasNonNull("STATUS")) {
+			ssd.setStoreStatus(this.getStatusFromPGStatusCode(attributes.get("STATUS").intValue()));
+		}
+
+		ssd.setAreaTotal(JsonNodeUtil.getNodeIntValue(attributes, "SIZESF"));
+		ssd.setAreaIsActual(attributes.hasNonNull("SIZESFTYPE") && attributes.get("SIZESFTYPE").intValue() == 2);
+
+		return ssd;
+	}
+
+	private String getStatusFromPGStatusCode(Integer statusCode) {
+		switch (statusCode) {
+			case 0: return "Open";
+			case 1: return "New Under Construction";
+			case 2: return "Proposed";
+			case 3: return "Planned";
+			case 99: return "Dead Deal";
+			default: return null;
+		}
+	}
+
+	public JsonNode getFeatureByObjectId(String objectId) throws IOException {
 		ResponseEntity<String> token = this.getAccessToken();
 		JsonNode keyRoot = new ObjectMapper().readTree(token.getBody());
 		JsonNode accessTokenField = keyRoot.path("access_token");
@@ -76,7 +132,8 @@ public class PlannedGroceryService {
 				.queryParam("outSR", "4326")
 				.build();
 
-		return new RestTemplate().getForEntity(featureQueryUri.toUriString(), String.class);
+		ResponseEntity<String> response = new RestTemplate().getForEntity(featureQueryUri.toUriString(), String.class);
+		return new ObjectMapper().readTree(response.getBody());
 	}
 
 	@Async
@@ -219,12 +276,12 @@ public class PlannedGroceryService {
 		}
 
 		if (attributesNode.hasNonNull("STATUS")) {
-			String sourceStatus = getStatusMap().get(attributesNode.get("STATUS").intValue());
+			String sourceStatus = this.getStatusFromPGStatusCode(attributesNode.get("STATUS").intValue());
 			Optional<StoreStatus> mostRelevantStatus = StoreUtil.getLatestStatusAsOfDateTime(store, sourceEditedDate);
 			if (mostRelevantStatus.isPresent()) {
 				String status = mostRelevantStatus.get().getStatus();
 				// Planned Grocery doesn't do closings, so if we already have it as open, leave it open.
-				if (getStatusRank(sourceStatus) >= getStatusRank(status)) {
+				if (sourceStatus != null && getStatusRank(sourceStatus) >= getStatusRank(status)) {
 					// Only create new if changed (progressively)
 					if (!sourceStatus.equals(status)) {
 						this.createNewStatusFromSource(store, sourceStatus, sourceEditedDate);
@@ -326,18 +383,6 @@ public class PlannedGroceryService {
 		// if (status.equals("Dead") || status.equals("Float")) {
 		return 0;
 		//}
-	}
-
-	private Map<Integer, String> getStatusMap() {
-		if (this.statusMap == null) {
-			this.statusMap = new HashMap<>();
-			this.statusMap.put(0, "Open");
-			this.statusMap.put(1, "New Under Construction");
-			this.statusMap.put(2, "Proposed");
-			this.statusMap.put(3, "Planned");
-			this.statusMap.put(99, "Dead Deal");
-		}
-		return this.statusMap;
 	}
 
 }

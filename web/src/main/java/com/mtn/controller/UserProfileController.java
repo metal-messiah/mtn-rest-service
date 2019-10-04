@@ -53,18 +53,9 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
 	}
 
 	@GetMapping("/{userProfileId}/boundary")
-	public ResponseEntity<List<BoundaryView>> getUserPermissions(@PathVariable Integer userProfileId) {
+	public ResponseEntity<List<BoundaryView>> getUserBoundaries(@PathVariable Integer userProfileId) {
 		List<Boundary> userBoundaries = this.boundaryService.getUserBoundaries(userProfileId);
 		return ResponseEntity.ok(userBoundaries.stream().map(BoundaryView::new).collect(Collectors.toList()));
-	}
-
-	@PutMapping(path = "/{userID}/boundary/{boundaryID}")
-	public ResponseEntity associateBoundaryToUser(@PathVariable("userID") Integer userID,
-												  @PathVariable("boundaryID") Integer boundaryID) {
-		Boundary boundary = boundaryService.findOne(boundaryID);
-
-		UserProfile userProfile = ((UserProfileService) this.entityService).setUserBoundary(userID, boundary);
-		return ResponseEntity.ok(new SimpleUserProfileView(userProfile));
 	}
 
 	@PutMapping("{userId}/role/{roleId}")

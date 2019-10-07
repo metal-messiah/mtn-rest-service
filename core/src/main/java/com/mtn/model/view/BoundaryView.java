@@ -23,4 +23,5 @@ public class BoundaryView extends AuditingEntityView {
 	public void setGeojson(String geojson) {
 		this.geojson = geojson;
 	}
+
 }

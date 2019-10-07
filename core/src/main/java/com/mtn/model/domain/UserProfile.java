@@ -20,6 +20,8 @@ public class UserProfile extends AuditingEntity {
     private Role role;
     private Boundary restrictionBoundary;
 
+    private List<Boundary> boundaries = new ArrayList<>();
+
     private List<StoreList> subscribedStoreLists = new ArrayList<>();
     private List<StoreList> createdStoreLists = new ArrayList<>();
 
@@ -118,6 +120,36 @@ public class UserProfile extends AuditingEntity {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "user_boundary", joinColumns = @JoinColumn(name = "user_profile_id", referencedColumnName = "user_profile_id"), inverseJoinColumns = @JoinColumn(name = "boundary_id", referencedColumnName = "boundary_id"))
+    public List<Boundary> getBoundaries() {
+        return boundaries;
+    }
+
+    public void setBoundaries(List<Boundary> boundaries) {
+        this.boundaries = boundaries;
+    }
+
+    public void addBoundary(Boundary boundary) {
+        this.getBoundaries().add(boundary);
+    }
+
+    public void addBoundaries(List<Boundary> boundaries) {
+        this.getBoundaries().addAll(boundaries);
+    }
+
+    public void removeBoundary(Boundary boundary) {
+        this.getBoundaries().removeIf(b -> b.getId().equals(boundary.getId()));
+    }
+
+    public void removeBoundaryById(Integer boundaryId) {
+        this.getBoundaries().removeIf(b -> b.getId().equals(boundaryId));
+    }
+
+    public void removeBoundaries(List<Boundary> boundaries) {
+        this.getBoundaries().removeAll(boundaries);
     }
 
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)

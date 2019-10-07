@@ -185,6 +185,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.DELETE, "/api/store-list/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/store-list/**").authenticated()
 				.antMatchers(HttpMethod.PUT, "/api/store-list/**").authenticated()
+				.antMatchers(HttpMethod.DELETE, "/api/user-boundary/**").authenticated()
+				.antMatchers(HttpMethod.POST, "/api/user-boundary/**").authenticated()
+				.antMatchers(HttpMethod.PUT, "/api/user-boundary/**").authenticated()
+				.antMatchers(HttpMethod.GET, "/api/user-boundary/**").authenticated()
+				.antMatchers(HttpMethod.GET, "/api/boundary/**").authenticated()
+				.antMatchers(HttpMethod.DELETE, "/api/boundary/**").authenticated()
+				.antMatchers(HttpMethod.POST, "/api/boundary/**").authenticated()
+				.antMatchers(HttpMethod.PUT, "/api/boundary/**").authenticated()
 				.anyRequest().denyAll();
 	}
 

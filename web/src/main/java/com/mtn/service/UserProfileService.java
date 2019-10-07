@@ -16,6 +16,8 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,13 @@ public class UserProfileService extends EntityService<UserProfile, UserProfileVi
 		return this.repository.findAll(where(UserProfileSpecifications.groupIdEquals(groupId))
 				.and(UserProfileSpecifications.isNotSystemAdministrator())
 				.and(UserProfileSpecifications.isNotDeleted()));
+	}
+
+	@Transactional
+	public UserProfile setUserBoundary(Integer userID, Boundary boundary) {
+		UserProfile userProfile = this.findOne(userID);
+		userProfile.addBoundary(boundary);
+		return userProfile;
 	}
 
 	private boolean isAlreadySubscribed(final UserProfile userProfile, final Integer id) {

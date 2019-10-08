@@ -1,6 +1,7 @@
 package com.mtn.security;
 
 import com.mtn.model.domain.UserProfile;
+import com.mtn.service.PermissionService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -11,13 +12,16 @@ public class MtnAuthentication implements Authentication {
 	private UserProfile userProfile;
 	private boolean authenticated;
 
-	public MtnAuthentication( UserProfile userProfile ) {
+	private final PermissionService permissionService;
+
+	public MtnAuthentication(UserProfile userProfile, PermissionService permissionService) {
 		this.userProfile = userProfile;
+		this.permissionService = permissionService;
 	}
 
 	@Override
 	public Collection< ? extends GrantedAuthority > getAuthorities() {
-		return userProfile.getPermissions();
+		return this.permissionService.getUserPermissions(this.userProfile.getId());
 	}
 
 	@Override

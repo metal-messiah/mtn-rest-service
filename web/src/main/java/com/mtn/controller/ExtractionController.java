@@ -97,16 +97,18 @@ public class ExtractionController {
 	}
 
 	@GetMapping(params = {"store-list-id", "field-set-id"})
-	public void downloadStoreListData(HttpServletResponse response, @RequestParam("store-list-id") Integer storeListId,
+	public void downloadStoreListData(HttpServletResponse response,
+									  @RequestParam("store-list-id") Integer storeListId,
 									  @RequestParam("field-set-id") Integer fieldSetId) {
 		StoreList storeList = storeListService.findOne(storeListId);
 		List<Store> stores = storeList.getStores();
 		List<StoreCasing> casings = stores.stream()
 				.map(store -> store.getCasings().stream().filter(storeCasing -> storeCasing.getDeletedDate() == null)
 						.max(Comparator.comparing(StoreCasing::getCasingDate)).orElse(null))
-				.filter(Objects::nonNull).collect(Collectors.toList());
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
 
-		// Add a blank casing to allow Dozer to get necessary data
+		// For stores without casings Add a blank casing to allow Dozer to get necessary data
 		stores.stream().filter(st -> st.getCasings().size() == 0).forEach(st -> {
 			StoreCasing tempCasing = new StoreCasing();
 			tempCasing.setStore(st);

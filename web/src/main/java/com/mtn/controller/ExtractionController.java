@@ -32,22 +32,26 @@ public class ExtractionController {
 
 	@Autowired
 	public ExtractionController(StoreCasingService storeCasingService,
-			ExtractionFieldSetService extractionFieldSetService, StoreService storeService,
-			StoreListService storeListService) {
+								ExtractionFieldSetService extractionFieldSetService,
+								StoreService storeService,
+								StoreListService storeListService) {
 		this.storeCasingService = storeCasingService;
 		this.extractionFieldSetService = extractionFieldSetService;
 		this.storeService = storeService;
 		this.storeListService = storeListService;
 	}
 
-	@GetMapping(params = { "store-ids", "field-set-id" })
-	public void downloadLatestForStores(HttpServletResponse response, @RequestParam("store-ids") List<Integer> storeIds,
-			@RequestParam("field-set-id") Integer fieldSetId) {
+	@GetMapping(params = {"store-ids", "field-set-id"})
+	public void downloadLatestForStores(HttpServletResponse response,
+										@RequestParam("store-ids") List<Integer> storeIds,
+										@RequestParam("field-set-id") Integer fieldSetId) {
 		List<Store> stores = this.storeService.findAllByIdsUsingSpecs(storeIds);
 		List<StoreCasing> casings = stores.stream()
-				.map(store -> store.getCasings().stream().filter(storeCasing -> storeCasing.getDeletedDate() == null)
+				.map(store -> store.getCasings().stream()
+						.filter(storeCasing -> storeCasing.getDeletedDate() == null)
 						.max(Comparator.comparing(StoreCasing::getCasingDate)).orElse(null))
-				.filter(Objects::nonNull).collect(Collectors.toList());
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
 
 		// Add a blank casing to allow Dozer to get necessary data
 		stores.stream().filter(st -> st.getCasings().size() == 0).forEach(st -> {
@@ -59,19 +63,22 @@ public class ExtractionController {
 		download(response, casings, fieldSetId);
 	}
 
-	@GetMapping(value = "all-casings", params = { "store-ids", "field-set-id" })
+	@GetMapping(value = "all-casings", params = {"store-ids", "field-set-id"})
 	public void downloadAllCasingsForStores(HttpServletResponse response,
-			@RequestParam("store-ids") List<Integer> storeIds, @RequestParam("field-set-id") Integer fieldSetId,
-			@RequestParam("primary-only") Boolean primaryOnly) {
+											@RequestParam("store-ids") List<Integer> storeIds,
+											@RequestParam("field-set-id") Integer fieldSetId,
+											@RequestParam("primary-only") Boolean primaryOnly) {
 		List<Store> stores = this.storeService.findAllByIdsUsingSpecs(storeIds);
-		List<StoreCasing> casings = stores.stream().map(Store::getCasings).reduce((prev, curr) -> {
-			prev.addAll(curr);
-			return prev;
-		}).orElse(new ArrayList<>()).stream().filter(casing -> casing.getDeletedDate() == null)
+		List<StoreCasing> casings = stores.stream()
+				.map(Store::getCasings)
+				.reduce((prev, curr) -> {
+					prev.addAll(curr);
+					return prev;
+				}).orElse(new ArrayList<>()).stream()
+				.filter(casing -> casing.getDeletedDate() == null)
 				.collect(Collectors.toList());
 
-		// If user requests primary data only, filter to only those casings associated
-		// to primary data projects
+		// If user requests primary data only, filter to only those casings associated to primary data projects
 		if (primaryOnly) {
 			casings = casings.stream().filter(casing -> casing.getProjects().stream().anyMatch(Project::getPrimaryData))
 					.collect(Collectors.toList());
@@ -80,16 +87,18 @@ public class ExtractionController {
 		download(response, casings, fieldSetId);
 	}
 
-	@GetMapping(params = { "project-id", "field-set-id" })
-	public void downloadProjectCasingData(HttpServletResponse response, @RequestParam("project-id") Integer projectId,
-			@RequestParam("field-set-id") Integer fieldSetId) {
+
+	@GetMapping(params = {"project-id", "field-set-id"})
+	public void downloadProjectCasingData(HttpServletResponse response,
+										  @RequestParam("project-id") Integer projectId,
+										  @RequestParam("field-set-id") Integer fieldSetId) {
 		List<StoreCasing> casings = storeCasingService.findAllByProjectId(projectId);
 		download(response, casings, fieldSetId);
 	}
 
-	@GetMapping(params = { "store-list-id", "field-set-id" })
+	@GetMapping(params = {"store-list-id", "field-set-id"})
 	public void downloadStoreListData(HttpServletResponse response, @RequestParam("store-list-id") Integer storeListId,
-			@RequestParam("field-set-id") Integer fieldSetId) {
+									  @RequestParam("field-set-id") Integer fieldSetId) {
 		StoreList storeList = storeListService.findOne(storeListId);
 		List<Store> stores = storeList.getStores();
 		List<StoreCasing> casings = stores.stream()
@@ -119,49 +128,54 @@ public class ExtractionController {
 		ExtractionFieldSet fieldSet = this.extractionFieldSetService.findOne(fieldSetId);
 		List<ExtractionField> extractionFields = fieldSet.getFields();
 
-		final CellProcessor[] processors = extractionFields.stream().map(field -> {
-			if (field.getExtractionDataType() != null) {
-				switch (field.getExtractionDataType()) {
-				case "DATE_TIME":
-					return new FmtLocalDateTime();
-				case "DATE":
-					return new FmtLocalDate();
-				case "INTERSECTION":
-					return new FmtIntersection();
-				case "BLANK":
-					return new FmtBlank();
-				case "ACCESS_COUNT":
-					return new FmtAccessCount();
-				case "ACCESS_FRONT_MAIN_COUNT":
-					return new FmtAccessFrontMainCount();
-				case "ACCESS_SIDE_MAIN_COUNT":
-					return new FmtAccessSideMainCount();
-				case "ACCESS_NON_MAIN_COUNT":
-					return new FmtAccessNonMainCount();
-				case "PROJECT_LIST":
-					return new FmtProjectList();
-				case "TENANT_COUNT":
-					return new FmtTenantCount();
-				case "TENANT_INLINE_COUNT":
-					return new FmtTenantInlineCount();
-				case "TENANT_INLINE_LIST":
-					return new FmtTenantInlineList();
-				case "TENANT_OUTPARCEL_COUNT":
-					return new FmtTenantOutparcelCount();
-				case "TENANT_OUTPARCEL_LIST":
-					return new FmtTenantOutparcelList();
-				case "LATEST_VOLUME_TOTAL":
-					return new GetLatestVolumeTotal();
-				case "LATEST_VOLUME_DATE":
-					return new GetLatestVolumeDate(new FmtLocalDate());
-				case "LATEST_VOLUME_TYPE":
-					return new GetLatestVolumeType();
-				}
-			}
-			return null;
-		}).toArray(CellProcessor[]::new);
-		final String[] headers = extractionFields.stream().map(ExtractionField::getHeader).toArray(String[]::new);
-		final String[] FIELD_MAPPING = extractionFields.stream().map(ExtractionField::getFieldMapping)
+		final CellProcessor[] processors = extractionFields.stream()
+				.map(field -> {
+					if (field.getExtractionDataType() != null) {
+						switch (field.getExtractionDataType()) {
+							case "DATE_TIME":
+								return new FmtLocalDateTime();
+							case "DATE":
+								return new FmtLocalDate();
+							case "INTERSECTION":
+								return new FmtIntersection();
+							case "BLANK":
+								return new FmtBlank();
+							case "ACCESS_COUNT":
+								return new FmtAccessCount();
+							case "ACCESS_FRONT_MAIN_COUNT":
+								return new FmtAccessFrontMainCount();
+							case "ACCESS_SIDE_MAIN_COUNT":
+								return new FmtAccessSideMainCount();
+							case "ACCESS_NON_MAIN_COUNT":
+								return new FmtAccessNonMainCount();
+							case "PROJECT_LIST":
+								return new FmtProjectList();
+							case "TENANT_COUNT":
+								return new FmtTenantCount();
+							case "TENANT_INLINE_COUNT":
+								return new FmtTenantInlineCount();
+							case "TENANT_INLINE_LIST":
+								return new FmtTenantInlineList();
+							case "TENANT_OUTPARCEL_COUNT":
+								return new FmtTenantOutparcelCount();
+							case "TENANT_OUTPARCEL_LIST":
+								return new FmtTenantOutparcelList();
+							case "LATEST_VOLUME_TOTAL":
+								return new GetLatestVolumeTotal();
+							case "LATEST_VOLUME_DATE":
+								return new GetLatestVolumeDate(new FmtLocalDate());
+							case "LATEST_VOLUME_TYPE":
+								return new GetLatestVolumeType();
+						}
+					}
+					return null;
+				})
+				.toArray(CellProcessor[]::new);
+		final String[] headers = extractionFields.stream()
+				.map(ExtractionField::getHeader)
+				.toArray(String[]::new);
+		final String[] FIELD_MAPPING = extractionFields.stream()
+				.map(ExtractionField::getFieldMapping)
 				.toArray(String[]::new);
 
 		try {

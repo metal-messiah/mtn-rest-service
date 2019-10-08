@@ -36,9 +36,6 @@ public class Site extends AuditingEntity {
     private List<Store> stores = new ArrayList<>();
     private UserProfile assignee;
 
-    private List<SiteIsochrone> siteIsochrones;
-    private List<SiteBlockGroupDriveTime> driveTimes;
-
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shopping_center_id")
     public ShoppingCenter getShoppingCenter() {
@@ -228,24 +225,5 @@ public class Site extends AuditingEntity {
 
     public void setCbsaId(Integer cbsaId) {
         this.cbsaId = cbsaId;
-    }
-
-    @OneToMany(mappedBy = "site")
-    public List<SiteIsochrone> getSiteIsochrones() {
-        return siteIsochrones;
-    }
-
-    public void setSiteIsochrones(List<SiteIsochrone> siteIsochrones) {
-        this.siteIsochrones = siteIsochrones;
-    }
-
-
-    @OneToMany(mappedBy = "site", fetch = FetchType.LAZY)
-    public List<SiteBlockGroupDriveTime> getDriveTimes() {
-        return driveTimes;
-    }
-
-    public void setDriveTimes(List<SiteBlockGroupDriveTime> driveTimes) {
-        this.driveTimes = driveTimes;
     }
 }

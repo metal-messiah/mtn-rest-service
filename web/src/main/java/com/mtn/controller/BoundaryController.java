@@ -1,16 +1,22 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.Boundary;
+import com.mtn.model.domain.Project;
+import com.mtn.model.domain.StoreCasing;
 import com.mtn.model.simpleView.SimpleBoundaryView;
+import com.mtn.model.simpleView.SimpleProjectView;
 import com.mtn.model.view.BoundaryView;
+import com.mtn.model.view.ProjectView;
 import com.mtn.service.BoundaryService;
+import com.mtn.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/boundary")

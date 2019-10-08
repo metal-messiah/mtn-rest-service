@@ -1,6 +1,7 @@
 package com.mtn.controller;
 
 import com.mtn.model.domain.UserBoundary;
+import com.mtn.model.simpleView.SimpleUserBoundaryView;
 import com.mtn.model.utils.TupleUtil;
 import com.mtn.model.view.UserBoundaryView;
 import com.mtn.service.UserBoundaryService;
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Tuple;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user-boundary")

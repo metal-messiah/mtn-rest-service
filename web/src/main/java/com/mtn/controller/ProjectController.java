@@ -36,10 +36,9 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 	}
 
 	@GetMapping
-	public ResponseEntity findAll(Pageable page,
-								  @RequestParam(value = "query", required = false) String query,
-								  @RequestParam(value = "active", required = false) Boolean active,
-								  @RequestParam(value = "primaryData", required = false) Boolean primaryData) {
+	public ResponseEntity findAll(Pageable page, @RequestParam(value = "query", required = false) String query,
+			@RequestParam(value = "active", required = false) Boolean active,
+			@RequestParam(value = "primaryData", required = false) Boolean primaryData) {
 		Page<Project> domainModels;
 		if (query != null || active != null || primaryData != null) {
 			domainModels = ((ProjectService) this.entityService).findAllByQueryUsingSpecs(page, query, active,
@@ -62,17 +61,28 @@ public class ProjectController extends CrudController<Project, ProjectView> {
 
 	@PutMapping(path = "/{projectID}/boundary/{boundaryID}")
 	public ResponseEntity associateBoundaryToProject(@PathVariable("projectID") Integer projectID,
-													 @PathVariable("boundaryID") Integer boundaryID, @RequestBody BoundaryView request) {
+			@PathVariable("boundaryID") Integer boundaryID, @RequestBody BoundaryView request) {
 		Boundary boundary = boundaryService.findOne(boundaryID);
 		Project project = ((ProjectService) this.entityService).setProjectBoundary(projectID, boundary);
 		return ResponseEntity.ok(new SimpleProjectView(project));
 	}
 
-	@DeleteMapping(path = "/{id}/boundary")
-	public ResponseEntity removeProjectBoundary(@PathVariable("id") Integer projectId) {
-		Project project = ((ProjectService) this.entityService).removeProjectBoundary(projectId);
-		return ResponseEntity.ok(new SimpleProjectView(project));
-	}
+	// @PostMapping(path = "/{id}/boundary")
+	// public ResponseEntity createProjectBoundary(@PathVariable("id") Integer
+	// projectId, @RequestBody BoundaryView request) {
+	// Boundary boundary = boundaryService.addOne(request);
+	// Project project = ((ProjectService)
+	// this.entityService).setProjectBoundary(projectId, boundary);
+	// return ResponseEntity.ok(new SimpleProjectView(project));
+	// }
+
+	// @DeleteMapping(path = "/{id}/boundary")
+	// public ResponseEntity removeProjectBoundary(@PathVariable("id") Integer
+	// projectId) {
+	// Project project = ((ProjectService)
+	// this.entityService).removeProjectBoundary(projectId);
+	// return ResponseEntity.ok(new SimpleProjectView(project));
+	// }
 
 	@GetMapping("/{id}/cased-store-ids")
 	public ResponseEntity<List<Integer>> casedStoreIds(@PathVariable("id") Integer projectId) {

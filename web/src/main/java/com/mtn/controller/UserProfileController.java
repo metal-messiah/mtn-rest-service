@@ -58,6 +58,12 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
 		return ResponseEntity.ok(domainModels.map(UserProfileView::new));
 	}
 
+	@GetMapping("/{userProfileId}/boundary")
+	public ResponseEntity<List<BoundaryView>> getUserBoundaries(@PathVariable Integer userProfileId) {
+		List<Boundary> userBoundaries = this.boundaryService.getUserBoundaries(userProfileId);
+		return ResponseEntity.ok(userBoundaries.stream().map(BoundaryView::new).collect(Collectors.toList()));
+	}
+
 	@PutMapping("{userId}/role/{roleId}")
 	public ResponseEntity setUserRole(@PathVariable() Integer userId, @PathVariable() Integer roleId) {
 		Role role = this.roleService.findOneUsingSpecs(roleId);
@@ -111,12 +117,6 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
 															 @RequestBody List<Integer> permissionIds) {
 		UserProfile userProfile = ((UserProfileService) this.entityService).updatePermissions(userProfileId, permissionIds);
 		return ResponseEntity.ok(new UserProfileView(userProfile));
-	}
-
-	@GetMapping("/{userProfileId}/boundary")
-	public ResponseEntity<List<BoundaryView>> getUserBoundaries(@PathVariable Integer userProfileId) {
-		List<Boundary> userBoundaries = this.boundaryService.getUserBoundaries(userProfileId);
-		return ResponseEntity.ok(userBoundaries.stream().map(BoundaryView::new).collect(Collectors.toList()));
 	}
 
 }

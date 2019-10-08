@@ -160,8 +160,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.DELETE, "/api/banner-source/**").hasAuthority(PermissionType.STORE_SOURCE_DELETE)
 				.antMatchers(HttpMethod.GET, "/api/site-wise/**").hasAuthority("SITE_WISE_READ")
 				.antMatchers(HttpMethod.GET, "/api/commissary/**").hasAuthority("COMMISSARY_READ")
-				.antMatchers(HttpMethod.GET, "/api/map-box/**").hasAuthority("MAP_BOX_READ")
-				.antMatchers(HttpMethod.GET, "/api/gravity/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/planned-grocery/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/planned-grocery/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/source-updatable/**").authenticated()
@@ -185,21 +183,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.DELETE, "/api/store-list/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/store-list/**").authenticated()
 				.antMatchers(HttpMethod.PUT, "/api/store-list/**").authenticated()
+				.antMatchers(HttpMethod.GET, "/api/boundary/**").authenticated()
 				.antMatchers(HttpMethod.DELETE, "/api/user-boundary/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/user-boundary/**").authenticated()
 				.antMatchers(HttpMethod.PUT, "/api/user-boundary/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/user-boundary/**").authenticated()
-				.antMatchers(HttpMethod.GET, "/api/boundary/**").authenticated()
 				.antMatchers(HttpMethod.DELETE, "/api/boundary/**").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/boundary/**").authenticated()
-				.antMatchers(HttpMethod.PUT, "/api/boundary/**").authenticated()
-				.anyRequest().denyAll();
+				.antMatchers(HttpMethod.PUT, "/api/boundary/**").authenticated().anyRequest().denyAll();
 	}
 
 	/**
 	 * This AuthenticationProvider merges Auth0's JWT token validation with our own
 	 * custom flow.
 	 */
+
 	private class MtnAuthenticationProvider implements AuthenticationProvider {
 
 		private final CustomJwtAuthenticationProvider jwtAuthenticationProvider;

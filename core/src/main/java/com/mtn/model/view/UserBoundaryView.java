@@ -1,6 +1,7 @@
 package com.mtn.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mtn.model.domain.Boundary;
 import com.mtn.model.domain.UserBoundary;
 import com.mtn.model.simpleView.SimpleBoundaryView;
 import com.mtn.model.simpleView.SimpleUserProfileView;

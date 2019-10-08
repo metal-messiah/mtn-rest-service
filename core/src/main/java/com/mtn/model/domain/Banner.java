@@ -19,7 +19,7 @@ public class Banner extends AuditingEntity {
 
     private List<Store> stores = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "company_id")
     public Company getCompany() {
         return company;

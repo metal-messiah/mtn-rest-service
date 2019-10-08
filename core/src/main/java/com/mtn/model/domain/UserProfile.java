@@ -57,7 +57,7 @@ public class UserProfile extends AuditingEntity {
         this.lastName = lastName;
     }
 
-    @ManyToMany(mappedBy = "subscribers")
+    @ManyToMany(mappedBy = "subscribers", fetch = FetchType.LAZY)
     public List<StoreList> getSubscribedStoreLists() {
         return subscribedStoreLists;
     }
@@ -74,7 +74,7 @@ public class UserProfile extends AuditingEntity {
         this.getSubscribedStoreLists().removeIf(sl -> sl.getId().equals(storeList.getId()));
     }
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     public List<StoreList> getCreatedStoreLists() {
         return createdStoreLists;
@@ -104,7 +104,7 @@ public class UserProfile extends AuditingEntity {
         this.group = group;
     }
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restriction_boundary_id")
     public Boundary getRestrictionBoundary() {
         return restrictionBoundary;
@@ -152,7 +152,7 @@ public class UserProfile extends AuditingEntity {
         this.getBoundaries().removeAll(boundaries);
     }
 
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_permission",
             joinColumns = @JoinColumn(name = "user_profile_id", referencedColumnName = "user_profile_id"),

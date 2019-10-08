@@ -2,13 +2,16 @@ package com.mtn.controller;
 
 import com.mtn.model.domain.Boundary;
 import com.mtn.model.domain.Group;
+import com.mtn.model.domain.Permission;
 import com.mtn.model.domain.Role;
 import com.mtn.model.domain.UserProfile;
+import com.mtn.model.simpleView.SimplePermissionView;
 import com.mtn.model.simpleView.SimpleUserProfileView;
 import com.mtn.model.view.BoundaryView;
 import com.mtn.model.view.UserProfileView;
 import com.mtn.service.BoundaryService;
 import com.mtn.service.GroupService;
+import com.mtn.service.PermissionService;
 import com.mtn.service.RoleService;
 import com.mtn.service.UserProfileService;
 import org.apache.commons.lang3.StringUtils;
@@ -27,18 +30,20 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
 
 	private final RoleService roleService;
 	private final GroupService groupService;
+	private final PermissionService permissionService;
 	private final BoundaryService boundaryService;
 
 	@Autowired
 	public UserProfileController(UserProfileService userProfileService,
 								 RoleService roleService,
 								 GroupService groupService,
+								 PermissionService permissionService,
 								 BoundaryService boundaryService) {
 		super(userProfileService, UserProfileView::new);
 		this.roleService = roleService;
 		this.groupService = groupService;
 		this.boundaryService = boundaryService;
-
+		this.permissionService = permissionService;
 	}
 
 	@GetMapping
@@ -49,6 +54,7 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
 		} else {
 			domainModels = this.entityService.findAllUsingSpecs(page);
 		}
+
 		return ResponseEntity.ok(domainModels.map(UserProfileView::new));
 	}
 
@@ -98,6 +104,12 @@ public class UserProfileController extends CrudController<UserProfile, UserProfi
 		UserProfile userProfile = ((UserProfileService) this.entityService).unsubscribeToStoreListById(userId,
 				storeListId);
 		return ResponseEntity.ok(new SimpleUserProfileView(userProfile));
+	}
+
+	@GetMapping("/{userProfileId}/permissions")
+	public ResponseEntity<List<SimplePermissionView>> getUserPermissions(@PathVariable Integer userProfileId) {
+		List<Permission> userPermissions = this.permissionService.getUserPermissions(userProfileId);
+		return ResponseEntity.ok(userPermissions.stream().map(SimplePermissionView::new).collect(Collectors.toList()));
 	}
 
 	@PutMapping("/{userProfileId}/permissions")

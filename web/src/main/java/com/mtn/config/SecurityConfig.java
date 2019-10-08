@@ -14,6 +14,7 @@ import com.mtn.model.domain.UserProfile;
 import com.mtn.security.CustomJwtAuthenticationProvider;
 import com.mtn.security.MtnAuthentication;
 import com.mtn.service.AuthCacheService;
+import com.mtn.service.PermissionService;
 import com.mtn.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,11 +57,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final AuthCacheService authCacheService;
 	private final UserProfileService userProfileService;
+	private final PermissionService permissionService;
 
 	@Autowired
-	public SecurityConfig(AuthCacheService authCacheService, UserProfileService userProfileService) {
+	public SecurityConfig(AuthCacheService authCacheService,
+						  UserProfileService userProfileService,
+						  PermissionService permissionService) {
 		this.authCacheService = authCacheService;
 		this.userProfileService = userProfileService;
+		this.permissionService = permissionService;
 	}
 
 	@PostConstruct
@@ -75,7 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 
 		JwtWebSecurityConfigurer.forRS256(apiAudience, issuer, new MtnAuthenticationProvider()).configure(http)
-				.authorizeRequests().antMatchers("/api/auth/user").authenticated()
+				.authorizeRequests()
+				.antMatchers("/api/auth/user").authenticated()
+				.antMatchers("/api/auth/user-permissions").authenticated()
 				.antMatchers(HttpMethod.POST, "/api/user/**").hasAuthority(PermissionType.USERS_CREATE)
 				.antMatchers(HttpMethod.GET, "/api/user/**").hasAuthority(PermissionType.USERS_READ)
 				.antMatchers(HttpMethod.PUT, "/api/user/**").hasAuthority(PermissionType.USERS_UPDATE)
@@ -216,7 +223,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			this.jwtAuthenticationProvider.authenticate(authentication);
 
 			UserProfile userProfile = getUserProfileRecord(authentication);
-			return new MtnAuthentication(userProfile);
+			return new MtnAuthentication(userProfile, permissionService);
 		}
 
 		/**

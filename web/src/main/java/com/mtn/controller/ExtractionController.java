@@ -4,6 +4,7 @@ import com.mtn.model.domain.*;
 import com.mtn.service.ExtractionFieldSetService;
 import com.mtn.service.StoreCasingService;
 import com.mtn.service.StoreService;
+import com.mtn.service.StoreListService;
 import com.mtn.util.csv.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +28,17 @@ public class ExtractionController {
 	private final StoreCasingService storeCasingService;
 	private final ExtractionFieldSetService extractionFieldSetService;
 	private final StoreService storeService;
+	private final StoreListService storeListService;
 
 	@Autowired
 	public ExtractionController(StoreCasingService storeCasingService,
 								ExtractionFieldSetService extractionFieldSetService,
-								StoreService storeService) {
+								StoreService storeService,
+								StoreListService storeListService) {
 		this.storeCasingService = storeCasingService;
 		this.extractionFieldSetService = extractionFieldSetService;
 		this.storeService = storeService;
+		this.storeListService = storeListService;
 	}
 
 	@GetMapping(params = {"store-ids", "field-set-id"})
@@ -89,6 +93,28 @@ public class ExtractionController {
 										  @RequestParam("project-id") Integer projectId,
 										  @RequestParam("field-set-id") Integer fieldSetId) {
 		List<StoreCasing> casings = storeCasingService.findAllByProjectId(projectId);
+		download(response, casings, fieldSetId);
+	}
+
+	@GetMapping(params = {"store-list-id", "field-set-id"})
+	public void downloadStoreListData(HttpServletResponse response,
+									  @RequestParam("store-list-id") Integer storeListId,
+									  @RequestParam("field-set-id") Integer fieldSetId) {
+		StoreList storeList = storeListService.findOne(storeListId);
+		List<Store> stores = storeList.getStores();
+		List<StoreCasing> casings = stores.stream()
+				.map(store -> store.getCasings().stream().filter(storeCasing -> storeCasing.getDeletedDate() == null)
+						.max(Comparator.comparing(StoreCasing::getCasingDate)).orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+
+		// For stores without casings Add a blank casing to allow Dozer to get necessary data
+		stores.stream().filter(st -> st.getCasings().size() == 0).forEach(st -> {
+			StoreCasing tempCasing = new StoreCasing();
+			tempCasing.setStore(st);
+			casings.add(tempCasing);
+		});
+
 		download(response, casings, fieldSetId);
 	}
 
@@ -155,7 +181,8 @@ public class ExtractionController {
 				.toArray(String[]::new);
 
 		try {
-			ICsvDozerBeanWriter beanWriter = new CsvDozerBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+			ICsvDozerBeanWriter beanWriter = new CsvDozerBeanWriter(response.getWriter(),
+					CsvPreference.STANDARD_PREFERENCE);
 			beanWriter.configureBeanMapping(StoreCasing.class, FIELD_MAPPING);
 
 			beanWriter.writeHeader(headers);

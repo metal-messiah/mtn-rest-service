@@ -6,7 +6,6 @@ import com.mtn.model.domain.*;
 import com.mtn.repository.*;
 import com.mtn.util.MtnLogger;
 import com.opencsv.CSVWriter;
-import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,9 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -124,23 +121,27 @@ public class SiteWiseService {
 		List<AvgSalesAreaPercentByBanner> avgSalesAreaPercentByBanner = avgSalesAreaPercentByBannerRepository.findAll();
 		List<AvgSalesAreaPercentByFit> avgSalesAreaPercentByFit = avgSalesAreaPercentByFitRepository.findAll();
 
-		Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaSales = a -> {
+		Function<ActiveAndFutureStores, Map<String, Integer>> getAreaSales = a -> {
+			Map<String, Integer> pair = new HashMap<>();
 			if (a.getAreaSales() != null) {
-				return new Pair<>("DB", nearestThousand(a.getAreaSales()));
+				pair.put("DB", nearestThousand(a.getAreaSales()));
+				return pair;
 			}
 			if (a.getAreaTotal() != null) {
 				if (a.getBannerId() != null) {
 					Optional<AvgSalesAreaPercentByBanner> abo = avgSalesAreaPercentByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
 					if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
 						Integer salesArea = nearestThousand(abo.get().getAvgSalesPercent() * a.getAreaTotal());
-						return new Pair<>("Calculated from % of total avg by banner", salesArea);
+						pair.put("Calculated from % of total avg by banner", salesArea);
+						return pair;
 					}
 				}
 				if (a.getStoreFit() != null) {
 					Optional<AvgSalesAreaPercentByFit> abo = avgSalesAreaPercentByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
 					if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
 						Integer salesArea = nearestThousand(abo.get().getAvgSalesPercent() * a.getAreaTotal());
-						return new Pair<>("Calculated from % of total avg by fit", salesArea);
+						pair.put("Calculated from % of total avg by fit", salesArea);
+						return pair;
 					}
 				}
 			}
@@ -148,54 +149,63 @@ public class SiteWiseService {
 				Optional<AvgByBannerInCounty> abo = avgByBannerInCounty.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId()) && sameCounty(a, ab)).findAny();
 				if (abo.isPresent() && abo.get().getAreaSales() != null) {
 					Integer salesArea = nearestThousand(abo.get().getAreaSales());
-					return new Pair<>("Avg by Banner in County", salesArea);
+					pair.put("Avg by Banner in County", salesArea);
+					return pair;
 				}
 			}
 			if (a.getBannerId() != null) {
 				Optional<AvgByBanner> abo = avgByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
 				if (abo.isPresent() && abo.get().getAreaSales() != null) {
 					Integer salesArea = nearestThousand(abo.get().getAreaSales());
-					return new Pair<>("Avg by Banner in Nation", salesArea);
+					pair.put("Avg by Banner in Nation", salesArea);
+					return pair;
 				}
 			}
 			if (a.getStoreFit() != null) {
 				Optional<AvgByFitInCounty> abo = avgByFitInCounty.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit()) && sameCounty(a, ab)).findAny();
 				if (abo.isPresent() && abo.get().getAreaSales() != null) {
 					Integer salesArea = nearestThousand(abo.get().getAreaSales());
-					return new Pair<>("Avg by Fit in County", salesArea);
+					pair.put("Avg by Fit in County", salesArea);
+					return pair;
 				}
 			}
 			if (a.getStoreFit() != null) {
 				Optional<AvgByFit> abo = avgByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
 				if (abo.isPresent() && abo.get().getAreaSales() != null) {
 					Integer salesArea = nearestThousand(abo.get().getAreaSales());
-					return new Pair<>("Avg by Fit in Nation", salesArea);
+					pair.put("Avg by Fit in Nation", salesArea);
+					return pair;
 				}
 			}
 			Optional<AvgByCounty> abo = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
 			if (abo.isPresent() && abo.get().getAreaSales() != null) {
 				Integer salesArea = nearestThousand(abo.get().getAreaSales());
-				return new Pair<>("Avg by County", salesArea);
+				pair.put("Avg by County", salesArea);
+				return pair;
 			}
 			return null;
 		};
-		Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaTotal = a -> {
+		Function<ActiveAndFutureStores, Map<String, Integer>> getAreaTotal = a -> {
+			Map<String, Integer> pair = new HashMap<>();
 			if (a.getAreaTotal() != null) {
-				return new Pair<>("DB", nearestThousand(a.getAreaTotal()));
+				pair.put("DB", nearestThousand(a.getAreaTotal()));
+				return pair;
 			}
 			if (a.getAreaSales() != null) {
 				if (a.getBannerId() != null) {
 					Optional<AvgSalesAreaPercentByBanner> abo = avgSalesAreaPercentByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
 					if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
 						Integer totalArea = nearestThousand(a.getAreaSales() / abo.get().getAvgSalesPercent());
-						return new Pair<>("Calculated from % of total avg by banner", totalArea);
+						pair.put("Calculated from % of total avg by banner", totalArea);
+						return pair;
 					}
 				}
 				if (a.getStoreFit() != null) {
 					Optional<AvgSalesAreaPercentByFit> abo = avgSalesAreaPercentByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
 					if (abo.isPresent() && abo.get().getAvgSalesPercent() != null) {
 						Integer totalArea = nearestThousand(a.getAreaSales() / abo.get().getAvgSalesPercent());
-						return new Pair<>("Calculated from % of total avg by fit", totalArea);
+						pair.put("Calculated from % of total avg by fit", totalArea);
+						return pair;
 					}
 				}
 			}
@@ -203,98 +213,118 @@ public class SiteWiseService {
 				Optional<AvgByBannerInCounty> abo = avgByBannerInCounty.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId()) && sameCounty(a, ab)).findAny();
 				if (abo.isPresent() && abo.get().getAreaTotal() != null) {
 					Integer totalArea = nearestThousand(abo.get().getAreaTotal());
-					return new Pair<>("Avg by Banner in County", totalArea);
+					pair.put("Avg by Banner in County", totalArea);
+					return pair;
 				}
 				Optional<AvgByBanner> abb = avgByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
 				if (abb.isPresent() && abb.get().getAreaTotal() != null) {
 					Integer totalArea = nearestThousand(abb.get().getAreaTotal());
-					return new Pair<>("Avg by Banner in Nation", totalArea);
+					pair.put("Avg by Banner in Nation", totalArea);
+					return pair;
 				}
 			}
 			if (a.getStoreFit() != null) {
 				Optional<AvgByFitInCounty> abo = avgByFitInCounty.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit()) && sameCounty(a, ab)).findAny();
 				if (abo.isPresent() && abo.get().getAreaTotal() != null) {
 					Integer totalArea = nearestThousand(abo.get().getAreaTotal());
-					return new Pair<>("Avg by Fit in County", totalArea);
+					pair.put("Avg by Fit in County", totalArea);
+					return pair;
 				}
 				Optional<AvgByFit> abf = avgByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
 				if (abf.isPresent() && abf.get().getAreaTotal() != null) {
 					Integer totalArea = nearestThousand(abf.get().getAreaTotal());
-					return new Pair<>("Avg by Fit in Nation", totalArea);
+					pair.put("Avg by Fit in Nation", totalArea);
+					return pair;
 				}
 			}
 			Optional<AvgByCounty> abo = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
 			if (abo.isPresent() && abo.get().getAreaTotal() != null) {
 				Integer totalArea = nearestThousand(abo.get().getAreaTotal());
-				return new Pair<>("Avg by County", totalArea);
+				pair.put("Avg by County", totalArea);
+				return pair;
 			}
 			return null;
 		};
-		Function<Pair<ActiveAndFutureStores, Pair<String, Integer>>, Pair<String, Integer>> getVolume = aa -> {
-			ActiveAndFutureStores a = aa.getKey();
-			Pair<String, Integer> salesArea = aa.getValue();
+		Function<Map<ActiveAndFutureStores, Map<String, Integer>>, Map<String, Integer>> getVolume = aa -> {
+			ActiveAndFutureStores a = aa.keySet().iterator().next();
+			Map<String, Integer> salesArea = aa.get(a);
+
+			Map<String, Integer> pair = new HashMap<>();
 
 			if (a.getVolumeTotal() != null) {
-				return new Pair<>(a.getVolumeChoice(), nearestThousand(a.getVolumeTotal()));
+				pair.put(a.getVolumeChoice(), nearestThousand(a.getVolumeTotal()));
+				return pair;
 			}
-			if (salesArea != null && salesArea.getValue() != null) {
+			String key = salesArea.keySet().iterator().next();
+			Integer sa = salesArea.get(key);
+			if (sa != null) {
 				Optional<AvgByBannerInCounty> abic = avgByBannerInCounty.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId()) && sameCounty(a, ab)).findAny();
 				if (abic.isPresent() && abic.get().getDpsf() != null) {
-					Integer volume = nearestThousand(abic.get().getDpsf() * salesArea.getValue());
-					return new Pair<>(salesArea.getKey() + " * (Avg Banner in County $/sqft)", volume);
+					Integer volume = nearestThousand(abic.get().getDpsf() * sa);
+					pair.put(key + " * (Avg Banner in County $/sqft)", volume);
+					return pair;
 				}
 				Optional<AvgByBanner> abb = avgByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
 				if (abb.isPresent() && abb.get().getDpsf() != null) {
-					Integer volume = nearestThousand(abb.get().getDpsf() * salesArea.getValue());
-					return new Pair<>(salesArea.getKey() + " * (Avg Banner in Nation $/sqft)", volume);
+					Integer volume = nearestThousand(abb.get().getDpsf() * sa);
+					pair.put(key + " * (Avg Banner in Nation $/sqft)", volume);
+					return pair;
 				}
 				Optional<AvgByFitInCounty> afic = avgByFitInCounty.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit()) && sameCounty(a, ab)).findAny();
 				if (afic.isPresent() && afic.get().getDpsf() != null) {
-					Integer volume = nearestThousand(afic.get().getDpsf() * salesArea.getValue());
-					return new Pair<>(salesArea.getKey() + " * (Avg Fit in County $/sqft)", volume);
+					Integer volume = nearestThousand(afic.get().getDpsf() * sa);
+					pair.put(key + " * (Avg Fit in County $/sqft)", volume);
+					return pair;
 				}
 				Optional<AvgByFit> af = avgByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
 				if (af.isPresent() && af.get().getDpsf() != null) {
-					Integer volume = nearestThousand(af.get().getDpsf() * salesArea.getValue());
-					return new Pair<>(salesArea.getKey() + " * (Avg Fit in Nation $/sqft)", volume);
+					Integer volume = nearestThousand(af.get().getDpsf() * sa);
+					pair.put(key + " * (Avg Fit in Nation $/sqft)", volume);
+					return pair;
 				}
 				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
 				if (ac.isPresent() && ac.get().getDpsf() != null) {
-					Integer volume = nearestThousand(ac.get().getDpsf() * salesArea.getValue());
-					return new Pair<>(salesArea.getKey() + " * (Avg County $/sqft)", volume);
+					Integer volume = nearestThousand(ac.get().getDpsf() * sa);
+					pair.put(key + " * (Avg County $/sqft)", volume);
+					return pair;
 				}
 			} else {
 				Optional<AvgByBannerInCounty> abic = avgByBannerInCounty.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId()) && sameCounty(a, ab)).findAny();
 				if (abic.isPresent() && abic.get().getVolume() != null) {
 					Integer volume = nearestThousand(abic.get().getVolume());
-					return new Pair<>("Avg by Banner in County", volume);
+					pair.put("Avg by Banner in County", volume);
+					return pair;
 				}
 				Optional<AvgByBanner> abb = avgByBanner.stream().filter(ab -> ab.getBannerId().equals(a.getBannerId())).findAny();
 				if (abb.isPresent() && abb.get().getVolume() != null) {
 					Integer volume = nearestThousand(abb.get().getVolume());
-					return new Pair<>("Avg by Banner in Nation", volume);
+					pair.put("Avg by Banner in Nation", volume);
+					return pair;
 				}
 				Optional<AvgByFitInCounty> afic = avgByFitInCounty.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit()) && sameCounty(a, ab)).findAny();
 				if (afic.isPresent() && afic.get().getVolume() != null) {
 					Integer volume = nearestThousand(afic.get().getVolume());
-					return new Pair<>("Avg by Fit in County", volume);
+					pair.put("Avg by Fit in County", volume);
+					return pair;
 				}
 				Optional<AvgByFit> af = avgByFit.stream().filter(ab -> ab.getStoreFit().equals(a.getStoreFit())).findAny();
 				if (af.isPresent() && af.get().getVolume() != null) {
 					Integer volume = nearestThousand(af.get().getVolume());
-					return new Pair<>("Avg by Fit in Nation", volume);
+					pair.put("Avg by Fit in Nation", volume);
+					return pair;
 				}
 				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
 				if (ac.isPresent() && ac.get().getVolume() != null) {
 					Integer volume = nearestThousand(ac.get().getVolume());
-					return new Pair<>("Avg by County", volume);
+					pair.put("Avg by County", volume);
+					return pair;
 				}
 			}
 			return null;
 		};
-		Function<Pair<ActiveAndFutureStores, Float>, Integer> getPseudoPower = aa -> {
-			ActiveAndFutureStores a = aa.getKey();
-			Float dpsf = aa.getValue();
+		Function<Map<ActiveAndFutureStores, Float>, Integer> getPseudoPower = aa -> {
+			ActiveAndFutureStores a = aa.keySet().iterator().next();
+			Float dpsf = aa.get(a);
 			if (dpsf != null) {
 				Optional<AvgByCounty> ac = avgByCounty.stream().filter(ab -> sameCounty(a, ab)).findAny();
 				if (ac.isPresent() && ac.get().getDpsf() != null && ac.get().getDpsfMin() != null && ac.get().getDpsfMax() != null) {
@@ -413,13 +443,15 @@ public class SiteWiseService {
 	}
 
 	private String[] getActiveAndFutureStoresRow(ActiveAndFutureStores s,
-												 Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaSales,
-												 Function<ActiveAndFutureStores, Pair<String, Integer>> getAreaTotal,
-												 Function<Pair<ActiveAndFutureStores, Pair<String, Integer>>, Pair<String, Integer>> getVolume,
-												 Function<Pair<ActiveAndFutureStores, Float>, Integer> getPseudoPower) {
-		Pair<String, Integer> salesArea = getAreaSales.apply(s);
-		Pair<String, Integer> totalArea = getAreaTotal.apply(s);
-		Pair<String, Integer> volume = getVolume.apply(new Pair<>(s, salesArea));
+												 Function<ActiveAndFutureStores, Map<String, Integer>> getAreaSales,
+												 Function<ActiveAndFutureStores, Map<String, Integer>> getAreaTotal,
+												 Function<Map<ActiveAndFutureStores, Map<String, Integer>>,Map<String, Integer>> getVolume,
+												 Function<Map<ActiveAndFutureStores, Float>, Integer> getPseudoPower) {
+		Map<String, Integer> salesArea = getAreaSales.apply(s);
+		Map<String, Integer> totalArea = getAreaTotal.apply(s);
+		Map<ActiveAndFutureStores, Map<String, Integer>> m = new HashMap<>();
+		m.put(s, salesArea);
+		Map<String, Integer> volume = getVolume.apply(m);
 
 		List<String> row = new ArrayList<>();
 		row.add(s.getStoreId().toString());
@@ -456,22 +488,22 @@ public class SiteWiseService {
 
 		// Sales Area
 		if (salesArea != null) {
-			this.addIntToRow(row, salesArea.getValue());
+			this.addIntToRow(row, salesArea.values().iterator().next());
 		} else {
 			row.add(null);
 		}
 
 		// Total Area
 		if (totalArea != null) {
-			this.addIntToRow(row, totalArea.getValue());
+			this.addIntToRow(row, totalArea.values().iterator().next());
 		} else {
 			row.add(null);
 		}
 
 		// Volume
 		if (volume != null) {
-			row.add(volume.getKey());
-			addIntToRow(row, volume.getValue());
+			row.add(volume.keySet().iterator().next());
+			addIntToRow(row, volume.values().iterator().next());
 		} else {
 			row.add(null);
 			row.add(null);
@@ -491,20 +523,22 @@ public class SiteWiseService {
 		this.addDateToRow(row, s.getPowerDate());
 
 		if (salesArea != null) {
-			row.add(salesArea.getKey());    //	using_area_sales_from
+			row.add(salesArea.keySet().iterator().next());    //	using_area_sales_from
 		} else {
 			row.add(null);
 		}
 		if (totalArea != null) {
-			row.add(totalArea.getKey());    //	using_area_total_from
+			row.add(totalArea.keySet().iterator().next());    //	using_area_total_from
 		} else {
 			row.add(null);
 		}
 
 		// Pseudo_power && // Dollars per sqft
-		if (volume != null && volume.getValue() != null && salesArea != null && salesArea.getValue() != null && salesArea.getValue() != 0) {
-			float dpsf = volume.getValue().floatValue() / salesArea.getValue().floatValue();
-			Integer pseudoPower = getPseudoPower.apply(new Pair<>(s, dpsf));
+		if (volume != null && volume.values().iterator().next() != null && salesArea != null && salesArea.values().iterator().next() != null && salesArea.values().iterator().next() != 0) {
+			float dpsf = volume.values().iterator().next().floatValue() / salesArea.values().iterator().next().floatValue();
+			Map<ActiveAndFutureStores, Float> p = new HashMap<>();
+			p.put(s, dpsf);
+			Integer pseudoPower = getPseudoPower.apply(p);
 			addIntToRow(row, pseudoPower);
 			addFloatToRow(row, Math.round(dpsf * 100f) / 100f);
 		} else {

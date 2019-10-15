@@ -24,6 +24,7 @@ public class StoreStatusService extends StoreChildService<StoreStatus, StoreStat
 		super(securityService, repository, validator, StoreStatus::new);
 	}
 
+	@Transactional
 	public StoreStatus addOneToStore(StoreStatusView request, Store store) {
 		this.validator.validateForInsert(request);
 
@@ -40,6 +41,7 @@ public class StoreStatusService extends StoreChildService<StoreStatus, StoreStat
 		status.setUpdatedBy(currentUser);
 
 		status.setStore(store);
+		store.getStatuses().add(status);
 
 		return this.repository.save(status);
 	}
